@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="argox-android-sdk">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/libs/argox-android-sdk.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

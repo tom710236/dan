@@ -1,0 +1,82 @@
+[
+    {
+        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\myspinner.xml",
+        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\layout\\myspinner.xml"
+    },
+    {
+        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\footer.xml",
+        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\layout\\footer.xml"
+    },
+    {
+        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\device_name.xml",
+        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\layout\\device_name.xml"
+    },
+    {
+        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\headernobtn.xml",
+        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\layout\\headernobtn.xml"
+    },
+    {
+        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\frg_inout.xml",
+        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\layout\\frg_inout.xml"
+    },
+    {
+        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\listview_reason.xml",
+        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\layout\\listview_reason.xml"
+    },
+    {
+        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\activity_gcm.xml",
+        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\layout\\activity_gcm.xml"
+    },
+    {
+        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\activity_main.xml",
+        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\activity_login.xml",
+        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\layout\\activity_login.xml"
+    },
+    {
+        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\frg_waiting.xml",
+        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\layout\\frg_waiting.xml"
+    },
+    {
+        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\header.xml",
+        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\layout\\header.xml"
+    },
+    {
+        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\frg_gettask.xml",
+        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\layout\\frg_gettask.xml"
+    },
+    {
+        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\listview_history.xml",
+        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\layout\\listview_history.xml"
+    },
+    {
+        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\main.xml",
+        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\layout\\main.xml"
+    },
+    {
+        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\fragment_layout.xml",
+        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\layout\\fragment_layout.xml"
+    },
+    {
+        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\device_list.xml",
+        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\layout\\device_list.xml"
+    },
+    {
+        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\listview.xml",
+        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\layout\\listview.xml"
+    },
+    {
+        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\message.xml",
+        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\layout\\message.xml"
+    },
+    {
+        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\activity_login1.xml",
+        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\layout\\activity_login1.xml"
+    },
+    {
+        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\frg_history.xml",
+        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\layout\\frg_history.xml"
+    }
+]

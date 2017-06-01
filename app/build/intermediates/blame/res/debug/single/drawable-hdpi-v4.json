@@ -1,0 +1,38 @@
+[
+    {
+        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\logo2.jpeg",
+        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-hdpi\\logo2.jpeg"
+    },
+    {
+        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\listview_row_even.xml",
+        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-hdpi\\listview_row_even.xml"
+    },
+    {
+        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\btnbg3.xml",
+        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-hdpi\\btnbg3.xml"
+    },
+    {
+        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\btnbg4.xml",
+        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-hdpi\\btnbg4.xml"
+    },
+    {
+        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\btnbg1.xml",
+        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-hdpi\\btnbg1.xml"
+    },
+    {
+        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\listview_row_odd.xml",
+        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-hdpi\\listview_row_odd.xml"
+    },
+    {
+        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\btnbg2.xml",
+        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-hdpi\\btnbg2.xml"
+    },
+    {
+        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\btnbg.xml",
+        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-hdpi\\btnbg.xml"
+    },
+    {
+        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\btncolor.xml",
+        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-hdpi\\btncolor.xml"
+    }
+]

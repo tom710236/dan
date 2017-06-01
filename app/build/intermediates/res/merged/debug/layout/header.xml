@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" 
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" 
+        android:padding="5dp">
+
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="3dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageVie"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:src="@drawable/logo" />
+ </LinearLayout>
+ <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/imageVi2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:src="@drawable/logo_b" />
+
+</LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+ <Button
+        android:id="@+id/button_DoList"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+         android:background="@drawable/btnbg1"
+         android:textColor="@drawable/btncolor"
+        android:layout_weight="1"
+        android:text="" />
+  <Button
+        android:id="@+id/button_IO"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+         android:background="@drawable/btnbg2"
+         android:textColor="@drawable/btncolor"
+        android:layout_weight="1"
+        android:text="" />
+   <Button
+        android:id="@+id/button_GT"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+         android:background="@drawable/btnbg3"
+         android:textColor="@drawable/btncolor"
+        android:layout_weight="1"
+        android:text="" />
+    <Button
+        android:id="@+id/button_DoneList"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+         android:background="@drawable/btnbg4"
+         android:textColor="@drawable/btncolor"
+        android:layout_weight="1"
+        android:text="" />
+        </LinearLayout>
+
+</LinearLayout>

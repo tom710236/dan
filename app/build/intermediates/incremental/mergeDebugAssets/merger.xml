@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="output"><source path="C:\Users\TOM\.android\build-cache\c30dc90c811a661f56ef75a1f9fa0562e5510dce\output\assets"/></dataSet><dataSet config="main"><source path="C:\work\dan\John\MotoAPP\app\src\main\assets"/><source path="C:\work\dan\John\MotoAPP\app\build\generated\assets\shaders\debug"/></dataSet><dataSet config="debug"><source path="C:\work\dan\John\MotoAPP\app\src\debug\assets"/></dataSet></merger>

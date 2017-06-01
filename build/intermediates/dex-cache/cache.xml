@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="C:\work\dan\John\MotoAPP\app\libs\gcm.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="a6d7bce795a14c7f86111756c4ceb44b79de14aa">
+        <dex dex="C:\work\dan\John\MotoAPP\app\build\intermediates\transforms\dex\debug\folders\1000\2\gcm_e8021c53035b99a106cadd09a6b33ef2c8b77239\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\work\dan\John\MotoAPP\app\libs\argox-android-sdk.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="18c691ce2c07d471a9e822daf36efee9f2610554">
+        <dex dex="C:\work\dan\John\MotoAPP\app\build\intermediates\transforms\dex\debug\folders\1000\2\argox-android-sdk_a3e2b6f0bc5cdbb0c330c96e9e9dabb059e12cfd\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\work\dan\John\MotoAPP\app\libs\json.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="f6c8bfbe2c1c3395a1d587c265258a9eb265c511">
+        <dex dex="C:\work\dan\John\MotoAPP\app\build\intermediates\transforms\dex\debug\folders\1000\2\json_8352c7d9675f0032fa9300b5127270581e0e6474\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\work\dan\John\MotoAPP\app\libs\android-support-v4.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="efec67655f6db90757faa37201efcee2a9ec3507">
+        <dex dex="C:\work\dan\John\MotoAPP\app\build\intermediates\transforms\dex\debug\folders\1000\2\android-support-v4_f522f9930a367d5af749dbc2ed2046d2a15107c3\classes.dex" />
+    </item>
+
+</items>

@@ -1,0 +1,4 @@
+#Thu Jun 01 09:22:04 CST 2017
+base.0=C\:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\1f\\main
+renamed.0=classes.dex
+file.0=C\:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\1f\\main\\classes.dex

@@ -1,0 +1,28 @@
+[
+    {
+        "outputFile": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v14\\values-v14.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endLine": 4,
+                    "endColumn": 12,
+                    "endOffset": 182
+                },
+                "from": {
+                    "file": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\values-v14\\styles.xml",
+                    "position": {
+                        "startLine": 7,
+                        "startColumn": 5,
+                        "startOffset": 226,
+                        "endLine": 9,
+                        "endColumn": 12,
+                        "endOffset": 355
+                    }
+                }
+            }
+        ]
+    }
+]

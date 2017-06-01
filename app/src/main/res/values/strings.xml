@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Kerry Moto</string>
+    <!-- BluetoothChat -->
+    <string name="send">Send</string>
+    <string name="not_connected">You are not connected to a device</string>
+    <string name="bt_not_enabled_leaving">Bluetooth was not enabled. Leaving Bluetooth Chat.</string>
+    <string name="title_connecting">connecting...</string>
+    
+    <string name="title_not_connected">not connected</string>
+    <!-- DeviceListActivity -->
+    <string name="scanning">scanning for devices...</string>
+    <string name="select_device">select a device to connect</string>
+    <string name="none_paired">No devices have been paired</string>
+    <string name="none_found">No devices found</string>
+    <string name="title_paired_devices">Paired Devices</string>
+    <string name="title_other_devices">Other Available Devices</string>
+    <string name="button_scan">Scan for devices</string>
+    <!-- Options Menu -->
+    <string name="connect">Connect a device</string>
+    <string name="discoverable">Make discoverable</string>
+    <!-- GCM(Google Cloud Messaging) -->
+    <string name="error_config" translatable="false">Please set the %1$s constant and recompile the app.</string>
+    <string name="already_registered" translatable="false">Device is already registered on server.</string>
+    <string name="gcm_registered" translatable="false">From GCM: device successfully registered!</string>
+    <string name="gcm_unregistered" translatable="false">From GCM: device successfully unregistered!</string>
+    <string name="gcm_message" translatable="false">From GCM: you got message!</string>
+    <string name="gcm_error" translatable="false">From GCM: error (%1$s).</string>
+    <string name="gcm_recoverable_error" translatable="false">From GCM: recoverable error (%1$s).</string>
+    <string name="gcm_deleted" translatable="false">From GCM: server deleted %1$d pending messages!</string>
+    <string name="server_registering" translatable="false">Trying (attempt %1$d/%2$d) to register device on Demo Server.</string>
+    <string name="server_registered" translatable="false">From Demo Server: successfully added device!</string>
+    <string name="server_unregistered" translatable="false">From Demo Server: successfully removed device!</string>
+    <string name="server_register_error" translatable="false">Could not register device on Demo Server after %1$d attempts.</string>
+    <string name="server_unregister_error" translatable="false">Could not unregister device on Demo Server (%1$s).</string>
+    <string name="options_register" translatable="false">Register</string>
+    <string name="options_unregister" translatable="false">Unregister</string>
+    <string name="options_clear" translatable="false">Clear</string>
+    <string name="options_exit" translatable="false">Exit</string>
+    <string name="title_activity_image_view" translatable="false">ImageViewActivity</string>
+    <string name="title_activity_login" translatable="false">嘉里大榮</string>
+    <string name="title_activity_login1">Login1</string>
+    <string name="title_activity_test">Test</string>
+    <string name="title_activity_main_activityk">MainActivityk</string>
+    <string name="title_activity_gcm">派遣通知</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="scan">Scan</string> 
+    <string name="print_setup">Printer Setup...</string>
+
+</resources>

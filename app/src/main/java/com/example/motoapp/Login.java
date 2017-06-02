@@ -1,27 +1,11 @@
 package com.example.motoapp;
 
-import java.util.ArrayList;
-import java.util.Map;
-
-import org.json.JSONObject;
-
-import com.argox.sdk.barcodeprinter.BarcodePrinter;
-import com.argox.sdk.barcodeprinter.connection.PrinterConnection;
-import com.argox.sdk.barcodeprinter.connection.bluetooth.BluetoothConnection;
-import com.argox.sdk.barcodeprinter.emulation.pplz.PPLZ;
-import com.argox.sdk.barcodeprinter.emulation.pplz.PPLZBarCodeType;
-import com.argox.sdk.barcodeprinter.emulation.pplz.PPLZOrient;
-import com.argox.sdk.barcodeprinter.emulation.pplz.PPLZStorage;
-import com.argox.sdk.barcodeprinter.util.Encoding;
-
-import com.google.android.gcm.GCMRegistrar;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Typeface;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Build.VERSION;
@@ -29,24 +13,29 @@ import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.telephony.TelephonyManager;
-import android.text.InputType;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
-
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnKeyListener;
-import android.view.View.OnTouchListener;
-import android.view.Window;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.InputMethodManager;
+import android.view.View.OnKeyListener;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.android.gcm.GCMRegistrar;
+
+import org.json.JSONObject;
+
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.READ_PHONE_STATE;
+
 public class Login extends Activity {
 
-	private Button btnLogin;
+
+    private static final int REQUEST_CONTACTS = 1;
+    private Button btnLogin;
 	private Button	btnCancel;
 	Context objContext;
 	Handler handler;
@@ -67,7 +56,10 @@ public class Login extends Activity {
 		SysApplication.getInstance().addActivity(this);
 		dbLocations objLocation = new dbLocations(Login.this);
 		objLocation.CheckDB();
-		
+        openGps();
+        Intent it = new Intent(this, Delay.class);
+        //stopService(it);
+        startService(it);
 		if(VERSION.SDK_INT >= VERSION_CODES.GINGERBREAD) {
 		    serial = Build.SERIAL;
 		    Log.d("SERIAL", serial);
@@ -349,5 +341,27 @@ public class Login extends Activity {
         }
         return super.onKeyDown(keyCode, event);
     }
-	
+
+    public void onClick (View v){
+
+
+		Intent intent = new Intent(Login.this, DataListFrg.class);
+		startActivity(intent);
+	}
+
+    //取得 定位權限
+    private void openGps() {
+        int permission = ActivityCompat.checkSelfPermission(this,
+                ACCESS_FINE_LOCATION);
+        int permission2 = ActivityCompat.checkSelfPermission(this,
+                ACCESS_COARSE_LOCATION);
+        int permission3 = ActivityCompat.checkSelfPermission(this,
+                READ_PHONE_STATE);
+        if (permission != PackageManager.PERMISSION_GRANTED || permission2 != PackageManager.PERMISSION_GRANTED|| permission3 != PackageManager.PERMISSION_GRANTED) {
+            //若尚未取得權限，則向使用者要求允許聯絡人讀取與寫入的權限，REQUEST_CONTACTS常數未宣告則請按下Alt+Enter自動定義常數值。
+            ActivityCompat.requestPermissions(this,
+                    new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION,READ_PHONE_STATE},
+                    REQUEST_CONTACTS);
+        }
+    }
 }

@@ -861,28 +861,28 @@
                             android:text="送達失敗" />
                     </LinearLayout>
 
-<LinearLayout
-    android:id="@+id/LinearLayout_ButtonPrint2"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal" >
+                    <LinearLayout
+                        android:id="@+id/LinearLayout_ButtonPrint2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/button_Print2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_weight="1"
-        android:text="列印" />
+                        <Button
+                            android:id="@+id/button_Print2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:text="列印" />
 
-    <Button
-        android:id="@+id/button_Next2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_weight="1"
-        android:text="下一步" />
-</LinearLayout>
+                        <Button
+                            android:id="@+id/button_Next2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:text="下一步" />
+                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/LinearLayout_SetGoods"

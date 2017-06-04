@@ -19,8 +19,15 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by TOM on 2017/6/2.
@@ -32,7 +39,9 @@ public class Delay extends Service implements LocationListener {
     LocationManager mgr; //取得定位管理員
     Runnable runnable;
     Handler handler;
-    String today, IMEI;
+    String today;
+    String IMEI;
+    String Employee, regID,lon,lat;
 
     @Nullable
     @Override
@@ -42,16 +51,20 @@ public class Delay extends Service implements LocationListener {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        // activity向service传值
+        Employee = intent.getStringExtra("Employee");
+        regID = intent.getStringExtra("regID");
+        Log.e("Employee", Employee);
+        Log.e("regID", regID);
         handler = new Handler();
         runnable = new Runnable() {
             @TargetApi(Build.VERSION_CODES.M)
             @Override
             public void run() {
-                Log.e("A", "A");
+
                 mgr = (LocationManager) getSystemService(LOCATION_SERVICE);
                 String best = mgr.getBestProvider(new Criteria(), true);
                 if (best != null) {
-
 
                     if (ActivityCompat.checkSelfPermission(Delay.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Delay.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                         // TODO: Consider calling
@@ -66,34 +79,38 @@ public class Delay extends Service implements LocationListener {
                     mgr.requestLocationUpdates(best,
                             MIN_TIME, MIN_DIST, Delay.this);
                     time();
-                    TelephonyManager mTelManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+                    TelephonyManager mTelManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
                     IMEI = mTelManager.getDeviceId();
-                }else{
-                    Log.e("定位中","定位中");
+                    Get get = new Get();
+                    get.start();
+                } else {
+                    Log.e("定位中", "定位中");
                 }
 
-                handler.postAtTime(this,android.os.SystemClock.uptimeMillis()+10*1000);
+                handler.postAtTime(this, android.os.SystemClock.uptimeMillis() + 10 * 1000);
             }
 
         };
         //每分鐘執行一次
-        handler.postAtTime(runnable,android.os.SystemClock.uptimeMillis()+10*1000);
+        handler.postAtTime(runnable, android.os.SystemClock.uptimeMillis() + 10 * 1000);
         //return super.onStartCommand(intent, flags, startId);
         return START_NOT_STICKY;
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        String str = "定位提供者:"+location.getProvider();
-        str+=String.format("\n緯度:%.5f\n經度:%.5f\n高度:%.2f公尺",
+        String str = "定位提供者:" + location.getProvider();
+        str += String.format("\n緯度:%.5f\n經度:%.5f\n高度:%.2f公尺",
                 location.getLatitude(),
                 location.getLongitude(),
                 location.getAltitude()
         );
-        Log.e("str",str);
-        Log.e("location.getLatitude()", String.valueOf(location.getLatitude()));
-        Log.e("today",today);
-        Toast.makeText(Delay.this,str+today+IMEI,Toast.LENGTH_SHORT).show();
+        Log.e("str", str);
+        Log.e("today", today);
+        Log.e("IMEI", IMEI);
+        lon = String.valueOf(location.getLongitude());
+        lat = String.valueOf(location.getLatitude());
+        Toast.makeText(Delay.this, str + today + IMEI, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -110,12 +127,50 @@ public class Delay extends Service implements LocationListener {
     public void onProviderDisabled(String provider) {
 
     }
+
     private void time() {
         Calendar mCal = Calendar.getInstance();
         String dateformat = "yyyy/MM/dd/ HH:mm:ss";
         SimpleDateFormat df = new SimpleDateFormat(dateformat);
         today = df.format(mCal.getTime());
     }
+
+    class Get extends Thread {
+        @Override
+        public void run() {
+            okHttpGet();
+        }
+
+        private void okHttpGet() {
+            final String url1 = "http://efms.hinet.net/FMS_WS/Services/API/Motor_Dispatch/Send_GPSInfo.aspx?\n" +
+                    "Key=7092a3c1-8ad6-48b5-b354-577378c282a5\n" +
+                    "&DeviceID="+regID+"\n" +
+                    "&EmployeeID="+Employee+"\n" +
+                    "&StatusTime=2017%2F05%2F31%2008%3A30%3A12\n" +
+                    "&lon="+lon+"\n" +
+                    "&lat="+lat+"";
+            final OkHttpClient client = new OkHttpClient();
+            final Request request = new Request.Builder()
+                    .url(url1)
+                    .build();
+            Call call = client.newCall(request);
+            call.enqueue(new Callback(){
+
+                @Override
+                public void onFailure(Call call, IOException e) {
+
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    String json = response.body().string();
+                    Log.e("URL",url1);
+                    Log.e("回傳",json);
+                }
+            });
+
+        }
+
+    }
+
 }
-
-

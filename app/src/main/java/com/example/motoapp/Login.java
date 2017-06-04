@@ -47,6 +47,7 @@ public class Login extends Activity {
 	private static final String TAG = "Login";
 	PPLZPrinter printer;
 	String serial;
+    String regId;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +58,10 @@ public class Login extends Activity {
 		dbLocations objLocation = new dbLocations(Login.this);
 		objLocation.CheckDB();
         openGps();
-        Intent it = new Intent(this, Delay.class);
-        //stopService(it);
-        startService(it);
+
 		if(VERSION.SDK_INT >= VERSION_CODES.GINGERBREAD) {
 		    serial = Build.SERIAL;
-		    Log.d("SERIAL", serial);
+
 		}
 		
 		//TODO 判斷是否隔天了，如果是的話清掉登入資訊
@@ -106,7 +105,7 @@ public class Login extends Activity {
 				//Application.strPass = EditText_Password.getText().toString();
 				Application.strCar = EditText_Car.getText().toString();
 				Application.strDeviceID = serial;
-			
+
 			   new clsHttpPostAPI().CallAPI(objContext, "API001");
 			}
 		});
@@ -223,8 +222,17 @@ public class Login extends Activity {
 						
 						//取站所資料
 						
+
+						String EmployeeName =  objLogin.UserName;
+						String Employee;
+						Employee =  EmployeeName.substring(0, 3);
+						Intent it = new Intent(Login.this,Delay.class);
+                        it.putExtra("Employee",Employee);
+                        it.putExtra("regID",regId);
+						startService(it);
+
 						Intent intent = new Intent(Login.this, DataListFrg.class);
-					    startActivity(intent);
+						startActivity(intent);
 					}
 					
 					if (Result.equals("2")) {
@@ -288,7 +296,8 @@ public class Login extends Activity {
 			// 檢查裝置是否支援 GCM
 			GCMRegistrar.checkDevice(Login.this);
 			GCMRegistrar.checkManifest(Login.this);
-			String regId = GCMRegistrar.getRegistrationId(Login.this);
+			regId = GCMRegistrar.getRegistrationId(Login.this);
+			Log.e("REGID",regId);
 			if (regId.equals("")) {
 				Log.d(TAG, "尚未註冊 Google GCM, 進行註冊");
 
@@ -341,13 +350,6 @@ public class Login extends Activity {
         }
         return super.onKeyDown(keyCode, event);
     }
-
-    public void onClick (View v){
-
-
-		Intent intent = new Intent(Login.this, DataListFrg.class);
-		startActivity(intent);
-	}
 
     //取得 定位權限
     private void openGps() {

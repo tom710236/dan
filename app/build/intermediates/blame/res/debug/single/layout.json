@@ -1,19 +1,19 @@
 [
     {
-        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_list_menu_item_checkbox.xml",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\2c6e9d925e6ab833828d44363f69c43e06132385\\output\\res\\layout\\abc_list_menu_item_checkbox.xml"
-    },
-    {
         "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_select_dialog_material.xml",
         "source": "C:\\Users\\TOM\\.android\\build-cache\\2c6e9d925e6ab833828d44363f69c43e06132385\\output\\res\\layout\\abc_select_dialog_material.xml"
     },
     {
-        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\select_dialog_multichoice_material.xml",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\2c6e9d925e6ab833828d44363f69c43e06132385\\output\\res\\layout\\select_dialog_multichoice_material.xml"
+        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_list_menu_item_checkbox.xml",
+        "source": "C:\\Users\\TOM\\.android\\build-cache\\2c6e9d925e6ab833828d44363f69c43e06132385\\output\\res\\layout\\abc_list_menu_item_checkbox.xml"
     },
     {
         "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\footer.xml",
         "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\layout\\footer.xml"
+    },
+    {
+        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\select_dialog_multichoice_material.xml",
+        "source": "C:\\Users\\TOM\\.android\\build-cache\\2c6e9d925e6ab833828d44363f69c43e06132385\\output\\res\\layout\\select_dialog_multichoice_material.xml"
     },
     {
         "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_popup_menu_item_layout.xml",

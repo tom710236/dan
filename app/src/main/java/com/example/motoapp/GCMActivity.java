@@ -75,6 +75,7 @@ public class GCMActivity extends Activity {
 			intent1.setClass(GCMActivity.this, DataListFrg.class);
 			Bundle obj = new Bundle();
 			obj.putString("type", "21");
+
 			intent1.putExtras(obj);
 			startActivity(intent);
 			finish();

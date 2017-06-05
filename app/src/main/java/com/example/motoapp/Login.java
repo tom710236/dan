@@ -47,7 +47,9 @@ public class Login extends Activity {
 	private static final String TAG = "Login";
 	PPLZPrinter printer;
 	String serial;
-    String regId;
+    public static String regId;
+	public static String Account;
+	public static String Car;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -194,21 +196,21 @@ public class Login extends Activity {
 			@Override
 			public void handleMessage(Message msg) {
 				JSONObject json = (JSONObject) msg.obj;
-
+				Log.e("json", String.valueOf(json));
 				try {
 					String Result = json.getString("Result");
-					
+					Log.e("Result",Result);
 					if (Result.equals("1")) {
+
 						//Application.strObuID = json.getString("ObuID");
 						Application.strUserName = json
 								.getString("EmployeeName");
 						
 						clsLoginInfo objLogin = new clsLoginInfo(objContext);
 						objLogin.Car = EditText_Car.getText().toString();
-						objLogin.CarID = json.getString("ObuID");
+						//objLogin.CarID = json.getString("ObuID");
 						objLogin.DeviceID = Application.strDeviceID;
 						objLogin.GCMID = Application.strRegistId;
-						/*待補*/
 						objLogin.StationID="7048";
 						objLogin.StationName="松山站所";
 						objLogin.UserID=EditText_Account.getText().toString();
@@ -219,7 +221,7 @@ public class Login extends Activity {
 						
 						//記Log
 						new clsHttpPostAPI().CallAPI(objContext, "API021");
-						
+
 						//取站所資料
 						
 

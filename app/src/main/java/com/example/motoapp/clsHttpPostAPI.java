@@ -1,14 +1,19 @@
 package com.example.motoapp;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.widget.EditText;
 
 import org.json.JSONObject;
 
-public class clsHttpPostAPI {
+
+
+
+public class clsHttpPostAPI extends Activity {
 
 	public static Handler handlerLogin = null;
 	public static Handler handlerTask = null;
@@ -17,6 +22,11 @@ public class clsHttpPostAPI {
 	private String strData;
 	ProgressDialog progressDialog;
 	Context context;
+
+    Login login = new Login();
+    String regId = login.regId;
+    EditText Account = login.EditText_Account;
+    EditText car = login.EditText_Car;
 
 	private dbLocations objDB;
 
@@ -136,6 +146,7 @@ public class clsHttpPostAPI {
 	}
 
 	Runnable Login = new Runnable() {
+
 		@Override
 		public void run() {
 			//
@@ -144,9 +155,20 @@ public class clsHttpPostAPI {
 
 			clsHttpPost objHttppost = new clsHttpPost();
 			String strRequestJSON = "";
+
 			try {
-				String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DeviceInfo.aspx?DeviceID="
-						+ Application.strRegistId + "&Status=1&EmployeeID="+Application.strAccount+"&Password="+Application.strPass+"&CarNo="+Application.strCar+"&key="+Application.strKey;
+
+				String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DeviceInfo.aspx?" +
+						"DeviceID="+ regId +
+						"&Status=1" +
+						"&EmployeeID="+Application.strAccount+
+						"&Password="+Application.strPass+
+						"&CarNo="+Application.strCar+
+						"&key="+Application.strKey+
+						"&lon=121.48225"+ "&lat=25.02479";
+
+
+
 				clsLogger.i("Login", strUrl);
 				strRequestJSON = objHttppost.Invoke(strUrl, "");
 				JSONObject json = new JSONObject(strRequestJSON);
@@ -177,7 +199,7 @@ public class clsHttpPostAPI {
 				clsLoginInfo objL = new clsLoginInfo(context);
 				objL.Load();
 
-				String strUrl =Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?CaseID="+ Application.strCaseID + "&Status=1&obuID=" + objL.CarID+"&key="+Application.strKey;
+				String strUrl =Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?CaseID=40000200420" + "&Status=1&obuID=" + objL.CarID+"&key="+Application.strKey;
 				clsLogger.i("form_get", strUrl);
 				strRequestJSON = objHttppost.Invoke(strUrl, "");
 
@@ -778,16 +800,39 @@ public class clsHttpPostAPI {
 	Runnable Logout = new Runnable() {
 		@Override
 		public void run() {
+
 			//
 			// TODO: http request.
 			//
+            clsHttpPost objHttppost = new clsHttpPost();
+            String strRequestJSON = "";
 			clsLoginInfo objL = new clsLoginInfo(context);
 			objL.Load();
-			clsHttpPost objHttppost = new clsHttpPost();
-			String strRequestJSON = "";
+
 			try {
-				String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DeviceInfo.aspx?ObuID="
-						+ objL.CarID + "&Status=2&key="+Application.strKey;
+				String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DeviceInfo.aspx?" +
+						"DeviceID=" + regId+
+						"&Status=2" +
+						"&EmployeeID=123"+
+						"&Password="+Application.strPass+
+						"&CarNo=123"+
+						"&key="+Application.strKey+
+						"&lon=121.48225"+ "&lat=25.02479";
+						/*
+						Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DeviceInfo.aspx?" +
+						"ObuID=" + objL.CarID +
+						"&Status=2&key="+Application.strKey+
+						"&lon=121.48225"+
+						"&lat=25.02479" ;
+
+						"DeviceID=123" +
+						"&Status=1" +
+						"&EmployeeID="+Application.strAccount+
+						"&Password="+Application.strPass+
+						"&CarNo="+Application.strCar+
+						"&key="+Application.strKey+
+						"&lon=121.48225"+ "&lat=25.02479";
+				 */
 				clsLogger.i("Login", strUrl);
 				strRequestJSON = objHttppost.Invoke(strUrl, "");
 				JSONObject json = new JSONObject(strRequestJSON);
@@ -966,4 +1011,5 @@ public class clsHttpPostAPI {
 			}
 		}
 	};
+
 }

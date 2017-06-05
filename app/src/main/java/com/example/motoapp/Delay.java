@@ -42,7 +42,7 @@ public class Delay extends Service implements LocationListener {
     String today;
     String IMEI;
     String Employee, regID,lon,lat;
-
+    String Employee2 = "123456";
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -107,7 +107,6 @@ public class Delay extends Service implements LocationListener {
         );
         Log.e("str", str);
         Log.e("today", today);
-        Log.e("IMEI", IMEI);
         lon = String.valueOf(location.getLongitude());
         lat = String.valueOf(location.getLatitude());
         Toast.makeText(Delay.this, str + today + IMEI, Toast.LENGTH_SHORT).show();
@@ -130,7 +129,7 @@ public class Delay extends Service implements LocationListener {
 
     private void time() {
         Calendar mCal = Calendar.getInstance();
-        String dateformat = "yyyy/MM/dd/ HH:mm:ss";
+        String dateformat = "yyyy/MM/dd HH:mm:ss";
         SimpleDateFormat df = new SimpleDateFormat(dateformat);
         today = df.format(mCal.getTime());
     }
@@ -142,11 +141,11 @@ public class Delay extends Service implements LocationListener {
         }
 
         private void okHttpGet() {
-            final String url1 = "http://efms.hinet.net/FMS_WS/Services/API/Motor_Dispatch/Send_GPSInfo.aspx?\n" +
+            final String url1 = "http://efms.hinet.net/FMS_WSMotor/Services/API/Motor_Dispatch/Send_GPSInfo.aspx?\n" +
                     "Key=7092a3c1-8ad6-48b5-b354-577378c282a5\n" +
                     "&DeviceID="+regID+"\n" +
                     "&EmployeeID="+Employee+"\n" +
-                    "&StatusTime=2017%2F05%2F31%2008%3A30%3A12\n" +
+                    "&StatusTime="+today+"\n" +
                     "&lon="+lon+"\n" +
                     "&lat="+lat+"";
             final OkHttpClient client = new OkHttpClient();

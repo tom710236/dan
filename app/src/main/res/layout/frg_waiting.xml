@@ -528,7 +528,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_weight="1"
-                            android:text="列印" />
+                            android:text="列印"
+                            android:visibility="gone" />
                         
                         <Button
                             android:id="@+id/button_Next1"
@@ -873,7 +874,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_weight="1"
-                            android:text="列印" />
+                            android:text="列印"
+                            android:visibility="gone" />
 
                         <Button
                             android:id="@+id/button_Next2"

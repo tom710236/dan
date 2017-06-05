@@ -1,25 +1,5 @@
 package com.example.motoapp;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import com.argox.sdk.barcodeprinter.BarcodePrinter;
-import com.argox.sdk.barcodeprinter.connection.PrinterConnection;
-import com.argox.sdk.barcodeprinter.connection.bluetooth.BluetoothConnection;
-import com.argox.sdk.barcodeprinter.emulation.pplz.PPLZ;
-import com.argox.sdk.barcodeprinter.emulation.pplz.PPLZBarCodeType;
-import com.argox.sdk.barcodeprinter.emulation.pplz.PPLZOrient;
-import com.argox.sdk.barcodeprinter.emulation.pplz.PPLZStorage;
-import com.argox.sdk.barcodeprinter.util.Encoding;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -31,7 +11,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.PixelFormat;
-import android.graphics.Typeface;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.PictureCallback;
@@ -39,19 +18,14 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.ContactsContract.Contacts.Data;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.View.OnKeyListener;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.view.View.OnClickListener;
-
+import android.view.View.OnKeyListener;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -63,6 +37,16 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 
@@ -142,7 +126,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		setKeyListener();
 		
 		// 0代表橫向、1代表縱向
-		this.setRequestedOrientation(1);
+		//this.setRequestedOrientation(1);
 		// 設為横向顯示。因為攝影頭會自動翻轉90度，所以如果不横向顯示，看到的畫面就是翻轉的。
 
 		surfaceView1 = (SurfaceView) findViewById(R.id.surfaceView1);
@@ -177,6 +161,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 				objDB.UpdateTaskRecTime(
 						((TextView) findViewById(R.id.EditText_Receive))
 								.getText().toString(), Application.strCaseID);
+
 				objDB.DBClose();
 
 				/*
@@ -409,6 +394,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 						objDB.DBClose();
 						Application.strCaseID = json.getString("caseID");
 						// Application.strObuID = json.getString("obuid");
+
 						type = "02";
 						display();
 					}
@@ -1630,7 +1616,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 
 	public void surfaceCreated(SurfaceHolder holder) {
 
-		camera = Camera.open();
+		//camera = Camera.open();
 		try {
 			/*
 			 * Camera.Parameters params = camera.getParameters();
@@ -1676,9 +1662,9 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 	public void surfaceDestroyed(SurfaceHolder holder) {
 
 		System.out.println("surfaceDestroyed");
-		camera.stopPreview();
+//		camera.stopPreview();
 		// 關閉預覽
-		camera.release();
+//		camera.release();
 		//
 	}
 

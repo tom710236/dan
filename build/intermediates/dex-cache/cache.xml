@@ -12,6 +12,15 @@
     </item>
     <item
         is-multidex="true"
+        jar="C:\Users\TOM\.gradle\caches\modules-2\files-2.1\com.squareup.okio\okio\1.11.0\840897fcd7223a8143f1d9b6f69714e7be34fd50\okio-1.11.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="840897fcd7223a8143f1d9b6f69714e7be34fd50">
+        <dex dex="C:\work\dan\John\MotoAPP\app\build\intermediates\transforms\dex\debug\folders\1000\10\okio-1.11.0_962fea0f2da6a7bf4ef3b12b20d9db598e32087e\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
         jar="C:\work\dan\John\MotoAPP\app\libs\gcm.jar"
         jumboMode="false"
         optimize="true"
@@ -81,6 +90,15 @@
         revision="25.0.3"
         sha1="4b746ef0fd46acb5aaf3d9ab9a4cec22c28d3211">
         <dex dex="C:\work\dan\John\MotoAPP\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_d9e42eff9cb6999143ad82bb3714c86a01187235\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\TOM\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp3\okhttp\3.6.0\69edde9fc4b01c9fd51d25b83428837478c27254\okhttp-3.6.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="69edde9fc4b01c9fd51d25b83428837478c27254">
+        <dex dex="C:\work\dan\John\MotoAPP\app\build\intermediates\transforms\dex\debug\folders\1000\10\okhttp-3.6.0_cbd188e6112cb7fba81e3c8b5224a9b228aa5438\classes.dex" />
     </item>
     <item
         is-multidex="true"

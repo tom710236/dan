@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.widget.EditText;
+import android.util.Log;
 
 import org.json.JSONObject;
 
@@ -25,8 +25,12 @@ public class clsHttpPostAPI extends Activity {
 
     Login login = new Login();
     String regId = login.regId;
-    EditText Account = login.EditText_Account;
-    EditText car = login.EditText_Car;
+    String Account = login.Account;
+	String carID = login.carID;
+	GCMActivity gcm = new GCMActivity();
+	String caseID = gcm.strCaseID;
+
+
 
 	private dbLocations objDB;
 
@@ -167,8 +171,6 @@ public class clsHttpPostAPI extends Activity {
 						"&key="+Application.strKey+
 						"&lon=121.48225"+ "&lat=25.02479";
 
-
-
 				clsLogger.i("Login", strUrl);
 				strRequestJSON = objHttppost.Invoke(strUrl, "");
 				JSONObject json = new JSONObject(strRequestJSON);
@@ -198,8 +200,7 @@ public class clsHttpPostAPI extends Activity {
 			try {
 				clsLoginInfo objL = new clsLoginInfo(context);
 				objL.Load();
-
-				String strUrl =Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?CaseID=40000200420" + "&Status=1&obuID=" + objL.CarID+"&key="+Application.strKey;
+				String strUrl =Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?CaseID="+ caseID + "&Status=1&obuID=" + carID+"&key="+Application.strKey;
 				clsLogger.i("form_get", strUrl);
 				strRequestJSON = objHttppost.Invoke(strUrl, "");
 
@@ -238,8 +239,8 @@ public class clsHttpPostAPI extends Activity {
 				strRequestJSON = objHttppost
 						.Invoke(Application.ChtUrl
 								+ "Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?CaseID="
-								+ Application.strCaseID + "&Status=2&obuID="
-								+ objL.CarID, "");
+								+ caseID + "&Status=2&obuID="
+								+ carID, "");
 
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -702,13 +703,12 @@ public class clsHttpPostAPI extends Activity {
 				strRequestJSON = objHttppost.Invoke(strUrl, strData);
 
 				JSONObject json = new JSONObject(strRequestJSON);
-
-
 				if(handlerInOut!=null)
 				{
 					Message objMessage = new Message();
 					objMessage.obj = json;
 					handlerInOut.sendMessage(objMessage);
+					Log.e("jsoncarPost", String.valueOf(json));
 				}
 
 			} catch (Exception e) {
@@ -813,9 +813,9 @@ public class clsHttpPostAPI extends Activity {
 				String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DeviceInfo.aspx?" +
 						"DeviceID=" + regId+
 						"&Status=2" +
-						"&EmployeeID=123"+
+						"&EmployeeID="+ Account+
 						"&Password="+Application.strPass+
-						"&CarNo=123"+
+						"&CarNo="+ carID+
 						"&key="+Application.strKey+
 						"&lon=121.48225"+ "&lat=25.02479";
 						/*

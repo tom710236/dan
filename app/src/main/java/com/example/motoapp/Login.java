@@ -44,12 +44,13 @@ public class Login extends Activity {
 	EditText EditText_Car;
 	EditText EditText_Area;
 	EditText EditText_No;
+	public static String carID;
+	public static String Account;
 	private static final String TAG = "Login";
 	PPLZPrinter printer;
 	String serial;
     public static String regId;
-	public static String Account;
-	public static String Car;
+
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -89,8 +90,10 @@ public class Login extends Activity {
 		EditText_Area = (EditText) findViewById(R.id.EditText_Area);
 		EditText_No = (EditText) findViewById(R.id.EditText_No);
 		EditText_Account.setText("123456");
+		Account = EditText_Account.getText().toString();
 		//EditText_Password.setText("123456");
 		EditText_Car.setText("MAH-8167");//MAH-8162 035-Q9
+		carID = EditText_Car.getText().toString();
 		EditText_Area.setText("123");
 		EditText_No.setText("1234567");
 		objContext = Login.this;

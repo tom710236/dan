@@ -375,9 +375,10 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			@Override
 			public void handleMessage(Message msg) {
 				Bundle json = (Bundle) msg.obj;
-
+				Log.e("json", String.valueOf(json));
 				try {
 					String status = json.getString("status");
+					Log.e("status",status);
 					myDialog.dismiss();
 					if (status.equals("0")) {
 						Application.objForm = json;
@@ -393,16 +394,18 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 								json.getString("request_time"), "0" });
 						objDB.DBClose();
 						Application.strCaseID = json.getString("caseID");
-						// Application.strObuID = json.getString("obuid");
-
+						Application.strObuID = json.getString("obuid");
+						Log.e("strCaseID",Application.strCaseID);
+						Log.e("strCaseID",json.getString("caseID"));
 						type = "02";
 						display();
 					}
 					if (status.equals("1")) {
 						Application.strCaseID = json.getString("caseID");
-						// Application.strObuID = json.getString("obuid");
+						Application.strObuID = json.getString("obuid");
 						Application.objFormInfo = json;
-
+						Log.e("strCaseID2",Application.strCaseID);
+						Log.e("strCaseID2",json.getString("caseID"));
 						type = "21";
 						objDB.openDB();
 						objDB.UpdateTask(json.getString("customer_address"),
@@ -414,6 +417,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 								json.getString("pay_type"),
 								json.getString("pay_amount"), "21",
 								json.getString("caseID"));
+
 						objDB.DBClose();
 						display();
 					}

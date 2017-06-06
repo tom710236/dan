@@ -3,6 +3,7 @@ package com.example.motoapp;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -11,7 +12,7 @@ import android.widget.TextView;
 
 public class GCMActivity extends Activity {
 
-	String strCaseID="";
+	public static String strCaseID="";
 	String strOrderID="";
 	Button btnOpen;
 	Button btnClose;
@@ -56,6 +57,7 @@ public class GCMActivity extends Activity {
 			strOrderID =  bundle.getString("orderID");
 			TextView_Msg.setText("收到一筆派遣任務("+strOrderID+")，請問要立刻開啟嗎?");
 			LinearLayout_St0.setVisibility(View.VISIBLE);
+			Log.e("strCaseID",strCaseID);
 		}
 
 		if (strStatus.equals("1")) {

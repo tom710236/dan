@@ -7,9 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
-import android.os.Build;
-import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -51,6 +48,8 @@ public class Login extends Activity {
 	String serial;
     public static String regId;
 
+	Delay delay = new Delay();
+
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +61,12 @@ public class Login extends Activity {
 		objLocation.CheckDB();
         openGps();
 
+		/*
 		if(VERSION.SDK_INT >= VERSION_CODES.GINGERBREAD) {
 		    serial = Build.SERIAL;
 
 		}
+		*/
 		
 		//TODO 判斷是否隔天了，如果是的話清掉登入資訊
 		clsLoginInfo objLoginInfo = new clsLoginInfo(Login.this);
@@ -202,9 +203,9 @@ public class Login extends Activity {
 				Log.e("json", String.valueOf(json));
 				try {
 					String Result = json.getString("Result");
-					Log.e("Result",Result);
+					Log.e("Resultand",Result);
 					if (Result.equals("1")) {
-
+						Log.e("Resultand",Result);
 						//Application.strObuID = json.getString("ObuID");
 						Application.strUserName = json
 								.getString("EmployeeName");
@@ -228,11 +229,11 @@ public class Login extends Activity {
 						//取站所資料
 						
 
-						String EmployeeName =  objLogin.UserName;
-						String Employee;
-						Employee =  EmployeeName.substring(0, 3);
+						//String EmployeeName =  objLogin.UserName;
+						//String Employee;
+						//Employee =  EmployeeName.substring(0, 3);
 						Intent it = new Intent(Login.this,Delay.class);
-                        it.putExtra("Employee",Employee);
+                        //it.putExtra("Employee",Employee);
                         it.putExtra("regID",regId);
 						startService(it);
 

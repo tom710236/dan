@@ -41,8 +41,7 @@ public class Delay extends Service implements LocationListener {
     Handler handler;
     String today;
     String IMEI;
-    String Employee, regID,lon,lat;
-    String Employee2 = "123456";
+    public static String Employee,regID,lon,lat;
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -54,7 +53,6 @@ public class Delay extends Service implements LocationListener {
         // activity向service传值
         Employee = intent.getStringExtra("Employee");
         regID = intent.getStringExtra("regID");
-        Log.e("Employee", Employee);
         Log.e("regID", regID);
         handler = new Handler();
         runnable = new Runnable() {
@@ -87,12 +85,12 @@ public class Delay extends Service implements LocationListener {
                     Log.e("定位中", "定位中");
                 }
 
-                handler.postAtTime(this, android.os.SystemClock.uptimeMillis() + 10 * 1000);
+                handler.postAtTime(this, android.os.SystemClock.uptimeMillis() + 30 * 1000);
             }
 
         };
         //每分鐘執行一次
-        handler.postAtTime(runnable, android.os.SystemClock.uptimeMillis() + 10 * 1000);
+        handler.postAtTime(runnable, android.os.SystemClock.uptimeMillis() + 30 * 1000);
         //return super.onStartCommand(intent, flags, startId);
         return START_NOT_STICKY;
     }
@@ -109,7 +107,7 @@ public class Delay extends Service implements LocationListener {
         Log.e("today", today);
         lon = String.valueOf(location.getLongitude());
         lat = String.valueOf(location.getLatitude());
-        Toast.makeText(Delay.this, str + today + IMEI, Toast.LENGTH_SHORT).show();
+        Toast.makeText(Delay.this, str + today , Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -163,7 +161,7 @@ public class Delay extends Service implements LocationListener {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     String json = response.body().string();
-                    Log.e("URL",url1);
+                    //Log.e("URL",url1);
                     Log.e("回傳",json);
                 }
             });

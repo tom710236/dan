@@ -48,6 +48,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 
 	MainActivity objActivity;
@@ -87,6 +97,10 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 	Camera camera;
 	ProgressDialog myDialog;
 	PPLZPrinter printer;
+
+	GCMActivity gcm = new GCMActivity();
+	String caseID = gcm.strCaseID;
+
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -147,6 +161,16 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 				// 顯示Progress對話方塊
 				myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
 				new clsHttpPostAPI().CallAPI(context, "API002");
+
+			}
+		});
+		/* 拒絕 */
+		Button Button_Reject = (Button) findViewById(R.id.button_Reject);
+		Button_Reject.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				new clsHttpPostAPI().CallAPI(context, "API003");
+				finish();
 			}
 		});
 
@@ -224,11 +248,18 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		/* 託運單拍照後送出 */
 		Button button_Send = (Button) findViewById(R.id.button_Send);
 		button_Send.setOnClickListener(new OnClickListener() {
+
+
 			@Override
 			public void onClick(View v) {
+				Post post = new Post();
+				post.start();
+
+
 				/*
 				 * 上傳照片及是否協助建檔
-				 */
+
+
 				if (type.equals("070")) {
 					// 簽收單
 					new clsHttpPostAPI().CallAPI(context, "API011");
@@ -241,7 +272,9 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 					imageView1.setImageDrawable(null);
 					// imageView1.setImageResource(0);
 				}
+				 */
 			}
+
 		});
 
 		/* 直送 */
@@ -1666,9 +1699,9 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 	public void surfaceDestroyed(SurfaceHolder holder) {
 
 		System.out.println("surfaceDestroyed");
-//		camera.stopPreview();
+//	    camera.stopPreview();
 		// 關閉預覽
-//		camera.release();
+		// 	camera.release();
 		//
 	}
 
@@ -1716,5 +1749,79 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 							}).show();
 		}
 		return super.onKeyDown(keyCode, event);
+	}
+	class Post extends Thread{
+		@Override
+		public void run() {
+			String url=Application.ChtUrl+"/Services/API/Motor_Dispatch/Upload_ForwardOrder.aspx";
+			File file = new File("C:\\test.jpg");
+			try {
+				upload(url,file);
+				//upload2(url,file);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	public void upload(String url, File file) throws IOException {
+		OkHttpClient client = new OkHttpClient();
+		RequestBody formBody = new MultipartBody.Builder()
+				.setType(MultipartBody.FORM)
+				.addFormDataPart("data", file.getName(),
+						RequestBody.create(MediaType.parse("jpg/git"), file))
+				.addFormDataPart("other_field", "other_field_value")
+				.build();
+
+		RequestBody body = new FormBody.Builder()
+				.add("key", Application.strKey)
+				.add("caseID",caseID)
+				.add("Type","1")
+				.add("FileType","jpg")
+				.add("KeyinFile","1")
+				.build();
+		Request request = new Request.Builder()
+				.url(url)
+				.post(body)
+				//.post(formBody)
+				.build();
+		/*
+		Response response = client.newCall(request).execute();
+		if (!response.isSuccessful()) {
+			throw new IOException("Unexpected code " + response);
+		}
+		*/
+
+		client.newCall(request).enqueue(new Callback() {
+			@Override
+			public void onFailure(Call call, IOException e) {
+
+			}
+
+			@Override
+			public void onResponse(Call call, Response response) throws IOException {
+				String json = response.body().string();
+				Log.e("OkHttp", response.toString());
+				Log.e("OkHttp2", json);
+			}
+		});
+
+	}
+	public void upload2(String url, File file) throws IOException {
+		OkHttpClient client = new OkHttpClient();
+		final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+		RequestBody formBody = new MultipartBody.Builder()
+				.setType(MultipartBody.FORM)
+				.addFormDataPart("file", "date", RequestBody.create(MEDIA_TYPE_PNG, file))
+
+				.build();
+		Request request = new Request.Builder()
+				.url(url)
+				.post(formBody)
+				.build();
+		Response response = client.newCall(request).execute();
+		if (!response.isSuccessful()) {
+			throw new IOException("Unexpected code " + response);
+		}
+
 	}
 }

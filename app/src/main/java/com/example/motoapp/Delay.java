@@ -41,7 +41,8 @@ public class Delay extends Service implements LocationListener {
     Handler handler;
     String today;
     String IMEI;
-    public static String Employee,regID,lon,lat;
+    Context context;
+    public static String Employee,regID,lon,lat,UserID,GCMID;
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -51,9 +52,9 @@ public class Delay extends Service implements LocationListener {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         // activity向service传值
+
         Employee = intent.getStringExtra("Employee");
-        regID = intent.getStringExtra("regID");
-        Log.e("regID", regID);
+        //regID = intent.getStringExtra("regID");
         handler = new Handler();
         runnable = new Runnable() {
             @TargetApi(Build.VERSION_CODES.M)
@@ -136,13 +137,18 @@ public class Delay extends Service implements LocationListener {
         @Override
         public void run() {
             okHttpGet();
+
         }
 
         private void okHttpGet() {
+            clsLoginInfo objL = new clsLoginInfo(context);
+            //objL.Load();
+            UserID= objL.UserID;
+            GCMID = objL.GCMID;
             final String url1 = "http://efms.hinet.net/FMS_WSMotor/Services/API/Motor_Dispatch/Send_GPSInfo.aspx?\n" +
                     "Key=7092a3c1-8ad6-48b5-b354-577378c282a5\n" +
-                    "&DeviceID="+regID+"\n" +
-                    "&EmployeeID="+Employee+"\n" +
+                    "&DeviceID="+GCMID+"\n" +
+                    "&EmployeeID="+UserID+"\n" +
                     "&StatusTime="+today+"\n" +
                     "&lon="+lon+"\n" +
                     "&lat="+lat+"";
@@ -168,6 +174,12 @@ public class Delay extends Service implements LocationListener {
 
         }
 
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.e("STOP","STOP");
+        handler.removeCallbacks(runnable);
     }
 
 }

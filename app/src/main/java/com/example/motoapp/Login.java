@@ -5,8 +5,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -42,13 +44,13 @@ public class Login extends Activity {
 	EditText EditText_Area;
 	EditText EditText_No;
 	public static String carID;
-	public static String Account;
+	public static String Account,NO,AREA;
 	private static final String TAG = "Login";
 	PPLZPrinter printer;
 	String serial;
     public static String regId;
 
-	Delay delay = new Delay();
+
 
 	
 	@Override
@@ -56,18 +58,20 @@ public class Login extends Activity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_login);
+
+
 		SysApplication.getInstance().addActivity(this);
 		dbLocations objLocation = new dbLocations(Login.this);
 		objLocation.CheckDB();
         openGps();
+		// GCM
+		new GCMTask().execute();
 
-		/*
-		if(VERSION.SDK_INT >= VERSION_CODES.GINGERBREAD) {
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
 		    serial = Build.SERIAL;
 
 		}
-		*/
-		
+
 		//TODO 判斷是否隔天了，如果是的話清掉登入資訊
 		clsLoginInfo objLoginInfo = new clsLoginInfo(Login.this);
 		objLoginInfo.Load();
@@ -84,35 +88,48 @@ public class Login extends Activity {
 		 //printer = new PPLZPrinter();
 		  //((PPLZPrinter) this.printer).initPrinter(this);
 		  //this.printer.setReset();
-		  
+
+		//
 		EditText_Account = (EditText) findViewById(R.id.EditText_Account);
 		//EditText_Password = (EditText) findViewById(R.id.EditText_Password);
 		EditText_Car = (EditText) findViewById(R.id.EditText_Car);
 		EditText_Area = (EditText) findViewById(R.id.EditText_Area);
 		EditText_No = (EditText) findViewById(R.id.EditText_No);
 		EditText_Account.setText("123456");
-		Account = EditText_Account.getText().toString();
+
 		//EditText_Password.setText("123456");
 		EditText_Car.setText("MAH-8167");//MAH-8162 035-Q9
-		carID = EditText_Car.getText().toString();
+
 		EditText_Area.setText("123");
 		EditText_No.setText("1234567");
 		objContext = Login.this;
 		
 		//String imei = ((TelephonyManager) objContext.getSystemService(TELEPHONY_SERVICE)).getDeviceId();
-		// GCM
-		new GCMTask().execute();
-		
+		//帳號若輸入正確 記住登入帳號
+
+		SharedPreferences setting =
+				getSharedPreferences("Login", MODE_PRIVATE);
+		EditText_Account.setText(setting.getString("Account", "123456"));
+		EditText_Car.setText(setting.getString("Car", "MAH-8167"));
+		EditText_No.setText(setting.getString("NO", "1234567"));
+		EditText_Area.setText(setting.getString("Area", "123"));
+
+
 		btnLogin = (Button)findViewById(R.id.button_Login);
 		btnLogin.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				new GCMTask().execute();
 				Application.strAccount = EditText_Account.getText().toString();
 				//Application.strPass = EditText_Password.getText().toString();
 				Application.strCar = EditText_Car.getText().toString();
 				Application.strDeviceID = serial;
+				Account = EditText_Account.getText().toString();
+				carID = EditText_Car.getText().toString();
+				NO = EditText_No.getText().toString();
+				AREA = EditText_Area.getText().toString();
 
-			   new clsHttpPostAPI().CallAPI(objContext, "API001");
+			    new clsHttpPostAPI().CallAPI(objContext, "API001");
 			}
 		});
 		
@@ -226,14 +243,23 @@ public class Login extends Activity {
 						//記Log
 						new clsHttpPostAPI().CallAPI(objContext, "API021");
 
-						//取站所資料
-						
+
+						//記住帳號
+						SharedPreferences setting =
+								getSharedPreferences("Login", MODE_PRIVATE);
+						setting.edit()
+								.putString("Account", Account)
+								.putString("Car",carID)
+								.putString("NO",NO)
+								.putString("Area",AREA)
+								.commit();
 
 						//String EmployeeName =  objLogin.UserName;
 						//String Employee;
 						//Employee =  EmployeeName.substring(0, 3);
 						Intent it = new Intent(Login.this,Delay.class);
-                        //it.putExtra("Employee",Employee);
+						Log.e("Account",Account);
+                        it.putExtra("Employee",Account);
                         it.putExtra("regID",regId);
 						startService(it);
 

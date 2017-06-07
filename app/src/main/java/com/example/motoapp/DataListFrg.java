@@ -99,13 +99,17 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 	PPLZPrinter printer;
 
 	GCMActivity gcm = new GCMActivity();
-	String caseID = gcm.strCaseID;
+	public String caseID = gcm.strCaseID;
+	public static String regID,Account,carID;
 
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d("=====>", "GoogleFragment onCreateView");
+
+
+
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.frg_waiting);
@@ -780,6 +784,8 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 				new clsHttpPostAPI().CallAPI(context, "API014");
 				//Intent intent = new Intent(DataListFrg.this, Login.class);
 			 	//startActivity(intent);
+				Intent it = new Intent(DataListFrg.this,Delay.class);
+				stopService(it);
 			}
 		});
 		
@@ -1754,16 +1760,28 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		@Override
 		public void run() {
 			String url=Application.ChtUrl+"/Services/API/Motor_Dispatch/Upload_ForwardOrder.aspx";
-			File file = new File("C:\\test.jpg");
+			String file2 = "DCIM/100MEDIA/IMAG0111.jpg";
+			String data = null;
+			File file = new File("DCIM/100MEDIA/IMAG0111.jpg");
+			if (file != null){
+				Log.e("Yes", String.valueOf(file));
+			}else{
+				Log.e("NO","NO");
+			}
+			//upload(url,file);
+			//upload2(url,file);
+			//upload3(url,file);
+			//postAsynFile(url,file2);
+			UploadService uploadService = new UploadService();
 			try {
-				upload(url,file);
-				//upload2(url,file);
+				uploadService.uploadImage(file,data);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 	}
-	public void upload(String url, File file) throws IOException {
+	public void upload(final String url, File file) throws IOException {
+		Log.e("caseid",caseID);
 		OkHttpClient client = new OkHttpClient();
 		RequestBody formBody = new MultipartBody.Builder()
 				.setType(MultipartBody.FORM)
@@ -1800,6 +1818,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			@Override
 			public void onResponse(Call call, Response response) throws IOException {
 				String json = response.body().string();
+				Log.e("caseid",caseID);
 				Log.e("OkHttp", response.toString());
 				Log.e("OkHttp2", json);
 			}
@@ -1824,4 +1843,102 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		}
 
 	}
+	public void upload3(String url, File file) throws IOException {
+		OkHttpClient client = new OkHttpClient();
+		final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+		RequestBody formBody = new MultipartBody.Builder()
+				.setType(MultipartBody.FORM)
+				.addFormDataPart("file", "file", RequestBody.create(MEDIA_TYPE_PNG, file))
+				.build();
+		RequestBody body = new FormBody.Builder()
+				.add("key", Application.strKey)
+				.add("caseID",caseID)
+				.add("Type","1")
+				.add("FileType","jpg")
+				.add("KeyinFile","1")
+				.build();
+		Request request = new Request.Builder()
+				.url(url)
+				.post(body)
+				.post(formBody)
+				.build();
+		Response response = client.newCall(request).execute();
+		if (!response.isSuccessful()) {
+			throw new IOException("Unexpected code " + response);
+		}
+
+	}
+	private void postAsynFile(String url,String file2) {
+		final MediaType MEDIA_TYPE_MARKDOWN
+				= MediaType.parse("jpg/x-markdown; charset=utf-8");
+
+		OkHttpClient client = new OkHttpClient();
+		File file = new File(file2);
+		Request request = new Request.Builder()
+				.url(url)
+				.post(RequestBody.create(MEDIA_TYPE_MARKDOWN, file))
+				.build();
+
+		client.newCall(request).enqueue(new Callback() {
+			@Override
+			public void onFailure(Call call, IOException e) {
+
+			}
+
+			@Override
+			public void onResponse(Call call, Response response) throws IOException {
+				Log.i("wangshu",response.body().string());
+				String json = response.body().string();
+				Log.e("caseid",caseID);
+				Log.e("OkHttp", response.toString());
+				Log.e("OkHttp2", json);
+			}
+		});
+	}
+	public class UploadService {
+
+		final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/jpg");
+
+		public void uploadImage(File image, String imageName) throws IOException {
+
+			OkHttpClient client = new OkHttpClient();
+
+			RequestBody requestBody = new MultipartBody
+					.Builder()
+					.setType(MultipartBody.FORM)
+					.addFormDataPart("file", imageName, RequestBody.create(MEDIA_TYPE_PNG, image))
+					.addFormDataPart("key", Application.strKey)
+					.addFormDataPart("caseID",caseID)
+					.addFormDataPart("Type","1")
+					.addFormDataPart("FileType","jpg")
+					.addFormDataPart("KeyinFile","1")
+					.build();
+
+			Request request = new Request.Builder()
+					.header("Authorization", "Client-ID " + "...")
+					.url(Application.ChtUrl+"/Services/API/Motor_Dispatch/Upload_ForwardOrder.aspx")
+					.post(requestBody)
+					.build();
+
+			client.newCall(request).enqueue(new Callback() {
+				@Override
+				public void onFailure(Call call, IOException e) {
+
+				}
+
+				@Override
+				public void onResponse(Call call, Response response) throws IOException {
+					String json = response.body().string();
+					Log.e("caseid",caseID);
+					Log.e("OkHttp", response.toString());
+					Log.e("OkHttp2", json);
+				}
+			});
+
+
+		}
+
+	}
+
+
 }

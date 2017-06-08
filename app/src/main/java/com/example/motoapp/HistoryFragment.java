@@ -1,7 +1,6 @@
 package com.example.motoapp;
 
 
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -109,6 +108,7 @@ public class HistoryFragment extends Activity {
 		LinearLayout_list.setVisibility(View.VISIBLE);
 		ScrollView_H1.setVisibility(View.GONE);
 
+		//返回
 		Button button_Back = (Button)findViewById(R.id.button_Back);
 		button_Back.setOnClickListener(new OnClickListener() {
 			@Override
@@ -117,6 +117,7 @@ public class HistoryFragment extends Activity {
 				LinearLayout LinearLayout_list = (LinearLayout)findViewById(R.id.LinearLayout_list);
 				sv.setVisibility(View.GONE);
 				LinearLayout_list.setVisibility(View.VISIBLE);
+
 			}
 		});
 

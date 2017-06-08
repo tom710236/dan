@@ -2,5 +2,9 @@
     {
         "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\raw\\windows_8_notify.mp3",
         "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\raw\\windows_8_notify.mp3"
+    },
+    {
+        "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\raw\\windows_8_notify.mp3",
+        "source": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\src\\main\\res\\raw\\windows_8_notify.mp3"
     }
 ]

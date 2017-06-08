@@ -27,7 +27,9 @@ public class clsHttpPostAPI extends Activity {
 	String carID = login.carID;
 	GCMActivity gcm = new GCMActivity();
 	String caseID = gcm.strCaseID;
-
+	Delay delay = new Delay();
+	String lon = delay.lon;
+	String lan = delay.lat;
 
 
 	private dbLocations objDB;
@@ -478,7 +480,7 @@ public class clsHttpPostAPI extends Activity {
 
 				//String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?CaseID="+ Application.strCaseID + "&Status=7&obuID=" + objL.CarID+"&key="+Application.strKey;
 				String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?CaseID="+ Application.strCaseID + "&Status=7&EmployeeID=" + objL.UserID+"&key="+Application.strKey;
-				clsLogger.i("form_success", strUrl);
+				clsLogger.i("form_SendOK", strUrl);
 				strRequestJSON = objHttppost.Invoke(strUrl, "");
 				JSONObject json = new JSONObject(strRequestJSON);
 
@@ -513,7 +515,7 @@ public class clsHttpPostAPI extends Activity {
 				objDB.DBClose();
 
 				//String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?CaseID="+ Application.strCaseID + "&Status=8&obuID=" + objL.CarID+"&key="+Application.strKey+"&FailReasonID="+objT.FailReasonID;
-				String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?CaseID="+ Application.strCaseID + "&Status=8&EmployeeID=" + Account+"&key="+Application.strKey;
+				String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?CaseID="+ Application.strCaseID + "&Status=8&EmployeeID=" + Account+"&key="+Application.strKey+"&FailReasonID="+objT.FailReasonID;
 				clsLogger.i("form_SendNG", strUrl);
 				strRequestJSON = objHttppost.Invoke(strUrl, "");
 				JSONObject json = new JSONObject(strRequestJSON);
@@ -549,7 +551,7 @@ public class clsHttpPostAPI extends Activity {
 				clsLoginInfo objL = new clsLoginInfo(context);
 				objL.Load();
 
-				String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?CaseID="+ Application.strCaseID + "&Status=5&obuID="+objL.Car+"&key="+Application.strKey+"&StationID="+objT.StationID+"&StationType="+strData;
+				String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?CaseID="+ Application.strCaseID + "&Status=5&obuID="+objL.Car+"&key="+Application.strKey+"&StationID="+objT.StationID+"&StationType="+strData+"&EmployeeID="+objL.UserID;
 				clsLogger.i("form_Back", strUrl);
 				strRequestJSON = objHttppost.Invoke(strUrl, "");
 				JSONObject json = new JSONObject(strRequestJSON);
@@ -770,8 +772,8 @@ public class clsHttpPostAPI extends Activity {
 				clsLoginInfo objL = new clsLoginInfo(context);
 				objL.Load();
 
-				String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?CaseID="+ Application.strCaseID + "&Status=9&obuID=" + objL.CarID+"&key="+Application.strKey;
-				clsLogger.i("form_Go", strUrl);
+				String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?CaseID="+ Application.strCaseID + "&Status=9&obuID=" + objL.Car+"&key="+Application.strKey+"&EmployeeID="+objL.UserID;
+				clsLogger.i("Resend", strUrl);
 				strRequestJSON = objHttppost.Invoke(strUrl, "");
 				JSONObject json = new JSONObject(strRequestJSON);
 
@@ -799,8 +801,8 @@ public class clsHttpPostAPI extends Activity {
 				clsLoginInfo objL = new clsLoginInfo(context);
 				objL.Load();
 
-				String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?CaseID="+ Application.strCaseID + "&Status=10&obuID=" + objL.CarID+"&key="+Application.strKey;
-				clsLogger.i("form_Go", strUrl);
+				String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?CaseID="+ Application.strCaseID + "&Status=10&obuID=" + objL.Car+"&key="+Application.strKey+"&EmployeeID="+objL.UserID;
+				clsLogger.i("Form_close", strUrl);
 				strRequestJSON = objHttppost.Invoke(strUrl, "");
 				JSONObject json = new JSONObject(strRequestJSON);
 
@@ -888,8 +890,8 @@ public class clsHttpPostAPI extends Activity {
 				objL.Load();
 
 				String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DeviceInfo.aspx?ObuID="
-						+ objL.CarID + "&Status=4&key="+Application.strKey;
-				clsLogger.i("Login", strUrl);
+						+ objL.Car + "&Status=4&key="+Application.strKey+"&lon="+lon+"&lan="+lan;
+				clsLogger.i("Form_Reset", strUrl);
 				strRequestJSON = objHttppost.Invoke(strUrl, "");
 				JSONObject json = new JSONObject(strRequestJSON);
 
@@ -915,8 +917,8 @@ public class clsHttpPostAPI extends Activity {
 				objL.Load();
 
 				String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DeviceInfo.aspx?ObuID="
-						+ objL.CarID + "&Status=3&key="+Application.strKey;
-				clsLogger.i("Login", strUrl);
+						+ objL.Car + "&Status=3&key="+Application.strKey+"&lon="+lon+"&lan="+lan;
+				clsLogger.i("Form_Get", strUrl);
 				strRequestJSON = objHttppost.Invoke(strUrl, "");
 				JSONObject json = new JSONObject(strRequestJSON);
 

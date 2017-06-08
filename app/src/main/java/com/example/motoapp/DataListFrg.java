@@ -58,6 +58,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static com.example.motoapp.R.id.button_Save;
+
 public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 
 	MainActivity objActivity;
@@ -367,7 +369,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		});
 
 		/* 送達失敗，原因 */
-		Button button_Save2 = (Button) findViewById(R.id.button_Save);
+		Button button_Save2 = (Button) findViewById(button_Save);
 		button_Save2.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -382,6 +384,15 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 				objDB.DBClose();
 
 				new clsHttpPostAPI().CallAPI(context, "API009");
+			}
+		});
+		//送達失敗，返回
+		Button button_back = (Button) findViewById(R.id.button_Back);
+		button_back.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+
+				new clsHttpPostAPI().CallAPI(context, "API007");
 			}
 		});
 

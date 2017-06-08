@@ -108,9 +108,6 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		super.onCreate(savedInstanceState);
 		Log.d("=====>", "GoogleFragment onCreateView");
 
-
-
-
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.frg_waiting);
 		SysApplication.getInstance().addActivity(this);

@@ -32,6 +32,6 @@ public class Application extends android.app.Application {
 
 	//測試
 	public static String ChtUrl = "http://efms.hinet.net/FMS_WSMotor/";
-	public static String ShindaUrl="http://demo.shinda.com.tw:3366/KerryWeb/";
-	//public static String ShindaUrl="http://demo.shinda.com.tw:7380/KerryWeb/";
+	//public static String ShindaUrl="http://demo.shinda.com.tw:3366/KerryWeb/";
+	public static String ShindaUrl="http://demo.shinda.com.tw:7380/KerryWeb/";
 }

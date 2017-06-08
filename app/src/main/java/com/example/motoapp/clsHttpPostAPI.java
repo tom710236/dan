@@ -168,7 +168,7 @@ public class clsHttpPostAPI extends Activity {
 						"&CarNo="+Application.strCar+
 						"&key="+Application.strKey+
 						"&lon=121.48225"+ "&lat=25.02479";
-
+				Log.e("strUrl",strUrl);
 				clsLogger.i("Login", strUrl);
 				strRequestJSON = objHttppost.Invoke(strUrl, "");
 				JSONObject json = new JSONObject(strRequestJSON);
@@ -261,6 +261,7 @@ public class clsHttpPostAPI extends Activity {
 		}
 
 	};
+
 
 	private class form_Go extends Thread{
 		String strTime;

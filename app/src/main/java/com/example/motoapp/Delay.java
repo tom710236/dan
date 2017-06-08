@@ -42,6 +42,7 @@ public class Delay extends Service implements LocationListener {
     String today;
     String IMEI;
     Context context;
+
     public static String Employee,regID,lon,lat,UserID,GCMID;
     @Nullable
     @Override
@@ -53,8 +54,9 @@ public class Delay extends Service implements LocationListener {
     public int onStartCommand(Intent intent, int flags, int startId) {
         // activity向service传值
 
+
         Employee = intent.getStringExtra("Employee");
-        //regID = intent.getStringExtra("regID");
+        regID = intent.getStringExtra("regID");
         handler = new Handler();
         runnable = new Runnable() {
             @TargetApi(Build.VERSION_CODES.M)
@@ -86,12 +88,12 @@ public class Delay extends Service implements LocationListener {
                     Log.e("定位中", "定位中");
                 }
 
-                handler.postAtTime(this, android.os.SystemClock.uptimeMillis() + 30 * 1000);
+                handler.postAtTime(this, android.os.SystemClock.uptimeMillis() + 10 * 1000);
             }
 
         };
         //每分鐘執行一次
-        handler.postAtTime(runnable, android.os.SystemClock.uptimeMillis() + 30 * 1000);
+        handler.postAtTime(runnable, android.os.SystemClock.uptimeMillis() + 10 * 1000);
         //return super.onStartCommand(intent, flags, startId);
         return START_NOT_STICKY;
     }
@@ -141,8 +143,8 @@ public class Delay extends Service implements LocationListener {
         }
 
         private void okHttpGet() {
-            clsLoginInfo objL = new clsLoginInfo(context);
-            //objL.Load();
+            clsLoginInfo objL = new clsLoginInfo(Delay.this);
+            objL.Load();
             UserID= objL.UserID;
             GCMID = objL.GCMID;
             final String url1 = "http://efms.hinet.net/FMS_WSMotor/Services/API/Motor_Dispatch/Send_GPSInfo.aspx?\n" +
@@ -167,8 +169,9 @@ public class Delay extends Service implements LocationListener {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     String json = response.body().string();
-                    //Log.e("URL",url1);
+                    Log.e("URL",url1);
                     Log.e("回傳",json);
+
                 }
             });
 

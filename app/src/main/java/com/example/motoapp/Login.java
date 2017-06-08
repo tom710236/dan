@@ -49,7 +49,7 @@ public class Login extends Activity {
 	PPLZPrinter printer;
 	String serial;
     public static String regId;
-
+	Context context;
 
 
 	
@@ -231,7 +231,8 @@ public class Login extends Activity {
 						objLogin.Car = EditText_Car.getText().toString();
 						//objLogin.CarID = json.getString("ObuID");
 						objLogin.DeviceID = Application.strDeviceID;
-						objLogin.GCMID = Application.strRegistId;
+						//objLogin.GCMID = Application.strRegistId;
+						objLogin.GCMID=regId;
 						objLogin.StationID="7048";
 						objLogin.StationName="松山站所";
 						objLogin.UserID=EditText_Account.getText().toString();
@@ -239,9 +240,11 @@ public class Login extends Activity {
 						objLogin.AreaID = EditText_Area.getText().toString();
 						objLogin.FormNo = EditText_No.getText().toString();
 						objLogin.Insert();
-						
+						//Log.e("GCMID",regId);
+						//Log.e("UserID",EditText_Account.getText().toString());
 						//記Log
 						new clsHttpPostAPI().CallAPI(objContext, "API021");
+
 
 
 						//記住帳號
@@ -258,7 +261,7 @@ public class Login extends Activity {
 						//String Employee;
 						//Employee =  EmployeeName.substring(0, 3);
 						Intent it = new Intent(Login.this,Delay.class);
-						Log.e("Account",Account);
+						//Log.e("Account",Account);
                         it.putExtra("Employee",Account);
                         it.putExtra("regID",regId);
 						startService(it);

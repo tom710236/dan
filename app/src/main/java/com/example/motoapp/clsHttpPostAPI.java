@@ -93,7 +93,7 @@ public class clsHttpPostAPI extends Activity {
 				new Thread(form_upload1).start(); // 上傳簽收單
 				break;
 			case "API012":
-				new Thread(form_GetStation).start(); // 取得站所 回站
+				new Thread(form_GetStation).start(); // 取得站所 配送站
 				break;
 			case "API013":
 				new Thread(form_GetTaskData).start(); // 取得任務
@@ -135,7 +135,7 @@ public class clsHttpPostAPI extends Activity {
 		context = pContext;
 		switch (pStrAPI) {
 			case "API010":
-				new Thread(form_Back).start(); // 回站
+				new Thread(form_Back).start(); // 配送站
 				break;
 			case "API013":
 				new Thread(form_GetTaskData).start(); // 取得任務
@@ -200,7 +200,8 @@ public class clsHttpPostAPI extends Activity {
 			try {
 				clsLoginInfo objL = new clsLoginInfo(context);
 				objL.Load();
-				String strUrl =Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?CaseID="+ caseID + "&Status=1&EmployeeID=" + objL.UserID+"&key="+Application.strKey;
+
+				String strUrl =Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?CaseID="+ Application.strCaseID + "&Status=1&EmployeeID=" + objL.UserID+"&key="+Application.strKey;
 				clsLogger.i("form_get", strUrl);
 				strRequestJSON = objHttppost.Invoke(strUrl, "");
 
@@ -238,10 +239,10 @@ public class clsHttpPostAPI extends Activity {
 			String strRequestJSON = "";
 			try {
 				strRequestJSON = objHttppost
-						.Invoke(Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?CaseID="+ caseID + "&Status=2&EmployeeID=" + Account+"&key="+Application.strKey, "");
+						.Invoke(Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?CaseID="+ Application.strCaseID+ "&Status=2&EmployeeID=" + objL.UserID+"&key="+Application.strKey, "");
 				JSONObject json = new JSONObject(strRequestJSON);
 				json.put("Type", "2");
-				Log.e("json3", String.valueOf(json));
+				Log.e("拒絕", String.valueOf(json));
 				if(handlerTask!=null)
 				{
 					Message objMessage = new Message();
@@ -360,7 +361,7 @@ public class clsHttpPostAPI extends Activity {
 				clsLoginInfo objL = new clsLoginInfo(context);
 				objL.Load();
 
-				//String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?CaseID="+ Application.strCaseID + "&Status=4&obuID=" + carID+"&key="+Application.strKey+"&PayTypeID="+objT.PayType+"&PayAmount="+objT.PayAmount+"&OrderID="+objT.OrderID;
+				//String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?CaseID="+ Application.strCaseID + "&Status=4&obuID=" + objL.Car+"&key="+Application.strKey+"&PayTypeID="+objT.PayType+"&PayAmount="+objT.PayAmount+"&OrderID="+objT.OrderID;
 				String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?key="+Application.strKey+"&caseID="+Application.strCaseID+"&Status=4&EmployeeID="+Account;
 				clsLogger.i("form_success", strUrl);
 				strRequestJSON = objHttppost.Invoke(strUrl, "");
@@ -404,7 +405,7 @@ public class clsHttpPostAPI extends Activity {
 				strRequestJSON = objHttppost
 						.PostDataAndFile(
 								Application.ChtUrl+"Services/API/Motor_Dispatch/Upload_ForwardOrder.aspx",
-								strAy, "/sdcard/dd.jpg");
+								strAy, "/storage/DCIM/Camera/123.jpg");
 
 				JSONObject json = new JSONObject(strRequestJSON);
 
@@ -627,10 +628,11 @@ public class clsHttpPostAPI extends Activity {
 				strAy[1] = "Type@2";
 				strAy[2] = "FileType@jpg";
 				strAy[3] = "key@"+Application.strKey;
+				String path = context.getFilesDir() + "/DCIM/100MEDIA/test.jpg";
 				strRequestJSON = objHttppost
 						.PostDataAndFile(
 								Application.ChtUrl+"Services/API/Motor_Dispatch/Upload_ForwardOrder.aspx",
-								strAy, "/sdcard/dd.jpg");
+								strAy, path);
 
 				JSONObject json = new JSONObject(strRequestJSON);
 
@@ -648,7 +650,7 @@ public class clsHttpPostAPI extends Activity {
 		}
 
 	};
-
+	//有修改
 	Runnable form_GetTaskData = new Runnable() {
 		@Override
 		public void run() {
@@ -658,14 +660,20 @@ public class clsHttpPostAPI extends Activity {
 			objDB = new dbLocations(context);
 			objDB.openDB();
 			objDB.Delete("tblTask", "cOrderID='"+strData+"'");
+			clsTask objT = objDB.LoadTask(Application.strCaseID);
 			objDB.DBClose();
 
 			clsHttpPost objHttppost = new clsHttpPost();
 			String strRequestJSON = "";
+			String strUrl;
 			try {
+				if(strData!=null){
+					strUrl =Application.ChtUrl+"Services/API/Motor_Dispatch/Get_DispatchInfo.aspx?OrderID=" + strData+"&key="+Application.strKey;
+				}else{
+					strUrl =Application.ChtUrl+"Services/API/Motor_Dispatch/Get_DispatchInfo.aspx?OrderID=" +objT.OrderID+"&key="+Application.strKey;
+				}
 
-				String strUrl =Application.ChtUrl+"Services/API/Motor_Dispatch/Get_DispatchInfo.aspx?OrderID=" + strData+"&key="+Application.strKey;
-				clsLogger.i("form_get", strUrl);
+				clsLogger.i("form_GetTaskData", strUrl);
 				strRequestJSON = objHttppost.Invoke(strUrl, "");
 
 				JSONObject json = new JSONObject(strRequestJSON);

@@ -229,8 +229,7 @@ public class clsHttpPost {
 		try {
 
 			// open a URL connection to the Servlet
-			// FileInputStream fileInputStream = new
-			// FileInputStream(sourceFile);
+			//FileInputStream fileInputStream = new FileInputStream(sourceFile);
 			URL url = new URL(pStrServerURL);
 
 			// Open a HTTP connection to the URL

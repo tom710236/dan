@@ -39,42 +39,47 @@
 
 </LinearLayout>
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
- <Button
-        android:id="@+id/button_DoList"
-        android:layout_width="0dp"
-        android:layout_height="55dp"
-         android:background="@drawable/btnbg1"
-         android:textColor="@drawable/btncolor"
-        android:layout_weight="1"
-        android:text="" />
-  <Button
-        android:id="@+id/button_IO"
-        android:layout_width="0dp"
-        android:layout_height="55dp"
-         android:background="@drawable/btnbg2"
-         android:textColor="@drawable/btncolor"
-        android:layout_weight="1"
-        android:text="" />
-   <Button
-        android:id="@+id/button_GT"
-        android:layout_width="0dp"
-        android:layout_height="55dp"
-         android:background="@drawable/btnbg3"
-         android:textColor="@drawable/btncolor"
-        android:layout_weight="1"
-        android:text="" />
-    <Button
-        android:id="@+id/button_DoneList"
-        android:layout_width="0dp"
-        android:layout_height="55dp"
-         android:background="@drawable/btnbg4"
-         android:textColor="@drawable/btncolor"
-        android:layout_weight="1"
-        android:text="" />
-        </LinearLayout>
+
+        <Button
+            android:id="@+id/button_DoList"
+            android:layout_width="0dp"
+            android:layout_height="55dp"
+            android:layout_weight="1"
+            android:background="@drawable/btnbg1"
+            android:text=""
+            android:textColor="@drawable/btncolor" />
+
+        <Button
+            android:id="@+id/button_IO"
+            android:layout_width="0dp"
+            android:layout_height="55dp"
+            android:layout_weight="1"
+            android:background="@drawable/btnbg2"
+            android:text=""
+            android:textColor="@drawable/btncolor" />
+
+        <Button
+            android:id="@+id/button_GT"
+            android:layout_width="0dp"
+            android:layout_height="55dp"
+            android:layout_weight="1"
+            android:background="@drawable/btnbg3"
+            android:text=""
+            android:textColor="@drawable/btncolor" />
+
+        <Button
+            android:id="@+id/button_DoneList"
+            android:layout_width="0dp"
+            android:layout_height="55dp"
+            android:layout_weight="1"
+            android:background="@drawable/btnbg4"
+            android:text=""
+            android:textColor="@drawable/btncolor" />
+    </LinearLayout>
 
 </LinearLayout>

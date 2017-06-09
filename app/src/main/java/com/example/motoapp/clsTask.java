@@ -117,6 +117,8 @@ public class clsTask {
 			return "接單失敗";
 		if(pStrStatus.equals("3"))
 			return "接單逾時";
+		if(pStrStatus.equals("00"))
+			return "拒絕";
 		return "";
 	}
 

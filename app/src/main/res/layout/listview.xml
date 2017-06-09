@@ -42,10 +42,10 @@
         android:id="@+id/button_Detail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-         android:background="@drawable/btnbg"
-         android:textColor="@drawable/btncolor"
-         android:layout_centerVertical="true"
+        android:layout_centerVertical="true"
         android:layout_weight="1"
-        android:text="明細" />
+        android:background="@drawable/btnbg"
+        android:text="明細"
+        android:textColor="@drawable/btncolor" />
 
 </LinearLayout>

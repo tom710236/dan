@@ -100,11 +100,14 @@ public class GCMActivity extends Activity {
 			LinearLayout_St1.setVisibility(View.VISIBLE);
 			TextView_Msg.setText("派遣任務("+bundle.getString("caseID")+")逾時超過"+bundle.getString("timeout")+"分鐘未回應！");
 		}
-
+		// 刷新listview
 		btnClose.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				Intent intent = new Intent(GCMActivity.this, DataListFrg.class);
+				startActivity(intent);
 				finish();
+
 			}
 		});
 

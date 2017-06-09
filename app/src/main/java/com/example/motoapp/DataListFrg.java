@@ -48,16 +48,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.FormBody;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-
 import static com.example.motoapp.R.id.button_Save;
 
 public class DataListFrg extends Activity implements SurfaceHolder.Callback {
@@ -71,7 +61,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 	Handler handlerListView;
 	Handler handlerThread;
 	clsLoginInfo objLoginInfo;
-	
+	ListViewAdpater adpater;
 	Button button_DoList;
 	Button button_IO;
 	Button button_GT;
@@ -130,6 +120,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		{
 			
 			setListView();
+
 		}
 		/*printer = new PPLZPrinter();
 		((PPLZPrinter) this.printer).initPrinter(this);*/
@@ -173,7 +164,9 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			@Override
 			public void onClick(View v) {
 				new clsHttpPostAPI().CallAPI(context, "API003");
-				finish();
+				type="71";
+				display();
+
 			}
 		});
 
@@ -243,8 +236,21 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		button_takePic1.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// 自動對焦
-				camera.autoFocus(afcb);
+
+				if (type.equals("070")) {
+					// 簽收單
+					//new clsHttpPostAPI().CallAPI(context, "API011");
+					type="71";
+					display();
+				} else {
+					Application.IsCreateData = ((CheckBox) findViewById(R.id.chkCreateData))
+							.isChecked();
+					objDB.openDB();
+					new clsHttpPostAPI().CallAPI(context, "API013");
+					type="41";
+					display();
+				}
+
 			}
 		});
 
@@ -255,9 +261,10 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 
 			@Override
 			public void onClick(View v) {
-				Post post = new Post();
-				post.start();
+				//Post post = new Post();
+				//post.start();
 
+				new clsHttpPostAPI().CallAPI(context, "API006");
 
 				/*
 				 * 上傳照片及是否協助建檔
@@ -866,9 +873,10 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 					}
 					objDB.DBClose();
 
-					ListViewAdpater adpater = new ListViewAdpater(context,
+					adpater = new ListViewAdpater(context,
 							rowitem);
 					listView.setAdapter(adpater);
+					//adpater.notifyDataSetChanged();
 				} catch (Exception e) {
 					Log.i("Error", e.getMessage());
 					try {
@@ -1764,189 +1772,5 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-	class Post extends Thread{
-		@Override
-		public void run() {
-			String url=Application.ChtUrl+"/Services/API/Motor_Dispatch/Upload_ForwardOrder.aspx";
-			String file2 = "DCIM/100MEDIA/IMAG0111.jpg";
-			String data = null;
-			File file = new File("DCIM/100MEDIA/IMAG0111.jpg");
-			if (file != null){
-				Log.e("Yes", String.valueOf(file));
-			}else{
-				Log.e("NO","NO");
-			}
-			//upload(url,file);
-			//upload2(url,file);
-			//upload3(url,file);
-			//postAsynFile(url,file2);
-			UploadService uploadService = new UploadService();
-			try {
-				uploadService.uploadImage(file,data);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	public void upload(final String url, File file) throws IOException {
-		Log.e("caseid",caseID);
-		OkHttpClient client = new OkHttpClient();
-		RequestBody formBody = new MultipartBody.Builder()
-				.setType(MultipartBody.FORM)
-				.addFormDataPart("data", file.getName(),
-						RequestBody.create(MediaType.parse("jpg/git"), file))
-				.addFormDataPart("other_field", "other_field_value")
-				.build();
-
-		RequestBody body = new FormBody.Builder()
-				.add("key", Application.strKey)
-				.add("caseID",caseID)
-				.add("Type","1")
-				.add("FileType","jpg")
-				.add("KeyinFile","1")
-				.build();
-		Request request = new Request.Builder()
-				.url(url)
-				.post(body)
-				//.post(formBody)
-				.build();
-		/*
-		Response response = client.newCall(request).execute();
-		if (!response.isSuccessful()) {
-			throw new IOException("Unexpected code " + response);
-		}
-		*/
-
-		client.newCall(request).enqueue(new Callback() {
-			@Override
-			public void onFailure(Call call, IOException e) {
-
-			}
-
-			@Override
-			public void onResponse(Call call, Response response) throws IOException {
-				String json = response.body().string();
-				Log.e("caseid",caseID);
-				Log.e("OkHttp", response.toString());
-				Log.e("OkHttp2", json);
-			}
-		});
-
-	}
-	public void upload2(String url, File file) throws IOException {
-		OkHttpClient client = new OkHttpClient();
-		final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
-		RequestBody formBody = new MultipartBody.Builder()
-				.setType(MultipartBody.FORM)
-				.addFormDataPart("file", "date", RequestBody.create(MEDIA_TYPE_PNG, file))
-
-				.build();
-		Request request = new Request.Builder()
-				.url(url)
-				.post(formBody)
-				.build();
-		Response response = client.newCall(request).execute();
-		if (!response.isSuccessful()) {
-			throw new IOException("Unexpected code " + response);
-		}
-
-	}
-	public void upload3(String url, File file) throws IOException {
-		OkHttpClient client = new OkHttpClient();
-		final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
-		RequestBody formBody = new MultipartBody.Builder()
-				.setType(MultipartBody.FORM)
-				.addFormDataPart("file", "file", RequestBody.create(MEDIA_TYPE_PNG, file))
-				.build();
-		RequestBody body = new FormBody.Builder()
-				.add("key", Application.strKey)
-				.add("caseID",caseID)
-				.add("Type","1")
-				.add("FileType","jpg")
-				.add("KeyinFile","1")
-				.build();
-		Request request = new Request.Builder()
-				.url(url)
-				.post(body)
-				.post(formBody)
-				.build();
-		Response response = client.newCall(request).execute();
-		if (!response.isSuccessful()) {
-			throw new IOException("Unexpected code " + response);
-		}
-
-	}
-	private void postAsynFile(String url,String file2) {
-		final MediaType MEDIA_TYPE_MARKDOWN
-				= MediaType.parse("jpg/x-markdown; charset=utf-8");
-
-		OkHttpClient client = new OkHttpClient();
-		File file = new File(file2);
-		Request request = new Request.Builder()
-				.url(url)
-				.post(RequestBody.create(MEDIA_TYPE_MARKDOWN, file))
-				.build();
-
-		client.newCall(request).enqueue(new Callback() {
-			@Override
-			public void onFailure(Call call, IOException e) {
-
-			}
-
-			@Override
-			public void onResponse(Call call, Response response) throws IOException {
-				Log.i("wangshu",response.body().string());
-				String json = response.body().string();
-				Log.e("caseid",caseID);
-				Log.e("OkHttp", response.toString());
-				Log.e("OkHttp2", json);
-			}
-		});
-	}
-	public class UploadService {
-
-		final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/jpg");
-
-		public void uploadImage(File image, String imageName) throws IOException {
-
-			OkHttpClient client = new OkHttpClient();
-
-			RequestBody requestBody = new MultipartBody
-					.Builder()
-					.setType(MultipartBody.FORM)
-					.addFormDataPart("file", imageName, RequestBody.create(MEDIA_TYPE_PNG, image))
-					.addFormDataPart("key", Application.strKey)
-					.addFormDataPart("caseID",caseID)
-					.addFormDataPart("Type","1")
-					.addFormDataPart("FileType","jpg")
-					.addFormDataPart("KeyinFile","1")
-					.build();
-
-			Request request = new Request.Builder()
-					.header("Authorization", "Client-ID " + "...")
-					.url(Application.ChtUrl+"/Services/API/Motor_Dispatch/Upload_ForwardOrder.aspx")
-					.post(requestBody)
-					.build();
-
-			client.newCall(request).enqueue(new Callback() {
-				@Override
-				public void onFailure(Call call, IOException e) {
-
-				}
-
-				@Override
-				public void onResponse(Call call, Response response) throws IOException {
-					String json = response.body().string();
-					Log.e("caseid",caseID);
-					Log.e("OkHttp", response.toString());
-					Log.e("OkHttp2", json);
-				}
-			});
-
-
-		}
-
-	}
-
 
 }

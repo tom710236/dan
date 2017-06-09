@@ -20,7 +20,7 @@ public class clsLogger {
 	public static void Debug(String pStrTagName, String pStrMessage)
 	{
 		if (boolEnableDebug)
-			Log.d(pStrTagName, android.text.format.DateFormat.format("hh:mm", new java.util.Date()).toString()+ StrSplit + pStrMessage);
+			Log.e(pStrTagName, android.text.format.DateFormat.format("hh:mm", new java.util.Date()).toString()+ StrSplit + pStrMessage);
 	}
 
 	/**
@@ -45,7 +45,7 @@ public class clsLogger {
 	public static void Information(String pStrTagName, String pStrMessage)
 	{
 		if (boolEnableInfo)
-			Log.i(pStrTagName, pStrMessage);
+			Log.e(pStrTagName, pStrMessage);
 	}
 
 	/**
@@ -70,7 +70,7 @@ public class clsLogger {
 	public static void Warn(String pStrTagName, String pStrMessage)
 	{
 		if (boolEnableWarn)
-			Log.w(pStrTagName, pStrMessage);
+			Log.e(pStrTagName, pStrMessage);
 	}
 
 	/**

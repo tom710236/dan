@@ -44,16 +44,16 @@
         "source": "C:\\Users\\TOM\\.android\\build-cache\\b7f8df07a0edfa59a716d85099175de6d259774a\\output\\res\\layout\\design_menu_item_action_area.xml"
     },
     {
-        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_list_menu_item_radio.xml",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\2c6e9d925e6ab833828d44363f69c43e06132385\\output\\res\\layout\\abc_list_menu_item_radio.xml"
+        "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\layout\\notification_action.xml",
+        "source": "C:\\Users\\TOM\\.android\\build-cache\\2c6e9d925e6ab833828d44363f69c43e06132385\\output\\res\\layout\\notification_action.xml"
     },
     {
         "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\main.xml",
         "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\layout\\main.xml"
     },
     {
-        "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\layout\\notification_action.xml",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\2c6e9d925e6ab833828d44363f69c43e06132385\\output\\res\\layout\\notification_action.xml"
+        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_list_menu_item_radio.xml",
+        "source": "C:\\Users\\TOM\\.android\\build-cache\\2c6e9d925e6ab833828d44363f69c43e06132385\\output\\res\\layout\\abc_list_menu_item_radio.xml"
     },
     {
         "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\design_navigation_item.xml",
@@ -88,20 +88,20 @@
         "source": "C:\\Users\\TOM\\.android\\build-cache\\2c6e9d925e6ab833828d44363f69c43e06132385\\output\\res\\layout\\abc_screen_toolbar.xml"
     },
     {
-        "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_action_menu_layout.xml",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\2c6e9d925e6ab833828d44363f69c43e06132385\\output\\res\\layout\\abc_action_menu_layout.xml"
-    },
-    {
         "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\layout\\device_name.xml",
         "source": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\src\\main\\res\\layout\\device_name.xml"
     },
     {
-        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_expanded_menu_layout.xml",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\2c6e9d925e6ab833828d44363f69c43e06132385\\output\\res\\layout\\abc_expanded_menu_layout.xml"
+        "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_action_menu_layout.xml",
+        "source": "C:\\Users\\TOM\\.android\\build-cache\\2c6e9d925e6ab833828d44363f69c43e06132385\\output\\res\\layout\\abc_action_menu_layout.xml"
     },
     {
         "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\headernobtn.xml",
         "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\layout\\headernobtn.xml"
+    },
+    {
+        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_expanded_menu_layout.xml",
+        "source": "C:\\Users\\TOM\\.android\\build-cache\\2c6e9d925e6ab833828d44363f69c43e06132385\\output\\res\\layout\\abc_expanded_menu_layout.xml"
     },
     {
         "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_screen_simple.xml",
@@ -116,12 +116,12 @@
         "source": "C:\\Users\\TOM\\.android\\build-cache\\2c6e9d925e6ab833828d44363f69c43e06132385\\output\\res\\layout\\abc_action_bar_up_container.xml"
     },
     {
-        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_action_mode_bar.xml",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\2c6e9d925e6ab833828d44363f69c43e06132385\\output\\res\\layout\\abc_action_mode_bar.xml"
-    },
-    {
         "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_popup_menu_header_item_layout.xml",
         "source": "C:\\Users\\TOM\\.android\\build-cache\\2c6e9d925e6ab833828d44363f69c43e06132385\\output\\res\\layout\\abc_popup_menu_header_item_layout.xml"
+    },
+    {
+        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_action_mode_bar.xml",
+        "source": "C:\\Users\\TOM\\.android\\build-cache\\2c6e9d925e6ab833828d44363f69c43e06132385\\output\\res\\layout\\abc_action_mode_bar.xml"
     },
     {
         "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\layout\\notification_template_custom_big.xml",

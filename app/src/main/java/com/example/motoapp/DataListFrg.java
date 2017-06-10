@@ -189,6 +189,9 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			@Override
 			public void onClick(View v) {
 				new clsHttpPostAPI().CallAPI(context, "API003");
+				objDB.openDB();
+				objDB.UpdateTaskStatus("00", Application.strCaseID);
+				objDB.DBClose();
 				type="71";
 				display();
 
@@ -275,6 +278,10 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 				if (type.equals("070")) {
 					// 簽收單
 					//new clsHttpPostAPI().CallAPI(context, "API011");
+
+					objDB.openDB(); //狀態
+					objDB.UpdateTaskStatus("71", Application.strCaseID);
+					objDB.DBClose();
 					type="71";
 					display();
 				} else {
@@ -551,6 +558,10 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 							break;
 						case "2":
 							strType = "派遣拒絕回覆";
+
+							objDB.openDB();
+							objDB.UpdateTaskStatus("00", Application.strCaseID);
+							objDB.DBClose();
 							type = "01";
 							break;
 						case "3":

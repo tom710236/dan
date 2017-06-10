@@ -427,7 +427,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			@Override
 			public void handleMessage(Message msg) {
 				Bundle json = (Bundle) msg.obj;
-				Log.e("json", String.valueOf(json));
+				Log.e("GCM資料", String.valueOf(json));
 				try {
 					String status = json.getString("status");
 					Log.e("status",status);
@@ -435,6 +435,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 					if (status.equals("0")) {
 						Application.objForm = json;
 						// cCaseID,cOrderID,cCustAddress,cDistance,cSize,cItemCount,cRequestDate,cType
+
 						objDB.openDB();
 						objDB.InsertTask(new Object[] {
 								json.getString("caseID"),
@@ -445,22 +446,23 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 								json.getString("item_count"),
 								json.getString("request_time"), "0" });
 						objDB.DBClose();
-						Application.strCaseID = json.getString("caseID");
-						Application.strObuID = json.getString("obuid");
 						Log.e("strCaseID",Application.strCaseID);
-						Log.e("strCaseID",json.getString("caseID"));
+						Log.e("strCaseID", String.valueOf(json.getInt("caseID")));
+
 						type = "02";
 						display();
 					}
 					if (status.equals("1")) {
+						Log.e("status=1 json", String.valueOf(json));
+						Log.e("item_count", String.valueOf(json.getInt("item_count")));
+						Log.e("distance",json.getString("distance"));
 						Application.strCaseID = json.getString("caseID");
 						Application.strObuID = json.getString("obuid");
 						Application.objFormInfo = json;
-						Log.e("strCaseID2",Application.strCaseID);
-						Log.e("strCaseID2",json.getString("caseID"));
 						type = "21";
 						objDB.openDB();
-						objDB.UpdateTask(json.getString("customer_address"),
+						objDB.UpdateTask(
+								json.getString("customer_address"),
 								json.getString("customer_name"),
 								json.getString("customer_phoneNo"),
 								json.getString("recipient_name"),
@@ -479,6 +481,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 						clsDialog.Show(context, "提示訊息", "接單失敗");
 						// dialog = ProgressDialog.show(MainActivity.this,
 						// "接單失敗", "等待詢車中...", true);
+						finish();
 					}
 					if (status.equals("3")) {
 						// type = 1;

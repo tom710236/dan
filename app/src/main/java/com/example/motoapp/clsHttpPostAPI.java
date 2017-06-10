@@ -241,7 +241,6 @@ public class clsHttpPostAPI extends Activity {
 				strRequestJSON = objHttppost
 						.Invoke(Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?CaseID="+ Application.strCaseID+ "&Status=2&EmployeeID=" + objL.UserID+"&key="+Application.strKey, "");
 				JSONObject json = new JSONObject(strRequestJSON);
-				json.put("Type", "2");
 				Log.e("拒絕", String.valueOf(json));
 				if(handlerTask!=null)
 				{

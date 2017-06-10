@@ -50,7 +50,7 @@ public class Login extends Activity {
 	String serial;
     public static String regId;
 	Context context;
-
+	Button button;
 
 	
 	@Override
@@ -59,7 +59,10 @@ public class Login extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_login);
 
-
+		if(regId!=null){
+			button = (Button)findViewById(R.id.GCM);
+			button.setVisibility(View.GONE);
+		}
 		SysApplication.getInstance().addActivity(this);
 		dbLocations objLocation = new dbLocations(Login.this);
 		objLocation.CheckDB();
@@ -401,4 +404,12 @@ public class Login extends Activity {
                     REQUEST_CONTACTS);
         }
     }
+    public void onGCM (View v){
+		new GCMTask().execute();
+
+		if (regId!=null){
+			button = (Button)findViewById(R.id.GCM);
+			button.setVisibility(View.GONE);
+		}
+	}
 }

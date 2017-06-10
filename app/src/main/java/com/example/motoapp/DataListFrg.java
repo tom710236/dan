@@ -37,6 +37,7 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -155,6 +156,30 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 				// 顯示Progress對話方塊
 				myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
 				new clsHttpPostAPI().CallAPI(context, "API002");
+                new Thread(new Runnable(){
+                    @Override
+                    public void run() {
+                        try{
+                            Thread.sleep(15000);
+                        }
+                        catch(Exception e){
+                            e.printStackTrace();
+                        }
+                        finally{
+							myDialog.dismiss();
+							runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									//Toast.makeText(DataListFrg.this, "單號有誤", Toast.LENGTH_SHORT).show();
+									clsDialog.Show(context, "提示訊息", "接單失敗");
+								}
+							});
+
+                        }
+                    }
+                }).start();
+
+
 
 			}
 		});
@@ -175,20 +200,30 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		button_Go.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				EditText editText = (EditText)findViewById(R.id.EditText_Receive);
+				if(editText.length()!=0){
+					/* 更新預計時間欄位 */
+					objDB.openDB();
+					objDB.UpdateTaskRecTime(
+							((TextView) findViewById(R.id.EditText_Receive))
+									.getText().toString(), Application.strCaseID);
 
-				/* 更新預計時間欄位 */
-				objDB.openDB();
-				objDB.UpdateTaskRecTime(
-						((TextView) findViewById(R.id.EditText_Receive))
-								.getText().toString(), Application.strCaseID);
-
-				objDB.DBClose();
+					objDB.DBClose();
 
 				/*
 				 * 呼叫API 前往取件
 				 */
-				new clsHttpPostAPI().CallAPI(context, "API004");
-				EditText_OrderID1.requestFocus();
+
+
+					new clsHttpPostAPI().CallAPI(context, "API004");
+					EditText_OrderID1.requestFocus();
+				}else{
+					Toast.makeText(DataListFrg.this, "請輸入時間", Toast.LENGTH_SHORT).show();
+				}
+
+
+
+
 				
 			}
 		});
@@ -478,7 +513,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 					if (status.equals("2")) {
 						// type = 1;
 						// changeTab(0);
-						clsDialog.Show(context, "提示訊息", "接單失敗");
+						//clsDialog.Show(context, "提示訊息", "接單失敗");
 						// dialog = ProgressDialog.show(MainActivity.this,
 						// "接單失敗", "等待詢車中...", true);
 						finish();
@@ -502,7 +537,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			@Override
 			public void handleMessage(Message msg) {
 				JSONObject json = (JSONObject) msg.obj;
-
+				Log.e("handlerTask JSON", String.valueOf(json));
 				try {
 					String Result = json.getString("Result");
 
@@ -863,7 +898,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 									.getColumnIndex("cCaseID"));
 							String strStatus = cursor.getString(cursor
 									.getColumnIndex("cStatus"));
-
+							Log.e("狀態",strStatus);
 							rowitem.add(new NewItem(strOrderID, strCaseID,
 									clsTask.GetStatus(strStatus)));
 
@@ -1068,6 +1103,10 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 					.setText(objT.OrderID);
 			((TextView) findViewById(R.id.editText_Address))
 					.setText(objT.CustAddress);
+			((TextView) findViewById(R.id.EditText_Count))
+					.setText(objT.ItemCount);
+			((TextView) findViewById(R.id.editText_Distant))
+					.setText(objT.Distance);
 			((TextView) findViewById(R.id.EditText_Size)).setText(objT.Size);
 
 			objDB.DBClose();
@@ -1114,6 +1153,10 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			((TextView) findViewById(R.id.editText_Address))
 					.setText(objT.CustAddress);
 			((TextView) findViewById(R.id.EditText_Size)).setText(objT.Size);
+			((TextView) findViewById(R.id.EditText_Count))
+					.setText(objT.ItemCount);
+			((TextView) findViewById(R.id.editText_Distant))
+					.setText(objT.Distance);
 			((TextView) findViewById(R.id.EditText_Receive)).setText("");
 
 			((TextView) findViewById(R.id.EditText_Receive)).requestFocus();

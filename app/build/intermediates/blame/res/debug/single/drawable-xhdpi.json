@@ -6,5 +6,9 @@
     {
         "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi\\ic_launcher.png",
         "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-xhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi\\ic_launcher.png",
+        "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-xhdpi\\ic_launcher.png"
     }
 ]

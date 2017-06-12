@@ -10,7 +10,6 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.PictureCallback;
@@ -220,6 +219,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 
 					new clsHttpPostAPI().CallAPI(context, "API004");
 					EditText_OrderID1.requestFocus();
+
 				}else{
 					Toast.makeText(DataListFrg.this, "請輸入時間", Toast.LENGTH_SHORT).show();
 				}
@@ -278,10 +278,16 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 				if (type.equals("070")) {
 					// 簽收單
 					//new clsHttpPostAPI().CallAPI(context, "API011");
-
-					objDB.openDB(); //狀態
-					objDB.UpdateTaskStatus("71", Application.strCaseID);
+					objDB = new dbLocations(context);
+					objDB.openDB();
+					clsTask objT = objDB.LoadTask(Application.strCaseID);
 					objDB.DBClose();
+					clsLoginInfo objL = new clsLoginInfo(context);
+					objL.Load();
+					objDB.openDB(); //狀態
+					objDB.UpdateTaskStatus("71", objT.CaseID);
+					objDB.DBClose();
+					Log.e(" objT.CaseID", objT.CaseID);
 					type="71";
 					display();
 				} else {
@@ -1725,21 +1731,26 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 
 	};
 
-	public void surfaceChanged(SurfaceHolder holder, int format, int width,
-			int height) {
+	@Override
+	public void surfaceCreated(SurfaceHolder holder) {
 
 	}
 
+	public void surfaceChanged(SurfaceHolder holder, int format, int width,
+							   int height) {
+
+	}
+	/*
 	public void surfaceCreated(SurfaceHolder holder) {
 
 		//camera = Camera.open();
 		try {
-			/*
-			 * Camera.Parameters params = camera.getParameters();
-			 * params.setPreviewSize(300, 400); params.setPreviewFrameRate(4);
-			 * params.setPictureFormat(PixelFormat.JPEG);
-			 * params.set("jpeg-quality", 85); params.setPictureSize(300, 400);
-			 */
+
+			 Camera.Parameters params = camera.getParameters();
+			 params.setPreviewSize(300, 400); params.setPreviewFrameRate(4);
+			 params.setPictureFormat(PixelFormat.JPEG);
+			 params.set("jpeg-quality", 85); params.setPictureSize(300, 400);
+
 			// camera.setParameters(params);
 			// camera.setPreviewDisplay(surfaceHolder);
 			// camera.setDisplayOrientation(90);
@@ -1774,13 +1785,14 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		}
 
 	}
+	*/
 
 	public void surfaceDestroyed(SurfaceHolder holder) {
 
 		System.out.println("surfaceDestroyed");
-//	    camera.stopPreview();
+		// camera.stopPreview();
 		// 關閉預覽
-		// 	camera.release();
+		// camera.release();
 		//
 	}
 
@@ -1791,7 +1803,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 
 			if (success) {
 				// 對焦成功才拍照
-				camera.takePicture(null, null, jpeg);
+				//camera.takePicture(null, null, jpeg);
 			}
 		}
 

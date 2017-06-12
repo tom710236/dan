@@ -1,6 +1,7 @@
 package com.example.motoapp;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.json.JSONObject;
 
@@ -159,6 +160,7 @@ public class clsTask {
 			json.put("HT3186", "1");
 			json.put("HT3191", strDate);
 			json.put("HT3192", strTime);
+			Log.e("postToAS400", String.valueOf(json));
 		} catch (Exception e) {
 			// TODO: handle exception
 		}

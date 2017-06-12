@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -52,6 +53,7 @@ public class HistoryFragment extends Activity {
 		List rowitem = new ArrayList();
 		listView = (ListView) findViewById(R.id.listView);
 
+
 		if(cursor!=null && cursor.getCount() > 0)
 		{
 			while(true)
@@ -73,7 +75,7 @@ public class HistoryFragment extends Activity {
 
 		ListViewAdpaterHistory adpater = new ListViewAdpaterHistory(HistoryFragment.this, rowitem);
 		listView.setAdapter(adpater);
-		
+
 		/*List rowitem = new ArrayList();
 
 		listView = (ListView) findViewById(R.id.listView);
@@ -107,6 +109,29 @@ public class HistoryFragment extends Activity {
 
 		LinearLayout_list.setVisibility(View.VISIBLE);
 		ScrollView_H1.setVisibility(View.GONE);
+
+
+		/* 取出資料 */
+		/*
+		objDB.openDB();
+		clsTask objT = objDB.LoadTask(caseID);
+
+		objDB.DBClose();
+		((TextView) findViewById(R.id.TextView_CarNo))
+				.setText(Application.strCar);
+		((TextView) findViewById(R.id.TextView_DateTime))
+				.setText(objT.RequestDate);
+		((TextView) findViewById(R.id.TextView_CaseID))
+				.setText(objT.OrderID);
+		((TextView) findViewById(R.id.editText_Address))
+				.setText(objT.RecAddress);
+		((TextView) findViewById(R.id.EditText_Size))
+				.setText(objT.RecName);
+		((TextView) findViewById(R.id.editText_Distant))
+				.setText(objT.Distance);
+		((TextView) findViewById(R.id.EditText_Count))
+				.setText(objT.ItemCount);
+		*/
 
 		//返回
 		Button button_Back = (Button)findViewById(R.id.button_Back);
@@ -225,4 +250,5 @@ public class HistoryFragment extends Activity {
 		}
 		return super.onKeyDown(keyCode, event);
 	}
+
 }

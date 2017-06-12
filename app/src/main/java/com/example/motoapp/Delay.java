@@ -106,8 +106,8 @@ public class Delay extends Service implements LocationListener {
                 location.getLongitude(),
                 location.getAltitude()
         );
-        Log.e("str", str);
-        Log.e("today", today);
+        //Log.e("str", str);
+        //Log.e("today", today);
         lon = String.valueOf(location.getLongitude());
         lat = String.valueOf(location.getLatitude());
         Toast.makeText(Delay.this, str + today , Toast.LENGTH_SHORT).show();
@@ -169,8 +169,8 @@ public class Delay extends Service implements LocationListener {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     String json = response.body().string();
-                    Log.e("URL",url1);
-                    Log.e("回傳",json);
+                    //Log.e("URL",url1);
+                    //Log.e("回傳",json);
 
                 }
             });

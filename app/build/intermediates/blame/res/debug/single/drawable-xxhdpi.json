@@ -4,6 +4,10 @@
         "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-xxhdpi\\ic_launcher.png"
     },
     {
+        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi\\ic_launcher.png",
+        "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-xxhdpi\\ic_launcher.png"
+    },
+    {
         "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi\\ic_launcher.png",
         "source": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\src\\main\\res\\drawable-xxhdpi\\ic_launcher.png"
     }

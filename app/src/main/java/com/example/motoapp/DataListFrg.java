@@ -92,9 +92,9 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 	PPLZPrinter printer;
 
 	GCMActivity gcm = new GCMActivity();
-	public String caseID = gcm.strCaseID;
-	public static String regID,Account,carID;
-	String lon = Delay.lon;
+
+
+
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -830,7 +830,8 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		button_DoList.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
+				type = "71";
+				display();
 			}
 		});
 
@@ -1633,6 +1634,19 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			LinearLayout_OKNG.setVisibility(View.GONE);
 			LinearLayout_SetGoods.setVisibility(View.GONE);
 			LinearLayout_SG.setVisibility(View.GONE);
+			/* 取出資料 */
+			objDB.openDB();
+			clsTask objT = objDB.LoadTask(Application.strCaseID);
+			if(Application.strCaseID!=null){
+				Log.e("直送",Application.strCaseID);
+			}else {
+				Log.e("直送","null");
+			}
+			objDB.DBClose();
+
+			((TextView) findViewById(R.id.EditText_CaseID3))
+					.setText(objT.OrderID);
+
 			Log.e("type",type);
 		}
 

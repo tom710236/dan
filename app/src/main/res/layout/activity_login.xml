@@ -260,7 +260,8 @@
                 android:layout_gravity="center"
                 android:layout_weight="6"
                 android:onClick="onGCM"
-                android:text="GCM" />
+                android:text="GCM"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/button_Login"

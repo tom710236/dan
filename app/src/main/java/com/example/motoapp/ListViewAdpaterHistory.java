@@ -29,6 +29,7 @@ public class ListViewAdpaterHistory extends BaseAdapter implements AdapterView.O
 	ViewHolder holder;
 	HashMap<Integer, String> addMap;
 	ArrayList<Map<Integer, String>> myList;
+	String today;
 	public static String caseID;
 
 	public ListViewAdpaterHistory(Context context, List items) {
@@ -76,7 +77,9 @@ public class ListViewAdpaterHistory extends BaseAdapter implements AdapterView.O
 
 		LayoutInflater mInflater = (LayoutInflater) context
 				.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+		convertView = null ;
 		if (convertView == null) {
+
 			convertView = mInflater.inflate(R.layout.listview_history, null);
 			holder = new ViewHolder();
 			holder.txtFormNo = (TextView) convertView
@@ -91,8 +94,6 @@ public class ListViewAdpaterHistory extends BaseAdapter implements AdapterView.O
 					convertView));
 			convertView.setTag(holder);
 
-			Log.e("TTT",((TextView) convertView
-					.findViewById(R.id.TextViewFormNo)).getText().toString());
 
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -102,6 +103,7 @@ public class ListViewAdpaterHistory extends BaseAdapter implements AdapterView.O
 
 		holder.txtFormNo.setText(items.getFormNo());
 		holder.txtStatus.setText(items.getStatus());
+		holder.txtDate.setText(items.getSDate());
 
 		if (position % 2 == 0) // 0 even 1 odd..
 			convertView.setBackgroundColor(Color.parseColor("#ffffff"));
@@ -182,9 +184,9 @@ public class ListViewAdpaterHistory extends BaseAdapter implements AdapterView.O
 			((TextView) objLayout.findViewById(R.id.TextView_CaseID))
 					.setText(objT.OrderID);
 			((TextView) objLayout.findViewById(R.id.editText_Address))
-					.setText(objT.RecAddress);
+					.setText(objT.CustAddress);
 			((TextView) objLayout.findViewById(R.id.EditText_Size))
-					.setText(objT.RecName);
+					.setText(objT.Size);
 			((TextView) objLayout.findViewById(R.id.editText_Distant))
 					.setText(objT.Distance);
 			((TextView) objLayout.findViewById(R.id.EditText_Count))
@@ -192,7 +194,7 @@ public class ListViewAdpaterHistory extends BaseAdapter implements AdapterView.O
 
 		}
 
-
 	}
+
 
 }

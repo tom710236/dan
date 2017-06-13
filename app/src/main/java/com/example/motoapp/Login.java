@@ -28,7 +28,10 @@ import org.json.JSONObject;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.READ_PHONE_STATE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class Login extends Activity {
 
@@ -52,6 +55,7 @@ public class Login extends Activity {
 	Context context;
 	Button button;
 
+
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +63,7 @@ public class Login extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_login);
 
+		new GCMTask().execute();
 		if(regId!=null){
 			button = (Button)findViewById(R.id.GCM);
 			button.setVisibility(View.GONE);
@@ -68,7 +73,7 @@ public class Login extends Activity {
 		objLocation.CheckDB();
         openGps();
 		// GCM
-		new GCMTask().execute();
+
 
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
 		    serial = Build.SERIAL;
@@ -224,86 +229,89 @@ public class Login extends Activity {
 				try {
 					String Result = json.getString("Result");
 					Log.e("Resultand",Result);
-					if (Result.equals("1")) {
-						Log.e("Resultand",Result);
-						//Application.strObuID = json.getString("ObuID");
-						Application.strUserName = json
-								.getString("EmployeeName");
-						
-						clsLoginInfo objLogin = new clsLoginInfo(objContext);
-						objLogin.Car = EditText_Car.getText().toString();
-						//objLogin.CarID = json.getString("ObuID");
-						objLogin.DeviceID = Application.strDeviceID;
-						//objLogin.GCMID = Application.strRegistId;
-						objLogin.GCMID=regId;
-						objLogin.StationID="7048";
-						objLogin.StationName="松山站所";
-						objLogin.UserID=EditText_Account.getText().toString();
-						objLogin.UserName = json.getString("EmployeeName");
-						objLogin.AreaID = EditText_Area.getText().toString();
-						objLogin.FormNo = EditText_No.getText().toString();
-						objLogin.Insert();
-						//Log.e("GCMID",regId);
-						//Log.e("UserID",EditText_Account.getText().toString());
-						//記Log
-						new clsHttpPostAPI().CallAPI(objContext, "API021");
+					if(regId!=null){
+						if (Result.equals("1")) {
+							Log.e("Resultand",Result);
+							//Application.strObuID = json.getString("ObuID");
+							Application.strUserName = json
+									.getString("EmployeeName");
+
+							clsLoginInfo objLogin = new clsLoginInfo(objContext);
+							objLogin.Car = EditText_Car.getText().toString();
+							//objLogin.CarID = json.getString("ObuID");
+							objLogin.DeviceID = Application.strDeviceID;
+							//objLogin.GCMID = Application.strRegistId;
+							objLogin.GCMID=regId;
+							objLogin.StationID="7048";
+							objLogin.StationName="松山站所";
+							objLogin.UserID=EditText_Account.getText().toString();
+							objLogin.UserName = json.getString("EmployeeName");
+							objLogin.AreaID = EditText_Area.getText().toString();
+							objLogin.FormNo = EditText_No.getText().toString();
+							objLogin.Insert();
+							//Log.e("GCMID",regId);
+							//Log.e("UserID",EditText_Account.getText().toString());
+							//記Log
+							new clsHttpPostAPI().CallAPI(objContext, "API021");
 
 
 
-						//記住帳號
-						SharedPreferences setting =
-								getSharedPreferences("Login", MODE_PRIVATE);
-						setting.edit()
-								.putString("Account", Account)
-								.putString("Car",carID)
-								.putString("NO",NO)
-								.putString("Area",AREA)
-								.commit();
+							//記住帳號
+							SharedPreferences setting =
+									getSharedPreferences("Login", MODE_PRIVATE);
+							setting.edit()
+									.putString("Account", Account)
+									.putString("Car",carID)
+									.putString("NO",NO)
+									.putString("Area",AREA)
+									.commit();
 
-						//String EmployeeName =  objLogin.UserName;
-						//String Employee;
-						//Employee =  EmployeeName.substring(0, 3);
-						Intent it = new Intent(Login.this,Delay.class);
-						//Log.e("Account",Account);
-                        it.putExtra("Employee",Account);
-                        it.putExtra("regID",regId);
-						startService(it);
+							//String EmployeeName =  objLogin.UserName;
+							//String Employee;
+							//Employee =  EmployeeName.substring(0, 3);
+							Intent it = new Intent(Login.this,Delay.class);
+							//Log.e("Account",Account);
+							it.putExtra("Employee",Account);
+							it.putExtra("regID",regId);
+							startService(it);
+							if (Result.equals("2")) {
+								clsDialog.Show(Login.this, "ERROR", "輸入的授權碼 (Key)是不合法的授權碼");
+							}
 
-						Intent intent = new Intent(Login.this, DataListFrg.class);
-						startActivity(intent);
+							if (Result.equals("3")) {
+								clsDialog.Show(Login.this,"ERROR", "輸入的參數有缺漏");
+							}
+
+							if (Result.equals("4")) {
+								clsDialog.Show(Login.this, "ERROR", "車機識別ID資訊有誤");
+							}
+
+							if (Result.equals("5")) {
+								clsDialog.Show(Login.this, "ERROR", "狀態內容有誤");
+							}
+
+							if (Result.equals("6")) {
+								clsDialog.Show(Login.this, "ERROR", "員工帳號資訊有誤");
+							}
+
+							if (Result.equals("7")) {
+								clsDialog.Show(Login.this, "ERROR", "車號不存在");
+							}
+
+							if (Result.equals("8")) {
+								clsDialog.Show(Login.this, "ERROR", "此車尚 未登入，無法進行其他狀態更新");
+							}
+
+							if (Result.equals("200")) {
+								clsDialog.Show(Login.this, "ERROR", "系統忙碌或其他原因造成沒有完服務，請重試");
+							}
+							Intent intent = new Intent(Login.this, DataListFrg.class);
+							startActivity(intent);
+						}else{
+							clsDialog.Show(Login.this, "", "GCMID收尋中");
+						}
 					}
-					
-					if (Result.equals("2")) {
-						clsDialog.Show(Login.this, "ERROR", "輸入的授權碼 (Key)是不合法的授權碼");
-					}
-					
-					if (Result.equals("3")) {
-						clsDialog.Show(Login.this,"ERROR", "輸入的參數有缺漏");
-					}
-					
-					if (Result.equals("4")) {
-						clsDialog.Show(Login.this, "ERROR", "車機識別ID資訊有誤");
-					}
-					
-					if (Result.equals("5")) {
-						clsDialog.Show(Login.this, "ERROR", "狀態內容有誤");
-					}
-					
-					if (Result.equals("6")) {
-						clsDialog.Show(Login.this, "ERROR", "員工帳號資訊有誤");
-					}
-					
-					if (Result.equals("7")) {
-						clsDialog.Show(Login.this, "ERROR", "車號不存在");
-					}
-					
-					if (Result.equals("8")) {
-						clsDialog.Show(Login.this, "ERROR", "此車尚 未登入，無法進行其他狀態更新");
-					}
-					
-					if (Result.equals("200")) {
-						clsDialog.Show(Login.this, "ERROR", "系統忙碌或其他原因造成沒有完服務，請重試");
-					}
+
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -397,10 +405,16 @@ public class Login extends Activity {
                 ACCESS_COARSE_LOCATION);
         int permission3 = ActivityCompat.checkSelfPermission(this,
                 READ_PHONE_STATE);
-        if (permission != PackageManager.PERMISSION_GRANTED || permission2 != PackageManager.PERMISSION_GRANTED|| permission3 != PackageManager.PERMISSION_GRANTED) {
+		int permission4 = ActivityCompat.checkSelfPermission(this,
+				WRITE_EXTERNAL_STORAGE);
+		int permission5 = ActivityCompat.checkSelfPermission(this,
+				READ_EXTERNAL_STORAGE);
+		int permission6 = ActivityCompat.checkSelfPermission(this,
+				CAMERA);
+        if (permission != PackageManager.PERMISSION_GRANTED || permission2 != PackageManager.PERMISSION_GRANTED|| permission3 != PackageManager.PERMISSION_GRANTED|| permission4 != PackageManager.PERMISSION_GRANTED|| permission5 != PackageManager.PERMISSION_GRANTED|| permission6 != PackageManager.PERMISSION_GRANTED) {
             //若尚未取得權限，則向使用者要求允許聯絡人讀取與寫入的權限，REQUEST_CONTACTS常數未宣告則請按下Alt+Enter自動定義常數值。
             ActivityCompat.requestPermissions(this,
-                    new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION,READ_PHONE_STATE},
+                    new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION,READ_PHONE_STATE,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE,CAMERA},
                     REQUEST_CONTACTS);
         }
     }

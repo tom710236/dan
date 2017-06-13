@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.SurfaceHolder;
@@ -93,12 +94,14 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 	GCMActivity gcm = new GCMActivity();
 	public String caseID = gcm.strCaseID;
 	public static String regID,Account,carID;
-
+	String lon = Delay.lon;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d("=====>", "GoogleFragment onCreateView");
+
+
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.frg_waiting);
@@ -107,10 +110,10 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 
 		objLoginInfo = new clsLoginInfo(context);
 		objLoginInfo.Load();
-		
+
 		objDB = new dbLocations(context);
-		
-		Intent intent = getIntent();
+
+		final Intent intent = getIntent();
 		Bundle bundle = intent.getExtras();
 		if(bundle!=null)
 		{
@@ -118,7 +121,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			display();
 		}else
 		{
-			
+
 			setListView();
 
 		}
@@ -132,16 +135,16 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 
 		/*鍵盤事件*/
 		setKeyListener();
-		
+
 		// 0代表橫向、1代表縱向
 		//this.setRequestedOrientation(1);
 		// 設為横向顯示。因為攝影頭會自動翻轉90度，所以如果不横向顯示，看到的畫面就是翻轉的。
 
-		surfaceView1 = (SurfaceView) findViewById(R.id.surfaceView1);
+		//surfaceView1 = (SurfaceView) findViewById(R.id.surfaceView1);
 		imageView1 = (ImageView) findViewById(R.id.imageView1);
-		surfaceHolder = surfaceView1.getHolder();
-		surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-		surfaceHolder.addCallback(this);
+		//surfaceHolder = surfaceView1.getHolder();
+//		surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+//		surfaceHolder.addCallback(this);
 
 		/* 接單 */
 		Button Button_Get = (Button) findViewById(R.id.button_Get);
@@ -153,31 +156,36 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 				 * 呼叫API 接單
 				 */
 				// 顯示Progress對話方塊
-				myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
-				new clsHttpPostAPI().CallAPI(context, "API002");
-                new Thread(new Runnable(){
-                    @Override
-                    public void run() {
-                        try{
-                            Thread.sleep(15000);
-                        }
-                        catch(Exception e){
-                            e.printStackTrace();
-                        }
-                        finally{
-							myDialog.dismiss();
-							runOnUiThread(new Runnable() {
-								@Override
-								public void run() {
-									//Toast.makeText(DataListFrg.this, "單號有誤", Toast.LENGTH_SHORT).show();
-									clsDialog.Show(context, "提示訊息", "接單失敗");
-								}
-							});
 
-                        }
-                    }
-                }).start();
+					new clsHttpPostAPI().CallAPI(context, "API002");
+					display();
+					myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
 
+
+					new Thread(new Runnable(){
+						@Override
+						public void run() {
+							try{
+								Thread.sleep(20000);
+							}
+							catch(Exception e){
+								e.printStackTrace();
+							}
+							finally{
+								myDialog.dismiss();
+								runOnUiThread(new Runnable() {
+									@Override
+									public void run() {
+										//Toast.makeText(DataListFrg.this, "單號有誤", Toast.LENGTH_SHORT).show();
+										//clsDialog.Show(context, "提示訊息", "接單失敗");
+										//new clsHttpPostAPI().CallAPI(context, "API002");
+										//display();
+									}
+								});
+
+							}
+						}
+					}).start();
 
 
 			}
@@ -227,7 +235,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 
 
 
-				
+
 			}
 		});
 
@@ -250,7 +258,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 				objDB.openDB();
 				clsTask objTask = objDB.LoadTask(Application.strCaseID);
 				objDB.close();
-				
+
                 intent.putExtra("keys", new String[]
                     { "@", "託運單號", "寄件人", "電話", "地址", "收件人", "電話", "地址", "貨件數" });
                 intent.putExtra("values", new String[]
@@ -274,33 +282,13 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		button_takePic1.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
-				if (type.equals("070")) {
-					// 簽收單
-					//new clsHttpPostAPI().CallAPI(context, "API011");
-					objDB = new dbLocations(context);
-					objDB.openDB();
-					clsTask objT = objDB.LoadTask(Application.strCaseID);
-					objDB.DBClose();
-					clsLoginInfo objL = new clsLoginInfo(context);
-					objL.Load();
-					objDB.openDB(); //狀態
-					objDB.UpdateTaskStatus("71", objT.CaseID);
-					objDB.DBClose();
-					Log.e(" objT.CaseID", objT.CaseID);
-					type="71";
-					display();
-				} else {
-					Application.IsCreateData = ((CheckBox) findViewById(R.id.chkCreateData))
-							.isChecked();
-					objDB.openDB();
-					new clsHttpPostAPI().CallAPI(context, "API013");
-					type="41";
-					display();
-				}
+				Intent it = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);  //建立動作為拍照的意圖
+				startActivityForResult(it, 100);   //啟動意圖並要求傳回資料
 
 			}
 		});
+
+
 
 		/* 託運單拍照後送出 */
 		Button button_Send = (Button) findViewById(R.id.button_Send);
@@ -309,10 +297,37 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 
 			@Override
 			public void onClick(View v) {
-				//Post post = new Post();
-				//post.start();
 
-				new clsHttpPostAPI().CallAPI(context, "API006");
+
+				//new clsHttpPostAPI().CallAPI(context, "API006");
+                if (type.equals("070")) {
+                    // 簽收單
+                    //new clsHttpPostAPI().CallAPI(context, "API011");
+                    objDB = new dbLocations(context);
+                    objDB.openDB();
+                    clsTask objT = objDB.LoadTask(Application.strCaseID);
+                    objDB.DBClose();
+                    clsLoginInfo objL = new clsLoginInfo(context);
+                    objL.Load();
+                    objDB.openDB(); //狀態
+                    objDB.UpdateTaskStatus("71", objT.CaseID);
+                    objDB.DBClose();
+                    Log.e(" objT.CaseID", objT.CaseID);
+                    type="71";
+                    display();
+                } else {
+                    Application.IsCreateData = ((CheckBox) findViewById(R.id.chkCreateData))
+                            .isChecked();
+                    objDB.openDB();
+                    //託運單
+                    //new clsHttpPostAPI().CallAPI(context, "API013");
+                    type="41";
+                    display();
+                }
+
+
+
+
 
 				/*
 				 * 上傳照片及是否協助建檔
@@ -367,7 +382,8 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 				objDB.UpdateTaskStationID(((ClsDropDownStation) Spinner_SetGoods
 						.getSelectedItem()).GetID(), Application.strCaseID);
 				objDB.DBClose();
-
+				Log.e("11",((ClsDropDownStation) Spinner_SetGoods
+						.getSelectedItem()).GetID());
 				new clsHttpPostAPI().CallAPI(context, "API010",((ClsDropDownStation) Spinner_SetGoods
 						.getSelectedItem()).GetStationType());
 
@@ -494,8 +510,8 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 								json.getString("item_count"),
 								json.getString("request_time"), "0" });
 						objDB.DBClose();
-						Log.e("strCaseID",Application.strCaseID);
-						Log.e("strCaseID", String.valueOf(json.getInt("caseID")));
+						Log.e("GCM_Application",Application.strCaseID);
+						Log.e("GCM_strCaseID", String.valueOf(json.getInt("caseID")));
 
 						type = "02";
 						display();
@@ -680,10 +696,10 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 							JSONObject jsonItem = null;
 							for (int i = 0; i < objArray.length(); i++) {
 								jsonItem = objArray.getJSONObject(i);
-								objList.add(new ClsDropDownStation(jsonItem
-										.getString("StationID"), jsonItem
-										.getString("StationName"), jsonItem
-										.getString("StationType")));
+								objList.add(new ClsDropDownStation(
+										jsonItem.getString("StationID"),
+										jsonItem.getString("StationName"),
+										jsonItem.getString("StationType")));
 							}
 
 							ArrayAdapter<ClsDropDownStation> Adapter = new ArrayAdapter<ClsDropDownStation>(
@@ -766,6 +782,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 
 					if (Result.equals("4")) {
 						clsDialog.Show(context, "ERROR", "案件編號不存在");
+
 					}
 
 					if (Result.equals("5")) {
@@ -1084,7 +1101,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		});
 		
 	}
-	
+	//畫面處理
 	public void display() {
 		if (type.equals("02"))// 接單畫面
 		{
@@ -1128,6 +1145,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 
 			objDB.DBClose();
 			objDB.close();
+			Log.e("type",type);
 
 		}
 
@@ -1177,7 +1195,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			((TextView) findViewById(R.id.EditText_Receive)).setText("");
 
 			((TextView) findViewById(R.id.EditText_Receive)).requestFocus();
-			
+			Log.e("type",type);
 		}
 
 		if (type.equals("03"))// 取件完成畫面
@@ -1236,7 +1254,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 					.setText(objT.PayAmount);
 			
 			((EditText) findViewById(R.id.EditText_OrderID1)).requestFocus();
-
+			Log.e("type",type);
 		}
 
 		if (type.equals("04"))// 列印
@@ -1294,7 +1312,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 					.setText(objT.PayAmount);
 			
 			((EditText) findViewById(R.id.EditText_OrderID1)).requestFocus();
-
+			Log.e("type",type);
 		}
 		
 		if (type.equals("040"))// 拍託運單
@@ -1347,7 +1365,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 					.GetPayType(objT.PayType));*/
 			((TextView) findViewById(R.id.EditText_Money))
 					.setText(objT.PayAmount);
-
+			Log.e("type",type);
 		}
 
 		if (type.equals("41"))// 直送或回站畫面
@@ -1390,7 +1408,11 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			/* 取出資料 */
 			objDB.openDB();
 			clsTask objT = objDB.LoadTask(Application.strCaseID);
-
+			if(Application.strCaseID!=null){
+				Log.e("直送",Application.strCaseID);
+			}else {
+				Log.e("直送","null");
+			}
 			objDB.DBClose();
 			((TextView) findViewById(R.id.TextView_CarNo2))
 					.setText(Application.strCar);
@@ -1410,6 +1432,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 					.GetPayType(objT.PayType));
 			((TextView) findViewById(R.id.EditText_Money2))
 					.setText(objT.PayAmount);
+			Log.e("type",type);
 		}
 
 		if (type.equals("06"))// 選直送
@@ -1448,6 +1471,35 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			LinearLayout_SetGoods.setVisibility(View.GONE);
 			LinearLayout_SG.setVisibility(View.GONE);
 			LinearLayout_ButtonPrint2.setVisibility(View.GONE);
+
+			/* 取出資料 */
+			objDB.openDB();
+			clsTask objT = objDB.LoadTask(Application.strCaseID);
+			if(Application.strCaseID!=null){
+				Log.e("直送",Application.strCaseID);
+			}else {
+				Log.e("直送","null");
+			}
+			objDB.DBClose();
+			((TextView) findViewById(R.id.TextView_CarNo2))
+					.setText(Application.strCar);
+			((TextView) findViewById(R.id.TextView_DateTime2))
+					.setText(objT.RequestDate);
+			((TextView) findViewById(R.id.TextView_OrderID2))
+					.setText(objT.OrderID);
+			((TextView) findViewById(R.id.editText_Address2))
+					.setText(objT.RecAddress);
+			((TextView) findViewById(R.id.EditText_CustomName2))
+					.setText(objT.RecName);
+			((TextView) findViewById(R.id.editText_Phone2))
+					.setText(objT.RecPhone);
+			((TextView) findViewById(R.id.EditText_Count2))
+					.setText(objT.ItemCount);
+			((TextView) findViewById(R.id.EditText_PayType2)).setText(clsTask
+					.GetPayType(objT.PayType));
+			((TextView) findViewById(R.id.EditText_Money2))
+					.setText(objT.PayAmount);
+			Log.e("type",type);
 		}
 		
 		if (type.equals("07"))// 列印簽收單
@@ -1486,6 +1538,36 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			LinearLayout_SetGoods.setVisibility(View.GONE);
 			LinearLayout_SG.setVisibility(View.GONE);
 			LinearLayout_ButtonPrint2.setVisibility(View.VISIBLE);
+			Log.e("type",type);
+
+			/* 取出資料 */
+			objDB.openDB();
+			clsTask objT = objDB.LoadTask(Application.strCaseID);
+			if(Application.strCaseID!=null){
+				Log.e("直送",Application.strCaseID);
+			}else {
+				Log.e("直送","null");
+			}
+			objDB.DBClose();
+			((TextView) findViewById(R.id.TextView_CarNo2))
+					.setText(Application.strCar);
+			((TextView) findViewById(R.id.TextView_DateTime2))
+					.setText(objT.RequestDate);
+			((TextView) findViewById(R.id.TextView_OrderID2))
+					.setText(objT.OrderID);
+			((TextView) findViewById(R.id.editText_Address2))
+					.setText(objT.RecAddress);
+			((TextView) findViewById(R.id.EditText_CustomName2))
+					.setText(objT.RecName);
+			((TextView) findViewById(R.id.editText_Phone2))
+					.setText(objT.RecPhone);
+			((TextView) findViewById(R.id.EditText_Count2))
+					.setText(objT.ItemCount);
+			((TextView) findViewById(R.id.EditText_PayType2)).setText(clsTask
+					.GetPayType(objT.PayType));
+			((TextView) findViewById(R.id.EditText_Money2))
+					.setText(objT.PayAmount);
+			Log.e("type",type);
 
 		}
 
@@ -1513,7 +1595,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			CheckBox chk = (CheckBox) findViewById(R.id.chkCreateData);
 			chk.setVisibility(View.GONE);
 			LinearLayout_pic.setVisibility(View.VISIBLE);
-
+			Log.e("type",type);
 		}
 
 		if (type.equals("08"))// 送達失敗
@@ -1551,6 +1633,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			LinearLayout_OKNG.setVisibility(View.GONE);
 			LinearLayout_SetGoods.setVisibility(View.GONE);
 			LinearLayout_SG.setVisibility(View.GONE);
+			Log.e("type",type);
 		}
 
 		if (type.equals("05"))// 回集貨站
@@ -1585,6 +1668,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			LinearLayout_OKNG.setVisibility(View.GONE);
 			LinearLayout_SetGoods.setVisibility(View.VISIBLE);
 			LinearLayout_SG.setVisibility(View.GONE);
+			Log.e("type",type);
 		}
 
 		if (type.equals("51"))// 續配 & 卸集貨
@@ -1622,6 +1706,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			LinearLayout_OKNG.setVisibility(View.GONE);
 			LinearLayout_SetGoods.setVisibility(View.GONE);
 			LinearLayout_SG.setVisibility(View.VISIBLE);
+			Log.e("type",type);
 		}
 
 		/* 回列表 */
@@ -1668,6 +1753,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 
 			ListViewAdpater adpater = new ListViewAdpater(context, rowitem);
 			listView.setAdapter(adpater);
+			Log.e("type",type);
 		}
 	}
 
@@ -1840,6 +1926,21 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 							}).show();
 		}
 		return super.onKeyDown(keyCode, event);
+	}
+	//拍照後的預覽畫面設定
+	protected void onActivityResult (int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+		if(resultCode == Activity.RESULT_OK && requestCode==100) {
+			Bundle extras = data.getExtras();         //將 Intent 的附加資料轉為 Bundle 物件
+			Bitmap bmp = (Bitmap) extras.get("data"); //由 Bundle 取出名為 "data" 的 Bitmap 資料
+			ImageView imv = (ImageView)findViewById(R.id.imageView);
+			imv.setImageBitmap(bmp);    	    	  //將 Bitmap 資料顯示在 ImageView 中
+
+		}
+		else {
+			Toast.makeText(this, "沒有拍到照片", Toast.LENGTH_LONG).show();
+		}
 	}
 
 }

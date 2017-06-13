@@ -27,20 +27,20 @@
         <ScrollView
             android:id="@+id/ScrollViewT"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
+            android:layout_height="fill_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical" >
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:id="@+id/LinearLayout_doType"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingTop="90dp"
                     android:gravity="center_vertical"
-                    android:orientation="vertical" >
+                    android:orientation="vertical"
+                    android:paddingTop="90dp">
 
                     <Button
                         android:id="@+id/button_doStart"
@@ -54,19 +54,20 @@
                         android:id="@+id/button_doEnd"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:paddingTop="10dp"
-                        android:layout_marginTop="10dp"
                         android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
                         android:layout_weight="1"
+                        android:paddingTop="10dp"
                         android:text="配達" />
+
                     <Button
                         android:id="@+id/button_Search"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:paddingTop="10dp"
                         android:layout_gravity="center"
                         android:layout_marginTop="10dp"
                         android:layout_weight="1"
+                        android:paddingTop="10dp"
                         android:text="查詢" />
                 </LinearLayout>
 
@@ -141,18 +142,18 @@
                     android:id="@+id/LinearLayout_Start2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical" >
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="40dp" >
+                        android:layout_height="40dp">
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:text="類型："
                             android:gravity="right"
+                            android:text="類型："
                             android:textSize="16sp" />
 
                         <TextView
@@ -165,14 +166,14 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="60dp" >
+                        android:layout_height="60dp">
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:text="貨況："
                             android:gravity="right"
+                            android:text="貨況："
                             android:textSize="16sp" />
 
                         <Button
@@ -181,8 +182,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1.5"
                             android:text="73"
-                            android:textSize="20sp"
-                            android:textColor="#FF0000" />
+                            android:textColor="#FF0000"
+                            android:textSize="20sp" />
 
                         <TextView
                             android:id="@+id/TextView_SStatusName1"
@@ -195,14 +196,14 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="40dp" >
+                        android:layout_height="40dp">
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:text="運輸單號："
                             android:gravity="right"
+                            android:text="運輸單號："
                             android:textSize="16sp" />
 
                         <TextView
@@ -216,14 +217,14 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" >
+                        android:layout_height="match_parent">
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:text="託運單號："
                             android:gravity="right"
+                            android:text="託運單號："
                             android:textSize="16sp" />
 
                         <EditText
@@ -238,7 +239,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="40dp" >
+                        android:layout_height="40dp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -257,19 +258,18 @@
                             android:textSize="16sp" />
                     </LinearLayout>
 
-                    
 
                     <LinearLayout
                         android:id="@+id/LinearLayout_SAddress"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp" >
+                        android:layout_height="40dp">
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:text="地址："
                             android:gravity="right"
+                            android:text="地址："
                             android:textSize="16sp" />
 
                         <TextView
@@ -280,16 +280,17 @@
                             android:text=""
                             android:textSize="16sp" />
                     </LinearLayout>
-<LinearLayout
+
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="40dp" >
+                        android:layout_height="40dp">
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:text="筆數："
                             android:gravity="right"
+                            android:text="筆數："
                             android:textSize="16sp" />
 
                         <TextView
@@ -300,25 +301,27 @@
                             android:text="0000/0000"
                             android:textSize="16sp" />
                     </LinearLayout>
-                    
+
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="40dp" >
- <Button
+                        android:layout_height="40dp">
+
+                        <Button
                             android:id="@+id/button_SGetAddress"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:visibility="invisible"
-                            android:text="地址查詢" />
+                            android:text="地址查詢"
+                            android:visibility="invisible" />
+
                         <Button
                             android:id="@+id/button_SGetCode"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:visibility="invisible"
-                            android:text="代碼查詢" />
+                            android:text="代碼查詢"
+                            android:visibility="invisible" />
 
                         <Button
                             android:id="@+id/button_Scancel2"
@@ -333,18 +336,18 @@
                     android:id="@+id/LinearLayout_End2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical" >
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="40dp" >
+                        android:layout_height="40dp">
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:text="類型："
                             android:gravity="right"
+                            android:text="類型："
                             android:textSize="16sp" />
 
                         <TextView
@@ -357,14 +360,14 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="60dp" >
+                        android:layout_height="60dp">
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:text="貨況："
                             android:gravity="right"
+                            android:text="貨況："
                             android:textSize="16sp" />
 
                         <Button
@@ -373,8 +376,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1.5"
                             android:text="02"
-                            android:textSize="20sp"
-                            android:textColor="#FF0000" />
+                            android:textColor="#FF0000"
+                            android:textSize="20sp" />
 
                         <TextView
                             android:id="@+id/TextView_EStatusName1"
@@ -387,14 +390,14 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="40dp" >
+                        android:layout_height="40dp">
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:text="運輸單號："
                             android:gravity="right"
+                            android:text="運輸單號："
                             android:textSize="16sp" />
 
                         <TextView
@@ -408,14 +411,14 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" >
+                        android:layout_height="match_parent">
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:text="託運單號："
                             android:gravity="right"
+                            android:text="託運單號："
                             android:textSize="16sp" />
 
                         <EditText
@@ -430,7 +433,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="40dp" >
+                        android:layout_height="40dp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -451,7 +454,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" >
+                        android:layout_height="match_parent">
 
                         <TextView
                             android:layout_width="0dp"
@@ -471,7 +474,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="40dp" >
+                        android:layout_height="40dp">
 
 
                         <Button
@@ -479,8 +482,8 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:visibility="invisible"
-                            android:text="代碼查詢" />
+                            android:text="代碼查詢"
+                            android:visibility="invisible" />
 
                         <Button
                             android:id="@+id/button_Ecancel2"
@@ -490,17 +493,18 @@
                             android:text="返回" />
                     </LinearLayout>
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/LinearLayout_Search"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingTop="90dp"
                     android:gravity="center_vertical"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:paddingTop="90dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" >
+                        android:layout_height="match_parent">
 
                         <TextView
                             android:layout_width="0dp"
@@ -521,7 +525,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="40dp" >
+                        android:layout_height="40dp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -541,8 +545,8 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_marginTop="20dp"
-                        android:layout_height="40dp" >
+                        android:layout_height="40dp"
+                        android:layout_marginTop="20dp">
 
 
                         <Button

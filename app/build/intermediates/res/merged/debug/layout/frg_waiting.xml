@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
@@ -30,8 +31,7 @@
             android:id="@+id/LinearLayout_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:visibility="visible">
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -79,8 +79,7 @@
         <ScrollView
             android:id="@+id/ScrollView_Step1"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:visibility="visible">
+            android:layout_height="fill_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -246,6 +245,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:inputType="number"
                         android:text=""
                         android:textSize="16sp" />
 
@@ -555,7 +555,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:weightSum="1">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -563,10 +564,13 @@
                             android:text="預覽 : "
                             android:textSize="16sp" />
 
-                        <SurfaceView
-                            android:id="@+id/surfaceView1"
-                            android:layout_width="320dp"
-                            android:layout_height="240dp" />
+                        <ImageView
+                            android:id="@+id/imageView"
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp"
+                            android:layout_weight="6.53"
+                            app:srcCompat="@android:drawable/ic_menu_camera" />
+
                     </LinearLayout>
 
                     <LinearLayout
@@ -650,7 +654,8 @@
                     android:id="@+id/LinearLayout_Arrivals"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="visible">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -963,7 +968,8 @@
                     android:id="@+id/LinearLayout_pic2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="visible">
 
                     <LinearLayout
                         android:layout_width="match_parent"

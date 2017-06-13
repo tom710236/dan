@@ -60,6 +60,7 @@ public class ListViewAdpater extends BaseAdapter {
 
 		LayoutInflater mInflater = (LayoutInflater) context
 				.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+		convertView = null ;
 		if (convertView == null) {
 			convertView = mInflater.inflate(R.layout.listview, null);
 			holder = new ViewHolder();
@@ -130,7 +131,11 @@ public class ListViewAdpater extends BaseAdapter {
 			clsTask objT = objDB.LoadTask(Application.strCaseID);
 			objDB.DBClose();
 			objDB.close();
-
+			if(Application.strCaseID!=null){
+				Log.e("LISTVIEW",Application.strCaseID);
+			}else {
+				Log.e("LISTVIEW","null");
+			}
 			if(handler!=null)
 			{
 				Message objMessage = new Message();

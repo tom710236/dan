@@ -2067,6 +2067,7 @@ containing a value of this type.
         public static final int image=0x7f0b0029;
         public static final int imageVi2=0x7f0b00ea;
         public static final int imageVie=0x7f0b00e9;
+        public static final int imageView=0x7f0b00c5;
         public static final int imageView1=0x7f0b00c9;
         public static final int imageView2=0x7f0b00ef;
         public static final int img=0x7f0b0072;
@@ -2122,7 +2123,6 @@ containing a value of this type.
         public static final int status_bar_latest_event_content=0x7f0b0100;
         public static final int submenuarrow=0x7f0b0041;
         public static final int submit_area=0x7f0b0052;
-        public static final int surfaceView1=0x7f0b00c5;
         public static final int tabMode=0x7f0b000b;
         public static final int text=0x7f0b0073;
         public static final int text2=0x7f0b010e;

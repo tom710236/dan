@@ -236,6 +236,7 @@ public class InOutFrg extends Activity {
 			}
 		});
 
+
 		/* 配送2-點取得地址 */
 
 		Button button_SGetAddress = (Button) findViewById(R.id.button_SGetAddress);
@@ -297,6 +298,15 @@ public class InOutFrg extends Activity {
 		/* 配達-點取消 */
 		Button button_Ecancel2 = (Button) findViewById(R.id.button_Ecancel2);
 		button_Ecancel2.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				GoInit();
+			}
+		});
+
+		/* 查詢-點返回 */
+		Button button_Ecancel3 = (Button) findViewById(R.id.button_Ecancel3);
+		button_Ecancel3.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				GoInit();

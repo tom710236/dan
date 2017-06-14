@@ -408,8 +408,9 @@ public class clsHttpPostAPI extends Activity {
 								Application.ChtUrl+"Services/API/Motor_Dispatch/Upload_ForwardOrder.aspx",
 								strAy, "/storage/DCIM/Camera/123.jpg");
 
+				Log.e("strRequestJSON",strRequestJSON);
 				JSONObject json = new JSONObject(strRequestJSON);
-
+				Log.e("上傳拖運單", String.valueOf(json));
 				json.put("Type", "5");
 				if(handlerTask!=null)
 				{
@@ -634,9 +635,10 @@ public class clsHttpPostAPI extends Activity {
 						.PostDataAndFile(
 								Application.ChtUrl+"Services/API/Motor_Dispatch/Upload_ForwardOrder.aspx",
 								strAy, path);
+				Log.e("strRequestJSON",strRequestJSON);
 
 				JSONObject json = new JSONObject(strRequestJSON);
-
+				Log.e("上傳簽收單", String.valueOf(json));
 				json.put("Type", "8");
 				if(handlerTask!=null)
 				{

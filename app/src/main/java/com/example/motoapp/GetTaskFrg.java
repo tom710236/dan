@@ -105,15 +105,15 @@ public class GetTaskFrg extends Activity {
 				
 			}
 		});
-		
+		// 登出 關閉SERVICE
 		Button button_Logout = (Button)findViewById(R.id.Button_Logout);
 		button_Logout.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				objLoginInfo.Update("03");
+				//objLoginInfo.Update("03");
+				Intent it = new Intent(GetTaskFrg.this,Delay.class);
+				stopService(it);
 				new clsHttpPostAPI().CallAPI(context, "API014");
-				//Intent intent = new Intent(GetTaskFrg.this, Login.class);
-			    //startActivity(intent);
 			}
 		});
 		

@@ -111,7 +111,7 @@ public class Delay extends Service implements LocationListener {
         lon = String.valueOf(location.getLongitude());
         lat = String.valueOf(location.getLatitude());
         Toast.makeText(Delay.this, str + today , Toast.LENGTH_SHORT).show();
-        Log.e("str",str);
+        //Log.e("str",str);
     }
 
     @Override

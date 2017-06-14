@@ -302,7 +302,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 				//new clsHttpPostAPI().CallAPI(context, "API006");
                 if (type.equals("070")) {
                     // 簽收單
-                    //new clsHttpPostAPI().CallAPI(context, "API011");
+                    new clsHttpPostAPI().CallAPI(context, "API011");
                     objDB = new dbLocations(context);
                     objDB.openDB();
                     clsTask objT = objDB.LoadTask(Application.strCaseID);
@@ -312,7 +312,6 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
                     objDB.openDB(); //狀態
                     objDB.UpdateTaskStatus("71", objT.CaseID);
                     objDB.DBClose();
-                    Log.e(" objT.CaseID", objT.CaseID);
                     type="71";
                     display();
                 } else {
@@ -320,7 +319,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
                             .isChecked();
                     objDB.openDB();
                     //託運單
-                    //new clsHttpPostAPI().CallAPI(context, "API013");
+                    //new clsHttpPostAPI().CallAPI(context, "API006");
                     type="41";
                     display();
                 }
@@ -864,16 +863,17 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 				startActivity(intent);
 			}
 		});
-
+		//登出 關閉service
 		Button button_Logout = (Button) findViewById(R.id.Button_Logout);
 		button_Logout.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				new clsHttpPostAPI().CallAPI(context, "API014");
+
 				//Intent intent = new Intent(DataListFrg.this, Login.class);
 			 	//startActivity(intent);
 				Intent it = new Intent(DataListFrg.this,Delay.class);
 				stopService(it);
+				new clsHttpPostAPI().CallAPI(context, "API014");
 			}
 		});
 		

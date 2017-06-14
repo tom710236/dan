@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -188,9 +187,9 @@ public class HistoryFragment extends Activity {
 		button_Logout.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				Intent it = new Intent(HistoryFragment.this,Delay.class);
+				stopService(it);
 				new clsHttpPostAPI().CallAPI(context, "API014");
-				//Intent intent = new Intent(HistoryFragment.this, Login.class);
-				//startActivity(intent);
 			}
 		});
 

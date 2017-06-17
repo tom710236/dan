@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -22,11 +23,15 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.motoapp.R.id.EditText_ENO1;
+import static com.example.motoapp.R.id.EditText_SNO1;
 
 public class InOutFrg extends Activity {
 	MainActivity objActivity;
@@ -76,7 +81,7 @@ public class InOutFrg extends Activity {
 		SysApplication.getInstance().addActivity(this);
 		listView = (ListView) findViewById(R.id.listView_Reason);
 		//SetListView(1);
-		ScrollView ScrollViewT = (ScrollView)findViewById(R.id.ScrollViewT);
+		ScrollView ScrollViewT = (ScrollView) findViewById(R.id.ScrollViewT);
 		LinearLayout LinearLayout_doType = (LinearLayout) findViewById(R.id.LinearLayout_doType);
 
 		LinearLayout LinearLayout_Start2 = (LinearLayout)
@@ -112,7 +117,7 @@ public class InOutFrg extends Activity {
 
 				ScrollView ScrollViewT = (ScrollView) findViewById(R.id.ScrollViewT);
 				LinearLayout LinearLayout_doType = (LinearLayout) findViewById(R.id.LinearLayout_doType);
-				LinearLayout LinearLayout_Search = (LinearLayout)findViewById(R.id.LinearLayout_Search);
+				LinearLayout LinearLayout_Search = (LinearLayout) findViewById(R.id.LinearLayout_Search);
 				LinearLayout LinearLayout_Start2 = (LinearLayout) findViewById(R.id.LinearLayout_Start2);
 				LinearLayout LinearLayout_End2 = (LinearLayout) findViewById(R.id.LinearLayout_End2);
 
@@ -126,7 +131,7 @@ public class InOutFrg extends Activity {
 				intType = 0;
 
 				LinearLayout_Start2.setVisibility(View.VISIBLE);
-				EditText EditForm = (EditText) findViewById(R.id.EditText_SNO1);
+				EditText EditForm = (EditText) findViewById(EditText_SNO1);
 				EditForm.requestFocus();
 
 				//LinearLayout_SAddress.setVisibility(View.GONE);
@@ -137,21 +142,21 @@ public class InOutFrg extends Activity {
 				TextView_EOrderID2.setText(objLoginInfo.FormNo);
 
 				//TODO 顯示數量
-				TextView TextView_SCount = (TextView)findViewById(R.id.TextView_SCount);
+				TextView TextView_SCount = (TextView) findViewById(R.id.TextView_SCount);
 				TextView_SCount.setText(String.format("%04d", Integer.valueOf(objLoginInfo.In)));
 
 			}
 		});
 
+
 		/* 配送-在運輸單號中點選Enter */
-		EditText EditText_SNO1 = (EditText)findViewById(R.id.EditText_SNO1);
+		final EditText EditText_SNO1 = (EditText) findViewById(R.id.EditText_SNO1);
 		EditText_SNO1.setOnKeyListener(new OnKeyListener() {
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
 				if (event.getAction() == event.ACTION_DOWN) {
-					if (keyCode == 23|| keyCode==66) {
-						EditText EditText_SNO1 = (EditText)v;
-						if(EditText_SNO1.getText().toString().length()<10)
-						{
+					if (keyCode == 23 || keyCode == 66) {
+						EditText EditText_SNO1 = (EditText) v;
+						if (EditText_SNO1.getText().toString().length() < 10) {
 							clsDialog.Show(context, "提示", "請輸入10碼以上的託運單號！");
 							return true;
 						}
@@ -160,35 +165,38 @@ public class InOutFrg extends Activity {
 						 * */
 
 						JSONObject json = new JSONObject();
+						Log.e("配送前", String.valueOf(json));
 						try {
 							java.util.Date now = new java.util.Date();
 							String strDate = new java.text.SimpleDateFormat("yyyyMMdd").format(now);
-							String strMDate = String.valueOf(Integer.parseInt(strDate)-19110000);
+							String strMDate = String.valueOf(Integer.parseInt(strDate) - 19110000);
 							String strTime = new java.text.SimpleDateFormat("HHmmss").format(now);
 
-							json.put("HT3101", ((Button)findViewById(R.id.EditText_SStatus1)).getText().toString());
-							json.put("HT3102", ((EditText)findViewById(R.id.EditText_SNO1)).getText().toString());
+							json.put("HT3101", ((Button) findViewById(R.id.EditText_SStatus1)).getText().toString());
+							//json.put("HT3101", ("查詢"));
+							json.put("HT3102", ((EditText) findViewById(R.id.EditText_SNO1)).getText().toString());
 							json.put("HT3103", objLoginInfo.FormNo);
 							json.put("HT3113", strMDate);
 							json.put("HT3114", strTime);
 							json.put("HT3181", Application.TestCode);
 							json.put("HT3182", objLoginInfo.AreaID);
 							json.put("HT3183", objLoginInfo.UserID);
-							json.put("HT3184", objLoginInfo.DeviceID);
+							json.put("HT3184", "ABCD");
 							json.put("HT3185", "B");
 							json.put("HT3186", "1");
 							json.put("HT3191", strDate);
 							json.put("HT3192", strTime);
+							Log.e("配送", String.valueOf(json));
 						} catch (Exception e) {
 							// TODO: handle exception
 						}
 
 
-						String strPOSTData =json.toString();
+						String strPOSTData = json.toString();
 						new clsHttpPostAPI().CallAPI(context, "API016", strPOSTData);
-
+						Log.e("strPOSTData", strPOSTData);
 						//TODO 記單號
-						TextView TextView_SNo = (TextView)findViewById(R.id.TextView_SNO1);
+						TextView TextView_SNo = (TextView) findViewById(R.id.TextView_SNO1);
 
 						TextView_SNo.setText(EditText_SNO1.getText().toString());
 						String sssss = TextView_SNo.getText().toString();
@@ -199,7 +207,7 @@ public class InOutFrg extends Activity {
 						objLoginInfo.UpdateInOut("In");
 
 						//TODO 顯示數量
-						TextView TextView_SCount = (TextView)findViewById(R.id.TextView_SCount);
+						TextView TextView_SCount = (TextView) findViewById(R.id.TextView_SCount);
 						TextView_SCount.setText(String.format("%04d", Integer.valueOf(objLoginInfo.In)));
 
 						//TODO
@@ -264,7 +272,7 @@ public class InOutFrg extends Activity {
 
 				ScrollView ScrollViewT = (ScrollView) findViewById(R.id.ScrollViewT);
 				LinearLayout LinearLayout_doType = (LinearLayout) findViewById(R.id.LinearLayout_doType);
-				LinearLayout LinearLayout_Search = (LinearLayout)findViewById(R.id.LinearLayout_Search);
+				LinearLayout LinearLayout_Search = (LinearLayout) findViewById(R.id.LinearLayout_Search);
 				LinearLayout_Search.setVisibility(View.GONE);
 				LinearLayout LinearLayout_Start2 = (LinearLayout) findViewById(R.id.LinearLayout_Start2);
 				LinearLayout LinearLayout_End2 = (LinearLayout) findViewById(R.id.LinearLayout_End2);
@@ -278,7 +286,7 @@ public class InOutFrg extends Activity {
 				intType = 1;
 
 				LinearLayout_End2.setVisibility(View.VISIBLE);
-				EditText EditForm = (EditText) findViewById(R.id.EditText_ENO1);
+				EditText EditForm = (EditText) findViewById(EditText_ENO1);
 				EditForm.requestFocus();
 
 				//LinearLayout_SAddress.setVisibility(View.GONE);
@@ -289,8 +297,8 @@ public class InOutFrg extends Activity {
 				TextView_EOrderID2.setText(objLoginInfo.FormNo);
 
 				//TODO 顯示數量
-				TextView TextView_ECount = (TextView)findViewById(R.id.TextView_ECount);
-				TextView_ECount.setText(String.format("%04d", Integer.valueOf(objLoginInfo.Out))+" / "+String.format("%04d", Integer.valueOf(objLoginInfo.In)));
+				TextView TextView_ECount = (TextView) findViewById(R.id.TextView_ECount);
+				TextView_ECount.setText(String.format("%04d", Integer.valueOf(objLoginInfo.Out)) + " / " + String.format("%04d", Integer.valueOf(objLoginInfo.In)));
 
 			}
 		});
@@ -311,6 +319,49 @@ public class InOutFrg extends Activity {
 			public void onClick(View v) {
 				GoInit();
 			}
+		});/* 查詢-點查詢 */
+		Button button_Search2 = (Button) findViewById(R.id.button_Search2);
+		button_Search2.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				/**
+				 * 呼叫API
+				 * */
+				EditText editText = (EditText) findViewById(R.id.EditText_SearchVal);
+				JSONObject json = new JSONObject();
+				Log.e("配送前", String.valueOf(json));
+				try {
+					java.util.Date now = new java.util.Date();
+					String strDate = new java.text.SimpleDateFormat("yyyyMMdd").format(now);
+					String strMDate = String.valueOf(Integer.parseInt(strDate) - 19110000);
+					String strTime = new java.text.SimpleDateFormat("HHmmss").format(now);
+
+					//json.put("HT3101", ((Button)findViewById(R.id.EditText_SStatus1)).getText().toString());
+					json.put("HT3101", ("查詢"));
+					json.put("HT3102", (editText.getText().toString()));
+					json.put("HT3103", objLoginInfo.FormNo);
+					json.put("HT3113", strMDate);
+					json.put("HT3114", strTime);
+					json.put("HT3181", Application.TestCode);
+					json.put("HT3182", objLoginInfo.AreaID);
+					json.put("HT3183", objLoginInfo.UserID);
+					json.put("HT3184", "ABCD");
+					json.put("HT3185", "B");
+					json.put("HT3186", "1");
+					json.put("HT3191", strDate);
+					json.put("HT3192", strTime);
+					Log.e("配送", String.valueOf(json));
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+
+
+				String strPOSTData = json.toString();
+				new clsHttpPostAPI().CallAPI(context, "API016", strPOSTData);
+				Log.e("strPOSTData", strPOSTData);
+
+
+			}
 		});
 
 		/* 配達-點查詢代碼 */
@@ -323,14 +374,13 @@ public class InOutFrg extends Activity {
 		});
 
 		/* 配達-在運輸單號中點選Enter */
-		EditText EditText_ENO1 = (EditText)findViewById(R.id.EditText_ENO1);
+		EditText EditText_ENO1 = (EditText) findViewById(R.id.EditText_ENO1);
 		EditText_ENO1.setOnKeyListener(new OnKeyListener() {
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
 				if (event.getAction() == event.ACTION_DOWN) {
-					EditText EditText_ENO1 = (EditText)v;
-					if (keyCode == 23 || keyCode==66) {
-						if(EditText_ENO1.getText().toString().length()<10)
-						{
+					EditText EditText_ENO1 = (EditText) v;
+					if (keyCode == 23 || keyCode == 66) {
+						if (EditText_ENO1.getText().toString().length() < 10) {
 							clsDialog.Show(context, "提示", "請輸入10碼以上的託運單號！");
 							return true;
 						}
@@ -342,18 +392,18 @@ public class InOutFrg extends Activity {
 						try {
 							java.util.Date now = new java.util.Date();
 							String strDate = new java.text.SimpleDateFormat("yyyyMMdd").format(now);
-							String strMDate = String.valueOf(Integer.parseInt(strDate)-19110000);
+							String strMDate = String.valueOf(Integer.parseInt(strDate) - 19110000);
 							String strTime = new java.text.SimpleDateFormat("HHmmss").format(now);
 
-							json.put("HT3101", ((Button)findViewById(R.id.EditText_EStatus1)).getText().toString());
-							json.put("HT3102", ((EditText)findViewById(R.id.EditText_ENO1)).getText().toString());
+							json.put("HT3101", ((Button) findViewById(R.id.EditText_EStatus1)).getText().toString());
+							json.put("HT3102", ((EditText) findViewById(R.id.EditText_ENO1)).getText().toString());
 							json.put("HT3103", objLoginInfo.FormNo);
 							json.put("HT3113", strMDate);
 							json.put("HT3114", strTime);
 							json.put("HT3181", Application.TestCode);
 							json.put("HT3182", objLoginInfo.AreaID);
 							json.put("HT3183", objLoginInfo.UserID);
-							json.put("HT3184", objLoginInfo.DeviceID);
+							json.put("HT3184", "ABCD");
 							json.put("HT3185", "B");
 							json.put("HT3186", "1");
 							json.put("HT3191", strDate);
@@ -363,11 +413,11 @@ public class InOutFrg extends Activity {
 						}
 
 
-						String strPOSTData =json.toString();
+						String strPOSTData = json.toString();
 						new clsHttpPostAPI().CallAPI(context, "API023", strPOSTData);
 
 						//TODO 記單號
-						TextView TextView_ENo = (TextView)findViewById(R.id.TextView_ENO1);
+						TextView TextView_ENo = (TextView) findViewById(R.id.TextView_ENO1);
 
 						TextView_ENo.setText(EditText_ENO1.getText().toString());
 						String sssss = TextView_ENo.getText().toString();
@@ -378,8 +428,8 @@ public class InOutFrg extends Activity {
 						objLoginInfo.UpdateInOut("Out");
 
 						//TODO 顯示數量
-						TextView TextView_ECount = (TextView)findViewById(R.id.TextView_ECount);
-						TextView_ECount.setText(String.format("%04d", Integer.valueOf(objLoginInfo.Out))+" / "+String.format("%04d", Integer.valueOf(objLoginInfo.In)));
+						TextView TextView_ECount = (TextView) findViewById(R.id.TextView_ECount);
+						TextView_ECount.setText(String.format("%04d", Integer.valueOf(objLoginInfo.Out)) + " / " + String.format("%04d", Integer.valueOf(objLoginInfo.In)));
 
 						//TODO
 						Button EditText_SStatus1 = (Button) findViewById(R.id.EditText_SStatus1);
@@ -398,7 +448,7 @@ public class InOutFrg extends Activity {
 		});
 
 
-		EditText_Val = (EditText)findViewById(R.id.EditText_Val);
+		EditText_Val = (EditText) findViewById(R.id.EditText_Val);
 		EditText_Val.setOnKeyListener(new OnKeyListener() {
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
 				if (event.getAction() == event.ACTION_DOWN) {
@@ -422,7 +472,7 @@ public class InOutFrg extends Activity {
 
 						ScrollView ScrollViewT = (ScrollView) findViewById(R.id.ScrollViewT);
 						LinearLayout LinearLayout_doType = (LinearLayout) findViewById(R.id.LinearLayout_doType);
-						LinearLayout LinearLayout_Search = (LinearLayout)findViewById(R.id.LinearLayout_Search);
+						LinearLayout LinearLayout_Search = (LinearLayout) findViewById(R.id.LinearLayout_Search);
 						LinearLayout_Search.setVisibility(View.GONE);
 						LinearLayout LinearLayout_Start2 = (LinearLayout) findViewById(R.id.LinearLayout_Start2);
 						LinearLayout LinearLayout_End2 = (LinearLayout) findViewById(R.id.LinearLayout_End2);
@@ -465,7 +515,7 @@ public class InOutFrg extends Activity {
 			}
 		});
 
-		Button button_Search = (Button)findViewById(R.id.button_Search);
+		Button button_Search = (Button) findViewById(R.id.button_Search);
 		button_Search.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -473,7 +523,7 @@ public class InOutFrg extends Activity {
 			}
 		});
 
-		button_DoList = (Button)findViewById(R.id.button_DoList);
+		button_DoList = (Button) findViewById(R.id.button_DoList);
 		button_DoList.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -482,7 +532,7 @@ public class InOutFrg extends Activity {
 			}
 		});
 
-		button_IO = (Button)findViewById(R.id.button_IO);
+		button_IO = (Button) findViewById(R.id.button_IO);
 		button_IO.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -491,7 +541,7 @@ public class InOutFrg extends Activity {
 			}
 		});
 
-		button_GT = (Button)findViewById(R.id.button_GT);
+		button_GT = (Button) findViewById(R.id.button_GT);
 		button_GT.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -501,7 +551,7 @@ public class InOutFrg extends Activity {
 			}
 		});
 
-		button_DoneList = (Button)findViewById(R.id.button_DoneList);
+		button_DoneList = (Button) findViewById(R.id.button_DoneList);
 		button_DoneList.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -510,33 +560,31 @@ public class InOutFrg extends Activity {
 			}
 		});
 		//登出 關閉SERVICE
-		Button button_Logout = (Button)findViewById(R.id.Button_Logout);
+		Button button_Logout = (Button) findViewById(R.id.Button_Logout);
 		button_Logout.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent it = new Intent(InOutFrg.this,Delay.class);
+				Intent it = new Intent(InOutFrg.this, Delay.class);
 				stopService(it);
 				new clsHttpPostAPI().CallAPI(context, "API014");
 			}
 		});
 
-		Button Button_Status = (Button)findViewById(R.id.Button_Status);
+		Button Button_Status = (Button) findViewById(R.id.Button_Status);
 		Button_Status.setText(objLoginInfo.GetStatus());
 		Button_Status.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if(objLoginInfo.Status.equals("02"))//休息中
+				if (objLoginInfo.Status.equals("02"))//休息中
 				{
 					objLoginInfo.Update("01");
-					((Button)v).setText(objLoginInfo.GetStatus());
+					((Button) v).setText(objLoginInfo.GetStatus());
 					//呼叫API
 					new clsHttpPostAPI().CallAPI(context, "API020");
-				}
-				else
-				if(objLoginInfo.Status.equals("01"))//接單中
+				} else if (objLoginInfo.Status.equals("01"))//接單中
 				{
 					objLoginInfo.Update("02");
-					((Button)v).setText(objLoginInfo.GetStatus());
+					((Button) v).setText(objLoginInfo.GetStatus());
 					//呼叫API
 					new clsHttpPostAPI().CallAPI(context, "API019");
 				}
@@ -555,8 +603,10 @@ public class InOutFrg extends Activity {
 					String Result = json.getString("Result");
 
 					//if (Result.equals("1")) {
-					TextView TextView_SAddress1 = (TextView)findViewById(R.id.TextView_SAddress1);
+					TextView TextView_SAddress1 = (TextView) findViewById(R.id.TextView_SAddress1);
 					TextView_SAddress1.setText(json.getString("Address"));
+					TextView textViewAD = (TextView) findViewById(R.id.TextView_AD);
+					textViewAD.setText(json.getString("Address"));
 					//}
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
@@ -573,11 +623,10 @@ public class InOutFrg extends Activity {
 
 	public void onStop() {
 		super.onStop();
-		clsHttpPostAPI.handlerInOut =null;
+		clsHttpPostAPI.handlerInOut = null;
 	}
 
-	private void SetSearch()
-	{
+	private void SetSearch() {
 		ScrollView ScrollViewT = (ScrollView) findViewById(R.id.ScrollViewT);
 		ScrollViewT.setVisibility(View.VISIBLE);
 
@@ -591,11 +640,10 @@ public class InOutFrg extends Activity {
 		LinearLayout_Search.setVisibility(View.VISIBLE);
 	}
 
-	private void SetListView(int pIntMode)
-	{
+	private void SetListView(int pIntMode) {
 		ScrollView ScrollViewT = (ScrollView) findViewById(R.id.ScrollViewT);
 		LinearLayout LinearLayout_doType = (LinearLayout) findViewById(R.id.LinearLayout_doType);
-		LinearLayout LinearLayout_Search = (LinearLayout)findViewById(R.id.LinearLayout_Search);
+		LinearLayout LinearLayout_Search = (LinearLayout) findViewById(R.id.LinearLayout_Search);
 		LinearLayout_Search.setVisibility(View.GONE);
 		LinearLayout LinearLayout_Start2 = (LinearLayout) findViewById(R.id.LinearLayout_Start2);
 		LinearLayout LinearLayout_End2 = (LinearLayout) findViewById(R.id.LinearLayout_End2);
@@ -613,46 +661,46 @@ public class InOutFrg extends Activity {
 		List rowitem = new ArrayList();
 		String strType = "";
 
-		if(pIntMode==0){
-			rowitem.add(new ReasonItem(1, "37","外包轉出"));
-			rowitem.add(new ReasonItem(2, "38","外包配達"));
-			rowitem.add(new ReasonItem(3, "41","轉運積貨"));
-			rowitem.add(new ReasonItem(4, "45","轉運卸貨"));
-			rowitem.add(new ReasonItem(5, "52","空運積貨"));
-			rowitem.add(new ReasonItem(6, "56","空運卸貨"));
-			rowitem.add(new ReasonItem(7, "73","配送"));
-			rowitem.add(new ReasonItem(8, "74","共配配送"));
-			rowitem.add(new ReasonItem(9, "83","誤積誤訂轉出"));
-			rowitem.add(new ReasonItem(10, "84","誤積誤訂轉入  "));
-			rowitem.add(new ReasonItem(11, "92"," KTJ轉超峰    "));
-			strType="配送";
+		if (pIntMode == 0) {
+			rowitem.add(new ReasonItem(1, "37", "外包轉出"));
+			rowitem.add(new ReasonItem(2, "38", "外包配達"));
+			rowitem.add(new ReasonItem(3, "41", "轉運積貨"));
+			rowitem.add(new ReasonItem(4, "45", "轉運卸貨"));
+			rowitem.add(new ReasonItem(5, "52", "空運積貨"));
+			rowitem.add(new ReasonItem(6, "56", "空運卸貨"));
+			rowitem.add(new ReasonItem(7, "73", "配送"));
+			rowitem.add(new ReasonItem(8, "74", "共配配送"));
+			rowitem.add(new ReasonItem(9, "83", "誤積誤訂轉出"));
+			rowitem.add(new ReasonItem(10, "84", "誤積誤訂轉入  "));
+			rowitem.add(new ReasonItem(11, "92", " KTJ轉超峰    "));
+			strType = "配送";
 		}
 
-		if(pIntMode==1){
-			rowitem.add(new ReasonItem(1, "00","客戶不在"));
-			rowitem.add(new ReasonItem(2, "02","配達"));
-			rowitem.add(new ReasonItem(3, "08","站止未領"));
-			rowitem.add(new ReasonItem(4, "10","站戶拒收"));
-			rowitem.add(new ReasonItem(5, "11","破損拒收"));
-			rowitem.add(new ReasonItem(6, "13","客戶他遷"));
-			rowitem.add(new ReasonItem(7, "16","欠採購文號"));
-			rowitem.add(new ReasonItem(8, "19","另約時間配送"));
-			rowitem.add(new ReasonItem(9, "22","指定收貨人不在"));
+		if (pIntMode == 1) {
+			rowitem.add(new ReasonItem(1, "00", "客戶不在"));
+			rowitem.add(new ReasonItem(2, "02", "配達"));
+			rowitem.add(new ReasonItem(3, "08", "站止未領"));
+			rowitem.add(new ReasonItem(4, "10", "站戶拒收"));
+			rowitem.add(new ReasonItem(5, "11", "破損拒收"));
+			rowitem.add(new ReasonItem(6, "13", "客戶他遷"));
+			rowitem.add(new ReasonItem(7, "16", "欠採購文號"));
+			rowitem.add(new ReasonItem(8, "19", "另約時間配送"));
+			rowitem.add(new ReasonItem(9, "22", "指定收貨人不在"));
 
-			rowitem.add(new ReasonItem(10, "24","客戶聯絡自領  "));
-			rowitem.add(new ReasonItem(11, "25","節日休息節後送"));
-			rowitem.add(new ReasonItem(12, "26","客戶要求改址 "));
-			rowitem.add(new ReasonItem(13, "29","地址錯誤      "));
-			rowitem.add(new ReasonItem(14, "40","無此收件人    "));
-			rowitem.add(new ReasonItem(15, "42","公司已停業    "));
-			rowitem.add(new ReasonItem(16, "46","電聯無人接聽  "));
-			rowitem.add(new ReasonItem(17, "77","送回寄件人　　"));
-			strType="配達";
+			rowitem.add(new ReasonItem(10, "24", "客戶聯絡自領  "));
+			rowitem.add(new ReasonItem(11, "25", "節日休息節後送"));
+			rowitem.add(new ReasonItem(12, "26", "客戶要求改址 "));
+			rowitem.add(new ReasonItem(13, "29", "地址錯誤      "));
+			rowitem.add(new ReasonItem(14, "40", "無此收件人    "));
+			rowitem.add(new ReasonItem(15, "42", "公司已停業    "));
+			rowitem.add(new ReasonItem(16, "46", "電聯無人接聽  "));
+			rowitem.add(new ReasonItem(17, "77", "送回寄件人　　"));
+			strType = "配達";
 		}
 
 		EditText_Val.requestFocus();
 		EditText_Val.setText("");
-		TextView TextView_Type = (TextView)findViewById(R.id.TextView_Type);
+		TextView TextView_Type = (TextView) findViewById(R.id.TextView_Type);
 		TextView_Type.setText(strType);
 
 		ListViewReason adpater = new ListViewReason(InOutFrg.this, rowitem);
@@ -679,16 +727,16 @@ public class InOutFrg extends Activity {
 				ScrollViewT.setVisibility(View.VISIBLE);
 				LinearLayout_doType.setVisibility(View.GONE);
 				//LinearLayout_Start1.setVisibility(View.GONE);
-				if (intType == 0)
-				{LinearLayout_Start2.setVisibility(View.VISIBLE);
+				if (intType == 0) {
+					LinearLayout_Start2.setVisibility(View.VISIBLE);
 					Button EditText_SStatus1 = (Button) findViewById(R.id.EditText_SStatus1);
 					EditText_SStatus1.setText(TextViewNo.getText());
 
 					TextView TextView_SStatusName1 = (TextView) findViewById(R.id.TextView_SStatusName1);
 					TextView_SStatusName1.setText(TextViewReason.getText());
 				}
-				if (intType == 1)
-				{LinearLayout_End2.setVisibility(View.VISIBLE);
+				if (intType == 1) {
+					LinearLayout_End2.setVisibility(View.VISIBLE);
 					Button EditText_EStatus1 = (Button) findViewById(R.id.EditText_EStatus1);
 					EditText_EStatus1.setText(TextViewNo.getText());
 
@@ -704,7 +752,7 @@ public class InOutFrg extends Activity {
 	private void GoInit() {
 		ScrollView ScrollViewT = (ScrollView) findViewById(R.id.ScrollViewT);
 		LinearLayout LinearLayout_doType = (LinearLayout) findViewById(R.id.LinearLayout_doType);
-		LinearLayout LinearLayout_Search = (LinearLayout)findViewById(R.id.LinearLayout_Search);
+		LinearLayout LinearLayout_Search = (LinearLayout) findViewById(R.id.LinearLayout_Search);
 		LinearLayout_Search.setVisibility(View.GONE);
 		LinearLayout LinearLayout_Start2 = (LinearLayout) findViewById(R.id.LinearLayout_Start2);
 		LinearLayout LinearLayout_End2 = (LinearLayout) findViewById(R.id.LinearLayout_End2);
@@ -749,5 +797,202 @@ public class InOutFrg extends Activity {
 							}).show();
 		}
 		return super.onKeyDown(keyCode, event);
+	}
+
+	//配送 - 按掃描
+	public void onScran(View v) {
+		Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+		if (getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).size() == 0) {
+			// 未安裝
+			Toast.makeText(this, "請至 Play 商店安裝 ZXing 條碼掃描器", Toast.LENGTH_LONG).show();
+		} else {
+			// SCAN_MODE, 可判別所有支援的條碼
+			// QR_CODE_MODE, 只判別 QRCode
+			// PRODUCT_MODE, UPC and EAN 碼
+			// ONE_D_MODE, 1 維條碼
+			intent.putExtra("SCAN_MODE", "SCAN_MODE");
+
+			// 呼叫ZXing Scanner，完成動作後回傳 1 給 onActivityResult 的 requestCode 參數
+			startActivityForResult(intent, 1);
+		}
+	}
+
+	public void onScran2(View v) {
+		Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+		if (getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).size() == 0) {
+			// 未安裝
+			Toast.makeText(this, "請至 Play 商店安裝 ZXing 條碼掃描器", Toast.LENGTH_LONG).show();
+		} else {
+			// SCAN_MODE, 可判別所有支援的條碼
+			// QR_CODE_MODE, 只判別 QRCode
+			// PRODUCT_MODE, UPC and EAN 碼
+			// ONE_D_MODE, 1 維條碼
+			intent.putExtra("SCAN_MODE", "SCAN_MODE");
+
+			// 呼叫ZXing Scanner，完成動作後回傳 1 給 onActivityResult 的 requestCode 參數
+			startActivityForResult(intent, 2);
+		}
+	}
+
+	public void onScran3(View v) {
+		Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+		if (getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).size() == 0) {
+			// 未安裝
+			Toast.makeText(this, "請至 Play 商店安裝 ZXing 條碼掃描器", Toast.LENGTH_LONG).show();
+		} else {
+			// SCAN_MODE, 可判別所有支援的條碼
+			// QR_CODE_MODE, 只判別 QRCode
+			// PRODUCT_MODE, UPC and EAN 碼
+			// ONE_D_MODE, 1 維條碼
+			intent.putExtra("SCAN_MODE", "SCAN_MODE");
+			// 呼叫ZXing Scanner，完成動作後回傳 1 給 onActivityResult 的 requestCode 參數
+			startActivityForResult(intent, 3);
+		}
+	}
+
+	// 接收 ZXing 掃描後回傳來的結果
+	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		if (requestCode == 1) {
+			if (resultCode == RESULT_OK) {
+				// ZXing回傳的內容
+				String contents = intent.getStringExtra("SCAN_RESULT");
+				final EditText editText = (EditText) findViewById(EditText_SNO1);
+				editText.setText(contents);
+				if (editText.length() == 11) {
+					/**
+					 * 呼叫API
+					 * */
+					JSONObject json = new JSONObject();
+					try {
+						java.util.Date now = new java.util.Date();
+						String strDate = new java.text.SimpleDateFormat("yyyyMMdd").format(now);
+						String strMDate = String.valueOf(Integer.parseInt(strDate) - 19110000);
+						String strTime = new java.text.SimpleDateFormat("HHmmss").format(now);
+
+						json.put("HT3101", ((Button) findViewById(R.id.EditText_EStatus1)).getText().toString());
+						json.put("HT3102", ((EditText) findViewById(EditText_ENO1)).getText().toString());
+						json.put("HT3103", objLoginInfo.FormNo);
+						json.put("HT3113", strMDate);
+						json.put("HT3114", strTime);
+						json.put("HT3181", Application.TestCode);
+						json.put("HT3182", objLoginInfo.AreaID);
+						json.put("HT3183", objLoginInfo.UserID);
+						json.put("HT3184", "ABCD");
+						json.put("HT3185", "B");
+						json.put("HT3186", "1");
+						json.put("HT3191", strDate);
+						json.put("HT3192", strTime);
+					} catch (Exception e) {
+						// TODO: handle exception
+					}
+
+					String strPOSTData = json.toString();
+					new clsHttpPostAPI().CallAPI(context, "API016", strPOSTData);
+					Log.e("strPOSTData", strPOSTData);
+					//TODO 記單號
+					TextView TextView_SNo = (TextView) findViewById(R.id.TextView_SNO1);
+
+					//TextView_SNo.setText(EditText_SNO1.getText().toString());
+					String sssss = TextView_SNo.getText().toString();
+					//TODO 清掉欄位
+					//EditText_SNO1.setText("");
+
+					//TODO 更新數量
+					objLoginInfo.UpdateInOut("In");
+
+					//TODO 顯示數量
+					TextView TextView_SCount = (TextView) findViewById(R.id.TextView_SCount);
+					TextView_SCount.setText(String.format("%04d", Integer.valueOf(objLoginInfo.In)));
+					//TODO
+					Button EditText_SStatus1 = (Button) findViewById(R.id.EditText_SStatus1);
+					EditText_SStatus1.setText("73");
+
+					TextView TextView_EStatusName1 = (TextView) findViewById(R.id.TextView_EStatusName1);
+					TextView_EStatusName1.setText("配送");
+
+					editText.setText("");
+				}
+
+			}
+		} else if (requestCode == 2) {
+			if (resultCode == RESULT_OK) {
+				// ZXing回傳的內容
+				String contents = intent.getStringExtra("SCAN_RESULT");
+				final EditText editText = (EditText) findViewById(R.id.EditText_ENO1);
+				editText.setText(contents);
+				if (editText.length() == 11) {
+
+					/**
+					 * 呼叫API
+					 * */
+					JSONObject json = new JSONObject();
+					try {
+						java.util.Date now = new java.util.Date();
+						String strDate = new java.text.SimpleDateFormat("yyyyMMdd").format(now);
+						String strMDate = String.valueOf(Integer.parseInt(strDate) - 19110000);
+						String strTime = new java.text.SimpleDateFormat("HHmmss").format(now);
+
+						json.put("HT3101", ((Button) findViewById(R.id.EditText_EStatus1)).getText().toString());
+						json.put("HT3102", ((EditText) findViewById(R.id.EditText_ENO1)).getText().toString());
+						json.put("HT3103", objLoginInfo.FormNo);
+						json.put("HT3113", strMDate);
+						json.put("HT3114", strTime);
+						json.put("HT3181", Application.TestCode);
+						json.put("HT3182", objLoginInfo.AreaID);
+						json.put("HT3183", objLoginInfo.UserID);
+						json.put("HT3184", "ABCD");
+						json.put("HT3185", "B");
+						json.put("HT3186", "1");
+						json.put("HT3191", strDate);
+						json.put("HT3192", strTime);
+					} catch (Exception e) {
+						// TODO: handle exception
+					}
+
+
+					String strPOSTData = json.toString();
+					new clsHttpPostAPI().CallAPI(context, "API023", strPOSTData);
+
+					//TODO 記單號
+					TextView TextView_ENo = (TextView) findViewById(R.id.TextView_ENO1);
+
+					//TextView_ENo.setText(EditText_ENO1.getText().toString());
+					String sssss = TextView_ENo.getText().toString();
+					//TODO 清掉欄位
+					//EditText_ENO1.setText("");
+
+					//TODO 更新數量
+					objLoginInfo.UpdateInOut("Out");
+
+					//TODO 顯示數量
+					TextView TextView_ECount = (TextView) findViewById(R.id.TextView_ECount);
+					TextView_ECount.setText(String.format("%04d", Integer.valueOf(objLoginInfo.Out)) + " / " + String.format("%04d", Integer.valueOf(objLoginInfo.In)));
+
+					//TODO
+					Button EditText_SStatus1 = (Button) findViewById(R.id.EditText_SStatus1);
+					EditText_SStatus1.setText("02");
+
+					TextView TextView_EStatusName1 = (TextView) findViewById(R.id.TextView_EStatusName1);
+					TextView_EStatusName1.setText("配達");
+
+					//EditText_ENO1.requestFocus();
+					editText.setText("");
+
+				}
+			}
+
+		} else if (requestCode == 3) {
+			if (resultCode == RESULT_OK) {
+				// ZXing回傳的內容
+				String contents = intent.getStringExtra("SCAN_RESULT");
+				final EditText editText = (EditText) findViewById(R.id.EditText_SearchVal);
+				editText.setText(contents);
+				if (editText.length() == 11) {
+					Toast.makeText(this,contents,Toast.LENGTH_SHORT).show();
+					editText.setText("");
+				}
+			}
+
+		}
 	}
 }

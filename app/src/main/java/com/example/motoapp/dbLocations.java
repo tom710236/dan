@@ -277,6 +277,7 @@ public class dbLocations extends SQLiteOpenHelper {
 			objTask.IsCreateData = cursor.getString(cursor.getColumnIndex("cIsCreateData"));
 			objTask.FailReasonID = cursor.getString(cursor.getColumnIndex("cFailReasonID"));
 			objTask.StationID = cursor.getString(cursor.getColumnIndex("cStationID"));
+
 			cursor.close();
 		}
 

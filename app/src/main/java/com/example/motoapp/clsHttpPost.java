@@ -6,12 +6,14 @@ import android.util.Log;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -30,8 +32,8 @@ public class clsHttpPost {
 	public static String Invoke(String pStrServerURL, String pStrPostData)
 			throws Exception {
 
-		Log.d("HttpPost", pStrServerURL);
-		Log.d("HttpPost", pStrPostData);
+		Log.e("HttpPost,pStrServerURL", pStrServerURL);
+		Log.e("HttpPost,pStrPostData", pStrPostData);
 		String strResult = "";
 		HttpParams params = new BasicHttpParams();
 		HttpConnectionParams.setConnectionTimeout(params, 10000);
@@ -43,12 +45,12 @@ public class clsHttpPost {
 		List<NameValuePair> namevaluepairs = new ArrayList<NameValuePair>(1);
 
 		namevaluepairs.add(new BasicNameValuePair("POST31DATA", pStrPostData));
-		//post.setEntity(new UrlEncodedFormEntity(namevaluepairs, HTTP.UTF_8));// 讀中文
+		post.setEntity(new UrlEncodedFormEntity(namevaluepairs, HTTP.UTF_8));// 讀中文
 		HttpResponse response = client.execute(post);
 
 		// 接收傳回來的值
 		strResult = EntityUtils.toString(response.getEntity());
-
+		Log.e("strResult",strResult);
 		return strResult;
 	}
 

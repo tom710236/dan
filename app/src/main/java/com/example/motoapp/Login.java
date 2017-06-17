@@ -397,7 +397,7 @@ public class Login extends Activity {
         return super.onKeyDown(keyCode, event);
     }
 
-    //取得 定位權限
+    //取得 權限
     private void openGps() {
         int permission = ActivityCompat.checkSelfPermission(this,
                 ACCESS_FINE_LOCATION);

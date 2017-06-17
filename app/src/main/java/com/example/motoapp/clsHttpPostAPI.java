@@ -30,6 +30,7 @@ public class clsHttpPostAPI extends Activity {
 	Delay delay = new Delay();
 	String lon = delay.lon;
 	String lan = delay.lat;
+	JSONObject from_get_json;
 	public static String form_get_Result;
 
 	private dbLocations objDB;
@@ -288,7 +289,7 @@ public class clsHttpPostAPI extends Activity {
 				objL.Load();
 
 				//String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?CaseID="+ Application.strCaseID + "&Status=3&obuID=" + carID+"&key="+Application.strKey+"&ExpArrive="+strTime;
-				String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?key="+Application.strKey+"&caseID="+Application.strCaseID+"&Status=1&EmployeeID="+objL.UserID;
+				String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?key="+Application.strKey+"&caseID="+Application.strCaseID+"&Status=3&EmployeeID="+objL.UserID+"&ExpArrive="+strTime;
 				clsLogger.i("form_Go", strUrl);
 				strRequestJSON = objHttppost.Invoke(strUrl, "");
 				JSONObject json = new JSONObject(strRequestJSON);
@@ -729,14 +730,16 @@ public class clsHttpPostAPI extends Activity {
 				String strUrl = Application.ShindaUrl+"HTF31_Send.aspx";
 				clsLogger.i("CardPost", strUrl);
 				strRequestJSON = objHttppost.Invoke(strUrl, strData);
-
+				Log.e("strData",strData);
 				JSONObject json = new JSONObject(strRequestJSON);
+				Log.e("strRequestJSON",strRequestJSON);
+				Log.e("jsoncarPost", String.valueOf(json));
 				if(handlerInOut!=null)
 				{
 					Message objMessage = new Message();
 					objMessage.obj = json;
 					handlerInOut.sendMessage(objMessage);
-					Log.e("jsoncarPost", String.valueOf(json));
+
 				}
 
 			} catch (Exception e) {
@@ -753,17 +756,18 @@ public class clsHttpPostAPI extends Activity {
 			String strRequestJSON = "";
 			try {
 				String strUrl = Application.ShindaUrl+"HTF31_Arraid.aspx";
-				clsLogger.i("CardPost", strUrl);
+				clsLogger.i("CardPost_1", strUrl);
 				strRequestJSON = objHttppost.Invoke(strUrl, strData);
-
+                Log.e("CardPost_1 strData",strData);
 				JSONObject json = new JSONObject(strRequestJSON);
+				Log.e("jsoncarPost", String.valueOf(json));
 				//自己補
 				if(handlerInOut!=null)
 				{
 					Message objMessage = new Message();
 					objMessage.obj = json;
 					handlerInOut.sendMessage(objMessage);
-					Log.e("jsoncarPost", String.valueOf(json));
+
 				}
 
 			} catch (Exception e) {

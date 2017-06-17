@@ -43,7 +43,8 @@ public class Delay extends Service implements LocationListener {
     String IMEI;
     Context context;
 
-    public static String Employee,regID,lon,lat,UserID,GCMID;
+    public static String Employee, regID, lon, lat, UserID, GCMID;
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -110,7 +111,7 @@ public class Delay extends Service implements LocationListener {
         //Log.e("today", today);
         lon = String.valueOf(location.getLongitude());
         lat = String.valueOf(location.getLatitude());
-        Toast.makeText(Delay.this, str + today , Toast.LENGTH_SHORT).show();
+        Toast.makeText(Delay.this, str + today, Toast.LENGTH_SHORT).show();
         //Log.e("str",str);
     }
 
@@ -146,21 +147,21 @@ public class Delay extends Service implements LocationListener {
         private void okHttpGet() {
             clsLoginInfo objL = new clsLoginInfo(Delay.this);
             objL.Load();
-            UserID= objL.UserID;
+            UserID = objL.UserID;
             GCMID = objL.GCMID;
             final String url1 = "http://efms.hinet.net/FMS_WSMotor/Services/API/Motor_Dispatch/Send_GPSInfo.aspx?\n" +
                     "Key=7092a3c1-8ad6-48b5-b354-577378c282a5\n" +
-                    "&DeviceID="+GCMID+"\n" +
-                    "&EmployeeID="+UserID+"\n" +
-                    "&StatusTime="+today+"\n" +
-                    "&lon="+lon+"\n" +
-                    "&lat="+lat+"";
+                    "&DeviceID=" + GCMID + "\n" +
+                    "&EmployeeID=" + UserID + "\n" +
+                    "&StatusTime=" + today + "\n" +
+                    "&lon=" + lon + "\n" +
+                    "&lat=" + lat + "";
             final OkHttpClient client = new OkHttpClient();
             final Request request = new Request.Builder()
                     .url(url1)
                     .build();
             Call call = client.newCall(request);
-            call.enqueue(new Callback(){
+            call.enqueue(new Callback() {
 
                 @Override
                 public void onFailure(Call call, IOException e) {
@@ -179,10 +180,11 @@ public class Delay extends Service implements LocationListener {
         }
 
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.e("STOP","STOP");
+        Log.e("STOP", "STOP");
         handler.removeCallbacks(runnable);
     }
 

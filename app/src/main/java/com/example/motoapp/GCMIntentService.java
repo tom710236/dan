@@ -1,32 +1,23 @@
 package com.example.motoapp;
 
-import static com.example.motoapp.CommonUtilities.SENDER_ID;
-import static com.example.motoapp.CommonUtilities.displayMessage;
-
-
-import java.io.UnsupportedEncodingException;
-import java.util.List;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.PowerManager;
 import android.util.Log;
 
 import com.google.android.gcm.GCMBaseIntentService;
 import com.google.android.gcm.GCMRegistrar;
-import com.example.motoapp.R;
-import com.example.motoapp.clsLogger;
+
+import org.json.JSONException;
+
+import java.io.UnsupportedEncodingException;
+
+import static com.example.motoapp.CommonUtilities.SENDER_ID;
+import static com.example.motoapp.CommonUtilities.displayMessage;
 
 /**
  * IntentService responsible for handling GCM messages.
@@ -65,6 +56,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 	public GCMIntentService() {
 		super(SENDER_ID);
+
 	}
 
 	@Override
@@ -96,6 +88,15 @@ public class GCMIntentService extends GCMBaseIntentService {
 		// 接收 GCM server 傳來的訊息
 		Bundle bData = intent.getExtras();
 
+
+		PowerManager pm=(PowerManager) getSystemService(Context.POWER_SERVICE);
+		//获取电源管理器对象
+		PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.SCREEN_DIM_WAKE_LOCK, "bright");
+		//获取PowerManager.WakeLock对象,后面的参数|表示同时传入两个值,最后的是LogCat里用的Tag
+		wl.acquire();
+		//点亮屏幕
+		wl.release();
+		//释放
 		// 處理 bData 內含的訊息
 		// 在本例中, 我的 server 端程式 gcm_send.php 傳來了 message, campaigndate, title, description 四項資料
 		try {
@@ -104,6 +105,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 			String message = getString(R.string.gcm_message);
 			displayMessage(context, message);
 			generateNotification(context, intent);
+
+
 
 		} catch (Exception e1) {
 			clsLogger.i(TAG, e1.getMessage());
@@ -117,6 +120,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		String message = getString(R.string.gcm_message);
 		displayMessage(context, message);
 		generateNotification(context, intent);*/
+
 	}
 
 	@Override
@@ -186,6 +190,49 @@ public class GCMIntentService extends GCMBaseIntentService {
 		
 	/*	*/
 
+	}
+	private android.os.PowerManager.WakeLock mWakeLock;
+
+
+	/**
+	 * 获取锁，保持屏幕亮度。 Android中通过各种Lock锁对电源进行控制，需要注意的是加锁和解锁必须成对出现。
+	 * 一般使用:这个函数在Activity的 onResume中被调用。releaseWakeLock()方法则是释放该锁,在Activity的onPause中被调用。
+	 */
+	protected void acquireWakeLock()
+	{
+		if (mWakeLock == null)
+		{
+			//通过PowerManager的newWakeLock((int flags, String tag)方法来生成WakeLock实例。
+			//int Flags指示要获取哪种WakeLock，不同的Lock对cpu、屏幕、键盘灯有不同影响。
+			PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+			mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, getClass().getCanonicalName());
+			mWakeLock.setReferenceCounted(false);
+			mWakeLock.acquire();
+		}
+	}
+
+	protected void acquireWakeLock(long timeout)
+	{
+		if (mWakeLock == null)
+		{
+			PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+			mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, getClass().getCanonicalName());
+			mWakeLock.setReferenceCounted(false);
+			mWakeLock.acquire(timeout);
+		}
+	}
+
+	/**
+	 * 释放锁，显示的释放，如果申请的锁不释放系统就不会进入休眠。
+	 */
+	protected void releaseWakeLock()
+	{
+
+		if(mWakeLock == null || !mWakeLock.isHeld())
+		{
+			mWakeLock.release();
+			mWakeLock = null;
+		}
 	}
 
 }

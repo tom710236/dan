@@ -176,7 +176,7 @@ public class ListViewAdpaterHistory extends BaseAdapter implements AdapterView.O
 			objDB.openDB();
 			clsTask objT = objDB.LoadTask(caseID);
 
-			//objDB.DBClose();
+			objDB.DBClose();
 			((TextView) objLayout.findViewById(R.id.TextView_CarNo))
 					.setText(Application.strCar);
 			((TextView)objLayout.findViewById(R.id.TextView_DateTime))

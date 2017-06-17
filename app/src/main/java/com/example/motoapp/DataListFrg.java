@@ -1,10 +1,8 @@
 package com.example.motoapp;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -13,6 +11,7 @@ import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.PictureCallback;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -42,12 +41,22 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 import static com.example.motoapp.R.id.button_Save;
 
@@ -86,13 +95,15 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 	SurfaceHolder surfaceHolder;
 	SurfaceView surfaceView1;
 	ImageView imageView1;
-
+	int KeyinFile = 0;
 	Camera camera;
 	ProgressDialog myDialog;
 	PPLZPrinter printer;
 
 	GCMActivity gcm = new GCMActivity();
-
+	Uri imgUri;    //用來參照拍照存檔的 Uri 物件
+	ImageView imv; //用來參照 ImageView 物件
+	Bitmap bmp;
 
 
 
@@ -141,7 +152,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		// 設為横向顯示。因為攝影頭會自動翻轉90度，所以如果不横向顯示，看到的畫面就是翻轉的。
 
 		//surfaceView1 = (SurfaceView) findViewById(R.id.surfaceView1);
-		imageView1 = (ImageView) findViewById(R.id.imageView1);
+		imv = (ImageView) findViewById(R.id.imageView1);
 		//surfaceHolder = surfaceView1.getHolder();
 //		surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 //		surfaceHolder.addCallback(this);
@@ -158,6 +169,10 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 				// 顯示Progress對話方塊
 
 					new clsHttpPostAPI().CallAPI(context, "API002");
+					clsHttpPostAPI clsHttpPostAPI = new clsHttpPostAPI();
+					clsHttpPostAPI.CallAPI(context, "API002");
+
+
 					display();
 					myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
 
@@ -166,7 +181,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 						@Override
 						public void run() {
 							try{
-								Thread.sleep(20000);
+								Thread.sleep(15000);
 							}
 							catch(Exception e){
 								e.printStackTrace();
@@ -219,22 +234,15 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 									.getText().toString(), Application.strCaseID);
 
 					objDB.DBClose();
-
 				/*
 				 * 呼叫API 前往取件
 				 */
-
-
 					new clsHttpPostAPI().CallAPI(context, "API004");
 					EditText_OrderID1.requestFocus();
 
 				}else{
 					Toast.makeText(DataListFrg.this, "請輸入時間", Toast.LENGTH_SHORT).show();
 				}
-
-
-
-
 
 			}
 		});
@@ -282,8 +290,16 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		button_takePic1.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent it = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);  //建立動作為拍照的意圖
-				startActivityForResult(it, 100);   //啟動意圖並要求傳回資料
+
+				String dir = Environment.getExternalStoragePublicDirectory(  //取得系統的公用圖檔路徑
+						Environment.DIRECTORY_PICTURES).toString();
+				String fname = "p" + System.currentTimeMillis() + ".jpg";  //利用目前時間組合出一個不會重複的檔名
+				imgUri = Uri.parse("file://" + dir + "/" + fname);    //依前面的路徑及檔名建立 Uri 物件
+
+				Intent it = new Intent("android.media.action.IMAGE_CAPTURE");
+				it.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);    //將 uri 加到拍照 Intent 的額外資料中
+				startActivityForResult(it, 100);
+				Log.e("imgUri", String.valueOf(imgUri));
 
 			}
 		});
@@ -298,34 +314,8 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			@Override
 			public void onClick(View v) {
 
-
-				//new clsHttpPostAPI().CallAPI(context, "API006");
-                if (type.equals("070")) {
-                    // 簽收單
-                    new clsHttpPostAPI().CallAPI(context, "API011");
-                    objDB = new dbLocations(context);
-                    objDB.openDB();
-                    clsTask objT = objDB.LoadTask(Application.strCaseID);
-                    objDB.DBClose();
-                    clsLoginInfo objL = new clsLoginInfo(context);
-                    objL.Load();
-                    objDB.openDB(); //狀態
-                    objDB.UpdateTaskStatus("71", objT.CaseID);
-                    objDB.DBClose();
-                    type="71";
-                    display();
-                } else {
-                    Application.IsCreateData = ((CheckBox) findViewById(R.id.chkCreateData))
-                            .isChecked();
-                    objDB.openDB();
-                    //託運單
-                    //new clsHttpPostAPI().CallAPI(context, "API006");
-                    type="41";
-                    display();
-                }
-
-
-
+				Post post = new Post();
+				post.run();
 
 
 				/*
@@ -348,6 +338,8 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			}
 
 		});
+
+
 
 		/* 直送 */
 		Button button_Online = (Button) findViewById(R.id.button_Online);
@@ -591,7 +583,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 							objDB.openDB();
 							objDB.UpdateTaskStatus("03", Application.strCaseID);
 							objDB.DBClose();
-							type = "03";
+							type = "71";//
 							display();
 							break;
 						case "4":
@@ -780,7 +772,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 					}
 
 					if (Result.equals("4")) {
-						clsDialog.Show(context, "ERROR", "案件編號不存在");
+						clsDialog.Show(context, "ERROR", "");
 
 					}
 
@@ -1142,7 +1134,8 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 					.setText(objT.ItemCount);
 			((TextView) findViewById(R.id.editText_Distant))
 					.setText(objT.Distance);
-			((TextView) findViewById(R.id.EditText_Size)).setText(objT.Size);
+			((TextView) findViewById(R.id.EditText_Size))
+					.setText(objT.Size);
 
 			objDB.DBClose();
 			objDB.close();
@@ -1188,7 +1181,8 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 					.setText(objT.OrderID);
 			((TextView) findViewById(R.id.editText_Address))
 					.setText(objT.CustAddress);
-			((TextView) findViewById(R.id.EditText_Size)).setText(objT.Size);
+			((TextView) findViewById(R.id.EditText_Size))
+					.setText(objT.Size);
 			((TextView) findViewById(R.id.EditText_Count))
 					.setText(objT.ItemCount);
 			((TextView) findViewById(R.id.editText_Distant))
@@ -1909,52 +1903,147 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 
 	};
 
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-		if (keyCode == KeyEvent.KEYCODE_BACK) { // 攔截返回鍵
-			new AlertDialog.Builder(DataListFrg.this)
-					.setTitle("確認視窗")
-					.setMessage("確定要結束應用程式嗎?")
-					.setIcon(R.drawable.ic_launcher)
-					.setPositiveButton("確定",
-							new DialogInterface.OnClickListener() {
-
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-									new clsHttpPostAPI().CallAPI(context,
-											"API014");
-									SysApplication.getInstance().exit();
-								}
-							})
-					.setNegativeButton("取消",
-							new DialogInterface.OnClickListener() {
-
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-									// TODO Auto-generated method stub
-
-								}
-							}).show();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
 	//拍照後的預覽畫面設定
 	protected void onActivityResult (int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
 		if(resultCode == Activity.RESULT_OK && requestCode==100) {
-			Bundle extras = data.getExtras();         //將 Intent 的附加資料轉為 Bundle 物件
-			Bitmap bmp = (Bitmap) extras.get("data"); //由 Bundle 取出名為 "data" 的 Bitmap 資料
-			ImageView imv = (ImageView)findViewById(R.id.imageView);
-			imv.setImageBitmap(bmp);    	    	  //將 Bitmap 資料顯示在 ImageView 中
 
+			showImg();
 		}
 		else {
 			Toast.makeText(this, "沒有拍到照片", Toast.LENGTH_LONG).show();
 		}
 	}
 
+
+	void showImg() {
+		int iw, ih, vw, vh;
+		Log.e("showing", String.valueOf(imgUri));
+		if(imgUri!=null){
+			BitmapFactory.Options option = new BitmapFactory.Options(); //建立選項物件
+			option.inJustDecodeBounds = true;      //設定選項：只讀取圖檔資訊而不載入圖檔
+			BitmapFactory.decodeFile(imgUri.getPath(), option);  //讀取圖檔資訊存入 Option 中
+			iw = option.outWidth;   //由 option 中讀出圖檔寬度
+			ih = option.outHeight;  //由 option 中讀出圖檔高度
+			vw = imv.getWidth();    //取得 ImageView 的寬度
+			vh = imv.getHeight();   //取得 ImageView 的高度
+
+			//int scaleFactor = 2 ;//Math.min(iw/vw, ih/vh); // 計算縮小比率
+			ImageView imv;
+			imv = (ImageView) findViewById(R.id.imageView);
+			option.inJustDecodeBounds = false;  //關閉只載入圖檔資訊的選項
+			option.inSampleSize = 2;  //設定縮小比例, 例如 2 則長寬都將縮小為原來的 1/2
+			bmp = BitmapFactory.decodeFile(imgUri.getPath(), option); //載入圖檔
+			imv.setImageBitmap(bmp);
+		}else{
+			Toast.makeText(this, "沒有拍到照片", Toast.LENGTH_LONG).show();
+		}
+
+	}
+	// 執行緒 - 執行PostUserInfo()方法
+	class Post extends Thread {
+		@Override
+		public void run() {
+			//上傳 照片
+			try {
+				Postfile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	private void Postfile() throws IOException {
+		int typeInt = 0;
+		if (type.equals("070")) {
+			typeInt = 2;
+		} else {
+			typeInt = 1;
+		}
+		objDB = new dbLocations(context);
+		objDB.openDB();
+		clsTask objT = objDB.LoadTask(Application.strCaseID);
+		objDB.DBClose();
+		clsLoginInfo objL = new clsLoginInfo(context);
+		objL.Load();
+		objDB.openDB(); //狀態
+		objDB.UpdateTaskStatus("71", objT.CaseID);
+		objDB.DBClose();
+
+		String url = "http://efms.hinet.net/FMS_WSMotor/Services/API/Motor_Dispatch/Upload_For\n" +
+				"wardOrder.aspx";
+		final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/jpg");
+		OkHttpClient client = new OkHttpClient();
+
+
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		if (bmp != null) {
+			bmp.compress(Bitmap.CompressFormat.JPEG, 70, bos);
+
+			RequestBody requestBody = new MultipartBody.Builder()
+					.setType(MultipartBody.FORM)
+					.addFormDataPart("file", "test", RequestBody.create(MEDIA_TYPE_PNG, bos.toByteArray()))
+					.addFormDataPart("Key", "7092a3c1-8ad6-48b5-b354-577378c282a5")
+					.addFormDataPart("caseID", objT.CaseID)
+					.addFormDataPart("KeyinFile", String.valueOf(KeyinFile))
+					.addFormDataPart("FileType", "jpg")
+					.addFormDataPart("Type", String.valueOf(typeInt))
+					.build();
+
+			final Request request = new Request.Builder().url(url)
+					.post(requestBody).build();
+
+			client.newCall(request).enqueue(new Callback() {
+				@Override
+				public void onFailure(Call call, IOException e) {
+
+				}
+
+				@Override
+				public void onResponse(Call call, Response response) throws IOException {
+					String string = response.body().string();
+					Log.e("request", String.valueOf(request));
+					Log.e("回傳訊息", string);
+					//new clsHttpPostAPI().CallAPI(context, "API006");
+					if (type.equals("070")) {
+						// 簽收單
+
+						runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								type="71";
+								display();
+							}
+						});
+					} else {
+						Application.IsCreateData = ((CheckBox) findViewById(R.id.chkCreateData))
+								.isChecked();
+
+						if (Application.IsCreateData==true){
+							KeyinFile = 1;
+						}else {
+							KeyinFile = 0;
+						}
+						Log.e("IsCreateData", String.valueOf(KeyinFile));
+						//託運單
+						//new clsHttpPostAPI().CallAPI(context, "API006");
+
+						runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								type="41";
+								display();
+							}
+						});
+					}
+
+				}
+			});
+
+
+		}else{
+			Toast.makeText(DataListFrg.this, "請確認是否有拍照", Toast.LENGTH_SHORT).show();
+
+		}
+	}
+	}
 }

@@ -20,6 +20,8 @@ public class GCMActivity extends Activity {
 	LinearLayout LinearLayout_St0;
 	LinearLayout LinearLayout_St1;
 	TextView TextView_Msg;
+	String strStatus;
+	int checkInt = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +42,7 @@ public class GCMActivity extends Activity {
 
 		Intent intent = getIntent();
 		Bundle bundle = intent.getExtras();
-		String strStatus = bundle.getString("status");
+		strStatus = bundle.getString("status");
 
 		if (strStatus.equals("0")) {
 			dbLocations objDB = new dbLocations(GCMActivity.this);
@@ -90,6 +92,7 @@ public class GCMActivity extends Activity {
 			objDB.DBClose();
 			LinearLayout_St1.setVisibility(View.VISIBLE);
 			TextView_Msg.setText("很可惜，派遣任務("+bundle.getString("caseID")+")接單失敗！");
+			checkInt = 1;
 		}
 
 		if (strStatus.equals("3")) {
@@ -107,29 +110,34 @@ public class GCMActivity extends Activity {
 				Intent intent = new Intent(GCMActivity.this, DataListFrg.class);
 				startActivity(intent);
 				finish();
-
+				Log.e("btnClose","btnClose");
 			}
 		});
 
 		btnClose1.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				checkInt = 1;
+				Log.e("btnClose1","btnClose1");
+				Intent intent = new Intent(GCMActivity.this, DataListFrg.class);
+				startActivity(intent);
 				finish();
 			}
 		});
 
 		btnOpen.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent();
-				intent.setClass(GCMActivity.this, DataListFrg.class);
-				Bundle obj = new Bundle();
-				obj.putString("type", "02");
-				Application.strCaseID=strCaseID;
-				intent.putExtras(obj);
-				startActivity(intent);
-
-				finish();
+					Intent intent = new Intent();
+					intent.setClass(GCMActivity.this, DataListFrg.class);
+					Bundle obj = new Bundle();
+					obj.putString("type", "02");
+					Application.strCaseID=strCaseID;
+					intent.putExtras(obj);
+					startActivity(intent);
+					Log.e("btnOpen","btnOpen");
+					finish();
 			}
 		});
 	}

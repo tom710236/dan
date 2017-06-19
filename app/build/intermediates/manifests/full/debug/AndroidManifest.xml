@@ -55,9 +55,20 @@
         android:icon="@drawable/kerryicon"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.DeviceDefault.Light" >
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.example.motoapp.provider"
+            android:exported="false"
+            android:grantUriPermissions="true" >
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
         <activity
             android:name="com.example.motoapp.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
         </activity>
 
         <!-- 接收 GCM 的 receiver -->

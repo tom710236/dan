@@ -191,48 +191,5 @@ public class GCMIntentService extends GCMBaseIntentService {
 	/*	*/
 
 	}
-	private android.os.PowerManager.WakeLock mWakeLock;
-
-
-	/**
-	 * 获取锁，保持屏幕亮度。 Android中通过各种Lock锁对电源进行控制，需要注意的是加锁和解锁必须成对出现。
-	 * 一般使用:这个函数在Activity的 onResume中被调用。releaseWakeLock()方法则是释放该锁,在Activity的onPause中被调用。
-	 */
-	protected void acquireWakeLock()
-	{
-		if (mWakeLock == null)
-		{
-			//通过PowerManager的newWakeLock((int flags, String tag)方法来生成WakeLock实例。
-			//int Flags指示要获取哪种WakeLock，不同的Lock对cpu、屏幕、键盘灯有不同影响。
-			PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-			mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, getClass().getCanonicalName());
-			mWakeLock.setReferenceCounted(false);
-			mWakeLock.acquire();
-		}
-	}
-
-	protected void acquireWakeLock(long timeout)
-	{
-		if (mWakeLock == null)
-		{
-			PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-			mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, getClass().getCanonicalName());
-			mWakeLock.setReferenceCounted(false);
-			mWakeLock.acquire(timeout);
-		}
-	}
-
-	/**
-	 * 释放锁，显示的释放，如果申请的锁不释放系统就不会进入休眠。
-	 */
-	protected void releaseWakeLock()
-	{
-
-		if(mWakeLock == null || !mWakeLock.isHeld())
-		{
-			mWakeLock.release();
-			mWakeLock = null;
-		}
-	}
 
 }

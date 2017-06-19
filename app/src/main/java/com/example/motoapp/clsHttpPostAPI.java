@@ -147,6 +147,9 @@ public class clsHttpPostAPI extends Activity {
 			case "API023":
 				new Thread(CardPost_1).start(); // 攜出消卡不帶地址
 				break;
+			case "API024":
+				new Thread(CardPost_2).start(); // 查詢
+				break;
 		}
 	}
 
@@ -779,7 +782,33 @@ public class clsHttpPostAPI extends Activity {
 			}
 		}
 	};
+	public Runnable CardPost_2 = new Runnable() {
+		@Override
+		public void run() {
+			clsHttpPost objHttppost = new clsHttpPost();
+			String strRequestJSON = "";
+			try {
+				String strUrl = Application.ShindaUrl+"/QueryAddr.aspx";
+				clsLogger.i("CardPost_2", strUrl);
+				strRequestJSON = objHttppost.Invoke(strUrl, strData);
+				Log.e("CardPost_2 strData",strData);
+				JSONObject json = new JSONObject(strRequestJSON);
+				Log.e("jsoncarPost", String.valueOf(json));
+				//自己補
+				if(handlerInOut!=null)
+				{
+					Message objMessage = new Message();
+					objMessage.obj = json;
+					handlerInOut.sendMessage(objMessage);
 
+				}
+
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	};
 
 	Runnable Resend = new Runnable() {
 		@Override

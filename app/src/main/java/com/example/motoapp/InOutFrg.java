@@ -329,7 +329,7 @@ public class InOutFrg extends Activity {
 				 * */
 				EditText editText = (EditText) findViewById(R.id.EditText_SearchVal);
 				JSONObject json = new JSONObject();
-				Log.e("配送前", String.valueOf(json));
+				Log.e("查詢前", String.valueOf(json));
 				try {
 					java.util.Date now = new java.util.Date();
 					String strDate = new java.text.SimpleDateFormat("yyyyMMdd").format(now);
@@ -337,27 +337,30 @@ public class InOutFrg extends Activity {
 					String strTime = new java.text.SimpleDateFormat("HHmmss").format(now);
 
 					//json.put("HT3101", ((Button)findViewById(R.id.EditText_SStatus1)).getText().toString());
-					json.put("HT3101", ("查詢"));
+					//json.put("HT3101", ("查詢"));
 					json.put("HT3102", (editText.getText().toString()));
+					json.put("HT3184", "ABCD");
+					/*
 					json.put("HT3103", objLoginInfo.FormNo);
 					json.put("HT3113", strMDate);
 					json.put("HT3114", strTime);
 					json.put("HT3181", Application.TestCode);
 					json.put("HT3182", objLoginInfo.AreaID);
 					json.put("HT3183", objLoginInfo.UserID);
-					json.put("HT3184", "ABCD");
+
 					json.put("HT3185", "B");
 					json.put("HT3186", "1");
 					json.put("HT3191", strDate);
 					json.put("HT3192", strTime);
-					Log.e("配送", String.valueOf(json));
+					*/
+					Log.e("查詢", String.valueOf(json));
 				} catch (Exception e) {
 					// TODO: handle exception
 				}
 
 
 				String strPOSTData = json.toString();
-				new clsHttpPostAPI().CallAPI(context, "API016", strPOSTData);
+				new clsHttpPostAPI().CallAPI(context, "API024", strPOSTData);
 				Log.e("strPOSTData", strPOSTData);
 
 
@@ -858,6 +861,8 @@ public class InOutFrg extends Activity {
 				String contents = intent.getStringExtra("SCAN_RESULT");
 				final EditText editText = (EditText) findViewById(EditText_SNO1);
 				editText.setText(contents);
+				TextView textView = (TextView)findViewById(R.id.TextView_SNO1);
+				textView.setText(contents);
 				if (editText.length() == 11) {
 					/**
 					 * 呼叫API
@@ -920,6 +925,7 @@ public class InOutFrg extends Activity {
 				String contents = intent.getStringExtra("SCAN_RESULT");
 				final EditText editText = (EditText) findViewById(R.id.EditText_ENO1);
 				editText.setText(contents);
+
 				if (editText.length() == 11) {
 
 					/**
@@ -987,6 +993,7 @@ public class InOutFrg extends Activity {
 				String contents = intent.getStringExtra("SCAN_RESULT");
 				final EditText editText = (EditText) findViewById(R.id.EditText_SearchVal);
 				editText.setText(contents);
+
 				if (editText.length() == 11) {
 					Toast.makeText(this,contents,Toast.LENGTH_SHORT).show();
 					editText.setText("");

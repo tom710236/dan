@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.motoapp"
     android:versionCode="1"
@@ -52,7 +53,17 @@
         android:label="@string/app_name"
 
         android:theme="@android:style/Theme.DeviceDefault.Light">
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
         <activity
+            android:screenOrientation="portrait"
             android:name=".MainActivity"
             android:label="@string/app_name" >
         </activity>
@@ -130,6 +141,8 @@
             android:name=".Delay"
             android:enabled="true"
             android:exported="true" ></service>
+
+
     </application>
 
 </manifest>

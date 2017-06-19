@@ -539,10 +539,12 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 						// clsDialog.Show(context, "提示訊息", "接單失敗");
 						// dialog = ProgressDialog.show(MainActivity.this,
 						// "接單失敗", "等待詢車中...", true);
-						myDialog.dismiss();
+						Log.e("接單status",status);
+						type = "71";
+						display();
 					}
 					if (status.equals("3")) {
-						myDialog.dismiss();
+
 						// type = 1;
 						// changeTab(0);
 						// clsDialog.Show(MainActivity.this, "提示訊息", "接單逾時");
@@ -821,6 +823,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			}
 		};
 
+		//上排按鈕設定
 		button_DoList = (Button) findViewById(R.id.button_DoList);
 		button_DoList.setOnClickListener(new OnClickListener() {
 			@Override
@@ -872,7 +875,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 				new clsHttpPostAPI().CallAPI(context, "API014");
 			}
 		});
-		
+		// 休息中 接單中
 		Button Button_Status = (Button)findViewById(R.id.Button_Status);
 		Button_Status.setText(objLoginInfo.GetStatus());
 		Button_Status.setOnClickListener(new OnClickListener() {
@@ -1917,6 +1920,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		}
 		else {
 			Toast.makeText(this, "沒有拍到照片", Toast.LENGTH_LONG).show();
+			display();
 		}
 	}
 
@@ -1942,6 +1946,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			imv.setImageBitmap(bmp);
 		}else{
 			Toast.makeText(this, "沒有拍到照片", Toast.LENGTH_LONG).show();
+			display();
 		}
 
 	}
@@ -1963,6 +1968,16 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		} else {
 			typeInt = 1;
 		}
+		Application.IsCreateData = ((CheckBox) findViewById(R.id.chkCreateData))
+				.isChecked();
+
+		if (Application.IsCreateData==true){
+			KeyinFile = 1;
+		}else {
+			KeyinFile = 0;
+		}
+
+		Log.e("IsCreateData", String.valueOf(KeyinFile));
 		objDB = new dbLocations(context);
 		objDB.openDB();
 		clsTask objT = objDB.LoadTask(Application.strCaseID);
@@ -2019,23 +2034,20 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 							}
 						});
 					} else {
-						Application.IsCreateData = ((CheckBox) findViewById(R.id.chkCreateData))
-								.isChecked();
 
-						if (Application.IsCreateData==true){
-							KeyinFile = 1;
-						}else {
-							KeyinFile = 0;
-						}
-						Log.e("IsCreateData", String.valueOf(KeyinFile));
 						//託運單
 						//new clsHttpPostAPI().CallAPI(context, "API006");
 
 						runOnUiThread(new Runnable() {
 							@Override
 							public void run() {
+								bmp = null;
+								ImageView imv;
+								imv = (ImageView) findViewById(R.id.imageView);
+								imv.setImageBitmap(bmp);
 								type="41";
 								display();
+
 							}
 						});
 					}

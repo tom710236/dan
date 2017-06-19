@@ -168,12 +168,14 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 				 */
 				// 顯示Progress對話方塊
 
-					new clsHttpPostAPI().CallAPI(context, "API002");
+					//new clsHttpPostAPI().CallAPI(context, "API002");
 					clsHttpPostAPI clsHttpPostAPI = new clsHttpPostAPI();
 					clsHttpPostAPI.CallAPI(context, "API002");
 
-
+					int i = clsHttpPostAPI.from_get_json;
+					Log.e("i", String.valueOf(i));
 					display();
+
 					myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
 
 
@@ -201,7 +203,6 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 							}
 						}
 					}).start();
-
 
 			}
 		});
@@ -482,11 +483,12 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			@Override
 			public void handleMessage(Message msg) {
 				Bundle json = (Bundle) msg.obj;
+				myDialog.dismiss();
 				Log.e("GCM資料", String.valueOf(json));
 				try {
 					String status = json.getString("status");
 					Log.e("status",status);
-					myDialog.dismiss();
+
 					if (status.equals("0")) {
 						Application.objForm = json;
 						// cCaseID,cOrderID,cCustAddress,cDistance,cSize,cItemCount,cRequestDate,cType
@@ -508,6 +510,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 						display();
 					}
 					if (status.equals("1")) {
+
 						Log.e("status=1 json", String.valueOf(json));
 						Log.e("item_count", String.valueOf(json.getInt("item_count")));
 						Log.e("distance",json.getString("distance"));
@@ -533,12 +536,13 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 					if (status.equals("2")) {
 						// type = 1;
 						// changeTab(0);
-						//clsDialog.Show(context, "提示訊息", "接單失敗");
+						// clsDialog.Show(context, "提示訊息", "接單失敗");
 						// dialog = ProgressDialog.show(MainActivity.this,
 						// "接單失敗", "等待詢車中...", true);
-						finish();
+						myDialog.dismiss();
 					}
 					if (status.equals("3")) {
+						myDialog.dismiss();
 						// type = 1;
 						// changeTab(0);
 						// clsDialog.Show(MainActivity.this, "提示訊息", "接單逾時");

@@ -30,9 +30,9 @@ public class clsHttpPostAPI extends Activity {
 	Delay delay = new Delay();
 	String lon = delay.lon;
 	String lan = delay.lat;
-	JSONObject from_get_json;
+	public int from_get_json;
 	public static String form_get_Result;
-
+	ProgressDialog myDialog;
 	private dbLocations objDB;
 
 	/**
@@ -207,6 +207,9 @@ public class clsHttpPostAPI extends Activity {
 				strRequestJSON = objHttppost.Invoke(strUrl, "");
 
 				JSONObject json = new JSONObject(strRequestJSON);
+				from_get_json = json.getInt("Result");
+				Log.e("from_get_json", String.valueOf(from_get_json));
+
 				json.put("Type", "1");
 				if(handlerTask!=null)
 				Log.e("json1", String.valueOf(json));

@@ -103,13 +103,11 @@ public class Login extends Activity {
 		EditText_Car = (EditText) findViewById(R.id.EditText_Car);
 		EditText_Area = (EditText) findViewById(R.id.EditText_Area);
 		EditText_No = (EditText) findViewById(R.id.EditText_No);
-		EditText_Account.setText("123456");
-
+		EditText_Account.setText("123456");//員工卡號
 		//EditText_Password.setText("123456");
-		EditText_Car.setText("MAH-8167");//MAH-8162 035-Q9
-
-		EditText_Area.setText("123");
-		EditText_No.setText("1234567");
+		EditText_Car.setText("32");//路碼里程
+		//EditText_Area.setText("123");
+		EditText_No.setText("1234567");//運輸單號
 		objContext = Login.this;
 		
 		//String imei = ((TelephonyManager) objContext.getSystemService(TELEPHONY_SERVICE)).getDeviceId();
@@ -118,9 +116,9 @@ public class Login extends Activity {
 		SharedPreferences setting =
 				getSharedPreferences("Login", MODE_PRIVATE);
 		EditText_Account.setText(setting.getString("Account", "123456"));
-		EditText_Car.setText(setting.getString("Car", "MAH-8167"));
-		EditText_No.setText(setting.getString("NO", "1234567"));
-		EditText_Area.setText(setting.getString("Area", "123"));
+		EditText_Car.setText(setting.getString("Car", "1234567"));
+		EditText_No.setText(setting.getString("NO", "32"));
+		//EditText_Area.setText(setting.getString("Area", "123"));
 
 
 		btnLogin = (Button)findViewById(R.id.button_Login);
@@ -128,14 +126,14 @@ public class Login extends Activity {
 			@Override
 			public void onClick(View v) {
 				new GCMTask().execute();
-				Application.strAccount = EditText_Account.getText().toString();
-				//Application.strPass = EditText_Password.getText().toString();
-				Application.strCar = EditText_Car.getText().toString();
+				Application.strAccount = EditText_Account.getText().toString();//員工單號
+				Application.strPass = EditText_No.getText().toString();//運輸單號
+				Application.strCar = EditText_Car.getText().toString();//路瑪里程
 				Application.strDeviceID = serial;
-				Account = EditText_Account.getText().toString();
-				carID = EditText_Car.getText().toString();
-				NO = EditText_No.getText().toString();
-				AREA = EditText_Area.getText().toString();
+				Account = EditText_Account.getText().toString();//員工單號
+				carID = EditText_Car.getText().toString();//路碼里程
+				NO = EditText_No.getText().toString();//運輸單號
+				//AREA = EditText_Area.getText().toString();
 
 			    new clsHttpPostAPI().CallAPI(objContext, "API001");
 			}
@@ -149,7 +147,7 @@ public class Login extends Activity {
 				EditText_Account.setText("");
 				//EditText_Password.setText("");
 				EditText_Car.setText("");
-				EditText_Area.setText("");
+				//EditText_Area.setText("");
 				EditText_Account.requestFocus();
 				EditText_No.setText("");
 			}
@@ -263,7 +261,6 @@ public class Login extends Activity {
 									.putString("Account", Account)
 									.putString("Car",carID)
 									.putString("NO",NO)
-									.putString("Area",AREA)
 									.commit();
 
 							//String EmployeeName =  objLogin.UserName;
@@ -307,9 +304,9 @@ public class Login extends Activity {
 							}
 							Intent intent = new Intent(Login.this, DataListFrg.class);
 							startActivity(intent);
-						}else{
-							clsDialog.Show(Login.this, "", "GCMID收尋中");
 						}
+					}else{
+						clsDialog.Show(Login.this, "", "GCMID收尋中");
 					}
 
 				} catch (Exception e) {

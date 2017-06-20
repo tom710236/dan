@@ -67,8 +67,7 @@
 
         <activity
             android:name="com.example.motoapp.MainActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait" >
+            android:label="@string/app_name" >
         </activity>
 
         <!-- 接收 GCM 的 receiver -->
@@ -105,21 +104,25 @@
         <activity
             android:name="com.example.motoapp.HistoryFragment"
             android:label="@string/title_activity_login1"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
             android:name="com.example.motoapp.InOutFrg"
             android:label="@string/title_activity_login1"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
             android:name="com.example.motoapp.DataListFrg"
             android:label="@string/title_activity_login1"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
             android:name="com.example.motoapp.GetTaskFrg"
             android:label="@string/title_activity_main_activityk"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity

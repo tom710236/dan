@@ -170,8 +170,8 @@ public class clsHttpPostAPI extends Activity {
 						"DeviceID="+ regId +
 						"&Status=1" +
 						"&EmployeeID="+Application.strAccount+
-						"&Password="+Application.strPass+
-						"&CarNo="+Application.strCar+
+						"&Odometer="+Application.strPass+
+						"&TransportID="+Application.strCar+
 						"&key="+Application.strKey;
 						//"&lon=121.48225"+ "&lat=25.02479";
 				Log.e("strUrl",strUrl);
@@ -882,11 +882,11 @@ public class clsHttpPostAPI extends Activity {
 
 			try {
 				String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DeviceInfo.aspx?" +
-						"DeviceID=" + regId+
+						"DeviceID="+ regId +
 						"&Status=2" +
-						"&EmployeeID="+ objL.UserID+
-						"&Password="+Application.strPass+
-						"&CarNo="+ objL.Car+
+						"&EmployeeID="+objL.UserID+
+						"&Odometer="+Application.strPass+
+						"&TransportID="+Application.strCar+
 						"&key="+Application.strKey;
 						//"&lon=121.48225"+ "&lat=25.02479";
 						/*
@@ -937,9 +937,11 @@ public class clsHttpPostAPI extends Activity {
 				objL.Load();
 
 				String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DeviceInfo.aspx?" +
-						"DeviceID=" + regId+
-						"&EmployeeID="+ objL.UserID +
+						"DeviceID="+ regId +
 						"&Status=4" +
+						"&EmployeeID="+objL.UserID+
+						"&Odometer="+Application.strPass+
+						"&TransportID="+Application.strCar+
 						"&key="+Application.strKey;
 
 				clsLogger.i("Form_Reset", strUrl);
@@ -968,9 +970,11 @@ public class clsHttpPostAPI extends Activity {
 				objL.Load();
 
 				String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DeviceInfo.aspx?" +
-						"DeviceID=" + regId+
-						"&EmployeeID="+ objL.UserID +
+						"DeviceID="+ regId +
 						"&Status=3" +
+						"&EmployeeID="+objL.UserID+
+						"&Odometer="+Application.strPass+
+						"&TransportID="+Application.strCar+
 						"&key="+Application.strKey;
 				clsLogger.i("Form_Get", strUrl);
 				strRequestJSON = objHttppost.Invoke(strUrl, "");

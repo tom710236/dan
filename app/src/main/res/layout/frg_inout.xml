@@ -579,7 +579,6 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="5"
-                            android:text="台北市中山區中山北路2段105號"
                             android:textSize="16sp" />
                     </LinearLayout>
 

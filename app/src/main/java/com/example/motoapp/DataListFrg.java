@@ -183,7 +183,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 						@Override
 						public void run() {
 							try{
-								Thread.sleep(15000);
+								Thread.sleep(20000);
 							}
 							catch(Exception e){
 								e.printStackTrace();
@@ -254,6 +254,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			@Override
 			public void onClick(View v) {
 				new clsHttpPostAPI().CallAPI(context, "API005");
+
 			}
 		});
 		
@@ -281,6 +282,8 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		button_Next1.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				Log.e("下一步","下一步");
+				new clsHttpPostAPI().CallAPI(context, "API030");
 				type="040";
 				display();
 			}
@@ -407,6 +410,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		button_Next2.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+
 				type="070";
 				display();
 			}
@@ -1249,12 +1253,15 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 				if(((ClsDropDownItem)Spinner_PayType.getAdapter().getItem(j)).GetID().equals(objT.PayType))
 				{
 					Spinner_PayType.setSelection(j);
+
 				}
 			}
 			
 			((EditText) findViewById(R.id.EditText_Money))
 					.setText(objT.PayAmount);
-			
+			((EditText) findViewById(R.id.EditText_Money))
+					.setText(objT.PayAmount);
+
 			((EditText) findViewById(R.id.EditText_OrderID1)).requestFocus();
 			Log.e("type",type);
 		}
@@ -1307,11 +1314,15 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 				if(((ClsDropDownItem)Spinner_PayType.getAdapter().getItem(j)).GetID().equals(objT.PayType))
 				{
 					Spinner_PayType.setSelection(j);
+					Log.e("j", String.valueOf(j));
+					Application.strPayType= j;
 				}
 			}
-			
-			((EditText) findViewById(R.id.EditText_Money))
-					.setText(objT.PayAmount);
+
+			EditText editText = (EditText)findViewById(R.id.EditText_Money);
+			String payAmount = editText.getText().toString();
+			Log.e("PayAmount1",payAmount);
+			Application.strPayAmounts = payAmount;
 			
 			((EditText) findViewById(R.id.EditText_OrderID1)).requestFocus();
 			Log.e("type",type);
@@ -1919,7 +1930,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			showImg();
 		}
 		else {
-			Toast.makeText(this, "沒有拍到照片", Toast.LENGTH_LONG).show();
+			Toast.makeText(this, "沒有拍到照片1", Toast.LENGTH_LONG).show();
 			display();
 		}
 	}
@@ -1945,7 +1956,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			bmp = BitmapFactory.decodeFile(imgUri.getPath(), option); //載入圖檔
 			imv.setImageBitmap(bmp);
 		}else{
-			Toast.makeText(this, "沒有拍到照片", Toast.LENGTH_LONG).show();
+			Toast.makeText(this, "沒有拍到照片2", Toast.LENGTH_LONG).show();
 			display();
 		}
 

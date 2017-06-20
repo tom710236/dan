@@ -875,7 +875,8 @@ public class InOutFrg extends Activity {
 						String strTime = new java.text.SimpleDateFormat("HHmmss").format(now);
 
 						json.put("HT3101", ((Button) findViewById(R.id.EditText_EStatus1)).getText().toString());
-						json.put("HT3102", ((EditText) findViewById(EditText_ENO1)).getText().toString());
+						//json.put("HT3102", ((EditText) findViewById(EditText_ENO1)).getText().toString());
+						json.put("HT3102", contents);
 						json.put("HT3103", objLoginInfo.FormNo);
 						json.put("HT3113", strMDate);
 						json.put("HT3114", strTime);
@@ -939,7 +940,8 @@ public class InOutFrg extends Activity {
 						String strTime = new java.text.SimpleDateFormat("HHmmss").format(now);
 
 						json.put("HT3101", ((Button) findViewById(R.id.EditText_EStatus1)).getText().toString());
-						json.put("HT3102", ((EditText) findViewById(R.id.EditText_ENO1)).getText().toString());
+						//json.put("HT3102", ((EditText) findViewById(R.id.EditText_ENO1)).getText().toString());
+						json.put("HT3102", (contents));
 						json.put("HT3103", objLoginInfo.FormNo);
 						json.put("HT3113", strMDate);
 						json.put("HT3114", strTime);
@@ -995,8 +997,47 @@ public class InOutFrg extends Activity {
 				editText.setText(contents);
 
 				if (editText.length() == 11) {
-					Toast.makeText(this,contents,Toast.LENGTH_SHORT).show();
+					/**
+					 * 呼叫API
+					 * */
+					//EditText editText = (EditText) findViewById(R.id.EditText_SearchVal);
+					JSONObject json = new JSONObject();
+					Log.e("查詢前", String.valueOf(json));
+					try {
+						java.util.Date now = new java.util.Date();
+						String strDate = new java.text.SimpleDateFormat("yyyyMMdd").format(now);
+						String strMDate = String.valueOf(Integer.parseInt(strDate) - 19110000);
+						String strTime = new java.text.SimpleDateFormat("HHmmss").format(now);
+
+						//json.put("HT3101", ((Button)findViewById(R.id.EditText_SStatus1)).getText().toString());
+						//json.put("HT3101", ("查詢"));
+						//json.put("HT3102", (editText.getText().toString()));
+						json.put("HT3102", (contents));
+						json.put("HT3184", "ABCD");
+					/*
+					json.put("HT3103", objLoginInfo.FormNo);
+					json.put("HT3113", strMDate);
+					json.put("HT3114", strTime);
+					json.put("HT3181", Application.TestCode);
+					json.put("HT3182", objLoginInfo.AreaID);
+					json.put("HT3183", objLoginInfo.UserID);
+
+					json.put("HT3185", "B");
+					json.put("HT3186", "1");
+					json.put("HT3191", strDate);
+					json.put("HT3192", strTime);
+					*/
+						Log.e("查詢", String.valueOf(json));
+					} catch (Exception e) {
+						// TODO: handle exception
+					}
+
+
+					String strPOSTData = json.toString();
+					new clsHttpPostAPI().CallAPI(context, "API024", strPOSTData);
+					Log.e("strPOSTData", strPOSTData);
 					editText.setText("");
+
 				}
 			}
 

@@ -125,6 +125,8 @@ public class clsHttpPostAPI extends Activity {
 				break;
 			case "API022":
 				new Thread(LogoutLog).start(); // Logout Log
+			case "API030":
+				new Thread(form_next).start(); // Logout Log
 				break;
 
 		}
@@ -370,12 +372,49 @@ public class clsHttpPostAPI extends Activity {
 				objL.Load();
 
 				//String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?CaseID="+ Application.strCaseID + "&Status=4&obuID=" + objL.Car+"&key="+Application.strKey+"&PayTypeID="+objT.PayType+"&PayAmount="+objT.PayAmount+"&OrderID="+objT.OrderID;
-				String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?key="+Application.strKey+"&caseID="+Application.strCaseID+"&Status=4&EmployeeID="+Account;
+				String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?key="+Application.strKey+"&caseID="+Application.strCaseID+"&Status=4&EmployeeID="+ objL.UserID+"&PayTypeID="+objT.PayType+"&PayAmount="+objT.PayAmount;
 				clsLogger.i("form_success", strUrl);
 				strRequestJSON = objHttppost.Invoke(strUrl, "");
 				JSONObject json = new JSONObject(strRequestJSON);
 
 				json.put("Type", "4");
+				if(handlerTask!=null)
+				{
+					Message objMessage = new Message();
+					objMessage.obj = json;
+					handlerTask.sendMessage(objMessage);
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	};
+	Runnable form_next = new Runnable() {
+		@Override
+		public void run() {
+			//
+			// TODO: http request.
+			//
+
+			clsHttpPost objHttppost = new clsHttpPost();
+			String strRequestJSON = "";
+			try {
+				objDB = new dbLocations(context);
+				objDB.openDB();
+				clsTask objT = objDB.LoadTask(Application.strCaseID);
+				objDB.DBClose();
+
+				clsLoginInfo objL = new clsLoginInfo(context);
+				objL.Load();
+
+				//String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?CaseID="+ Application.strCaseID + "&Status=4&obuID=" + objL.Car+"&key="+Application.strKey+"&PayTypeID="+objT.PayType+"&PayAmount="+objT.PayAmount+"&OrderID="+objT.OrderID;
+				String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?key="+Application.strKey+"&caseID="+Application.strCaseID+"&Status=4&EmployeeID="+ objL.UserID+"&PayTypeID="+objT.PayType+"&PayAmount="+objT.PayAmount;
+				clsLogger.i("form_success", strUrl);
+				strRequestJSON = objHttppost.Invoke(strUrl, "");
+				JSONObject json = new JSONObject(strRequestJSON);
+
+				//json.put("Type", "4");
 				if(handlerTask!=null)
 				{
 					Message objMessage = new Message();
@@ -452,7 +491,7 @@ public class clsHttpPostAPI extends Activity {
 				objL.Load();
 
 				//String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?CaseID="+ Application.strCaseID + "&Status=6&obuID=" + carID+"&key="+Application.strKey;
-				String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?CaseID="+ objT.CaseID + "&Status=6&EmployeeID=" + objL.UserID+"&key="+Application.strKey;
+				String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?CaseID="+ objT.CaseID + "&Status=6&EmployeeID=" + objL.UserID+"&key="+Application.strKey+"&PayTypeID="+objT.PayType+"&PayAmount="+objT.PayAmount;
 				clsLogger.i("form_Send", strUrl);
 				strRequestJSON = objHttppost.Invoke(strUrl, "");
 				JSONObject json = new JSONObject(strRequestJSON);

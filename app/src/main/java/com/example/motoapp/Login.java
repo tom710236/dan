@@ -134,8 +134,12 @@ public class Login extends Activity {
 				carID = EditText_Car.getText().toString();//路碼里程
 				NO = EditText_No.getText().toString();//運輸單號
 				//AREA = EditText_Area.getText().toString();
-
-			    new clsHttpPostAPI().CallAPI(objContext, "API001");
+				Log.e("regId",regId);
+				if(regId!=null){
+					new clsHttpPostAPI().CallAPI(objContext, "API001");
+				}else {
+					clsDialog.Show(Login.this, "", "GCMID收尋中");
+				}
 			}
 		});
 		
@@ -229,7 +233,6 @@ public class Login extends Activity {
 					Log.e("Resultand",Result);
 					if(regId!=null){
 						if (Result.equals("1")) {
-							Log.e("Resultand",Result);
 							//Application.strObuID = json.getString("ObuID");
 							Application.strUserName = json
 									.getString("EmployeeName");

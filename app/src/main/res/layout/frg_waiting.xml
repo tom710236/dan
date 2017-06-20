@@ -247,6 +247,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:inputType="number"
+                        android:singleLine="true"
                         android:text=""
                         android:textSize="16sp" />
 
@@ -372,6 +373,7 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="3"
+                            android:inputType="number"
                             android:text="A123456789"
                             android:textSize="16sp">
 
@@ -436,6 +438,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="3"
+                            android:inputType="number"
                             android:text="0981888666"
                             android:textSize="16sp" />
                     </LinearLayout>
@@ -457,6 +460,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="3"
                             android:ems="10"
+                            android:inputType="number"
                             android:text="3"
                             android:textSize="16sp" />
 
@@ -503,6 +507,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1.5"
+                            android:inputType="number"
                             android:text="0"
                             android:textSize="16sp" />
                     </LinearLayout>
@@ -655,8 +660,7 @@
                     android:id="@+id/LinearLayout_Arrivals"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:visibility="gone">
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"

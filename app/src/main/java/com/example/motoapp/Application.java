@@ -21,7 +21,7 @@ public class Application extends android.app.Application {
 	public static String strCar;
 	
 	public static String TestCode="0078";
-	
+
 	
 	public static String strPageIndex="2";
 	public static String strDeviceID;
@@ -34,4 +34,8 @@ public class Application extends android.app.Application {
 	public static String ChtUrl = "http://efms.hinet.net/FMS_WSMotor/";
 	//public static String ShindaUrl="http://demo.shinda.com.tw:3366/KerryWeb/";
 	public static String ShindaUrl="http://demo.shinda.com.tw:7380/KerryWeb/";
+
+	//自己加
+	public static int strPayType;
+	public static String strPayAmounts;
 }

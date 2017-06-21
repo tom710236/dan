@@ -632,6 +632,7 @@ public class clsHttpPostAPI extends Activity {
 				objDB = new dbLocations(context);
 				objDB.openDB();
 				clsTask objT = objDB.LoadTask(Application.strCaseID);
+				objDB.UpdateTaskStatus("06", objT.CaseID);
 				objDB.DBClose();
 
 				clsLoginInfo objL = new clsLoginInfo(context);

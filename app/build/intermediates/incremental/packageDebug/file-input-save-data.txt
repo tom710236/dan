@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Tue Jun 20 18:32:53 CST 2017
+#Wed Jun 21 10:37:20 CST 2017
 210.set=ANDROID_RESOURCE
 14.set=ANDROID_RESOURCE
 180.file=C\:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\layout\\device_name.xml

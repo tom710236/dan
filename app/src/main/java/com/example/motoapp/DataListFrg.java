@@ -1991,13 +1991,11 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		Log.e("IsCreateData", String.valueOf(KeyinFile));
 		objDB = new dbLocations(context);
 		objDB.openDB();
-		clsTask objT = objDB.LoadTask(Application.strCaseID);
+		final clsTask objT = objDB.LoadTask(Application.strCaseID);
 		objDB.DBClose();
 		clsLoginInfo objL = new clsLoginInfo(context);
 		objL.Load();
-		objDB.openDB(); //狀態
-		objDB.UpdateTaskStatus("71", objT.CaseID);
-		objDB.DBClose();
+
 
 		String url = "http://efms.hinet.net/FMS_WSMotor/Services/API/Motor_Dispatch/Upload_For\n" +
 				"wardOrder.aspx";
@@ -2036,7 +2034,9 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 					//new clsHttpPostAPI().CallAPI(context, "API006");
 					if (type.equals("070")) {
 						// 簽收單
-
+						objDB.openDB(); //狀態
+						objDB.UpdateTaskStatus("71", objT.CaseID);
+						objDB.DBClose();
 						runOnUiThread(new Runnable() {
 							@Override
 							public void run() {
@@ -2048,7 +2048,9 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 
 						//託運單
 						//new clsHttpPostAPI().CallAPI(context, "API006");
-
+						objDB.openDB(); //狀態
+						objDB.UpdateTaskStatus("41", objT.CaseID);
+						objDB.DBClose();
 						runOnUiThread(new Runnable() {
 							@Override
 							public void run() {

@@ -33,7 +33,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="visible">
 
                 <LinearLayout
                     android:id="@+id/LinearLayout_doType"
@@ -41,7 +42,8 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:orientation="vertical"
-                    android:paddingTop="90dp">
+                    android:paddingTop="90dp"
+                    android:visibility="visible">
 
                     <Button
                         android:id="@+id/button_doStart"
@@ -211,7 +213,7 @@
                             android:id="@+id/TextView_SOrderID2"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="5"
+                            android:layout_weight="3"
                             android:text="A123456789"
                             android:textSize="16sp" />
 
@@ -238,7 +240,7 @@
                             android:id="@+id/EditText_SNO1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="5"
+                            android:layout_weight="3"
                             android:maxLength="11"
                             android:singleLine="true"
                             android:text=""
@@ -270,7 +272,6 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="5"
                             android:gravity="right"
-                            android:text="1111111111"
                             android:textSize="16sp" />
                     </LinearLayout>
 
@@ -296,7 +297,48 @@
                             android:text=""
                             android:textSize="16sp" />
                     </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/LinearLayout_SMoney"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp">
 
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:gravity="right"
+                            android:text="到付金額："
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/TextView_SMoney"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5"
+                            android:text=""
+                            android:textSize="16sp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/LinearLayout_SMoney2"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:gravity="right"
+                            android:text="代收貸款："
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/TextView_SMoney2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5"
+                            android:text=""
+                            android:textSize="16sp" />
+                    </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="40dp">
@@ -420,7 +462,7 @@
                             android:id="@+id/TextView_EOrderID2"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="5"
+                            android:layout_weight="3"
                             android:text="A123456789"
                             android:textSize="16sp" />
 
@@ -447,7 +489,7 @@
                             android:id="@+id/EditText_ENO1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="5"
+                            android:layout_weight="3"
                             android:maxLength="11"
                             android:singleLine="true"
                             android:text=""
@@ -479,18 +521,82 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="5"
                             android:gravity="right"
-                            android:text="A123456789"
-                            android:textSize="16sp" />
+                            android:textSize="16sp"
+                            android:visibility="visible" />
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/LinearLayout_EAddress"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="40dp">
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
+                            android:gravity="right"
+                            android:text="地址："
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/TextView_EAddress1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5"
+                            android:text=""
+                            android:textSize="16sp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/LinearLayout_EMoney"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:gravity="right"
+                            android:text="到付金額："
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/TextView_EMoney"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5"
+                            android:text=""
+                            android:textSize="16sp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/LinearLayout_EMoney2"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:gravity="right"
+                            android:text="代收貸款："
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/TextView_EMoney2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5"
+                            android:text=""
+                            android:textSize="16sp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:gravity="right"
                             android:text="筆數："
                             android:textSize="16sp" />
 
@@ -513,8 +619,8 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="代碼查詢"
-                            android:visibility="invisible" />
+                            android:text="確認"
+                            android:visibility="visible" />
 
                         <Button
                             android:id="@+id/button_Ecancel2"
@@ -548,7 +654,7 @@
                             android:id="@+id/EditText_SearchVal"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="5"
+                            android:layout_weight="3"
                             android:maxLength="11"
                             android:singleLine="true"
                             android:text=""
@@ -562,7 +668,44 @@
                             android:onClick="onScran3"
                             android:text="掃描" />
                     </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp">
 
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:text=""
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/TextView_ENO2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5"
+                            android:gravity="right"
+                            android:textSize="16sp"
+                            android:visibility="visible" />
+                    </LinearLayout>
+                    <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5"
+                        android:text="託運地址："
+                        android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/TextView_AD"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:textSize="16sp" />
+                    </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="40dp">
@@ -571,14 +714,32 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1.5"
-                            android:text="託運地址："
+                            android:text="到付金額："
                             android:textSize="16sp" />
 
                         <TextView
-                            android:id="@+id/TextView_AD"
+                            android:id="@+id/TextView_ADMoney"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="5"
+                            android:layout_weight="3"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.5"
+                            android:text="代收貸款："
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/TextView_ADMoney2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
                             android:textSize="16sp" />
                     </LinearLayout>
 

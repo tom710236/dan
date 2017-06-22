@@ -329,6 +329,8 @@ public class InOutFrg extends Activity {
 				 * */
 				EditText editText = (EditText) findViewById(R.id.EditText_SearchVal);
 				JSONObject json = new JSONObject();
+				TextView textView = (TextView)findViewById(R.id.TextView_ENO2);
+				textView.setText(editText.getText().toString());
 				Log.e("查詢前", String.valueOf(json));
 				try {
 					java.util.Date now = new java.util.Date();
@@ -926,7 +928,8 @@ public class InOutFrg extends Activity {
 				String contents = intent.getStringExtra("SCAN_RESULT");
 				final EditText editText = (EditText) findViewById(R.id.EditText_ENO1);
 				editText.setText(contents);
-
+				TextView textView = (TextView) findViewById(R.id.TextView_ENO1);
+				textView.setText(contents);
 				if (editText.length() == 11) {
 
 					/**
@@ -995,7 +998,8 @@ public class InOutFrg extends Activity {
 				String contents = intent.getStringExtra("SCAN_RESULT");
 				final EditText editText = (EditText) findViewById(R.id.EditText_SearchVal);
 				editText.setText(contents);
-
+				TextView textView = (TextView) findViewById(R.id.TextView_ENO2);
+				textView.setText(contents);
 				if (editText.length() == 11) {
 					/**
 					 * 呼叫API

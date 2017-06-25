@@ -28,7 +28,8 @@
         <ScrollView
             android:id="@+id/ScrollViewT"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:layout_height="fill_parent"
+            android:visibility="visible">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -169,7 +170,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="60dp">
+                        android:layout_height="wrap_content">
 
                         <TextView
                             android:layout_width="0dp"
@@ -179,6 +180,13 @@
                             android:text="貨況："
                             android:textSize="16sp" />
 
+                        <Spinner
+                            android:id="@+id/spinner"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5"
+                            android:gravity="left" />
+
                         <Button
                             android:id="@+id/EditText_SStatus1"
                             android:layout_width="0dp"
@@ -186,7 +194,8 @@
                             android:layout_weight="1.5"
                             android:text="73"
                             android:textColor="#FF0000"
-                            android:textSize="20sp" />
+                            android:textSize="20sp"
+                            android:visibility="gone" />
 
                         <TextView
                             android:id="@+id/TextView_SStatusName1"
@@ -194,7 +203,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="3.5"
                             android:text="配送"
-                            android:textSize="16sp" />
+                            android:textSize="16sp"
+                            android:visibility="gone" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -297,6 +307,7 @@
                             android:text=""
                             android:textSize="16sp" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/LinearLayout_SMoney"
                         android:layout_width="match_parent"
@@ -318,6 +329,7 @@
                             android:text=""
                             android:textSize="16sp" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/LinearLayout_SMoney2"
                         android:layout_width="match_parent"
@@ -339,6 +351,7 @@
                             android:text=""
                             android:textSize="16sp" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="40dp">
@@ -428,6 +441,12 @@
                             android:text="貨況："
                             android:textSize="16sp" />
 
+                        <Spinner
+                            android:id="@+id/spinner2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5" />
+
                         <Button
                             android:id="@+id/EditText_EStatus1"
                             android:layout_width="0dp"
@@ -435,7 +454,8 @@
                             android:layout_weight="1.5"
                             android:text="02"
                             android:textColor="#FF0000"
-                            android:textSize="20sp" />
+                            android:textSize="20sp"
+                            android:visibility="gone" />
 
                         <TextView
                             android:id="@+id/TextView_EStatusName1"
@@ -443,7 +463,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="3.5"
                             android:text="配達"
-                            android:textSize="16sp" />
+                            android:textSize="16sp"
+                            android:visibility="gone" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -546,6 +567,7 @@
                             android:text=""
                             android:textSize="16sp" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/LinearLayout_EMoney"
                         android:layout_width="match_parent"
@@ -567,6 +589,7 @@
                             android:text=""
                             android:textSize="16sp" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/LinearLayout_EMoney2"
                         android:layout_width="match_parent"
@@ -588,6 +611,7 @@
                             android:text=""
                             android:textSize="16sp" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="40dp">
@@ -668,6 +692,7 @@
                             android:onClick="onScran3"
                             android:text="掃描" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="40dp">
@@ -688,16 +713,17 @@
                             android:textSize="16sp"
                             android:visibility="visible" />
                     </LinearLayout>
-                    <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1.5"
-                        android:text="託運地址："
-                        android:textSize="16sp" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.5"
+                            android:text="託運地址："
+                            android:textSize="16sp" />
 
                         <TextView
                             android:id="@+id/TextView_AD"
@@ -706,6 +732,7 @@
                             android:layout_weight="3"
                             android:textSize="16sp" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="40dp">
@@ -724,6 +751,7 @@
                             android:layout_weight="3"
                             android:textSize="16sp" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="40dp">

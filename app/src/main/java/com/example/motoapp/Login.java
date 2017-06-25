@@ -134,7 +134,7 @@ public class Login extends Activity {
 				carID = EditText_Car.getText().toString();//路碼里程
 				NO = EditText_No.getText().toString();//運輸單號
 				//AREA = EditText_Area.getText().toString();
-				Log.e("regId",regId);
+				//Log.e("regId",regId);
 				if(regId!=null){
 					new clsHttpPostAPI().CallAPI(objContext, "API001");
 				}else {
@@ -227,11 +227,10 @@ public class Login extends Activity {
 			@Override
 			public void handleMessage(Message msg) {
 				JSONObject json = (JSONObject) msg.obj;
-				Log.e("json", String.valueOf(json));
+				//Log.e("json", String.valueOf(json));
 				try {
 					String Result = json.getString("Result");
-					Log.e("Resultand",Result);
-					if(regId!=null){
+					//Log.e("Resultand",Result);
 						if (Result.equals("1")) {
 							//Application.strObuID = json.getString("ObuID");
 							Application.strUserName = json
@@ -308,9 +307,6 @@ public class Login extends Activity {
 							Intent intent = new Intent(Login.this, DataListFrg.class);
 							startActivity(intent);
 						}
-					}else{
-						clsDialog.Show(Login.this, "", "GCMID收尋中");
-					}
 
 				} catch (Exception e) {
 					// TODO Auto-generated catch block

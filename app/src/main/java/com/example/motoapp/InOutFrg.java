@@ -17,18 +17,39 @@ import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import static com.example.motoapp.R.id.EditText_ENO1;
 import static com.example.motoapp.R.id.EditText_SNO1;
@@ -40,7 +61,7 @@ public class InOutFrg extends Activity {
 	Context context;
 	View view;
 	clsLoginInfo objLoginInfo;
-
+	int CARTYPE;
 	int intType;
 	EditText EditText_Val;
 	Button button_DoList;
@@ -55,6 +76,8 @@ public class InOutFrg extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d("=====>", "GoogleFragment onCreateView");
+
+
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.frg_inout);
@@ -111,6 +134,9 @@ public class InOutFrg extends Activity {
 		button_doStart.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				CARTYPE = 7;
+				Post7 post = new Post7();
+				post.run();
 				//Application.strCardNo = EditNo.getText().toString();
 				((TextView) findViewById(R.id.TextView_SNO1)).setText("");
 				((TextView) findViewById(R.id.TextView_ENO1)).setText("");
@@ -266,6 +292,10 @@ public class InOutFrg extends Activity {
 		button_doEnd.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+
+				CARTYPE = 8;
+				Post7 post = new Post7();
+				post.run();
 				//Application.strCardNo = EditNo.getText().toString();
 				((TextView) findViewById(R.id.TextView_SNO1)).setText("");
 				((TextView) findViewById(R.id.TextView_ENO1)).setText("");
@@ -1047,4 +1077,148 @@ public class InOutFrg extends Activity {
 
 		}
 	}
+	//貨況 配送
+	class Post7 extends Thread{
+		@Override
+		public void run() {
+			Get7Info();
+		}
+
+		private void Get7Info() {
+
+
+			String url = "https://ga.kerrytj.com/Cht_Motor/api/GetEmployee/GetCondition?CARTYPE="+CARTYPE;
+
+			final OkHttpClient client = new OkHttpClient()
+                    .newBuilder()
+                    .connectTimeout(15, TimeUnit.SECONDS)
+                    .readTimeout(15, TimeUnit.SECONDS)
+                    .writeTimeout(15, TimeUnit.SECONDS)
+                    //.addInterceptor(new LogInterceptor())
+                    //.addInterceptor(new TokenInterceptor())
+                    .sslSocketFactory(SSLSocketClient.getSSLSocketFactory())
+                    .hostnameVerifier(SSLSocketClient.getHostnameVerifier())
+                    .build();
+            final Request request = new Request.Builder()
+					.url(url)
+					.build();
+			Call call = client.newCall(request);
+
+			call.enqueue(new Callback() {
+				@Override
+				public void onFailure(Call call, IOException e) {
+					Log.e("e", String.valueOf(e));
+				}
+
+				@Override
+				public void onResponse(Call call, Response response) throws IOException {
+					String json = response.body().string();
+					Log.e("配送貨況回傳",json);
+					parseJson(json);
+				}
+			});
+
+		}
+
+		private void parseJson(String json) {
+			try {
+				JSONArray array = new JSONArray(json);
+				final ArrayList NUMArray = new ArrayList<>();
+				for (int i = 0; i < array.length(); i++){
+					JSONObject obj = array.getJSONObject(i);
+					String NUM = String.valueOf(obj.get("NUM"));
+					String DES = String.valueOf(obj.get("DES"));
+					NUMArray.add(NUM+" "+DES);
+					Log.e("NUMArray", String.valueOf(NUMArray));
+					Log.e("NUM",NUM);
+					Log.e("DES",DES);
+				}
+				//配送
+				//宣告並取得Spinner
+				final Spinner spinner = (Spinner) findViewById(R.id.spinner);
+				//設定Spinner
+				final ArrayAdapter list = new ArrayAdapter<>(
+						InOutFrg.this,
+						android.R.layout.simple_expandable_list_item_1,
+						NUMArray);
+
+				//顯示Spinner 非主執行緒的UI 需用runOnUiThread
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						spinner.setAdapter(list);
+					}
+				});
+				//配達
+				final Spinner spinner2 = (Spinner) findViewById(R.id.spinner2);
+				//設定Spinner
+				final ArrayAdapter list2 = new ArrayAdapter<>(
+						InOutFrg.this,
+						android.R.layout.simple_expandable_list_item_1,
+						NUMArray);
+
+				//顯示Spinner 非主執行緒的UI 需用runOnUiThread
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						spinner2.setAdapter(list2);
+					}
+				});
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+    /**
+     * Https 憑證不安全
+     * 略過憑證方法
+     */
+    public static class SSLSocketClient {
+
+        //获取这个SSLSocketFactory
+        public static SSLSocketFactory getSSLSocketFactory() {
+            try {
+                SSLContext sslContext = SSLContext.getInstance("SSL");
+                sslContext.init(null, getTrustManager(), new SecureRandom());
+                return sslContext.getSocketFactory();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        //获取TrustManager
+        private static TrustManager[] getTrustManager() {
+            TrustManager[] trustAllCerts = new TrustManager[]{
+                    new X509TrustManager() {
+                        @Override
+                        public void checkClientTrusted(X509Certificate[] chain, String authType) {
+                        }
+
+                        @Override
+                        public void checkServerTrusted(X509Certificate[] chain, String authType) {
+                        }
+
+                        @Override
+                        public X509Certificate[] getAcceptedIssuers() {
+                            return new X509Certificate[]{};
+                        }
+                    }
+            };
+            return trustAllCerts;
+        }
+
+        //获取HostnameVerifier
+        public static HostnameVerifier getHostnameVerifier() {
+            HostnameVerifier hostnameVerifier = new HostnameVerifier() {
+                @Override
+                public boolean verify(String s, SSLSession sslSession) {
+                    return true;
+                }
+            };
+            return hostnameVerifier;
+        }
+    }
+
+
 }

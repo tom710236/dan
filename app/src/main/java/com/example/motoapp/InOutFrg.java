@@ -402,6 +402,8 @@ public class InOutFrg extends Activity {
 						"&BOL_NO="+(editText.getText().toString());
 				PostBasic post = new PostBasic();
 				post.run();
+				EditText editText2 = (EditText)findViewById(R.id.EditText_SearchVal);
+				editText2.setText("");
 				/*
 				try {
 					java.util.Date now = new java.util.Date();
@@ -1126,8 +1128,8 @@ public class InOutFrg extends Activity {
 					 * 呼叫API
 					 * */
 
-					PostBasic post = new PostBasic();
-					post.run();
+					//PostBasic post = new PostBasic();
+					//post.run();
 					//EditText editText = (EditText) findViewById(R.id.EditText_SearchVal);
 					/*
 					JSONObject json = new JSONObject();

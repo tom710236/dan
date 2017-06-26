@@ -1,5 +1,6 @@
 package com.example.motoapp;
 
+import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -99,6 +100,14 @@ public class GCMIntentService extends GCMBaseIntentService {
 		//释放
 		// 處理 bData 內含的訊息
 		// 在本例中, 我的 server 端程式 gcm_send.php 傳來了 message, campaigndate, title, description 四項資料
+
+		KeyguardManager km= (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
+		//得到鍵盤鎖管理器對象
+		KeyguardManager.KeyguardLock kl = km.newKeyguardLock("unLock");
+		//參數是LogCat裡用的Tag
+		kl.disableKeyguard();
+		//解鎖
+
 		try {
 
 			clsLogger.i(TAG, "Received message");

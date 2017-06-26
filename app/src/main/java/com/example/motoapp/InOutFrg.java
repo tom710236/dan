@@ -34,7 +34,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -47,8 +49,10 @@ import javax.net.ssl.X509TrustManager;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static com.example.motoapp.R.id.EditText_ENO1;
@@ -71,6 +75,10 @@ public class InOutFrg extends Activity {
 
 	Handler handlerTask;
 	String BasicUrl;
+	String type7="73",type8="02",typeNUM;
+	String onClickNum;
+	String BrushDate,BrushTime,UP_DATE,UP_TIME;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -132,7 +140,10 @@ public class InOutFrg extends Activity {
 		button_doStart.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+
 				CARTYPE = 7;
+
+
 				PostCondition post = new PostCondition();
 				post.run();
 				//Application.strCardNo = EditNo.getText().toString();
@@ -162,8 +173,8 @@ public class InOutFrg extends Activity {
 
 				TextView TextView_SOrderID2 = (TextView) findViewById(R.id.TextView_SOrderID2);
 				TextView TextView_EOrderID2 = (TextView) findViewById(R.id.TextView_EOrderID2);
-				TextView_SOrderID2.setText(objLoginInfo.FormNo);
-				TextView_EOrderID2.setText(objLoginInfo.FormNo);
+				TextView_SOrderID2.setText(Application.strCar);
+				TextView_EOrderID2.setText(Application.strCar);
 
 				//TODO 顯示數量
 				TextView TextView_SCount = (TextView) findViewById(R.id.TextView_SCount);
@@ -177,6 +188,7 @@ public class InOutFrg extends Activity {
 		final EditText EditText_SNO1 = (EditText) findViewById(R.id.EditText_SNO1);
 		EditText_SNO1.setOnKeyListener(new OnKeyListener() {
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
+
 				if (event.getAction() == event.ACTION_DOWN) {
 					if (keyCode == 23 || keyCode == 66) {
 						EditText EditText_SNO1 = (EditText) v;
@@ -184,6 +196,9 @@ public class InOutFrg extends Activity {
 							clsDialog.Show(context, "提示", "請輸入10碼以上的託運單號！");
 							return true;
 						}
+						onClickNum =((EditText) findViewById(R.id.EditText_SNO1)).getText().toString();
+						final TextView textview = (TextView) findViewById(R.id.TextView_SNO1);
+						textview.setText(onClickNum);
 						/**
 						 * 呼叫API
 						 * */
@@ -192,9 +207,16 @@ public class InOutFrg extends Activity {
 								"ID="+Application.strAccount+
 								"&CAR_NO="+Application.strCar+
 								"&BOL_NO="+((EditText) findViewById(R.id.EditText_SNO1)).getText().toString();
+
 						PostBasic post = new PostBasic();
 						post.run();
-						//上傳AS400API
+						//資訊更新API
+
+						getBrushDate();
+						getUPDate();
+						PostCondition_UP post2 = new PostCondition_UP();
+						post2.run();
+						/*上傳AS400API
 						JSONObject json = new JSONObject();
 						Log.e("配送前", String.valueOf(json));
 						try {
@@ -203,7 +225,7 @@ public class InOutFrg extends Activity {
 							String strMDate = String.valueOf(Integer.parseInt(strDate) - 19110000);
 							String strTime = new java.text.SimpleDateFormat("HHmmss").format(now);
 
-							json.put("HT3101", ((Button) findViewById(R.id.EditText_SStatus1)).getText().toString());
+							json.put("HT3101", type7);
 							//json.put("HT3101", ("查詢"));
 							json.put("HT3102", ((EditText) findViewById(R.id.EditText_SNO1)).getText().toString());
 							json.put("HT3103", objLoginInfo.FormNo);
@@ -250,6 +272,7 @@ public class InOutFrg extends Activity {
 
 						EditText_SNO1.requestFocus();
 						return true;
+						*/
 					}
 					return false;
 				}
@@ -299,6 +322,9 @@ public class InOutFrg extends Activity {
 			public void onClick(View v) {
 
 				CARTYPE = 8;
+				typeNUM = null;
+				onClickNum = null;
+
 				PostCondition post = new PostCondition();
 				post.run();
 				//Application.strCardNo = EditNo.getText().toString();
@@ -328,8 +354,8 @@ public class InOutFrg extends Activity {
 
 				TextView TextView_SOrderID2 = (TextView) findViewById(R.id.TextView_SOrderID2);
 				TextView TextView_EOrderID2 = (TextView) findViewById(R.id.TextView_EOrderID2);
-				TextView_SOrderID2.setText(objLoginInfo.FormNo);
-				TextView_EOrderID2.setText(objLoginInfo.FormNo);
+				TextView_SOrderID2.setText(Application.strCar);
+				TextView_EOrderID2.setText(Application.strCar);
 
 				//TODO 顯示數量
 				TextView TextView_ECount = (TextView) findViewById(R.id.TextView_ECount);
@@ -369,14 +395,14 @@ public class InOutFrg extends Activity {
 				TextView textView = (TextView) findViewById(R.id.TextView_ENO2);
 				textView.setText(editText.getText().toString());
 				Log.e("查詢前", String.valueOf(json));
-
+				onClickNum = editText.getText().toString();
 				BasicUrl = "https://ga.kerrytj.com/Cht_Motor/api/GetEmployee/GetBasic?" +
 						"ID="+Application.strAccount+
 						"&CAR_NO="+Application.strCar+
 						"&BOL_NO="+(editText.getText().toString());
 				PostBasic post = new PostBasic();
 				post.run();
-
+				/*
 				try {
 					java.util.Date now = new java.util.Date();
 					String strDate = new java.text.SimpleDateFormat("yyyyMMdd").format(now);
@@ -399,7 +425,7 @@ public class InOutFrg extends Activity {
 					json.put("HT3186", "1");
 					json.put("HT3191", strDate);
 					json.put("HT3192", strTime);
-					*/
+
 					Log.e("查詢", String.valueOf(json));
 				} catch (Exception e) {
 					// TODO: handle exception
@@ -409,7 +435,7 @@ public class InOutFrg extends Activity {
 				String strPOSTData = json.toString();
 				new clsHttpPostAPI().CallAPI(context, "API024", strPOSTData);
 				Log.e("strPOSTData", strPOSTData);
-
+				*/
 
 			}
 		});
@@ -439,13 +465,19 @@ public class InOutFrg extends Activity {
 						 * 呼叫API
 						 * */
 						//取得資訊API
+
 						BasicUrl = "https://ga.kerrytj.com/Cht_Motor/api/GetEmployee/GetBasic?" +
 								"ID="+Application.strAccount+
 								"&CAR_NO="+Application.strCar+
 								"&BOL_NO="+((EditText) findViewById(R.id.EditText_ENO1)).getText().toString();
 						PostBasic post = new PostBasic();
 						post.run();
+						onClickNum =((EditText) findViewById(R.id.EditText_ENO1)).getText().toString();
+						final TextView textview = (TextView) findViewById(R.id.TextView_ENO1);
+						textview.setText(onClickNum);
+
 						//上傳AS400API
+						/*
 						JSONObject json = new JSONObject();
 						try {
 							java.util.Date now = new java.util.Date();
@@ -453,7 +485,7 @@ public class InOutFrg extends Activity {
 							String strMDate = String.valueOf(Integer.parseInt(strDate) - 19110000);
 							String strTime = new java.text.SimpleDateFormat("HHmmss").format(now);
 
-							json.put("HT3101", ((Button) findViewById(R.id.EditText_EStatus1)).getText().toString());
+							json.put("HT3101", type8);
 							json.put("HT3102", ((EditText) findViewById(R.id.EditText_ENO1)).getText().toString());
 							json.put("HT3103", objLoginInfo.FormNo);
 							json.put("HT3113", strMDate);
@@ -498,10 +530,13 @@ public class InOutFrg extends Activity {
 
 						EditText_ENO1.requestFocus();
 						return true;
+						*/
 					}
 					return false;
+
 				}
 				return true;
+
 			}
 		});
 
@@ -910,6 +945,7 @@ public class InOutFrg extends Activity {
 
 	// 接收 ZXing 掃描後回傳來的結果
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		//配送
 		if (requestCode == 1) {
 			if (resultCode == RESULT_OK) {
 				// ZXing回傳的內容
@@ -922,12 +958,21 @@ public class InOutFrg extends Activity {
 						"ID="+Application.strAccount+
 						"&CAR_NO="+Application.strCar+
 						"&BOL_NO="+contents;
+				onClickNum = contents;
 				if (editText.length() == 11) {
 					/**
 					 * 呼叫API
 					 * */
+					//託運單資訊
 					PostBasic post = new PostBasic();
 					post.run();
+					//託運單上傳
+					//資訊更新API
+
+					getBrushDate();
+					getUPDate();
+					PostCondition_UP post2 = new PostCondition_UP();
+					post2.run();
 					/*
 					JSONObject json = new JSONObject();
 					try {
@@ -936,7 +981,7 @@ public class InOutFrg extends Activity {
 						String strMDate = String.valueOf(Integer.parseInt(strDate) - 19110000);
 						String strTime = new java.text.SimpleDateFormat("HHmmss").format(now);
 
-						json.put("HT3101", ((Button) findViewById(R.id.EditText_EStatus1)).getText().toString());
+						json.put("HT3101", type7);
 						//json.put("HT3102", ((EditText) findViewById(EditText_ENO1)).getText().toString());
 						json.put("HT3102", contents);
 						json.put("HT3103", objLoginInfo.FormNo);
@@ -985,6 +1030,7 @@ public class InOutFrg extends Activity {
 				}
 
 			}
+		//配達
 		} else if (requestCode == 2) {
 			if (resultCode == RESULT_OK) {
 				// ZXing回傳的內容
@@ -993,6 +1039,7 @@ public class InOutFrg extends Activity {
 				editText.setText(contents);
 				TextView textView = (TextView) findViewById(R.id.TextView_ENO1);
 				textView.setText(contents);
+				onClickNum = contents;
 				BasicUrl = "https://ga.kerrytj.com/Cht_Motor/api/GetEmployee/GetBasic?" +
 						"ID="+Application.strAccount+
 						"&CAR_NO="+Application.strCar+
@@ -1061,7 +1108,7 @@ public class InOutFrg extends Activity {
 					*/
 				}
 			}
-
+		//查詢
 		} else if (requestCode == 3) {
 			if (resultCode == RESULT_OK) {
 				// ZXing回傳的內容
@@ -1200,6 +1247,29 @@ public class InOutFrg extends Activity {
 						list.notifyDataSetChanged();
 					}
 				});
+				//spinner 點擊事件
+				spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+					@Override
+					public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+						//所點擊的索引值
+						int index ;
+						index = spinner.getSelectedItemPosition();
+						//所點擊的內容文字
+						String Sname;
+						Sname = spinner.getSelectedItem().toString();
+						type7 = Sname.substring(0,2);
+						typeNUM = type7;
+						Log.e("index", String.valueOf(index));
+						Log.e("type7", type7);
+
+					}
+
+					@Override
+					public void onNothingSelected(AdapterView<?> parent) {
+						// sometimes you need nothing here
+					}
+				});
 				//配達
 				final Spinner spinner2 = (Spinner) findViewById(R.id.spinner2);
 				//設定Spinner
@@ -1215,6 +1285,31 @@ public class InOutFrg extends Activity {
 						spinner2.setAdapter(list2);
 						spinner2.setSelection(1);
 						list.notifyDataSetChanged();
+					}
+				});
+				//spinner 點擊事件
+				spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+					@Override
+					public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+						//所點擊的索引值
+						int index ;
+						index = spinner2.getSelectedItemPosition();
+						//所點擊的內容文字
+						String Sname;
+						Sname = spinner2.getSelectedItem().toString();
+						type8 = Sname.substring(0,2);
+						typeNUM = type8;
+						Log.e("index", String.valueOf(index));
+						Log.e("type8", type8);
+						Log.e("index", String.valueOf(index));
+						Log.e("name", Sname);
+
+					}
+
+					@Override
+					public void onNothingSelected(AdapterView<?> parent) {
+						// sometimes you need nothing here
 					}
 				});
 			} catch (JSONException e) {
@@ -1306,9 +1401,186 @@ public class InOutFrg extends Activity {
 				public void onResponse(Call call, Response response) throws IOException {
 					String json = response.body().string();
 					Log.e("託運單資訊回傳", json);
+					parseJson(json);
+
 				}
+
+				private void parseJson(String json) {
+					try {
+						JSONArray array = new JSONArray(json);
+						for(int i = 0 ; i<array.length() ; i++) {
+							JSONObject obj = array.getJSONObject(i);
+							final String ADDRESS = String.valueOf(obj.get("ADDRESS"));
+							final String CASH = String.valueOf(obj.get("CASH"));
+							final String COD_AMT = String.valueOf(obj.get("COD_AMT"));
+
+							runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									//配送
+									TextView TextView_SAddress1 = (TextView) findViewById(R.id.TextView_SAddress1);
+									TextView_SAddress1.setText(ADDRESS);
+									TextView TextView_SMoney = (TextView)findViewById(R.id.TextView_SMoney);
+									TextView_SMoney.setText(CASH);
+									TextView TextView_SMoney2 = (TextView)findViewById(R.id.TextView_SMoney2);
+									TextView_SMoney2.setText(COD_AMT);
+									//配達
+									TextView TextView_EAddress1 = (TextView)findViewById(R.id.TextView_EAddress1);
+									TextView_EAddress1.setText(ADDRESS);
+									TextView TextView_EMoney = (TextView)findViewById(R.id.TextView_EMoney);
+									TextView_EMoney.setText(CASH);
+									TextView TextView_EMoney2 = (TextView)findViewById(R.id.TextView_EMoney2);
+									TextView_EMoney2.setText(COD_AMT);
+									//查詢
+									TextView TextView_AD = (TextView)findViewById(R.id.TextView_AD);
+									TextView_AD.setText(ADDRESS);
+									TextView TextView_ADMoney = (TextView)findViewById(R.id.TextView_ADMoney);
+									TextView_ADMoney.setText(CASH);
+									TextView TextView_ADMoney2 = (TextView)findViewById(R.id.TextView_ADMoney2);
+									TextView_ADMoney2.setText(COD_AMT);
+
+								}
+							});
+
+						}
+
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+
+				}
+
 			});
 		}
 
+
+
+	}
+	//配達 確認鍵
+	public void onClick (View v){
+		EditText EditText_ENO1 = (EditText)findViewById(R.id.EditText_ENO1);
+		if(EditText_ENO1.getText().toString().length()>10){
+			getUPDate();
+			PostCondition_UP post = new PostCondition_UP();
+			post.run();
+		}else {
+			clsDialog.Show(context, "提示", "請輸入10碼以上的託運單號！");
+		}
+
+
+	}
+	class PostCondition_UP extends Thread {
+		@Override
+		public void run() {
+			GetCondition_UPInfo();
+		}
+
+		private void GetCondition_UPInfo() {
+
+			final String url = "https://ga.kerrytj.com/Cht_Motor/api/GetEmployee/Condition_UP?" +
+					"NUM=" + typeNUM +
+					"&BOL_NO=" + onClickNum +
+					"&CAR_NO=" + Application.strCar +
+					"&BrushDate=" +BrushDate+
+					"&BrushTime=" +BrushTime+
+					"&BrushDept=" +"0078"+
+					"&Area=" +"777"+
+					"&ID=" +objLoginInfo.UserID+
+					"&HTnumber=" +"ABCD"+
+					"&DataResource=" +"B"+
+					"&BusinessID=" +"1"+
+					"&UP_DATE=" + UP_DATE +
+					"&UP_TIME="+ UP_TIME ;
+
+			final OkHttpClient client = new OkHttpClient()
+					.newBuilder()
+					.connectTimeout(15, TimeUnit.SECONDS)
+					.readTimeout(15, TimeUnit.SECONDS)
+					.writeTimeout(15, TimeUnit.SECONDS)
+					//.addInterceptor(new LogInterceptor())
+					//.addInterceptor(new TokenInterceptor())
+					.sslSocketFactory(SSLSocketClient.getSSLSocketFactory())
+					.hostnameVerifier(SSLSocketClient.getHostnameVerifier())
+					.build();
+			final MediaType JSON
+					= MediaType.parse("application/json; charset=utf-8");
+			RequestBody body = RequestBody.create(JSON,url);
+			final Request request = new Request.Builder()
+					.url(url)
+					.post(body)
+					.build();
+			Call call = client.newCall(request);
+			call.enqueue(new Callback() {
+				@Override
+				public void onFailure(Call call, IOException e) {
+					Log.e("GetCondition_UP e", String.valueOf(e));
+				}
+
+				@Override
+				public void onResponse(Call call, Response response) throws IOException {
+					String json = response.body().string();
+					Log.e("託運單資訊更新",url);
+					Log.e("託運單資訊更新回傳", json);
+
+					if(CARTYPE == 8 && json.equals("\"True\"") ){
+						//TODO 更新數量
+						objLoginInfo.UpdateInOut("Out");
+						runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								//TODO 顯示數量
+								TextView TextView_ECount = (TextView) findViewById(R.id.TextView_ECount);
+								TextView_ECount.setText(String.format("%04d", Integer.valueOf(objLoginInfo.Out)) + " / " + String.format("%04d", Integer.valueOf(objLoginInfo.In)));
+							}
+						});
+					}
+					if(CARTYPE == 7 && json.equals("\"True\"")){
+						//TODO 更新數量
+						objLoginInfo.UpdateInOut("In");
+						runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								//TODO 顯示數量
+								TextView TextView_SCount = (TextView) findViewById(R.id.TextView_SCount);
+								TextView_SCount.setText(String.format("%04d", Integer.valueOf(objLoginInfo.In)));
+							}
+						});
+					}
+						runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								TextView EditText_ENO1 = (TextView)findViewById(R.id.EditText_ENO1);
+								EditText_ENO1.setText("");
+								TextView EditText_SNO1 = (TextView)findViewById(R.id.EditText_SNO1);
+								EditText_SNO1.setText("");
+							}
+						});
+
+					}
+
+
+			});
+		}
+	}
+
+	private void getBrushDate() {
+		Calendar mCal = Calendar.getInstance();
+		String dateformat = "yyyyMMdd";
+		SimpleDateFormat df = new SimpleDateFormat(dateformat);
+		BrushDate = df.format(mCal.getTime());
+		String dateformat2 = "HHmmss";
+		df = new SimpleDateFormat(dateformat2);
+		BrushTime = df.format(mCal.getTime());
+		Log.e("DATE",BrushDate + BrushTime);
+	}
+	private void getUPDate() {
+		Calendar mCal = Calendar.getInstance();
+		String dateformat = "yyyyMMdd";
+		SimpleDateFormat df = new SimpleDateFormat(dateformat);
+		UP_DATE = df.format(mCal.getTime());
+		String dateformat2 = "HHmmss";
+		df = new SimpleDateFormat(dateformat2);
+		UP_TIME = df.format(mCal.getTime());
+		Log.e("DATE",BrushDate + BrushTime);
 	}
 }

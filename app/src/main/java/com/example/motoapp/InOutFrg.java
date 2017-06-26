@@ -70,13 +70,11 @@ public class InOutFrg extends Activity {
 	Button button_DoneList;
 
 	Handler handlerTask;
-	EditText EditNo;
-
+	String BasicUrl;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d("=====>", "GoogleFragment onCreateView");
-
 
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -135,7 +133,7 @@ public class InOutFrg extends Activity {
 			@Override
 			public void onClick(View v) {
 				CARTYPE = 7;
-				Post7 post = new Post7();
+				PostCondition post = new PostCondition();
 				post.run();
 				//Application.strCardNo = EditNo.getText().toString();
 				((TextView) findViewById(R.id.TextView_SNO1)).setText("");
@@ -189,7 +187,14 @@ public class InOutFrg extends Activity {
 						/**
 						 * 呼叫API
 						 * */
-
+						//取得資訊API
+						BasicUrl = "https://ga.kerrytj.com/Cht_Motor/api/GetEmployee/GetBasic?" +
+								"ID="+Application.strAccount+
+								"&CAR_NO="+Application.strCar+
+								"&BOL_NO="+((EditText) findViewById(R.id.EditText_SNO1)).getText().toString();
+						PostBasic post = new PostBasic();
+						post.run();
+						//上傳AS400API
 						JSONObject json = new JSONObject();
 						Log.e("配送前", String.valueOf(json));
 						try {
@@ -294,7 +299,7 @@ public class InOutFrg extends Activity {
 			public void onClick(View v) {
 
 				CARTYPE = 8;
-				Post7 post = new Post7();
+				PostCondition post = new PostCondition();
 				post.run();
 				//Application.strCardNo = EditNo.getText().toString();
 				((TextView) findViewById(R.id.TextView_SNO1)).setText("");
@@ -357,11 +362,21 @@ public class InOutFrg extends Activity {
 				/**
 				 * 呼叫API
 				 * */
+
+
 				EditText editText = (EditText) findViewById(R.id.EditText_SearchVal);
 				JSONObject json = new JSONObject();
-				TextView textView = (TextView)findViewById(R.id.TextView_ENO2);
+				TextView textView = (TextView) findViewById(R.id.TextView_ENO2);
 				textView.setText(editText.getText().toString());
 				Log.e("查詢前", String.valueOf(json));
+
+				BasicUrl = "https://ga.kerrytj.com/Cht_Motor/api/GetEmployee/GetBasic?" +
+						"ID="+Application.strAccount+
+						"&CAR_NO="+Application.strCar+
+						"&BOL_NO="+(editText.getText().toString());
+				PostBasic post = new PostBasic();
+				post.run();
+
 				try {
 					java.util.Date now = new java.util.Date();
 					String strDate = new java.text.SimpleDateFormat("yyyyMMdd").format(now);
@@ -423,6 +438,14 @@ public class InOutFrg extends Activity {
 						/**
 						 * 呼叫API
 						 * */
+						//取得資訊API
+						BasicUrl = "https://ga.kerrytj.com/Cht_Motor/api/GetEmployee/GetBasic?" +
+								"ID="+Application.strAccount+
+								"&CAR_NO="+Application.strCar+
+								"&BOL_NO="+((EditText) findViewById(R.id.EditText_ENO1)).getText().toString();
+						PostBasic post = new PostBasic();
+						post.run();
+						//上傳AS400API
 						JSONObject json = new JSONObject();
 						try {
 							java.util.Date now = new java.util.Date();
@@ -893,12 +916,19 @@ public class InOutFrg extends Activity {
 				String contents = intent.getStringExtra("SCAN_RESULT");
 				final EditText editText = (EditText) findViewById(EditText_SNO1);
 				editText.setText(contents);
-				TextView textView = (TextView)findViewById(R.id.TextView_SNO1);
+				TextView textView = (TextView) findViewById(R.id.TextView_SNO1);
 				textView.setText(contents);
+				BasicUrl = "https://ga.kerrytj.com/Cht_Motor/api/GetEmployee/GetBasic?" +
+						"ID="+Application.strAccount+
+						"&CAR_NO="+Application.strCar+
+						"&BOL_NO="+contents;
 				if (editText.length() == 11) {
 					/**
 					 * 呼叫API
 					 * */
+					PostBasic post = new PostBasic();
+					post.run();
+					/*
 					JSONObject json = new JSONObject();
 					try {
 						java.util.Date now = new java.util.Date();
@@ -920,9 +950,11 @@ public class InOutFrg extends Activity {
 						json.put("HT3186", "1");
 						json.put("HT3191", strDate);
 						json.put("HT3192", strTime);
+
 					} catch (Exception e) {
 						// TODO: handle exception
 					}
+
 
 					String strPOSTData = json.toString();
 					new clsHttpPostAPI().CallAPI(context, "API016", strPOSTData);
@@ -949,6 +981,7 @@ public class InOutFrg extends Activity {
 					TextView_EStatusName1.setText("配送");
 
 					editText.setText("");
+					*/
 				}
 
 			}
@@ -960,11 +993,18 @@ public class InOutFrg extends Activity {
 				editText.setText(contents);
 				TextView textView = (TextView) findViewById(R.id.TextView_ENO1);
 				textView.setText(contents);
+				BasicUrl = "https://ga.kerrytj.com/Cht_Motor/api/GetEmployee/GetBasic?" +
+						"ID="+Application.strAccount+
+						"&CAR_NO="+Application.strCar+
+						"&BOL_NO="+contents;
 				if (editText.length() == 11) {
 
 					/**
 					 * 呼叫API
 					 * */
+					PostBasic post = new PostBasic();
+					post.run();
+					/*
 					JSONObject json = new JSONObject();
 					try {
 						java.util.Date now = new java.util.Date();
@@ -1018,7 +1058,7 @@ public class InOutFrg extends Activity {
 
 					//EditText_ENO1.requestFocus();
 					editText.setText("");
-
+					*/
 				}
 			}
 
@@ -1030,11 +1070,19 @@ public class InOutFrg extends Activity {
 				editText.setText(contents);
 				TextView textView = (TextView) findViewById(R.id.TextView_ENO2);
 				textView.setText(contents);
+				BasicUrl = "https://ga.kerrytj.com/Cht_Motor/api/GetEmployee/GetBasic?" +
+						"ID="+Application.strAccount+
+						"&CAR_NO="+Application.strCar+
+						"&BOL_NO="+contents;
 				if (editText.length() == 11) {
 					/**
 					 * 呼叫API
 					 * */
+
+					PostBasic post = new PostBasic();
+					post.run();
 					//EditText editText = (EditText) findViewById(R.id.EditText_SearchVal);
+					/*
 					JSONObject json = new JSONObject();
 					Log.e("查詢前", String.valueOf(json));
 					try {
@@ -1060,7 +1108,7 @@ public class InOutFrg extends Activity {
 					json.put("HT3186", "1");
 					json.put("HT3191", strDate);
 					json.put("HT3192", strTime);
-					*/
+
 						Log.e("查詢", String.valueOf(json));
 					} catch (Exception e) {
 						// TODO: handle exception
@@ -1071,35 +1119,36 @@ public class InOutFrg extends Activity {
 					new clsHttpPostAPI().CallAPI(context, "API024", strPOSTData);
 					Log.e("strPOSTData", strPOSTData);
 					editText.setText("");
-
+				*/
 				}
 			}
 
 		}
 	}
-	//貨況 配送
-	class Post7 extends Thread{
+
+	//貨況 7-配送 8-配達
+	class PostCondition extends Thread {
 		@Override
 		public void run() {
-			Get7Info();
+			GetConditionInfo();
 		}
 
-		private void Get7Info() {
+		private void GetConditionInfo() {
 
 
-			String url = "https://ga.kerrytj.com/Cht_Motor/api/GetEmployee/GetCondition?CARTYPE="+CARTYPE;
+			String url = "https://ga.kerrytj.com/Cht_Motor/api/GetEmployee/GetCondition?CARTYPE=" + CARTYPE;
 
 			final OkHttpClient client = new OkHttpClient()
-                    .newBuilder()
-                    .connectTimeout(15, TimeUnit.SECONDS)
-                    .readTimeout(15, TimeUnit.SECONDS)
-                    .writeTimeout(15, TimeUnit.SECONDS)
-                    //.addInterceptor(new LogInterceptor())
-                    //.addInterceptor(new TokenInterceptor())
-                    .sslSocketFactory(SSLSocketClient.getSSLSocketFactory())
-                    .hostnameVerifier(SSLSocketClient.getHostnameVerifier())
-                    .build();
-            final Request request = new Request.Builder()
+					.newBuilder()
+					.connectTimeout(15, TimeUnit.SECONDS)
+					.readTimeout(15, TimeUnit.SECONDS)
+					.writeTimeout(15, TimeUnit.SECONDS)
+					//.addInterceptor(new LogInterceptor())
+					//.addInterceptor(new TokenInterceptor())
+					.sslSocketFactory(SSLSocketClient.getSSLSocketFactory())
+					.hostnameVerifier(SSLSocketClient.getHostnameVerifier())
+					.build();
+			final Request request = new Request.Builder()
 					.url(url)
 					.build();
 			Call call = client.newCall(request);
@@ -1113,7 +1162,7 @@ public class InOutFrg extends Activity {
 				@Override
 				public void onResponse(Call call, Response response) throws IOException {
 					String json = response.body().string();
-					Log.e("配送貨況回傳",json);
+					Log.e("貨況回傳", json);
 					parseJson(json);
 				}
 			});
@@ -1124,14 +1173,14 @@ public class InOutFrg extends Activity {
 			try {
 				JSONArray array = new JSONArray(json);
 				final ArrayList NUMArray = new ArrayList<>();
-				for (int i = 0; i < array.length(); i++){
+				for (int i = 0; i < array.length(); i++) {
 					JSONObject obj = array.getJSONObject(i);
 					String NUM = String.valueOf(obj.get("NUM"));
 					String DES = String.valueOf(obj.get("DES"));
-					NUMArray.add(NUM+" "+DES);
+					NUMArray.add(NUM + " " + DES);
 					Log.e("NUMArray", String.valueOf(NUMArray));
-					Log.e("NUM",NUM);
-					Log.e("DES",DES);
+					Log.e("NUM", NUM);
+					Log.e("DES", DES);
 				}
 				//配送
 				//宣告並取得Spinner
@@ -1139,7 +1188,7 @@ public class InOutFrg extends Activity {
 				//設定Spinner
 				final ArrayAdapter list = new ArrayAdapter<>(
 						InOutFrg.this,
-						android.R.layout.simple_expandable_list_item_1,
+						android.R.layout.simple_list_item_1,
 						NUMArray);
 
 				//顯示Spinner 非主執行緒的UI 需用runOnUiThread
@@ -1147,6 +1196,8 @@ public class InOutFrg extends Activity {
 					@Override
 					public void run() {
 						spinner.setAdapter(list);
+						spinner.setSelection(1);
+						list.notifyDataSetChanged();
 					}
 				});
 				//配達
@@ -1154,7 +1205,7 @@ public class InOutFrg extends Activity {
 				//設定Spinner
 				final ArrayAdapter list2 = new ArrayAdapter<>(
 						InOutFrg.this,
-						android.R.layout.simple_expandable_list_item_1,
+						android.R.layout.simple_list_item_1,
 						NUMArray);
 
 				//顯示Spinner 非主執行緒的UI 需用runOnUiThread
@@ -1162,6 +1213,8 @@ public class InOutFrg extends Activity {
 					@Override
 					public void run() {
 						spinner2.setAdapter(list2);
+						spinner2.setSelection(1);
+						list.notifyDataSetChanged();
 					}
 				});
 			} catch (JSONException e) {
@@ -1170,55 +1223,92 @@ public class InOutFrg extends Activity {
 		}
 	}
 
-    /**
-     * Https 憑證不安全
-     * 略過憑證方法
-     */
-    public static class SSLSocketClient {
+	/**
+	 * Https 憑證不安全
+	 * 略過憑證方法
+	 */
+	public static class SSLSocketClient {
 
-        //获取这个SSLSocketFactory
-        public static SSLSocketFactory getSSLSocketFactory() {
-            try {
-                SSLContext sslContext = SSLContext.getInstance("SSL");
-                sslContext.init(null, getTrustManager(), new SecureRandom());
-                return sslContext.getSocketFactory();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
+		//获取这个SSLSocketFactory
+		public static SSLSocketFactory getSSLSocketFactory() {
+			try {
+				SSLContext sslContext = SSLContext.getInstance("SSL");
+				sslContext.init(null, getTrustManager(), new SecureRandom());
+				return sslContext.getSocketFactory();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
 
-        //获取TrustManager
-        private static TrustManager[] getTrustManager() {
-            TrustManager[] trustAllCerts = new TrustManager[]{
-                    new X509TrustManager() {
-                        @Override
-                        public void checkClientTrusted(X509Certificate[] chain, String authType) {
-                        }
+		//获取TrustManager
+		private static TrustManager[] getTrustManager() {
+			TrustManager[] trustAllCerts = new TrustManager[]{
+					new X509TrustManager() {
+						@Override
+						public void checkClientTrusted(X509Certificate[] chain, String authType) {
+						}
 
-                        @Override
-                        public void checkServerTrusted(X509Certificate[] chain, String authType) {
-                        }
+						@Override
+						public void checkServerTrusted(X509Certificate[] chain, String authType) {
+						}
 
-                        @Override
-                        public X509Certificate[] getAcceptedIssuers() {
-                            return new X509Certificate[]{};
-                        }
-                    }
-            };
-            return trustAllCerts;
-        }
+						@Override
+						public X509Certificate[] getAcceptedIssuers() {
+							return new X509Certificate[]{};
+						}
+					}
+			};
+			return trustAllCerts;
+		}
 
-        //获取HostnameVerifier
-        public static HostnameVerifier getHostnameVerifier() {
-            HostnameVerifier hostnameVerifier = new HostnameVerifier() {
-                @Override
-                public boolean verify(String s, SSLSession sslSession) {
-                    return true;
-                }
-            };
-            return hostnameVerifier;
-        }
-    }
+		//获取HostnameVerifier
+		public static HostnameVerifier getHostnameVerifier() {
+			HostnameVerifier hostnameVerifier = new HostnameVerifier() {
+				@Override
+				public boolean verify(String s, SSLSession sslSession) {
+					return true;
+				}
+			};
+			return hostnameVerifier;
+		}
+	}
 
+	//貨況 7-配送 8-配達
+	class PostBasic extends Thread {
+		@Override
+		public void run() {
+			PostBasicInfo();
+		}
 
+		private void PostBasicInfo() {
+
+			final OkHttpClient client = new OkHttpClient()
+					.newBuilder()
+					.connectTimeout(15, TimeUnit.SECONDS)
+					.readTimeout(15, TimeUnit.SECONDS)
+					.writeTimeout(15, TimeUnit.SECONDS)
+					//.addInterceptor(new LogInterceptor())
+					//.addInterceptor(new TokenInterceptor())
+					.sslSocketFactory(SSLSocketClient.getSSLSocketFactory())
+					.hostnameVerifier(SSLSocketClient.getHostnameVerifier())
+					.build();
+			final Request request = new Request.Builder()
+					.url(BasicUrl)
+					.build();
+			Call call = client.newCall(request);
+			call.enqueue(new Callback() {
+				@Override
+				public void onFailure(Call call, IOException e) {
+					Log.e("basic e", String.valueOf(e));
+				}
+
+				@Override
+				public void onResponse(Call call, Response response) throws IOException {
+					String json = response.body().string();
+					Log.e("託運單資訊回傳", json);
+				}
+			});
+		}
+
+	}
 }

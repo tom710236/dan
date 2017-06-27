@@ -55,6 +55,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static android.icu.util.Currency.CurrencyUsage.CASH;
 import static com.example.motoapp.R.id.EditText_ENO1;
 import static com.example.motoapp.R.id.EditText_SNO1;
 
@@ -136,6 +137,7 @@ public class InOutFrg extends Activity {
 		LinearLayout_list.setVisibility(View.GONE);
 		
 		/* 點選外層的配送 */
+		//配送鍵
 		Button button_doStart = (Button) findViewById(R.id.button_doStart);
 		button_doStart.setOnClickListener(new OnClickListener() {
 			@Override
@@ -143,12 +145,19 @@ public class InOutFrg extends Activity {
 
 				CARTYPE = 7;
 
+				TextView TextView_SAddress1 = (TextView) findViewById(R.id.TextView_SAddress1);
+				TextView_SAddress1.setText("");
+				TextView TextView_SMoney = (TextView)findViewById(R.id.TextView_SMoney);
+				TextView_SMoney.setText("");
+				TextView TextView_SMoney2 = (TextView)findViewById(R.id.TextView_SMoney2);
+				TextView_SMoney2.setText("");
 
 				PostCondition post = new PostCondition();
 				post.run();
 				//Application.strCardNo = EditNo.getText().toString();
 				((TextView) findViewById(R.id.TextView_SNO1)).setText("");
 				((TextView) findViewById(R.id.TextView_ENO1)).setText("");
+				((TextView) findViewById(R.id.TextView_ENO2)).setText("");
 
 				ScrollView ScrollViewT = (ScrollView) findViewById(R.id.ScrollViewT);
 				LinearLayout LinearLayout_doType = (LinearLayout) findViewById(R.id.LinearLayout_doType);
@@ -316,20 +325,30 @@ public class InOutFrg extends Activity {
 
 
 		/* 點選外層的配達 */
+		//配達鍵
 		Button button_doEnd = (Button) findViewById(R.id.button_doEnd);
 		button_doEnd.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 
 				CARTYPE = 8;
+
 				typeNUM = null;
 				onClickNum = null;
+
+				TextView TextView_EAddress1 = (TextView)findViewById(R.id.TextView_EAddress1);
+				TextView_EAddress1.setText("");
+				TextView TextView_EMoney = (TextView)findViewById(R.id.TextView_EMoney);
+				TextView_EMoney.setText("");
+				TextView TextView_EMoney2 = (TextView)findViewById(R.id.TextView_EMoney2);
+				TextView_EMoney2.setText("");
 
 				PostCondition post = new PostCondition();
 				post.run();
 				//Application.strCardNo = EditNo.getText().toString();
 				((TextView) findViewById(R.id.TextView_SNO1)).setText("");
 				((TextView) findViewById(R.id.TextView_ENO1)).setText("");
+				((TextView) findViewById(R.id.TextView_ENO2)).setText("");
 
 				ScrollView ScrollViewT = (ScrollView) findViewById(R.id.ScrollViewT);
 				LinearLayout LinearLayout_doType = (LinearLayout) findViewById(R.id.LinearLayout_doType);
@@ -388,22 +407,28 @@ public class InOutFrg extends Activity {
 				/**
 				 * 呼叫API
 				 * */
+				EditText EditText_SearchVal = (EditText)findViewById(R.id.EditText_SearchVal);
+
+				if(EditText_SearchVal.getText().toString().length()>10){
+					EditText editText = (EditText) findViewById(R.id.EditText_SearchVal);
+					JSONObject json = new JSONObject();
+					TextView textView = (TextView) findViewById(R.id.TextView_ENO2);
+					textView.setText(editText.getText().toString());
+					Log.e("查詢前", String.valueOf(json));
+					onClickNum = editText.getText().toString();
+					BasicUrl = "https://ga.kerrytj.com/Cht_Motor/api/GetEmployee/GetBasic?" +
+							"ID="+Application.strAccount+
+							"&CAR_NO="+Application.strCar+
+							"&BOL_NO="+(editText.getText().toString());
+					PostBasic post = new PostBasic();
+					post.run();
+					EditText editText2 = (EditText)findViewById(R.id.EditText_SearchVal);
+					editText2.setText("");
+				}else {
+					clsDialog.Show(context, "提示", "請輸入10碼以上的託運單號！");
+				}
 
 
-				EditText editText = (EditText) findViewById(R.id.EditText_SearchVal);
-				JSONObject json = new JSONObject();
-				TextView textView = (TextView) findViewById(R.id.TextView_ENO2);
-				textView.setText(editText.getText().toString());
-				Log.e("查詢前", String.valueOf(json));
-				onClickNum = editText.getText().toString();
-				BasicUrl = "https://ga.kerrytj.com/Cht_Motor/api/GetEmployee/GetBasic?" +
-						"ID="+Application.strAccount+
-						"&CAR_NO="+Application.strCar+
-						"&BOL_NO="+(editText.getText().toString());
-				PostBasic post = new PostBasic();
-				post.run();
-				EditText editText2 = (EditText)findViewById(R.id.EditText_SearchVal);
-				editText2.setText("");
 				/*
 				try {
 					java.util.Date now = new java.util.Date();
@@ -609,11 +634,21 @@ public class InOutFrg extends Activity {
 				return true;
 			}
 		});
-
+		//查詢鍵
 		Button button_Search = (Button) findViewById(R.id.button_Search);
 		button_Search.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+
+				TextView TextView_AD = (TextView)findViewById(R.id.TextView_AD);
+				TextView_AD.setText("");
+				TextView TextView_ADMoney = (TextView)findViewById(R.id.TextView_ADMoney);
+				TextView_ADMoney.setText("");
+				TextView TextView_ADMoney2 = (TextView)findViewById(R.id.TextView_ADMoney2);
+				TextView_ADMoney2.setText("");
+
+				((TextView) findViewById(R.id.TextView_ENO2)).setText("");
+
 				SetSearch();
 			}
 		});
@@ -1465,6 +1500,12 @@ public class InOutFrg extends Activity {
 			getUPDate();
 			PostCondition_UP post = new PostCondition_UP();
 			post.run();
+			TextView TextView_EAddress1 = (TextView)findViewById(R.id.TextView_EAddress1);
+			TextView_EAddress1.setText("");
+			TextView TextView_EMoney = (TextView)findViewById(R.id.TextView_EMoney);
+			TextView_EMoney.setText("");
+			TextView TextView_EMoney2 = (TextView)findViewById(R.id.TextView_EMoney2);
+			TextView_EMoney2.setText("");
 		}else {
 			clsDialog.Show(context, "提示", "請輸入10碼以上的託運單號！");
 		}

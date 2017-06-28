@@ -41,6 +41,7 @@ public class Delay extends Service implements LocationListener {
     Handler handler;
     String today;
     String IMEI;
+    String GPSPeriod;
     Context context;
 
     public static String Employee, regID, lon, lat, UserID, GCMID;
@@ -58,6 +59,8 @@ public class Delay extends Service implements LocationListener {
 
         Employee = intent.getStringExtra("Employee");
         regID = intent.getStringExtra("regID");
+        GPSPeriod = intent.getStringExtra("GPSPeriod");
+        Log.e("GPSPeriod",GPSPeriod);
         handler = new Handler();
         runnable = new Runnable() {
             @TargetApi(Build.VERSION_CODES.M)
@@ -76,6 +79,7 @@ public class Delay extends Service implements LocationListener {
                         //                                          int[] grantResults)
                         // to handle the case where the user grants the permission. See the documentation
                         // for ActivityCompat#requestPermissions for more details.
+
                         return;
                     }
                     mgr.requestLocationUpdates(best,
@@ -85,16 +89,18 @@ public class Delay extends Service implements LocationListener {
                     IMEI = mTelManager.getDeviceId();
                     Get get = new Get();
                     get.start();
+                    Toast.makeText(Delay.this, "已成功定位", Toast.LENGTH_SHORT).show();
                 } else {
                     Log.e("定位中", "定位中");
                 }
 
-                handler.postAtTime(this, android.os.SystemClock.uptimeMillis() + 10 * 1000);
+                handler.postAtTime(this, android.os.SystemClock.uptimeMillis() + 30 * 1000);
+
             }
 
         };
         //每分鐘執行一次
-        handler.postAtTime(runnable, android.os.SystemClock.uptimeMillis() + 10 * 1000);
+        handler.postAtTime(runnable, android.os.SystemClock.uptimeMillis() + 30 * 1000);
         //return super.onStartCommand(intent, flags, startId);
         return START_NOT_STICKY;
     }
@@ -111,7 +117,7 @@ public class Delay extends Service implements LocationListener {
         //Log.e("today", today);
         lon = String.valueOf(location.getLongitude());
         lat = String.valueOf(location.getLatitude());
-        Toast.makeText(Delay.this, str + today, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(Delay.this, str + today, Toast.LENGTH_SHORT).show();
         //Log.e("str",str);
     }
 
@@ -183,9 +189,11 @@ public class Delay extends Service implements LocationListener {
 
     @Override
     public void onDestroy() {
+
+        handler.removeCallbacks(runnable);
+
         super.onDestroy();
         Log.e("STOP", "STOP");
-        handler.removeCallbacks(runnable);
     }
 
 }

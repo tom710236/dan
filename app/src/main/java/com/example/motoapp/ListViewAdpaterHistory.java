@@ -77,6 +77,7 @@ public class ListViewAdpaterHistory extends BaseAdapter implements AdapterView.O
 
 		LayoutInflater mInflater = (LayoutInflater) context
 				.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+		//list 下拉item不會重讀
 		convertView = null ;
 		if (convertView == null) {
 

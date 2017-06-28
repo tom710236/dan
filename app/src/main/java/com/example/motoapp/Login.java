@@ -73,7 +73,8 @@ public class Login extends Activity {
 		objLocation.CheckDB();
         openGps();
 		// GCM
-
+		Intent it = new Intent(Login.this,Delay.class);
+		stopService(it);
 
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
 		    serial = Build.SERIAL;
@@ -227,7 +228,8 @@ public class Login extends Activity {
 			@Override
 			public void handleMessage(Message msg) {
 				JSONObject json = (JSONObject) msg.obj;
-				//Log.e("json", String.valueOf(json));
+				//Log.e("LoginJson", String.valueOf(json));
+
 				try {
 					String Result = json.getString("Result");
 					//Log.e("Resultand",Result);
@@ -252,7 +254,8 @@ public class Login extends Activity {
 							//Log.e("GCMID",regId);
 							//Log.e("UserID",EditText_Account.getText().toString());
 							//記Log
-							new clsHttpPostAPI().CallAPI(objContext, "API021");
+							String GPSPeriod = json.getString("GPSPeriod");
+							//new clsHttpPostAPI().CallAPI(objContext, "API021");
 
 
 
@@ -272,41 +275,43 @@ public class Login extends Activity {
 							//Log.e("Account",Account);
 							it.putExtra("Employee",Account);
 							it.putExtra("regID",regId);
+							it.putExtra("GPSPeriod",GPSPeriod);
 							startService(it);
-							if (Result.equals("2")) {
-								clsDialog.Show(Login.this, "ERROR", "輸入的授權碼 (Key)是不合法的授權碼");
-							}
-
-							if (Result.equals("3")) {
-								clsDialog.Show(Login.this,"ERROR", "輸入的參數有缺漏");
-							}
-
-							if (Result.equals("4")) {
-								clsDialog.Show(Login.this, "ERROR", "車機識別ID資訊有誤");
-							}
-
-							if (Result.equals("5")) {
-								clsDialog.Show(Login.this, "ERROR", "狀態內容有誤");
-							}
-
-							if (Result.equals("6")) {
-								clsDialog.Show(Login.this, "ERROR", "員工帳號資訊有誤");
-							}
-
-							if (Result.equals("7")) {
-								clsDialog.Show(Login.this, "ERROR", "車號不存在");
-							}
-
-							if (Result.equals("8")) {
-								clsDialog.Show(Login.this, "ERROR", "此車尚 未登入，無法進行其他狀態更新");
-							}
-
-							if (Result.equals("200")) {
-								clsDialog.Show(Login.this, "ERROR", "系統忙碌或其他原因造成沒有完服務，請重試");
-							}
 							Intent intent = new Intent(Login.this, DataListFrg.class);
 							startActivity(intent);
+
 						}
+					if (Result.equals("2")) {
+						clsDialog.Show(Login.this, "ERROR", "輸入的授權碼 (Key)是不合法的授權碼");
+					}
+
+					if (Result.equals("3")) {
+						clsDialog.Show(Login.this,"ERROR", "輸入的參數有缺漏");
+					}
+
+					if (Result.equals("4")) {
+						clsDialog.Show(Login.this, "ERROR", "車機識別ID資訊有誤");
+					}
+
+					if (Result.equals("5")) {
+						clsDialog.Show(Login.this, "ERROR", "狀態內容有誤");
+					}
+
+					if (Result.equals("6")) {
+						clsDialog.Show(Login.this, "ERROR", "員工帳號資訊有誤");
+					}
+
+					if (Result.equals("7")) {
+						clsDialog.Show(Login.this, "ERROR", "車號不存在");
+					}
+
+					if (Result.equals("8")) {
+						clsDialog.Show(Login.this, "ERROR", "此車尚 未登入，無法進行其他狀態更新");
+					}
+
+					if (Result.equals("200")) {
+						clsDialog.Show(Login.this, "ERROR", "系統忙碌或其他原因造成沒有完服務，請重試");
+					}
 
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
@@ -317,7 +322,7 @@ public class Login extends Activity {
 		
 		
 	}
-	
+
 	public void onStart() {
 		super.onStart();
 		clsHttpPostAPI.handlerLogin = handler;
@@ -327,6 +332,7 @@ public class Login extends Activity {
 		super.onStop();
 		clsHttpPostAPI.handlerLogin =null;
 	}
+
 	
 	/**************************
 	 * GCM註冊

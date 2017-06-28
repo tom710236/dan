@@ -1564,7 +1564,40 @@ public class InOutFrg extends Activity {
 					String json = response.body().string();
 					Log.e("託運單資訊更新",url);
 					Log.e("託運單資訊更新回傳", json);
-
+					if(json.equals("\"True\"")){
+						if(CARTYPE == 8 ){
+							//TODO 更新數量
+							objLoginInfo.UpdateInOut("Out");
+							runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									//TODO 顯示數量
+									TextView TextView_ECount = (TextView) findViewById(R.id.TextView_ECount);
+									TextView_ECount.setText(String.format("%04d", Integer.valueOf(objLoginInfo.Out)) + " / " + String.format("%04d", Integer.valueOf(objLoginInfo.In)));
+								}
+							});
+						}
+						if(CARTYPE == 7 ){
+							//TODO 更新數量
+							objLoginInfo.UpdateInOut("In");
+							runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									//TODO 顯示數量
+									TextView TextView_SCount = (TextView) findViewById(R.id.TextView_SCount);
+									TextView_SCount.setText(String.format("%04d", Integer.valueOf(objLoginInfo.In)));
+								}
+							});
+						}
+					}else{
+						runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								Toast.makeText(InOutFrg.this,"配達失敗",Toast.LENGTH_SHORT).show();
+							}
+						});
+					}
+					/*
 					if(CARTYPE == 8 && json.equals("\"True\"") ){
 						//TODO 更新數量
 						objLoginInfo.UpdateInOut("Out");
@@ -1589,6 +1622,7 @@ public class InOutFrg extends Activity {
 							}
 						});
 					}
+					*/
 						runOnUiThread(new Runnable() {
 							@Override
 							public void run() {

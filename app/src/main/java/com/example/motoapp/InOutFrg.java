@@ -1254,6 +1254,8 @@ public class InOutFrg extends Activity {
 		}
 
 		private void parseJson(String json) {
+			int where73 = 0;
+			int where02 = 0;
 			try {
 				JSONArray array = new JSONArray(json);
 				final ArrayList NUMArray = new ArrayList<>();
@@ -1265,6 +1267,9 @@ public class InOutFrg extends Activity {
 					Log.e("NUMArray", String.valueOf(NUMArray));
 					Log.e("NUM", NUM);
 					Log.e("DES", DES);
+					where73 = NUMArray.indexOf("73 配送");
+					where02 = NUMArray.indexOf("02 配達");
+
 				}
 				//配送
 				//宣告並取得Spinner
@@ -1276,11 +1281,13 @@ public class InOutFrg extends Activity {
 						NUMArray);
 
 				//顯示Spinner 非主執行緒的UI 需用runOnUiThread
+
+				final int finalWhere7 = where73;
 				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
 						spinner.setAdapter(list);
-						spinner.setSelection(1);
+						spinner.setSelection(finalWhere7);
 						list.notifyDataSetChanged();
 					}
 				});
@@ -1316,11 +1323,12 @@ public class InOutFrg extends Activity {
 						NUMArray);
 
 				//顯示Spinner 非主執行緒的UI 需用runOnUiThread
+				final int finalWhere01 = where02;
 				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
 						spinner2.setAdapter(list2);
-						spinner2.setSelection(1);
+						spinner2.setSelection(finalWhere01);
 						list.notifyDataSetChanged();
 					}
 				});

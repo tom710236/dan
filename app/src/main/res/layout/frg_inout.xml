@@ -327,7 +327,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="5"
                             android:text=""
-                            android:textSize="16sp" />
+                            android:textColor="@android:color/holo_red_light"
+                            android:textSize="20sp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -349,7 +350,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="5"
                             android:text=""
-                            android:textSize="16sp" />
+                            android:textColor="@android:color/holo_red_light"
+                            android:textSize="20sp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -588,7 +590,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="5"
                             android:text=""
-                            android:textSize="16sp" />
+                            android:textColor="@android:color/holo_red_light"
+                            android:textSize="20sp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -610,7 +613,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="5"
                             android:text=""
-                            android:textSize="16sp" />
+                            android:textColor="@android:color/holo_red_light"
+                            android:textSize="20sp" />
                     </LinearLayout>
 
                     <LinearLayout

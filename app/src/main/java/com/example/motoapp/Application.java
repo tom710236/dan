@@ -27,11 +27,20 @@ public class Application extends android.app.Application {
 	public static String strDeviceID;
 	/** GCM RegistId */
 	public static String strRegistId="serial";
-	
-	//public static String ChtUrl = "http://efms.hinet.net/FMS_WS/";
 
+	/**
+	 * 中華電信的網址
+	 */
+	//正式版
+	//public static String ChtUrl = "http://efms.hinet.net/FMS_WS/";
 	//測試
 	public static String ChtUrl = "http://efms.hinet.net/FMS_WSMotor/";
+	//測試(0628中華內部測試)
+	//public static String ChtUrl = "http://efms.hinet.net/FMS_WSMotor_temp/";
+
+	/**
+	 * 新達的網址
+	 */
 	//public static String ShindaUrl="http://demo.shinda.com.tw:3366/KerryWeb/";
 	public static String ShindaUrl="http://demo.shinda.com.tw:7380/KerryWeb/";
 

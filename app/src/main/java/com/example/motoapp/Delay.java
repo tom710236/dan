@@ -89,7 +89,7 @@ public class Delay extends Service implements LocationListener {
                     IMEI = mTelManager.getDeviceId();
                     Get get = new Get();
                     get.start();
-                    Toast.makeText(Delay.this, "已成功定位", Toast.LENGTH_SHORT).show();
+
                 } else {
                     Log.e("定位中", "定位中");
                 }
@@ -119,6 +119,7 @@ public class Delay extends Service implements LocationListener {
         lat = String.valueOf(location.getLatitude());
         //Toast.makeText(Delay.this, str + today, Toast.LENGTH_SHORT).show();
         //Log.e("str",str);
+        Toast.makeText(Delay.this, "已成功定位", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -155,7 +156,8 @@ public class Delay extends Service implements LocationListener {
             objL.Load();
             UserID = objL.UserID;
             GCMID = objL.GCMID;
-            final String url1 = "http://efms.hinet.net/FMS_WSMotor/Services/API/Motor_Dispatch/Send_GPSInfo.aspx?\n" +
+            final String url1 =Application.ChtUrl+"Services/API/Motor_Dispatch/Send_GPSInfo.aspx?\n" +
+                    //"http://efms.hinet.net/FMS_WSMotor/Services/API/Motor_Dispatch/Send_GPSInfo.aspx?\n" +
                     "Key=7092a3c1-8ad6-48b5-b354-577378c282a5\n" +
                     "&DeviceID=" + GCMID + "\n" +
                     "&EmployeeID=" + UserID + "\n" +
@@ -177,7 +179,7 @@ public class Delay extends Service implements LocationListener {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     String json = response.body().string();
-                    //Log.e("URL",url1);
+                    Log.e("URL",url1);
                     //Log.e("回傳",json);
 
                 }

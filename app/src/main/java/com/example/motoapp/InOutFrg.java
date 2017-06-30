@@ -108,6 +108,15 @@ public class InOutFrg extends Activity {
 			Application.strDate = strDate;
 		}*/
 
+
+		//員工卡號姓名設定
+		clsLoginInfo objL = new clsLoginInfo(context);
+		objL.Load();
+		TextView tID = (TextView)findViewById(R.id.TextID);
+		TextView tName = (TextView)findViewById(R.id.TextName);
+		tID.setText(objL.UserID);
+		tName.setText(objL.UserName);
+
 		SysApplication.getInstance().addActivity(this);
 		listView = (ListView) findViewById(R.id.listView_Reason);
 		//SetListView(1);

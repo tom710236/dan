@@ -15,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import org.json.JSONObject;
 
@@ -39,6 +40,9 @@ public class GetTaskFrg extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.frg_gettask);
 		//view = inflater.inflate(R.layout.frg_gettask, container, false);
+
+
+
 		context = GetTaskFrg.this;
 
 		objLoginInfo = new clsLoginInfo(context);
@@ -139,7 +143,13 @@ public class GetTaskFrg extends Activity {
 				}
 			}
 		});
-		
+		//員工卡號姓名設定
+		clsLoginInfo objL = new clsLoginInfo(context);
+		objL.Load();
+		TextView tID = (TextView)findViewById(R.id.TextID);
+		TextView tName = (TextView)findViewById(R.id.TextName);
+		tID.setText(objL.UserID);
+		tName.setText(objL.UserName);
 		
 		handlerTask = new Handler() {
 			@Override

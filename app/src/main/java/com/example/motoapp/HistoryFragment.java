@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +53,13 @@ public class HistoryFragment extends Activity {
 		List rowitem = new ArrayList();
 		listView = (ListView) findViewById(R.id.listView);
 
+		//員工卡號姓名設定
+		clsLoginInfo objL = new clsLoginInfo(context);
+		objL.Load();
+		TextView tID = (TextView)findViewById(R.id.TextID);
+		TextView tName = (TextView)findViewById(R.id.TextName);
+		tID.setText(objL.UserID);
+		tName.setText(objL.UserName);
 
 		if(cursor!=null && cursor.getCount() > 0)
 		{

@@ -70,6 +70,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 	Handler handlerTask;
 	Handler handlerListView;
 	Handler handlerThread;
+    Handler handlerGet;
 	clsLoginInfo objLoginInfo;
 	ListViewAdpater adpater;
 	Button button_DoList;
@@ -147,6 +148,16 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		/*鍵盤事件*/
 		setKeyListener();
 
+		//員工卡號姓名設定
+		clsLoginInfo objL = new clsLoginInfo(context);
+		objL.Load();
+		TextView tID = (TextView)findViewById(R.id.TextID);
+		TextView tName = (TextView)findViewById(R.id.TextName);
+		tID.setText(objL.UserID);
+		tName.setText(objL.UserName);
+
+
+
 		// 0代表橫向、1代表縱向
 		//this.setRequestedOrientation(1);
 		// 設為横向顯示。因為攝影頭會自動翻轉90度，所以如果不横向顯示，看到的畫面就是翻轉的。
@@ -173,7 +184,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 					clsHttpPostAPI.CallAPI(context, "API002");
 
 					int i = clsHttpPostAPI.from_get_json;
-					Log.e("i", String.valueOf(i));
+					Log.e("clsHttpPostAPI", String.valueOf(i));
 					display();
 
 					myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
@@ -284,6 +295,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			public void onClick(View v) {
 				Log.e("下一步","下一步");
 				new clsHttpPostAPI().CallAPI(context, "API030");
+
 				type="040";
 				display();
 			}
@@ -310,7 +322,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 
 
 
-		/* 託運單拍照後送出 */
+		/* 託運單拍照後傳送 */
 		Button button_Send = (Button) findViewById(R.id.button_Send);
 		button_Send.setOnClickListener(new OnClickListener() {
 
@@ -556,6 +568,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 						// "逾時接單", "等待詢車中...", true);
 					}
 
+
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -707,8 +720,8 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 									context, R.layout.myspinner, objList);
 
 							Spinner_SetGoods.setAdapter(Adapter);
-
 							type = "05";
+
 							display();
 
 							break;
@@ -718,7 +731,8 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 							objDB.openDB();
 							objDB.UpdateTaskStatus("51", Application.strCaseID);
 							objDB.DBClose();
-							type = "51";
+							//type = "51";
+							type = "71";
 							display();
 							break;
 
@@ -782,7 +796,13 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 					}
 
 					if (Result.equals("4")) {
-						clsDialog.Show(context, "ERROR", "");
+						clsDialog.Show(context, "ERROR", "案件編號不存在");
+                        objDB.openDB();
+                        objDB.UpdateTaskStatus("AA", Application.strCaseID);
+                        objDB.DBClose();
+                        myDialog.dismiss();
+                        type="71";
+                        display();
 
 					}
 
@@ -826,6 +846,8 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 				}
 			}
 		};
+
+
 
 		//上排按鈕設定
 		button_DoList = (Button) findViewById(R.id.button_DoList);
@@ -1781,6 +1803,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			listView.setAdapter(adpater);
 			Log.e("type",type);
 		}
+
 	}
 
 	public void onStart() {
@@ -1982,9 +2005,9 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		Application.IsCreateData = ((CheckBox) findViewById(R.id.chkCreateData))
 				.isChecked();
 
-		if (Application.IsCreateData==true){
+		if (Application.IsCreateData == true) {
 			KeyinFile = 1;
-		}else {
+		} else {
 			KeyinFile = 0;
 		}
 
@@ -1997,7 +2020,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		objL.Load();
 
 
-		String url = "http://efms.hinet.net/FMS_WSMotor/Services/API/Motor_Dispatch/Upload_For\n" +
+		String url = Application.ChtUrl + "Services/API/Motor_Dispatch/Upload_For\n" +
 				"wardOrder.aspx";
 		final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/jpg");
 		OkHttpClient client = new OkHttpClient();
@@ -2040,7 +2063,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 						runOnUiThread(new Runnable() {
 							@Override
 							public void run() {
-								type="71";
+								type = "71";
 								display();
 							}
 						});
@@ -2058,7 +2081,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 								ImageView imv;
 								imv = (ImageView) findViewById(R.id.imageView);
 								imv.setImageBitmap(bmp);
-								type="41";
+								type = "41";
 								display();
 
 							}
@@ -2069,10 +2092,12 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			});
 
 
-		}else{
+		} else {
 			Toast.makeText(DataListFrg.this, "請確認是否有拍照", Toast.LENGTH_SHORT).show();
 
 		}
 	}
 	}
+
+
 }

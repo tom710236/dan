@@ -120,6 +120,8 @@ public class clsTask {
 			return "接單逾時";
 		if(pStrStatus.equals("00"))
 			return "拒絕";
+		if(pStrStatus.equals("AA"))
+			return "案件編號不存在";
 		return "";
 	}
 

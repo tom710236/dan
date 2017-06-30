@@ -176,7 +176,7 @@ public class clsHttpPostAPI extends Activity {
 						"&TransportID="+Application.strCar+
 						"&key="+Application.strKey;
 						//"&lon=121.48225"+ "&lat=25.02479";
-				Log.e("strUrl",strUrl);
+				//Log.e("strUrl",strUrl);
 				clsLogger.i("Login", strUrl);
 				strRequestJSON = objHttppost.Invoke(strUrl, "");
 				JSONObject json = new JSONObject(strRequestJSON);
@@ -214,7 +214,6 @@ public class clsHttpPostAPI extends Activity {
 				JSONObject json = new JSONObject(strRequestJSON);
 				from_get_json = json.getInt("Result");
 				Log.e("from_get_json", String.valueOf(from_get_json));
-
 				json.put("Type", "1");
 				if(handlerTask!=null)
 				Log.e("json1", String.valueOf(json));
@@ -632,7 +631,7 @@ public class clsHttpPostAPI extends Activity {
 				objDB = new dbLocations(context);
 				objDB.openDB();
 				clsTask objT = objDB.LoadTask(Application.strCaseID);
-				objDB.UpdateTaskStatus("06", objT.CaseID);
+				objDB.UpdateTaskStatus("41", objT.CaseID);
 				objDB.DBClose();
 
 				clsLoginInfo objL = new clsLoginInfo(context);

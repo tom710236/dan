@@ -341,7 +341,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
                             android:gravity="right"
-                            android:text="代收貸款："
+                            android:text="代收貨款："
                             android:textSize="16sp" />
 
                         <TextView
@@ -604,7 +604,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
                             android:gravity="right"
-                            android:text="代收貸款："
+                            android:text="代收貨款："
                             android:textSize="16sp" />
 
                         <TextView
@@ -766,7 +766,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1.5"
-                            android:text="代收貸款："
+                            android:text="代收貨款："
                             android:textSize="16sp" />
 
                         <TextView

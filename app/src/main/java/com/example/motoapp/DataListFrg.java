@@ -1127,7 +1127,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		});
 		
 	}
-	//畫面處理
+	//畫面處理 點選明細後畫面新增
 	public void display() {
 		if (type.equals("02"))// 接單畫面
 		{

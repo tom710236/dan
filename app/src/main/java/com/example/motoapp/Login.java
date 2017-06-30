@@ -139,12 +139,12 @@ public class Login extends Activity {
 				//Log.e("regId",regId);
 				if(regId!=null){
 					new clsHttpPostAPI().CallAPI(objContext, "API001");
-					myDialog = ProgressDialog.show(Login.this, "登入中", "登入資訊檢查中，請稍後！", false);
+					//myDialog = ProgressDialog.show(Login.this, "登入中", "登入資訊檢查中，請稍後！", false);
 					new Thread(new Runnable(){
 						@Override
 						public void run() {
 							try{
-								Thread.sleep(20000);
+								Thread.sleep(10000);
 							}
 							catch(Exception e){
 								e.printStackTrace();
@@ -245,12 +245,13 @@ public class Login extends Activity {
 			public void handleMessage(Message msg) {
 				JSONObject json = (JSONObject) msg.obj;
 				//Log.e("LoginJson", String.valueOf(json));
-				myDialog.dismiss();
+				//myDialog.dismiss();
 				try {
 					String Result = json.getString("Result");
-					myDialog.dismiss();
-					//Log.e("Resultand",Result);
+					//myDialog.dismiss();
+					Log.e("Resultand",Result);
 						if (Result.equals("1")) {
+							//myDialog.dismiss();
 							//Application.strObuID = json.getString("ObuID");
 							Application.strUserName = json
 									.getString("EmployeeName");
@@ -299,42 +300,42 @@ public class Login extends Activity {
 
 						}
 					if (Result.equals("2")) {
-						myDialog.dismiss();
+						//myDialog.dismiss();
 						clsDialog.Show(Login.this, "ERROR", "輸入的授權碼 (Key)是不合法的授權碼");
 					}
 
 					if (Result.equals("3")) {
-						myDialog.dismiss();
+						//myDialog.dismiss();
 						clsDialog.Show(Login.this,"ERROR", "輸入的參數有缺漏");
 					}
 
 					if (Result.equals("4")) {
-						myDialog.dismiss();
+						//myDialog.dismiss();
 						clsDialog.Show(Login.this, "ERROR", "車機識別ID資訊有誤");
 					}
 
 					if (Result.equals("5")) {
-						myDialog.dismiss();
+						//myDialog.dismiss();
 						clsDialog.Show(Login.this, "ERROR", "狀態內容有誤");
 					}
 
 					if (Result.equals("6")) {
-						myDialog.dismiss();
+						//myDialog.dismiss();
 						clsDialog.Show(Login.this, "ERROR", "員工帳號資訊有誤");
 					}
 
 					if (Result.equals("7")) {
-						myDialog.dismiss();
+						//myDialog.dismiss();
 						clsDialog.Show(Login.this, "ERROR", "車號不存在");
 					}
 
 					if (Result.equals("8")) {
-						myDialog.dismiss();
+						//myDialog.dismiss();
 						clsDialog.Show(Login.this, "ERROR", "此車尚 未登入，無法進行其他狀態更新");
 					}
 
 					if (Result.equals("200")) {
-						myDialog.dismiss();
+						//myDialog.dismiss();
 						clsDialog.Show(Login.this, "ERROR", "系統忙碌或其他原因造成沒有完服務，請重試");
 					}
 

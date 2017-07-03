@@ -179,6 +179,8 @@ public class clsHttpPostAPI extends Activity {
 				//Log.e("strUrl",strUrl);
 				clsLogger.i("Login", strUrl);
 				strRequestJSON = objHttppost.Invoke(strUrl, "");
+
+				/*
 				JSONObject json = new JSONObject(strRequestJSON);
 				if(handlerLogin!=null)
 				{
@@ -186,6 +188,7 @@ public class clsHttpPostAPI extends Activity {
 					objMessage.obj = json;
 					handlerLogin.sendMessage(objMessage);
 				}
+				*/
 
 			} catch (Exception e) {
 				// TODO Auto-generated catch block

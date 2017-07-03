@@ -25,7 +25,17 @@ import android.widget.EditText;
 
 import com.google.android.gcm.GCMRegistrar;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -56,7 +66,7 @@ public class Login extends Activity {
 	Context context;
 	Button button;
 	ProgressDialog myDialog;
-
+	String Result;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +121,7 @@ public class Login extends Activity {
 		//EditText_Area.setText("123");
 		EditText_No.setText("1234567");//運輸單號
 		objContext = Login.this;
-		
+
 		//String imei = ((TelephonyManager) objContext.getSystemService(TELEPHONY_SERVICE)).getDeviceId();
 		//帳號若輸入正確 記住登入帳號
 
@@ -128,6 +138,10 @@ public class Login extends Activity {
 			@Override
 			public void onClick(View v) {
 				new GCMTask().execute();
+
+				Post post = new Post();
+				post.run();
+
 				Application.strAccount = EditText_Account.getText().toString();//員工單號
 				Application.strPass = EditText_No.getText().toString();//運輸單號
 				Application.strCar = EditText_Car.getText().toString();//路瑪里程
@@ -140,6 +154,7 @@ public class Login extends Activity {
 				if(regId!=null){
 					new clsHttpPostAPI().CallAPI(objContext, "API001");
 					//myDialog = ProgressDialog.show(Login.this, "登入中", "登入資訊檢查中，請稍後！", false);
+					/*
 					new Thread(new Runnable(){
 						@Override
 						public void run() {
@@ -150,16 +165,17 @@ public class Login extends Activity {
 								e.printStackTrace();
 							}
 							finally{
-								myDialog.dismiss();
+								//myDialog.dismiss();
 							}
 						}
 					}).start();
+					*/
 				}else {
 					clsDialog.Show(Login.this, "", "GCMID收尋中");
 				}
 			}
 		});
-		
+
 		btnCancel = (Button)findViewById(R.id.button_Cancel);
 		btnCancel.setOnClickListener(new OnClickListener() {
 			@Override
@@ -173,7 +189,7 @@ public class Login extends Activity {
 				EditText_No.setText("");
 			}
 		});
-		
+
 		EditText_Account.setOnKeyListener(new OnKeyListener() {
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
 				if (event.getAction() == event.ACTION_DOWN) {
@@ -200,7 +216,7 @@ public class Login extends Activity {
 			}
 		       
 		});*/
-		
+
 		EditText_Car.setOnKeyListener(new OnKeyListener() {
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
 				if (event.getAction() == event.ACTION_DOWN) {
@@ -213,7 +229,7 @@ public class Login extends Activity {
 				return true;
 			}
 		});
-		
+
 		EditText_Area.setOnKeyListener(new OnKeyListener() {
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
 				if (event.getAction() == event.ACTION_DOWN) {
@@ -238,8 +254,8 @@ public class Login extends Activity {
 				return true;
 			}
 		});
-		
-	
+
+
 		handler = new Handler() {
 			@Override
 			public void handleMessage(Message msg) {
@@ -247,7 +263,7 @@ public class Login extends Activity {
 				//Log.e("LoginJson", String.valueOf(json));
 				//myDialog.dismiss();
 				try {
-					String Result = json.getString("Result");
+					Result = json.getString("Result");
 					//myDialog.dismiss();
 					Log.e("Resultand",Result);
 						if (Result.equals("1")) {
@@ -454,4 +470,52 @@ public class Login extends Activity {
 			button.setVisibility(View.GONE);
 		}
 	}
+
+	class Post extends Thread{
+		@Override
+		public void run() {
+			PostUserInfo();
+		}
+
+		private void PostUserInfo() {
+			String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DeviceInfo.aspx?" +
+					"DeviceID="+ regId +
+					"&Status=1" +
+					"&EmployeeID="+Application.strAccount+
+					"&Odometer="+Application.strPass+
+					"&TransportID="+Application.strCar+
+					"&key="+Application.strKey;
+			final OkHttpClient client = new OkHttpClient();
+			//要上傳的內容(JSON)--帳號登入
+			final MediaType JSON
+					= MediaType.parse("application/json; charset=utf-8");
+
+			Request request = new Request.Builder()
+					.url(strUrl)
+					.build();
+			Call call = client.newCall(request);
+			call.enqueue(new Callback(){
+
+				@Override
+				public void onFailure(Call call, IOException e) {
+
+				}
+
+				@Override
+				public void onResponse(Call call, Response response) throws IOException {
+					//取得回傳資料json 還是JSON檔
+					String json = response.body().string();
+					try {
+						Result = new JSONObject(json).getString("Result");
+
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+					Log.e("POST Result", Result);
+
+				}
+			});
+		}
+	}
+
 }

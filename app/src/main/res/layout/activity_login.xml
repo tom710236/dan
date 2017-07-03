@@ -63,7 +63,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
                 android:ems="10"
-                android:hint="請輸入帳號"
+                android:hint="請輸入員工卡號"
+                android:singleLine="true"
                 android:textSize="16sp">
 
                 <requestFocus />
@@ -148,6 +149,7 @@
                 android:layout_weight="8"
                 android:ems="10"
                 android:hint="請輸入運輸單號"
+                android:singleLine="true"
                 android:textSize="16sp"></EditText>
 
             <TextView
@@ -189,6 +191,7 @@
                 android:layout_weight="8"
                 android:ems="10"
                 android:hint="請輸入路碼里程"
+                android:singleLine="true"
                 android:textSize="16sp"></EditText>
 
             <TextView

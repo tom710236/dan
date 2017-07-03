@@ -59,7 +59,7 @@ public class GCMActivity extends Activity {
 			strOrderID =  bundle.getString("orderID");
 			TextView_Msg.setText("收到一筆派遣任務("+strOrderID+")，請問要立刻開啟嗎?");
 			LinearLayout_St0.setVisibility(View.VISIBLE);
-			Log.e("strCaseID",strCaseID);
+			Log.e("strStatus",strStatus);
 		}
 
 		if (strStatus.equals("1")) {
@@ -92,7 +92,7 @@ public class GCMActivity extends Activity {
 			objDB.DBClose();
 			LinearLayout_St1.setVisibility(View.VISIBLE);
 			TextView_Msg.setText("很可惜，派遣任務("+bundle.getString("caseID")+")接單失敗！");
-			checkInt = 1;
+			//checkInt = 1;
 		}
 
 		if (strStatus.equals("3")) {
@@ -117,7 +117,7 @@ public class GCMActivity extends Activity {
 		btnClose1.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				checkInt = 1;
+				//checkInt = 1;
 				Log.e("btnClose1","btnClose1");
 				Intent intent = new Intent(GCMActivity.this, DataListFrg.class);
 				startActivity(intent);

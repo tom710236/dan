@@ -34,9 +34,9 @@ public class Application extends android.app.Application {
 	//正式版
 	//public static String ChtUrl = "http://efms.hinet.net/FMS_WS/";
 	//測試
-	public static String ChtUrl = "http://efms.hinet.net/FMS_WSMotor/";
+	//public static String ChtUrl = "http://efms.hinet.net/FMS_WSMotor/";
 	//測試(0628中華內部測試)
-	//public static String ChtUrl = "http://efms.hinet.net/FMS_WSMotor_temp/";
+	public static String ChtUrl = "http://efms.hinet.net/FMS_WSMotor_temp/";
 
 	/**
 	 * 新達的網址

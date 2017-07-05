@@ -3,6 +3,8 @@ package com.example.motoapp;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,7 +24,7 @@ public class GCMActivity extends Activity {
 	TextView TextView_Msg;
 	String strStatus;
 	int checkInt = 0;
-
+	Handler handlerGCM;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -43,7 +45,7 @@ public class GCMActivity extends Activity {
 		Intent intent = getIntent();
 		Bundle bundle = intent.getExtras();
 		strStatus = bundle.getString("status");
-
+		Log.e("strStatus GCM2",strStatus);
 		if (strStatus.equals("0")) {
 			dbLocations objDB = new dbLocations(GCMActivity.this);
 			objDB.openDB();
@@ -63,8 +65,33 @@ public class GCMActivity extends Activity {
 		}
 
 		if (strStatus.equals("1")) {
-			dbLocations objDB = new dbLocations(GCMActivity.this);
+
+			final dbLocations objDB = new dbLocations(GCMActivity.this);
+
 			objDB.openDB();
+			Application.strCaseID = bundle.getString("caseID");
+			Application.strObuID = bundle.getString("obuid");
+			Application.objFormInfo = bundle;
+
+			objDB.InsertTask(new Object[] {
+					bundle.getString("caseID"),
+					bundle.getString("orderID"),
+					bundle.getString("customer_address"),
+					bundle.getString("distance"),
+					bundle.getString("size"),
+					bundle.getString("item_count"),
+					bundle.getString("request_time"), "0" });
+			objDB.DBClose();
+
+
+
+
+			objDB.openDB();
+			Message objMessage = new Message();
+			objMessage.obj = bundle;
+			Log.e("GCM2 bundle", String.valueOf(bundle));
+			//Application.objForm = bundle;
+			//Application.strCaseID=strCaseID;
 			objDB.UpdateTask(bundle.getString("customer_address"),
 					bundle.getString("customer_name"),
 					bundle.getString("customer_phoneNo"),
@@ -75,24 +102,35 @@ public class GCMActivity extends Activity {
 					bundle.getString("pay_amount"), "21",
 					bundle.getString("caseID"));
 			objDB.DBClose();
+
+
+
 			Intent intent1 = new Intent();
 			intent1.setClass(GCMActivity.this, DataListFrg.class);
 			Bundle obj = new Bundle();
 			obj.putString("type", "21");
+			obj.putString("GCM","1");
+			//Application.objForm = bundle;
 
 			intent1.putExtras(obj);
-			startActivity(intent);
+
+			//Application.strCaseID=strCaseID;
+			startActivity(intent1);
 			finish();
+
+
 		}
 
 		if (strStatus.equals("2")) {
+
 			dbLocations objDB = new dbLocations(GCMActivity.this);
 			objDB.openDB();
 			objDB.UpdateTaskStatus("2", bundle.getString("caseID"));
 			objDB.DBClose();
 			LinearLayout_St1.setVisibility(View.VISIBLE);
 			TextView_Msg.setText("很可惜，派遣任務("+bundle.getString("caseID")+")接單失敗！");
-			//checkInt = 1;
+			checkInt = 1;
+
 		}
 
 		if (strStatus.equals("3")) {
@@ -117,10 +155,12 @@ public class GCMActivity extends Activity {
 		btnClose1.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//checkInt = 1;
+				checkInt = 1;
 				Log.e("btnClose1","btnClose1");
 				Intent intent = new Intent(GCMActivity.this, DataListFrg.class);
 				startActivity(intent);
+				finish();
+
 				finish();
 			}
 		});
@@ -138,7 +178,10 @@ public class GCMActivity extends Activity {
 					startActivity(intent);
 					Log.e("btnOpen","btnOpen");
 					finish();
+
+
 			}
 		});
 	}
+
 }

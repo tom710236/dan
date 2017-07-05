@@ -26,13 +26,15 @@
         android:layout_below="@+id/LinearLayout_h"
         android:background="@drawable/page_bg"
         android:orientation="vertical"
-        android:padding="5dp">
+        android:padding="5dp"
+        android:visibility="visible">
 
         <LinearLayout
             android:id="@+id/LinearLayout_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="visible">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -80,12 +82,14 @@
         <ScrollView
             android:id="@+id/ScrollView_Step1"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:layout_height="fill_parent"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="visible">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -143,7 +147,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="60dp">
+                    android:layout_height="40dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -403,7 +407,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="60dp">
+                        android:layout_height="40dp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -718,7 +722,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="60dp">
+                        android:layout_height="40dp">
 
                         <TextView
                             android:layout_width="wrap_content"

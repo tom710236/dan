@@ -73,21 +73,23 @@ public class InOutFrg extends Activity {
 	Button button_IO;
 	Button button_GT;
 	Button button_DoneList;
-
+	Handler handlerGCM;
 	Handler handlerTask;
 	String BasicUrl;
 	String type7="73",type8="02",typeNUM;
 	String onClickNum;
 	String BrushDate,BrushTime,UP_DATE,UP_TIME;
-
+	private dbLocations objDB;
+	Handler handler;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d("=====>", "GoogleFragment onCreateView");
 
-
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.frg_inout);
+
+
 
 		context = InOutFrg.this;
 
@@ -753,16 +755,19 @@ public class InOutFrg extends Activity {
 				}
 			}
 		};
+
 	}
 
 	public void onStart() {
 		super.onStart();
 		clsHttpPostAPI.handlerInOut = handlerTask;
+		GCMIntentService.handlerGCM = handlerGCM;
 	}
 
 	public void onStop() {
 		super.onStop();
 		clsHttpPostAPI.handlerInOut = null;
+		GCMIntentService.handlerGCM = null;
 	}
 
 	private void SetSearch() {
@@ -1677,4 +1682,7 @@ public class InOutFrg extends Activity {
 		UP_TIME = df.format(mCal.getTime());
 		Log.e("DATE",BrushDate + BrushTime);
 	}
+
+
+
 }

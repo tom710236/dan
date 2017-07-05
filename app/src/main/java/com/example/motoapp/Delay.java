@@ -94,13 +94,13 @@ public class Delay extends Service implements LocationListener {
                     Log.e("定位中", "定位中");
                 }
 
-                handler.postAtTime(this, android.os.SystemClock.uptimeMillis() + 30 * 1000);
+                handler.postAtTime(this, android.os.SystemClock.uptimeMillis() + 10 * 1000);
 
             }
 
         };
         //每分鐘執行一次
-        handler.postAtTime(runnable, android.os.SystemClock.uptimeMillis() + 30 * 1000);
+        handler.postAtTime(runnable, android.os.SystemClock.uptimeMillis() + 10 * 1000);
         //return super.onStartCommand(intent, flags, startId);
         return START_NOT_STICKY;
     }
@@ -193,7 +193,9 @@ public class Delay extends Service implements LocationListener {
     public void onDestroy() {
 
         handler.removeCallbacks(runnable);
-
+        if(lon!=null&&lat!=null){
+            mgr.removeUpdates(this);
+        }
         super.onDestroy();
         Log.e("STOP", "STOP");
     }

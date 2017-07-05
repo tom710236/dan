@@ -127,6 +127,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 
 		final Intent intent = getIntent();
 		Bundle bundle = intent.getExtras();
+
 		if(bundle!=null)
 		{
 			type=bundle.getString("type");
@@ -149,7 +150,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		setKeyListener();
 
 		//員工卡號姓名設定
-		clsLoginInfo objL = new clsLoginInfo(context);
+		final clsLoginInfo objL = new clsLoginInfo(context);
 		objL.Load();
 		TextView tID = (TextView)findViewById(R.id.TextID);
 		TextView tName = (TextView)findViewById(R.id.TextName);
@@ -173,12 +174,10 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		Button_Get.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
 				/*
 				 * 呼叫API 接單
 				 */
 				// 顯示Progress對話方塊
-
 					//new clsHttpPostAPI().CallAPI(context, "API002");
 					clsHttpPostAPI clsHttpPostAPI = new clsHttpPostAPI();
 					clsHttpPostAPI.CallAPI(context, "API002");
@@ -194,7 +193,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 						@Override
 						public void run() {
 							try{
-								Thread.sleep(20000);
+								Thread.sleep(15000);
 							}
 							catch(Exception e){
 								e.printStackTrace();
@@ -240,17 +239,21 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 				EditText editText = (EditText)findViewById(R.id.EditText_Receive);
 				if(editText.length()!=0){
 					/* 更新預計時間欄位 */
+
 					objDB.openDB();
 					objDB.UpdateTaskRecTime(
 							((TextView) findViewById(R.id.EditText_Receive))
 									.getText().toString(), Application.strCaseID);
 
+					clsTask objT = objDB.LoadTask(Application.strCaseID);
+					Log.e("time",objT.RecTime);
 					objDB.DBClose();
 				/*
 				 * 呼叫API 前往取件
 				 */
 					new clsHttpPostAPI().CallAPI(context, "API004");
 					EditText_OrderID1.requestFocus();
+
 
 				}else{
 					Toast.makeText(DataListFrg.this, "請輸入時間", Toast.LENGTH_SHORT).show();
@@ -499,16 +502,16 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			@Override
 			public void handleMessage(Message msg) {
 				Bundle json = (Bundle) msg.obj;
-				myDialog.dismiss();
+				//myDialog.dismiss();
 				Log.e("GCM資料", String.valueOf(json));
 				try {
 					String status = json.getString("status");
-					Log.e("status",status);
+					Log.e("GCM status",status);
 
 					if (status.equals("0")) {
 						Application.objForm = json;
 						// cCaseID,cOrderID,cCustAddress,cDistance,cSize,cItemCount,cRequestDate,cType
-
+						myDialog.dismiss();
 						objDB.openDB();
 						objDB.InsertTask(new Object[] {
 								json.getString("caseID"),
@@ -527,13 +530,22 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 					}
 					if (status.equals("1")) {
 
-						Log.e("status=1 json", String.valueOf(json));
-						Log.e("item_count", String.valueOf(json.getInt("item_count")));
-						Log.e("distance",json.getString("distance"));
+						Log.e("GCM2","GCM2");
 						Application.strCaseID = json.getString("caseID");
 						Application.strObuID = json.getString("obuid");
 						Application.objFormInfo = json;
-						type = "21";
+
+						objDB.openDB();
+						objDB.InsertTask(new Object[] {
+								json.getString("caseID"),
+								json.getString("orderID"),
+								json.getString("customer_address"),
+								json.getString("distance"),
+								json.getString("size"),
+								json.getString("item_count"),
+								json.getString("request_time"), "0" });
+						objDB.DBClose();
+
 						objDB.openDB();
 						objDB.UpdateTask(
 								json.getString("customer_address"),
@@ -547,6 +559,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 								json.getString("caseID"));
 
 						objDB.DBClose();
+						type = "21";
 						display();
 					}
 					if (status.equals("2")) {

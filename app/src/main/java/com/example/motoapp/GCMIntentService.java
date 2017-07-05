@@ -63,7 +63,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 	@Override
 	protected void onRegistered(Context context, String registrationId) {
 
-		clsLogger.i(TAG, "Device registered: regId = " + registrationId);
+		clsLogger.i("onRegistered", "Device registered: regId = " + registrationId);
+		Log.e("onRegistered GCM", "Device registered: regId = " + registrationId);
 		displayMessage(context, getString(R.string.gcm_registered));
 		ServerUtilities.register(context, registrationId);
 
@@ -71,21 +72,23 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 	@Override
 	protected void onUnregistered(Context context, String registrationId) {
-		clsLogger.i(TAG, "Device unregistered");
+		clsLogger.i("onUnregistered", "Device unregistered");
+		Log.e("onUnregistered GCM", "Device unregistered");
 		displayMessage(context, getString(R.string.gcm_unregistered));
 		if (GCMRegistrar.isRegisteredOnServer(context)) {
 			ServerUtilities.unregister(context, registrationId);
 		} else {
 			// This callback results from the call to unregister made on
 			// ServerUtilities when the registration to the server failed.
-			clsLogger.i(TAG, "Ignoring unregister callback");
+			clsLogger.i("onUnregistered2", "Ignoring unregister callback");
 		}
 	}
 
 	@Override
 	protected void onMessage(Context context, Intent intent)
 	{
-		Log.i(TAG, "Received message");
+		Log.i("onMessage", "Received message");
+		Log.e("onMessage GCM", "Received message");
 		// 接收 GCM server 傳來的訊息
 		Bundle bData = intent.getExtras();
 
@@ -134,7 +137,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 	@Override
 	protected void onDeletedMessages(Context context, int total) {
-		clsLogger.i(TAG, "Received deleted messages notification");
+		clsLogger.i("onDeletedMessages GCM", "Received deleted messages notification");
+		Log.e("onDeletedMessages GCM", "Received deleted messages notification");
 		String message = getString(R.string.gcm_deleted, total);
 		displayMessage(context, message);
 		// notifies user
@@ -143,14 +147,16 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 	@Override
 	public void onError(Context context, String errorId) {
-		clsLogger.i(TAG, "Received error: " + errorId);
+		clsLogger.i("onError", "Received error: " + errorId);
+		Log.e("onError GCM", "Received error: " + errorId);
 		displayMessage(context, getString(R.string.gcm_error, errorId));
 	}
 
 	@Override
 	protected boolean onRecoverableError(Context context, String errorId) {
 		// log message
-		clsLogger.i(TAG, "Received recoverable error: " + errorId);
+		clsLogger.i("onRecoverableError", "Received recoverable error: " + errorId);
+		Log.e("onRecoverableError GCM", "Received recoverable error: " + errorId);
 		displayMessage(context,
 				getString(R.string.gcm_recoverable_error, errorId));
 		return super.onRecoverableError(context, errorId);
@@ -160,7 +166,9 @@ public class GCMIntentService extends GCMBaseIntentService {
 	private static void generateNotification(Context context, Intent intent_GCM) throws JSONException {
 
 		try {
-			clsLogger.i(TAG, new String(intent_GCM.getExtras().toString()
+			clsLogger.i(" generateNotification", new String(intent_GCM.getExtras().toString()
+					.getBytes(), "UTF-8"));
+			Log.e(" generate GCM", new String(intent_GCM.getExtras().toString()
 					.getBytes(), "UTF-8"));
 		} catch (UnsupportedEncodingException e) {
 			clsLogger.i(TAG, e.getMessage());
@@ -175,14 +183,28 @@ public class GCMIntentService extends GCMBaseIntentService {
 			mPlayer.start();
 
 			String strStatus = bundle.getString("status");
+			Log.e("strStatus GCM",strStatus);
 
 			if (strStatus.equals("1")) {
 				if (handlerGCM != null) {
+					Log.e("handlerGCM", String.valueOf(handlerGCM));
 					Message objMessage = new Message();
 					objMessage.obj = bundle;
 					handlerGCM.sendMessage(objMessage);
+
+				}else{
+					Log.e("GCM bundle", String.valueOf(bundle));
+					Message objMessage = new Message();
+					objMessage.obj = bundle;
+
+
+					Intent intent = new Intent("com.example.motoapp.MAIN");
+					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					intent.putExtras(bundle);
+					context.startActivity(intent);
 				}
 			} else {
+
 				Intent intent = new Intent("com.example.motoapp.MAIN");
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				intent.putExtras(bundle);

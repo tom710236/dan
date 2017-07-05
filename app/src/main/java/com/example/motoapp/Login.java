@@ -12,7 +12,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -66,7 +65,7 @@ public class Login extends Activity {
 	Context context;
 	Button button;
 	ProgressDialog myDialog;
-	String Result;
+
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -139,8 +138,29 @@ public class Login extends Activity {
 			public void onClick(View v) {
 				new GCMTask().execute();
 
-				Post post = new Post();
-				post.run();
+				if(regId!=null){
+					Post post = new Post();
+					post.run();
+					myDialog = ProgressDialog.show(Login.this, "登入中", "登入資訊檢查中，請稍後！", false);
+					new Thread(new Runnable(){
+						@Override
+						public void run() {
+							try{
+								Thread.sleep(10000);
+							}
+							catch(Exception e){
+								e.printStackTrace();
+							}
+							finally{
+								myDialog.dismiss();
+							}
+						}
+					}).start();
+
+				}else {
+					clsDialog.Show(Login.this, "", "GCMID收尋中");
+				}
+
 
 				Application.strAccount = EditText_Account.getText().toString();//員工單號
 				Application.strPass = EditText_No.getText().toString();//運輸單號
@@ -151,10 +171,11 @@ public class Login extends Activity {
 				NO = EditText_No.getText().toString();//運輸單號
 				//AREA = EditText_Area.getText().toString();
 				//Log.e("regId",regId);
+				/*
 				if(regId!=null){
 					new clsHttpPostAPI().CallAPI(objContext, "API001");
-					//myDialog = ProgressDialog.show(Login.this, "登入中", "登入資訊檢查中，請稍後！", false);
-					/*
+					myDialog = ProgressDialog.show(Login.this, "登入中", "登入資訊檢查中，請稍後！", false);
+
 					new Thread(new Runnable(){
 						@Override
 						public void run() {
@@ -169,10 +190,11 @@ public class Login extends Activity {
 							}
 						}
 					}).start();
-					*/
+
 				}else {
 					clsDialog.Show(Login.this, "", "GCMID收尋中");
 				}
+				*/
 			}
 		});
 
@@ -255,7 +277,7 @@ public class Login extends Activity {
 			}
 		});
 
-
+		/*
 		handler = new Handler() {
 			@Override
 			public void handleMessage(Message msg) {
@@ -362,7 +384,7 @@ public class Login extends Activity {
 			}
 		};
 		
-		
+		*/
 	}
 
 	public void onStart() {
@@ -478,12 +500,12 @@ public class Login extends Activity {
 		}
 
 		private void PostUserInfo() {
-			String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DeviceInfo.aspx?" +
+			final String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DeviceInfo.aspx?" +
 					"DeviceID="+ regId +
 					"&Status=1" +
-					"&EmployeeID="+Application.strAccount+
-					"&Odometer="+Application.strPass+
-					"&TransportID="+Application.strCar+
+					"&EmployeeID="+EditText_Account.getText().toString()+
+					"&Odometer="+EditText_No.getText().toString()+
+					"&TransportID="+EditText_Car.getText().toString()+
 					"&key="+Application.strKey;
 			final OkHttpClient client = new OkHttpClient();
 			//要上傳的內容(JSON)--帳號登入
@@ -504,14 +526,156 @@ public class Login extends Activity {
 				@Override
 				public void onResponse(Call call, Response response) throws IOException {
 					//取得回傳資料json 還是JSON檔
+					Log.e("URL",strUrl);
 					String json = response.body().string();
+					Log.e("json",json);
 					try {
-						Result = new JSONObject(json).getString("Result");
+						String Result = new JSONObject(json).getString("Result");
+						Log.e("Result",Result);
+							if (Result.equals("1")) {
+							runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									myDialog.dismiss();
+								}
+							});
+							//Application.strObuID = json.getString("ObuID");
+							Application.strUserName = new JSONObject(json)
+									.getString("EmployeeName");
 
+							clsLoginInfo objLogin = new clsLoginInfo(objContext);
+							objLogin.Car = EditText_Car.getText().toString();
+							//objLogin.CarID = json.getString("ObuID");
+							objLogin.DeviceID = Application.strDeviceID;
+							//objLogin.GCMID = Application.strRegistId;
+							objLogin.GCMID=regId;
+							objLogin.StationID="7048";
+							objLogin.StationName="松山站所";
+							objLogin.UserID=EditText_Account.getText().toString();
+							objLogin.UserName = new JSONObject(json).getString("EmployeeName");
+							objLogin.AreaID = EditText_Area.getText().toString();
+							objLogin.FormNo = EditText_No.getText().toString();
+							objLogin.Insert();
+							//Log.e("GCMID",regId);
+							//Log.e("UserID",EditText_Account.getText().toString());
+							//記Log
+							String GPSPeriod = new JSONObject(json).getString("GPSPeriod");
+							//new clsHttpPostAPI().CallAPI(objContext, "API021");
+
+
+
+							//記住帳號
+							SharedPreferences setting =
+									getSharedPreferences("Login", MODE_PRIVATE);
+							setting.edit()
+									.putString("Account", Account)
+									.putString("Car",carID)
+									.putString("NO",NO)
+									.commit();
+
+							//String EmployeeName =  objLogin.UserName;
+							//String Employee;
+							//Employee =  EmployeeName.substring(0, 3);
+							Intent it = new Intent(Login.this,Delay.class);
+							//Log.e("Account",Account);
+							it.putExtra("Employee",Account);
+							it.putExtra("regID",regId);
+							it.putExtra("GPSPeriod",GPSPeriod);
+							startService(it);
+							Intent intent = new Intent(Login.this, DataListFrg.class);
+							startActivity(intent);
+
+						}if (Result.equals("2")) {
+							runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									myDialog.dismiss();
+									clsDialog.Show(Login.this, "ERROR", "輸入的授權碼 (Key)是不合法的授權碼");
+								}
+							});
+
+						}
+
+						if (Result.equals("3")) {
+							runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									myDialog.dismiss();
+									clsDialog.Show(Login.this,"ERROR", "輸入的參數有缺漏");
+								}
+							});
+
+						}
+
+						if (Result.equals("4")) {
+							runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									myDialog.dismiss();
+									clsDialog.Show(Login.this, "ERROR", "車機識別ID資訊有誤");
+								}
+							});
+
+						}
+
+						if (Result.equals("5")) {
+							runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									myDialog.dismiss();
+									clsDialog.Show(Login.this, "ERROR", "狀態內容有誤");
+								}
+							});
+
+						}
+
+						if (Result.equals("6")) {
+							runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									myDialog.dismiss();
+									clsDialog.Show(Login.this, "ERROR", "員工帳號資訊有誤");
+								}
+							});
+
+						}
+
+						if (Result.equals("7")) {
+							runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									myDialog.dismiss();
+									clsDialog.Show(Login.this, "ERROR", "車號不存在");
+								}
+							});
+
+						}
+
+						if (Result.equals("8")) {
+							runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									myDialog.dismiss();
+									clsDialog.Show(Login.this, "ERROR", "此車尚 未登入，無法進行其他狀態更新");
+								}
+							});
+
+						}
+
+						if (Result.equals("200")) {
+							runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									myDialog.dismiss();
+									clsDialog.Show(Login.this, "ERROR", "系統忙碌或其他原因造成沒有完服務，請重試");
+								}
+							});
+
+						}
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
-					Log.e("POST Result", Result);
+
 
 				}
 			});

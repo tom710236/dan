@@ -68,6 +68,7 @@ public class clsHttpPostAPI extends Activity {
 				objDB.openDB();
 				clsTask objT = objDB.LoadTask(Application.strCaseID);
 				objDB.DBClose();
+				//form_Go obj = new form_Go(objT.RecTime);
 				form_Go obj = new form_Go(objT.RecTime);
 				obj.start();
 				//new Thread(form_Go).start(); // 前往取件
@@ -280,6 +281,7 @@ public class clsHttpPostAPI extends Activity {
 
 	private class form_Go extends Thread{
 		String strTime;
+
 		public form_Go(String pStrTime)
 		{
 			strTime = pStrTime;
@@ -303,7 +305,6 @@ public class clsHttpPostAPI extends Activity {
 				clsLogger.i("form_Go", strUrl);
 				strRequestJSON = objHttppost.Invoke(strUrl, "");
 				JSONObject json = new JSONObject(strRequestJSON);
-
 				json.put("Type", "3");
 				if(handlerTask!=null)
 				{
@@ -952,7 +953,7 @@ public class clsHttpPostAPI extends Activity {
 				if(json.getString("Result").equals("1"))
 				{
 					objL.Update("03");
-					new Thread(LogoutLog).start();
+					//new Thread(LogoutLog).start();
 					Intent intent = new Intent(context, Login.class);
 					//startActivity(intent);
 					context.startActivity(intent);

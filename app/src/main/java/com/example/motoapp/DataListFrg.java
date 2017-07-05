@@ -146,7 +146,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		/* 失敗原因 */
 		setDropDownListReason();
 
-		/*鍵盤事件*/
+		/*鍵盤事件*///
 		setKeyListener();
 
 		//員工卡號姓名設定

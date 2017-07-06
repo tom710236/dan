@@ -100,7 +100,8 @@ public class GCMActivity extends Activity {
 					bundle.getString("recipient_phoneNo"),
 					bundle.getString("pay_type"),
 					bundle.getString("pay_amount"), "21",
-					bundle.getString("caseID"));
+					bundle.getString("caseID"),
+					bundle.getString("orderID"));
 			objDB.DBClose();
 
 

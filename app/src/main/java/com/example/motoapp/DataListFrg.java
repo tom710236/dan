@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -193,7 +194,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 						@Override
 						public void run() {
 							try{
-								Thread.sleep(15000);
+								Thread.sleep(20000);
 							}
 							catch(Exception e){
 								e.printStackTrace();
@@ -267,6 +268,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		button_Sucess.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+
 				new clsHttpPostAPI().CallAPI(context, "API005");
 
 			}
@@ -509,9 +511,10 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 					Log.e("GCM status",status);
 
 					if (status.equals("0")) {
+						myDialog.dismiss();
 						Application.objForm = json;
 						// cCaseID,cOrderID,cCustAddress,cDistance,cSize,cItemCount,cRequestDate,cType
-						myDialog.dismiss();
+
 						objDB.openDB();
 						objDB.InsertTask(new Object[] {
 								json.getString("caseID"),
@@ -556,7 +559,8 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 								json.getString("recipient_phoneNo"),
 								json.getString("pay_type"),
 								json.getString("pay_amount"), "21",
-								json.getString("caseID"));
+								json.getString("caseID"),
+                                json.getString("orderID"));
 
 						objDB.DBClose();
 						type = "21";
@@ -625,7 +629,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 						case "4":
 							strType = "取件完成回覆";
 							objDB.openDB();
-							objDB.UpdateTask("", "", "", EditText_CustomName.getText().toString(), editText_Address1.getText().toString(), editText_Phone.getText().toString(), ((ClsDropDownItem)Spinner_PayType.getSelectedItem()).GetID(), EditText_Money.getText().toString(), "04", Application.strCaseID);
+							objDB.UpdateTask("", "", "", EditText_CustomName.getText().toString(), editText_Address1.getText().toString(), editText_Phone.getText().toString(), ((ClsDropDownItem)Spinner_PayType.getSelectedItem()).GetID(), EditText_Money.getText().toString(), "04", Application.strCaseID,Application.newstrObuID);
 							//呼叫API
 							clsTask.postToAS400(context, EditText_OrderID1.getText().toString(), "01");
 
@@ -1961,14 +1965,27 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 	protected void onActivityResult (int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-		if(resultCode == Activity.RESULT_OK && requestCode==100) {
 
-			showImg();
-		}
-		else {
-			Toast.makeText(this, "沒有拍到照片1", Toast.LENGTH_LONG).show();
-			display();
-		}
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                // ZXing回傳的內容
+                String contents = data.getStringExtra("SCAN_RESULT");
+                final EditText editText = (EditText) findViewById(R.id.EditText_OrderID1);
+                editText.setText(contents);
+                objDB.openDB();
+                objDB.UpdateTaskOrdID(contents,Application.strCaseID);
+                Application.newstrObuID = contents;
+
+            }
+        }else if(requestCode==100){
+            if(resultCode == Activity.RESULT_OK){
+                showImg();
+            }else {
+                Toast.makeText(this, "沒有拍到照片1", Toast.LENGTH_LONG).show();
+                display();
+            }
+        }
+
 	}
 
 
@@ -2111,6 +2128,23 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		}
 	}
 	}
+	//取件完成前 掃描
+	public void onScan (View v){
+		Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+		if (getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).size() == 0) {
+			// 未安裝
+			Toast.makeText(this, "請至 Play 商店安裝 ZXing 條碼掃描器", Toast.LENGTH_LONG).show();
+		} else {
+			// SCAN_MODE, 可判別所有支援的條碼
+			// QR_CODE_MODE, 只判別 QRCode
+			// PRODUCT_MODE, UPC and EAN 碼
+			// ONE_D_MODE, 1 維條碼
+			intent.putExtra("SCAN_MODE", "SCAN_MODE");
 
+			// 呼叫ZXing Scanner，完成動作後回傳 1 給 onActivityResult 的 requestCode 參數
+			startActivityForResult(intent, 1);
+		}
+
+	}
 
 }

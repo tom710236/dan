@@ -61,11 +61,11 @@ public class Login extends Activity {
 	private static final String TAG = "Login";
 	PPLZPrinter printer;
 	String serial;
-    public static String regId;
+    public static String regId ;
 	Context context;
 	Button button;
 	ProgressDialog myDialog;
-
+	int textInt = 0 ;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -74,10 +74,7 @@ public class Login extends Activity {
 		setContentView(R.layout.activity_login);
 
 		new GCMTask().execute();
-		if(regId!=null){
-			button = (Button)findViewById(R.id.GCM);
-			button.setVisibility(View.GONE);
-		}
+
 		SysApplication.getInstance().addActivity(this);
 		dbLocations objLocation = new dbLocations(Login.this);
 		objLocation.CheckDB();
@@ -136,9 +133,8 @@ public class Login extends Activity {
 		btnLogin.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				new GCMTask().execute();
 
-				if(regId!=null){
+					new GCMTask().execute();
 					Post post = new Post();
 					post.run();
 					myDialog = ProgressDialog.show(Login.this, "登入中", "登入資訊檢查中，請稍後！", false);
@@ -146,7 +142,7 @@ public class Login extends Activity {
 						@Override
 						public void run() {
 							try{
-								Thread.sleep(10000);
+								Thread.sleep(15000);
 							}
 							catch(Exception e){
 								e.printStackTrace();
@@ -156,19 +152,17 @@ public class Login extends Activity {
 							}
 						}
 					}).start();
+					Application.strAccount = EditText_Account.getText().toString();//員工單號
+					Application.strPass = EditText_No.getText().toString();//運輸單號
+					Application.strCar = EditText_Car.getText().toString();//路瑪里程
+					Application.strDeviceID = serial;
+					Account = EditText_Account.getText().toString();//員工單號
+					carID = EditText_Car.getText().toString();//路碼里程
+					NO = EditText_No.getText().toString();//運輸單號
 
-				}else {
-					clsDialog.Show(Login.this, "", "GCMID收尋中");
-				}
 
 
-				Application.strAccount = EditText_Account.getText().toString();//員工單號
-				Application.strPass = EditText_No.getText().toString();//運輸單號
-				Application.strCar = EditText_Car.getText().toString();//路瑪里程
-				Application.strDeviceID = serial;
-				Account = EditText_Account.getText().toString();//員工單號
-				carID = EditText_Car.getText().toString();//路碼里程
-				NO = EditText_No.getText().toString();//運輸單號
+
 				//AREA = EditText_Area.getText().toString();
 				//Log.e("regId",regId);
 				/*
@@ -389,12 +383,12 @@ public class Login extends Activity {
 
 	public void onStart() {
 		super.onStart();
-		clsHttpPostAPI.handlerLogin = handler;
+		//clsHttpPostAPI.handlerLogin = handler;
 	}
 
 	public void onStop() {
 		super.onStop();
-		clsHttpPostAPI.handlerLogin =null;
+		//clsHttpPostAPI.handlerLogin =null;
 	}
 
 	
@@ -496,7 +490,7 @@ public class Login extends Activity {
 	class Post extends Thread{
 		@Override
 		public void run() {
-			PostUserInfo();
+				PostUserInfo();
 		}
 
 		private void PostUserInfo() {
@@ -519,7 +513,16 @@ public class Login extends Activity {
 			call.enqueue(new Callback(){
 
 				@Override
-				public void onFailure(Call call, IOException e) {
+				public void onFailure(Call call, final IOException e) {
+					Log.e("LOGIN", String.valueOf(e));
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							myDialog.dismiss();
+							clsDialog.Show(Login.this, "ERROR", String.valueOf(e));
+						}
+					});
+
 
 				}
 
@@ -601,7 +604,8 @@ public class Login extends Activity {
 								@Override
 								public void run() {
 									myDialog.dismiss();
-									clsDialog.Show(Login.this,"ERROR", "輸入的參數有缺漏");
+									//clsDialog.Show(Login.this,"ERROR", "輸入的參數有缺漏");
+									clsDialog.Show(Login.this,"ERROR", "GCM收尋中");
 								}
 							});
 
@@ -681,5 +685,6 @@ public class Login extends Activity {
 			});
 		}
 	}
+
 
 }

@@ -47,4 +47,5 @@ public class Application extends android.app.Application {
 	//自己加
 	public static int strPayType;
 	public static String strPayAmounts;
+	public static String newstrObuID="";
 }

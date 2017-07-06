@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -83,7 +83,7 @@
             android:id="@+id/ScrollView_Step1"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -376,13 +376,21 @@
                             android:id="@+id/EditText_OrderID1"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="3"
+                            android:layout_weight="2"
                             android:inputType="number"
                             android:text="A123456789"
                             android:textSize="16sp">
 
                             <requestFocus />
                         </EditText>
+
+                        <Button
+                            android:id="@+id/scan"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:onClick="onScan"
+                            android:text="掃描" />
                     </LinearLayout>
 
                     <LinearLayout

@@ -328,7 +328,7 @@ public class dbLocations extends SQLiteOpenHelper {
 	 * 無須更新的欄位請留空
 	 * */
 	public void UpdateTask(String pStrCustAddress, String pStrCustName,String pStrPhone,
-						   String pStrRecName, String pStrRecAddress,String pStrRecPhone,String pStrPayType,String pStrPayAmount,String pStrStatus,String pStrPK) {
+						   String pStrRecName, String pStrRecAddress,String pStrRecPhone,String pStrPayType,String pStrPayAmount,String pStrStatus,String pStrPK,String pStrOrderID) {
 		ContentValues args = new ContentValues();
 		if(pStrCustAddress.length()>0)
 			args.put("cCustAddress", pStrCustAddress);
@@ -348,6 +348,8 @@ public class dbLocations extends SQLiteOpenHelper {
 			args.put("cPayAmount", pStrPayAmount);
 		if(pStrStatus.length()>0)
 			args.put("cStatus", pStrStatus);
+		if(pStrOrderID.length()>0)
+			args.put("cOrderID",pStrOrderID);
 
 		objDBLocations.update("tblTask", args, "cCaseID='"+pStrPK+"'", null);
 
@@ -417,6 +419,18 @@ public class dbLocations extends SQLiteOpenHelper {
 
 		if(pStrStationID.length()>0)
 			args.put("cStationID", pStrStationID);
+
+		objDBLocations.update("tblTask", args, "cCaseID='"+pStrPK+"'", null);
+	}
+
+	/** EX：
+	 * 更新ORDERID
+	 * */
+	public void UpdateTaskOrdID(String pStrOrdID,String pStrPK) {
+		ContentValues args = new ContentValues();
+
+		if(pStrOrdID.length()>0)
+			args.put("cOrderID", pStrOrdID);
 
 		objDBLocations.update("tblTask", args, "cCaseID='"+pStrPK+"'", null);
 	}

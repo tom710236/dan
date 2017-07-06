@@ -193,7 +193,7 @@ public class Delay extends Service implements LocationListener {
     public void onDestroy() {
 
         handler.removeCallbacks(runnable);
-        if(lon!=null&&lat!=null){
+        if(mgr!=null){
             mgr.removeUpdates(this);
         }
         super.onDestroy();

@@ -373,9 +373,10 @@ public class clsHttpPostAPI extends Activity {
 
 				clsLoginInfo objL = new clsLoginInfo(context);
 				objL.Load();
+				Log.e("Application.strCaseID",Application.strCaseID);
 
 				//String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?CaseID="+ Application.strCaseID + "&Status=4&obuID=" + objL.Car+"&key="+Application.strKey+"&PayTypeID="+objT.PayType+"&PayAmount="+objT.PayAmount+"&OrderID="+objT.OrderID;
-				String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?key="+Application.strKey+"&caseID="+Application.strCaseID+"&Status=4&EmployeeID="+ objL.UserID+"&PayTypeID="+objT.PayType+"&PayAmount="+objT.PayAmount;
+				String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?key="+Application.strKey+"&caseID="+Application.strCaseID+"&Status=4&EmployeeID="+ objL.UserID+"&PayTypeID="+objT.PayType+"&PayAmount="+objT.PayAmount+"&OrderID="+Application.newstrObuID;
 				clsLogger.i("form_success", strUrl);
 				strRequestJSON = objHttppost.Invoke(strUrl, "");
 				JSONObject json = new JSONObject(strRequestJSON);
@@ -412,7 +413,7 @@ public class clsHttpPostAPI extends Activity {
 				objL.Load();
 
 				//String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?CaseID="+ Application.strCaseID + "&Status=4&obuID=" + objL.Car+"&key="+Application.strKey+"&PayTypeID="+objT.PayType+"&PayAmount="+objT.PayAmount+"&OrderID="+objT.OrderID;
-				String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?key="+Application.strKey+"&caseID="+Application.strCaseID+"&Status=4&EmployeeID="+ objL.UserID+"&PayTypeID="+objT.PayType+"&PayAmount="+objT.PayAmount;
+				String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?key="+Application.strKey+"&caseID="+Application.strCaseID+"&Status=4&EmployeeID="+ objL.UserID+"&PayTypeID="+objT.PayType+"&PayAmount="+objT.PayAmount+"&OrderID="+Application.newstrObuID;
 				clsLogger.i("form_success", strUrl);
 				strRequestJSON = objHttppost.Invoke(strUrl, "");
 				JSONObject json = new JSONObject(strRequestJSON);

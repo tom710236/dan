@@ -39,7 +39,7 @@ public class Delay extends Service implements LocationListener {
     LocationManager mgr; //取得定位管理員
     Runnable runnable;
     Handler handler;
-    String today;
+    String today,datatime;
     String IMEI;
     String GPSPeriod;
     Context context;
@@ -89,7 +89,9 @@ public class Delay extends Service implements LocationListener {
                     IMEI = mTelManager.getDeviceId();
                     Get get = new Get();
                     get.start();
+                    Log.e("time",datatime);
 
+                    Application.datatime=datatime;
                 } else {
                     Log.e("定位中", "定位中");
                 }
@@ -140,8 +142,11 @@ public class Delay extends Service implements LocationListener {
     private void time() {
         Calendar mCal = Calendar.getInstance();
         String dateformat = "yyyy/MM/dd HH:mm:ss";
+        String datetime = "HHmm";
         SimpleDateFormat df = new SimpleDateFormat(dateformat);
+        SimpleDateFormat df2 = new SimpleDateFormat(datetime);
         today = df.format(mCal.getTime());
+        datatime = df2.format(mCal.getTime());
     }
 
     class Get extends Thread {

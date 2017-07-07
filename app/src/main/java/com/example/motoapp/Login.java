@@ -21,6 +21,7 @@ import android.view.View.OnKeyListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.gcm.GCMRegistrar;
 
@@ -66,12 +67,26 @@ public class Login extends Activity {
 	Button button;
 	ProgressDialog myDialog;
 	int textInt = 0 ;
-	
+	String Updata = "V1.00";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_login);
+
+		// 版本更新
+		TextView textView = (TextView)findViewById(R.id.textView9);
+		textView.setText(Updata);
+
+		Button button = (Button)findViewById(R.id.button2);
+		button.setEnabled(false);
+		button.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+
+			}
+		});
+
 
 		new GCMTask().execute();
 
@@ -128,6 +143,18 @@ public class Login extends Activity {
 		EditText_No.setText(setting.getString("NO", "32"));
 		//EditText_Area.setText(setting.getString("Area", "123"));
 
+		//時間到清除欄位
+		Log.e("Application.datatime",Application.datatime);
+		if(Application.datatime.equals("0100")||Application.datatime.equals("0101")||Application.datatime.equals("0102")||Application.datatime.equals("0102")){
+			//清除欄位
+			Log.e("YES","YES");
+			EditText_Account.setText("");
+			//EditText_Password.setText("");
+			EditText_Car.setText("");
+			//EditText_Area.setText("");
+			EditText_Account.requestFocus();
+			EditText_No.setText("");
+		}
 
 		btnLogin = (Button)findViewById(R.id.button_Login);
 		btnLogin.setOnClickListener(new OnClickListener() {
@@ -380,7 +407,7 @@ public class Login extends Activity {
 		
 		*/
 	}
-
+	/*
 	public void onStart() {
 		super.onStart();
 		//clsHttpPostAPI.handlerLogin = handler;
@@ -391,7 +418,7 @@ public class Login extends Activity {
 		//clsHttpPostAPI.handlerLogin =null;
 	}
 
-	
+	*/
 	/**************************
 	 * GCM註冊
 	 * 
@@ -530,7 +557,7 @@ public class Login extends Activity {
 				@Override
 				public void onResponse(Call call, Response response) throws IOException {
 					//取得回傳資料json 還是JSON檔
-					Log.e("URL",strUrl);
+					Log.e("strUrl",strUrl);
 					String json = response.body().string();
 					Log.e("json",json);
 					try {

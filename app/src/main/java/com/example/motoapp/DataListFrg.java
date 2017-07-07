@@ -289,8 +289,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
                 //objDB.close();
 
                 //付款方式更新
-
-
+				/*
 				final int[] indexSpinner = new int[1];
 
 				Spinner_PayType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -309,15 +308,15 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 
 					}
 				});
-
+					*/
 				bmp = null;
 				ImageView imv;
 				imv = (ImageView) findViewById(R.id.imageView);
 				imv.setImageBitmap(bmp);
 
-
+				// 資料變更後資料庫更新
 				objDB.openDB();
-				objDB.UpdateTask("", "", "", EditText_CustomName.getText().toString(), editText_Address1.getText().toString(), editText_Phone.getText().toString(), ((ClsDropDownItem)Spinner_PayType.getSelectedItem()).GetID(), EditText_Money.getText().toString(), "04", Application.strCaseID,Application.newstrObuID);
+				objDB.UpdateTask("", "", "", EditText_CustomName.getText().toString(), editText_Address1.getText().toString(), editText_Phone.getText().toString(), ((ClsDropDownItem)Spinner_PayType.getSelectedItem()).GetID(), EditText_Money.getText().toString(), "03", Application.strCaseID,Application.newstrObuID);
 				objDB.close();
 				new clsHttpPostAPI().CallAPI(context, "API005");
 
@@ -681,7 +680,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 						case "4":
 							strType = "取件完成回覆";
 							objDB.openDB();
-							objDB.UpdateTask("", "", "", EditText_CustomName.getText().toString(), editText_Address1.getText().toString(), editText_Phone.getText().toString(), ((ClsDropDownItem)Spinner_PayType.getSelectedItem()).GetID(), EditText_Money.getText().toString(), "04", Application.strCaseID,Application.newstrObuID);
+							objDB.UpdateTask("", "", "", EditText_CustomName.getText().toString(), editText_Address1.getText().toString(), editText_Phone.getText().toString(), ((ClsDropDownItem)Spinner_PayType.getSelectedItem()).GetID(), EditText_Money.getText().toString(), "03", Application.strCaseID,Application.newstrObuID);
 							//呼叫API
 							clsTask.postToAS400(context, EditText_OrderID1.getText().toString(), "01");
 
@@ -712,7 +711,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 						case "7":
 							strType = "已送達";
 							objDB.openDB();
-							objDB.UpdateTaskStatus("07", Application.strCaseID);
+							objDB.UpdateTaskStatus("06", Application.strCaseID);
 							clsTask objTask1 = objDB
 									.LoadTask(Application.strCaseID);
 							/*DataListFrg.this.printer.clearData();

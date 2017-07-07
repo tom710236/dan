@@ -116,6 +116,10 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 
 
 
+
+
+
+
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.frg_waiting);
 		SysApplication.getInstance().addActivity(this);
@@ -268,7 +272,53 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		button_Sucess.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+                //運輸單號更新
 
+                EditText editText = (EditText)findViewById(R.id.EditText_OrderID1);
+                Application.newstrObuID = editText.getText().toString();
+
+                //objDB.openDB();
+                //objDB.UpdateTaskOrdID(Application.newstrObuID,Application.strCardNo);
+                //objDB.close();
+
+                //付款金額更新
+                EditText editText1 = (EditText)findViewById(R.id.EditText_Money);
+                Application.newPay = editText1.getText().toString();
+                //objDB.openDB();
+                //objDB.UpdateTaskPayAmount(Application.newPay,Application.strCardNo);
+                //objDB.close();
+
+                //付款方式更新
+
+
+				final int[] indexSpinner = new int[1];
+
+				Spinner_PayType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+					@Override
+					public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+						indexSpinner[0] = Spinner_PayType.getSelectedItemPosition();
+						Log.e("indexSpinner", String.valueOf(indexSpinner[0]));
+						Application.newPayType = String.valueOf(indexSpinner[0]);
+						//objDB.openDB();
+						//objDB.UpdateTaskPayTypeID(String.valueOf(indexSpinner[0]),Application.strCardNo);
+						//objDB.close();
+					}
+
+					@Override
+					public void onNothingSelected(AdapterView<?> parent) {
+
+					}
+				});
+
+				bmp = null;
+				ImageView imv;
+				imv = (ImageView) findViewById(R.id.imageView);
+				imv.setImageBitmap(bmp);
+
+
+				objDB.openDB();
+				objDB.UpdateTask("", "", "", EditText_CustomName.getText().toString(), editText_Address1.getText().toString(), editText_Phone.getText().toString(), ((ClsDropDownItem)Spinner_PayType.getSelectedItem()).GetID(), EditText_Money.getText().toString(), "04", Application.strCaseID,Application.newstrObuID);
+				objDB.close();
 				new clsHttpPostAPI().CallAPI(context, "API005");
 
 			}
@@ -293,7 +343,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			}
 		});
 		
-		/* 下一步 */
+		/* 第一個下一步 */
 		Button button_Next1 = (Button) findViewById(R.id.button_Next1);
 		button_Next1.setOnClickListener(new OnClickListener() {
 			@Override
@@ -422,7 +472,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			}
 		});
 		
-		/* 下一步 */
+		/* 第二個下一步 */
 		Button button_Next2 = (Button) findViewById(R.id.button_Next2);
 		button_Next2.setOnClickListener(new OnClickListener() {
 			@Override
@@ -439,6 +489,8 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			@Override
 			public void onClick(View v) {
 				new clsHttpPostAPI().CallAPI(context, "API008");
+				//type="070";
+				//display();
 			}
 		});
 
@@ -635,7 +687,8 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 
 							objDB.DBClose();
 
-							type = "04";
+							//type = "04";
+							type = "040";
 							display();
 							break;
 						case "5":
@@ -688,7 +741,8 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 							objDB.DBClose();
 
 							//DataListFrg.this.printer.printF(DataListFrg.this);
-							type = "07";
+							//type = "07";
+							type = "070";
 							display();
 							break;
 						case "8":
@@ -1024,9 +1078,9 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		EditText EditText_Receive=((EditText) findViewById(R.id.EditText_Receive));
 		
 		 Spinner_PayType=((Spinner) findViewById(R.id.Spinner_PayType));
-		
+
 			List<ClsDropDownItem> objList = new ArrayList<ClsDropDownItem>();
-			
+
 				objList.add(new ClsDropDownItem("0", "月結"));
 				objList.add(new ClsDropDownItem("1", "現金"));
 				objList.add(new ClsDropDownItem("2", "到付"));
@@ -1287,7 +1341,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 					.setText(objT.RecPhone);
 			((EditText) findViewById(R.id.EditText_Count1))
 					.setText(objT.ItemCount);
-			
+			/*
 			for (int j = 0; j < Spinner_PayType.getAdapter().getCount(); j++) {
 				if(((ClsDropDownItem)Spinner_PayType.getAdapter().getItem(j)).GetID().equals(objT.PayType))
 				{
@@ -1295,7 +1349,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 
 				}
 			}
-			
+			*/
 			((EditText) findViewById(R.id.EditText_Money))
 					.setText(objT.PayAmount);
 			((EditText) findViewById(R.id.EditText_Money))
@@ -1348,16 +1402,16 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 					.setText(objT.RecPhone);
 			((EditText) findViewById(R.id.EditText_Count1))
 					.setText(objT.ItemCount);
-			
+			/*
 			for (int j = 0; j < Spinner_PayType.getAdapter().getCount(); j++) {
 				if(((ClsDropDownItem)Spinner_PayType.getAdapter().getItem(j)).GetID().equals(objT.PayType))
 				{
 					Spinner_PayType.setSelection(j);
-					Log.e("j", String.valueOf(j));
+					Log.e("付款方式", String.valueOf(j));
 					Application.strPayType= j;
 				}
 			}
-
+				*/
 			EditText editText = (EditText)findViewById(R.id.EditText_Money);
 			String payAmount = editText.getText().toString();
 			Log.e("PayAmount1",payAmount);
@@ -1974,6 +2028,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
                 editText.setText(contents);
                 objDB.openDB();
                 objDB.UpdateTaskOrdID(contents,Application.strCaseID);
+                objDB.close();
                 Application.newstrObuID = contents;
 
             }

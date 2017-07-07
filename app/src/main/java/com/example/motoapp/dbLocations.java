@@ -424,13 +424,36 @@ public class dbLocations extends SQLiteOpenHelper {
 	}
 
 	/** EX：
-	 * 更新ORDERID
+	 * 更新取件單號
 	 * */
 	public void UpdateTaskOrdID(String pStrOrdID,String pStrPK) {
 		ContentValues args = new ContentValues();
 
 		if(pStrOrdID.length()>0)
 			args.put("cOrderID", pStrOrdID);
+
+		objDBLocations.update("tblTask", args, "cCaseID='"+pStrPK+"'", null);
+	}
+	/** EX：
+	 * 更新付款方式
+	 * */
+	public void UpdateTaskPayTypeID(String pStrPayTypeID,String pStrPK) {
+		ContentValues args = new ContentValues();
+
+		if(pStrPayTypeID.length()>0)
+			args.put("cPayType", pStrPayTypeID);
+
+		objDBLocations.update("tblTask", args, "cCaseID='"+pStrPK+"'", null);
+	}
+
+	/** EX：
+	 * 更新付款金額
+	 * */
+	public void UpdateTaskPayAmount(String pStrPayAmount,String pStrPK) {
+		ContentValues args = new ContentValues();
+
+		if(pStrPayAmount.length()>0)
+			args.put("cPayAmount", pStrPayAmount);
 
 		objDBLocations.update("tblTask", args, "cCaseID='"+pStrPK+"'", null);
 	}

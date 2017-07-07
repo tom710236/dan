@@ -518,8 +518,9 @@ public class Login extends Activity {
 					runOnUiThread(new Runnable() {
 						@Override
 						public void run() {
-							myDialog.dismiss();
+
 							clsDialog.Show(Login.this, "ERROR", String.valueOf(e));
+							myDialog.dismiss();
 						}
 					});
 

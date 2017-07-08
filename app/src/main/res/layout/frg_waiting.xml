@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -166,7 +166,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp">
+                    android:layout_height="20dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -185,7 +185,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp">
+                    android:layout_height="20dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -210,7 +210,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp">
+                    android:layout_height="20dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -323,7 +323,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="40dp">
+                        android:layout_height="20dp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -343,7 +343,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="40dp">
+                        android:layout_height="20dp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -363,7 +363,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="40dp">
+                        android:layout_height="20dp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -676,7 +676,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="40dp">
+                        android:layout_height="20dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -694,7 +694,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="40dp">
+                        android:layout_height="20dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -712,7 +712,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="40dp">
+                        android:layout_height="20dp">
 
                         <TextView
                             android:layout_width="wrap_content"

@@ -87,6 +87,25 @@ public class clsTask {
 	 * 站所ID
 	 * */
 	public String StationID;
+	/**
+	 * 代收貸款
+	 * */
+	public String Cash;
+
+    /**
+     * 託運單照片路徑
+     * */
+    public String RecPicture;
+
+    /**
+     * 簽收單照片路徑
+     * */
+    public String ReqPicture;
+
+	/**
+	 * 最後更新時間
+	 * */
+	public String LastDate;
 
 	public static String GetStatus(String pStrStatus)
 	{

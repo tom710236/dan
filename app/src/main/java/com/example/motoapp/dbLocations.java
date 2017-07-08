@@ -12,7 +12,7 @@ public class dbLocations extends SQLiteOpenHelper {
 
 
 	private static final String DATABASE_NAME = "dbKerry.db";	//資料庫名稱
-	private static final int DATABASE_VERSION = 3;	//資料庫版本
+	private static final int DATABASE_VERSION = 22;	//資料庫版本
 	private SQLiteDatabase objDBLocations;
 
 	public dbLocations(Context context) {
@@ -21,6 +21,8 @@ public class dbLocations extends SQLiteOpenHelper {
 
 		// TODO Auto-generated constructor stub
 	}
+
+
 
 	public SQLiteDatabase openDB(){
 		try {
@@ -79,11 +81,17 @@ public class dbLocations extends SQLiteOpenHelper {
 					+ "[cIsCreateData] [varchar](1) NULL,"
 					+ "[cFailReasonID] [varchar](2) NULL,"
 					+ "[cStationID] [varchar](2) NULL,"
-					+ "[cRecTime] [varchar](10) NULL)";
+					+ "[cRecTime] [varchar](10) NULL,"
+					+ "[cCash] [varchar](10) NULL,"
+					+ "[cLastDate] [varchar](20) NULL,"
+					+ "[cRecPicture] [varchar](200) NULL,"
+					+ "[cReqPicture] [varchar](200) NULL"+
+					")";
 
 			// 建立config資料表，詳情請參考SQL語法
 			objDBLocations.execSQL(DATABASE_CREATE_TABLE);
 		} catch (Exception e) {
+			Log.e("建立錯誤", String.valueOf(e));
 		}
 
 
@@ -180,7 +188,9 @@ public class dbLocations extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// TODO Auto-generated method stub
 		db.execSQL("DROP TABLE IF EXISTS tblTask");	//刪除舊有的資料表
+		//db.execSQL("ALTER TABLE tblTask ADD COLUMN cCash VARCHAR");
 		onCreate(db);
+
 	}
 
 	/** EX：
@@ -213,8 +223,8 @@ public class dbLocations extends SQLiteOpenHelper {
 		//openDB();
 		try{
 			String sqlstr = "Insert into tblTask(cCaseID,cOrderID,cCustAddress,cDistance,cSize,cItemCount,cRequestDate,cType,cStatus," +
-					"cCustName,cCustPhone,cRecName,cRecPhone,cRecAddress,cRequestDate,cPayType,cPayAmount" +
-					") values(?,?,?,?,?,?,?,?,'41',?,?,?,?,?,?,?,?)";
+					"cCustName,cCustPhone,cRecName,cRecPhone,cRecAddress,cRequestDate,cPayType,cPayAmount,cCash" +
+					") values(?,?,?,?,?,?,?,?,'41',?,?,?,?,?,?,?,?,?)";
 			Object[] args = pObjArray;
 
 			objDBLocations.execSQL(sqlstr, args);
@@ -277,7 +287,10 @@ public class dbLocations extends SQLiteOpenHelper {
 			objTask.IsCreateData = cursor.getString(cursor.getColumnIndex("cIsCreateData"));
 			objTask.FailReasonID = cursor.getString(cursor.getColumnIndex("cFailReasonID"));
 			objTask.StationID = cursor.getString(cursor.getColumnIndex("cStationID"));
-
+			objTask.Cash = cursor.getString(cursor.getColumnIndex("cCash"));
+			objTask.LastDate = cursor.getString(cursor.getColumnIndex("cLastDate"));
+			objTask.RecPicture = cursor.getString(cursor.getColumnIndex("cRecPicture"));
+			objTask.ReqPicture = cursor.getString(cursor.getColumnIndex("cReqPicture"));
 			cursor.close();
 		}
 
@@ -328,7 +341,7 @@ public class dbLocations extends SQLiteOpenHelper {
 	 * 無須更新的欄位請留空
 	 * */
 	public void UpdateTask(String pStrCustAddress, String pStrCustName,String pStrPhone,
-						   String pStrRecName, String pStrRecAddress,String pStrRecPhone,String pStrPayType,String pStrPayAmount,String pStrStatus,String pStrPK,String pStrOrderID) {
+						   String pStrRecName, String pStrRecAddress,String pStrRecPhone,String pStrPayType,String pStrPayAmount,String pStrStatus,String pStrPK,String pStrOrderID,String pStrCash) {
 		ContentValues args = new ContentValues();
 		if(pStrCustAddress.length()>0)
 			args.put("cCustAddress", pStrCustAddress);
@@ -350,7 +363,8 @@ public class dbLocations extends SQLiteOpenHelper {
 			args.put("cStatus", pStrStatus);
 		if(pStrOrderID.length()>0)
 			args.put("cOrderID",pStrOrderID);
-
+		if(pStrCash.length()>0)
+			args.put("cCash",pStrCash);
 		objDBLocations.update("tblTask", args, "cCaseID='"+pStrPK+"'", null);
 
 	}
@@ -454,6 +468,17 @@ public class dbLocations extends SQLiteOpenHelper {
 
 		if(pStrPayAmount.length()>0)
 			args.put("cPayAmount", pStrPayAmount);
+
+		objDBLocations.update("tblTask", args, "cCaseID='"+pStrPK+"'", null);
+	}
+	/** EX：
+	 * 更新代收貸款
+	 * */
+	public void UpdateTaskCash(String pStrCash,String pStrPK) {
+		ContentValues args = new ContentValues();
+
+		if(pStrCash.length()>0)
+			args.put("cPayAmount", pStrCash);
 
 		objDBLocations.update("tblTask", args, "cCaseID='"+pStrPK+"'", null);
 	}

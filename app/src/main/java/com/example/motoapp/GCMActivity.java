@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -68,11 +67,12 @@ public class GCMActivity extends Activity {
 
 			final dbLocations objDB = new dbLocations(GCMActivity.this);
 
-			objDB.openDB();
+			Log.e("GCM2","GCM2");
 			Application.strCaseID = bundle.getString("caseID");
 			Application.strObuID = bundle.getString("obuid");
 			Application.objFormInfo = bundle;
 
+			objDB.openDB();
 			objDB.InsertTask(new Object[] {
 					bundle.getString("caseID"),
 					bundle.getString("orderID"),
@@ -83,16 +83,9 @@ public class GCMActivity extends Activity {
 					bundle.getString("request_time"), "0" });
 			objDB.DBClose();
 
-
-
-
 			objDB.openDB();
-			Message objMessage = new Message();
-			objMessage.obj = bundle;
-			Log.e("GCM2 bundle", String.valueOf(bundle));
-			//Application.objForm = bundle;
-			//Application.strCaseID=strCaseID;
-			objDB.UpdateTask(bundle.getString("customer_address"),
+			objDB.UpdateTask(
+					bundle.getString("customer_address"),
 					bundle.getString("customer_name"),
 					bundle.getString("customer_phoneNo"),
 					bundle.getString("recipient_name"),
@@ -101,7 +94,10 @@ public class GCMActivity extends Activity {
 					bundle.getString("pay_type"),
 					bundle.getString("pay_amount"), "21",
 					bundle.getString("caseID"),
-					bundle.getString("orderID"));
+					bundle.getString("orderID"),
+					bundle.getString("cash_on_delivery"));
+
+
 			objDB.DBClose();
 
 

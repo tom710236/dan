@@ -131,7 +131,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		objDB = new dbLocations(context);
 
 		final Intent intent = getIntent();
-		Bundle bundle = intent.getExtras();
+		final Bundle bundle = intent.getExtras();
 
 		if(bundle!=null)
 		{
@@ -244,7 +244,8 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 				EditText editText = (EditText)findViewById(R.id.EditText_Receive);
 				if(editText.length()!=0){
 					/* 更新預計時間欄位 */
-
+					Log.e("cash_on_delivery GCM",Application.cash_on_delivery);
+					Log.e("strCaseID GCM",Application.strCaseID);
 					objDB.openDB();
 					objDB.UpdateTaskRecTime(
 							((TextView) findViewById(R.id.EditText_Receive))
@@ -316,7 +317,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 
 				// 資料變更後資料庫更新
 				objDB.openDB();
-				objDB.UpdateTask("", "", "", EditText_CustomName.getText().toString(), editText_Address1.getText().toString(), editText_Phone.getText().toString(), ((ClsDropDownItem)Spinner_PayType.getSelectedItem()).GetID(), EditText_Money.getText().toString(), "03", Application.strCaseID,Application.newstrObuID);
+				objDB.UpdateTask("", "", "", EditText_CustomName.getText().toString(), editText_Address1.getText().toString(), editText_Phone.getText().toString(), ((ClsDropDownItem)Spinner_PayType.getSelectedItem()).GetID(), EditText_Money.getText().toString(), "03", Application.strCaseID,Application.newstrObuID,Application.cash_on_delivery);
 				objDB.close();
 				new clsHttpPostAPI().CallAPI(context, "API005");
 
@@ -560,7 +561,9 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 				try {
 					String status = json.getString("status");
 					Log.e("GCM status",status);
-
+					String cash_on_delivery = json.getString("cash_on_delivery");
+					Log.e("GCM cash_on_delivery",cash_on_delivery);
+					Application.cash_on_delivery = cash_on_delivery;
 					if (status.equals("0")) {
 						myDialog.dismiss();
 						Application.objForm = json;
@@ -611,7 +614,8 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 								json.getString("pay_type"),
 								json.getString("pay_amount"), "21",
 								json.getString("caseID"),
-                                json.getString("orderID"));
+                                json.getString("orderID"),
+								json.getString("cash_on_delivery"));
 
 						objDB.DBClose();
 						type = "21";
@@ -680,7 +684,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 						case "4":
 							strType = "取件完成回覆";
 							objDB.openDB();
-							objDB.UpdateTask("", "", "", EditText_CustomName.getText().toString(), editText_Address1.getText().toString(), editText_Phone.getText().toString(), ((ClsDropDownItem)Spinner_PayType.getSelectedItem()).GetID(), EditText_Money.getText().toString(), "03", Application.strCaseID,Application.newstrObuID);
+							objDB.UpdateTask("", "", "", EditText_CustomName.getText().toString(), editText_Address1.getText().toString(), editText_Phone.getText().toString(), ((ClsDropDownItem)Spinner_PayType.getSelectedItem()).GetID(), EditText_Money.getText().toString(), "03", Application.strCaseID,Application.newstrObuID,Application.cash_on_delivery);
 							//呼叫API
 							clsTask.postToAS400(context, EditText_OrderID1.getText().toString(), "01");
 

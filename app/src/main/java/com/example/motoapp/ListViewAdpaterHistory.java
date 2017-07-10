@@ -181,17 +181,25 @@ public class ListViewAdpaterHistory extends BaseAdapter implements AdapterView.O
 			((TextView) objLayout.findViewById(R.id.TextView_CarNo))
 					.setText(Application.strCar);
 			((TextView)objLayout.findViewById(R.id.TextView_DateTime))
-					.setText(objT.RequestDate);
+					.setText(objT.LastDate);
 			((TextView) objLayout.findViewById(R.id.TextView_CaseID))
 					.setText(objT.OrderID);
 			((TextView) objLayout.findViewById(R.id.editText_Address))
-					.setText(objT.CustAddress);
+					.setText(objT.RecAddress);
 			((TextView) objLayout.findViewById(R.id.EditText_Size))
 					.setText(objT.Size);
-			((TextView) objLayout.findViewById(R.id.editText_Distant))
-					.setText(objT.Distance);
 			((TextView) objLayout.findViewById(R.id.EditText_Count))
 					.setText(objT.ItemCount);
+			((TextView) objLayout.findViewById(R.id.TextView_SendMan))
+					.setText(objT.CustName);
+			((TextView) objLayout.findViewById(R.id.TextView_GetMan))
+					.setText(objT.RecName);
+			((TextView) objLayout.findViewById(R.id.TextView_TEL))
+					.setText(objT.RecPhone);
+			((TextView) objLayout.findViewById(R.id.EditText_Money))
+					.setText(objT.PayAmount);
+			((TextView) objLayout.findViewById(R.id.EditText_Cash))
+					.setText(objT.Cash);
 
 		}
 

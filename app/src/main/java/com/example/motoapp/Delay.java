@@ -89,9 +89,9 @@ public class Delay extends Service implements LocationListener {
                     IMEI = mTelManager.getDeviceId();
                     Get get = new Get();
                     get.start();
-                    Log.e("time",datatime);
+                    //Log.e("time",datatime);
 
-                    Application.datatime=datatime;
+                   // Application.datatime=datatime;
                 } else {
                     Log.e("定位中", "定位中");
                 }

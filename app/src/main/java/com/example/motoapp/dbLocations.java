@@ -12,7 +12,7 @@ public class dbLocations extends SQLiteOpenHelper {
 
 
 	private static final String DATABASE_NAME = "dbKerry.db";	//資料庫名稱
-	private static final int DATABASE_VERSION = 22;	//資料庫版本
+	private static final int DATABASE_VERSION = 23;	//資料庫版本
 	private SQLiteDatabase objDBLocations;
 
 	public dbLocations(Context context) {
@@ -85,7 +85,8 @@ public class dbLocations extends SQLiteOpenHelper {
 					+ "[cCash] [varchar](10) NULL,"
 					+ "[cLastDate] [varchar](20) NULL,"
 					+ "[cRecPicture] [varchar](200) NULL,"
-					+ "[cReqPicture] [varchar](200) NULL"+
+					+ "[cReqPicture] [varchar](200) NULL,"
+					+ "[cLoginTime] [varchar](200) NULL"+
 					")";
 
 			// 建立config資料表，詳情請參考SQL語法
@@ -291,6 +292,7 @@ public class dbLocations extends SQLiteOpenHelper {
 			objTask.LastDate = cursor.getString(cursor.getColumnIndex("cLastDate"));
 			objTask.RecPicture = cursor.getString(cursor.getColumnIndex("cRecPicture"));
 			objTask.ReqPicture = cursor.getString(cursor.getColumnIndex("cReqPicture"));
+			objTask.LoginTime = cursor.getString(cursor.getColumnIndex("cLoginTime"));
 			cursor.close();
 		}
 
@@ -479,6 +481,29 @@ public class dbLocations extends SQLiteOpenHelper {
 
 		if(pStrCash.length()>0)
 			args.put("cPayAmount", pStrCash);
+
+		objDBLocations.update("tblTask", args, "cCaseID='"+pStrPK+"'", null);
+	}
+	/** EX：
+	 * 更新時間
+	 * */
+	public void UpdateDate(String pStrDate,String pStrPK) {
+		ContentValues args = new ContentValues();
+
+		if(pStrDate.length()>0)
+			args.put("cLastDate", pStrDate);
+
+		objDBLocations.update("tblTask", args, "cCaseID='"+pStrPK+"'", null);
+	}
+
+	/** EX：
+	 * 更新登入時間
+	 * */
+	public void UpdateLoginTime(String pStrLoginTime,String pStrPK) {
+		ContentValues args = new ContentValues();
+
+		if(pStrLoginTime.length()>0)
+			args.put("cLastDate", pStrLoginTime);
 
 		objDBLocations.update("tblTask", args, "cCaseID='"+pStrPK+"'", null);
 	}

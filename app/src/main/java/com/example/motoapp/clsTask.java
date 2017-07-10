@@ -107,6 +107,13 @@ public class clsTask {
 	 * */
 	public String LastDate;
 
+
+	/**
+	 * 登入更新時間
+	 * */
+	public String LoginTime;
+
+
 	public static String GetStatus(String pStrStatus)
 	{
 		if(pStrStatus.equals("02"))

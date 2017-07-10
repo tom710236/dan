@@ -20,8 +20,9 @@
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_above="@+id/LinearLayout_footer"
-        android:layout_below="@+id/LinearLayout_h" >
+        android:layout_below="@+id/LinearLayout_h"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -58,9 +59,17 @@
                         android:id="@+id/TextView_OrderNo3"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="8"
+                        android:layout_weight="6"
                         android:text=""
                         android:textSize="16sp" />
+
+                    <Button
+                        android:id="@+id/button5"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:onClick="onScan"
+                        android:text="掃描" />
 
                     <TextView
                         android:layout_width="0dp"

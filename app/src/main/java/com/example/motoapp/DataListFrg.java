@@ -47,7 +47,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import okhttp3.Call;
@@ -88,7 +90,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 	EditText EditText_Money;
 	//Button Button_Print1;
 	Spinner Spinner_PayType;
-
+	String today;
 	/*
 	 * 01列表 02接單 03前往取件 04取件完成，拍照上傳 05回站 06直送 07已送達，拍照上傳 08送達失敗，失敗原因
 	 */
@@ -489,6 +491,11 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			@Override
 			public void onClick(View v) {
 				new clsHttpPostAPI().CallAPI(context, "API008");
+				time();
+				Log.e("today",today);
+				objDB.openDB();
+				objDB.UpdateDate(today, Application.strCaseID);
+				objDB.DBClose();
 				//type="070";
 				//display();
 			}
@@ -547,7 +554,11 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		button_Discharge.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
+                time();
+                Log.e("today",today);
+                objDB.openDB();
+                objDB.UpdateDate(today, Application.strCaseID);
+                objDB.DBClose();
 				new clsHttpPostAPI().CallAPI(context, "API018");
 			}
 		});
@@ -1344,6 +1355,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 					.setText(objT.RecPhone);
 			((EditText) findViewById(R.id.EditText_Count1))
 					.setText(objT.ItemCount);
+
 			/*
 			for (int j = 0; j < Spinner_PayType.getAdapter().getCount(); j++) {
 				if(((ClsDropDownItem)Spinner_PayType.getAdapter().getItem(j)).GetID().equals(objT.PayType))
@@ -1355,9 +1367,8 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			*/
 			((EditText) findViewById(R.id.EditText_Money))
 					.setText(objT.PayAmount);
-			((EditText) findViewById(R.id.EditText_Money))
-					.setText(objT.PayAmount);
-
+			((EditText) findViewById(R.id.EditText_Cash))
+					.setText(objT.Cash);
 			((EditText) findViewById(R.id.EditText_OrderID1)).requestFocus();
 			Log.e("type",type);
 		}
@@ -1541,6 +1552,12 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 					.GetPayType(objT.PayType));
 			((TextView) findViewById(R.id.EditText_Money2))
 					.setText(objT.PayAmount);
+			((TextView) findViewById(R.id.editText_SendMan))
+					.setText(objT.CustName);
+			((TextView) findViewById(R.id.EditText_Size2))
+					.setText(objT.Size);
+			((TextView) findViewById(R.id.EditText_Cash2))
+					.setText(objT.Cash);
 			Log.e("type",type);
 		}
 
@@ -2202,6 +2219,13 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			// 呼叫ZXing Scanner，完成動作後回傳 1 給 onActivityResult 的 requestCode 參數
 			startActivityForResult(intent, 1);
 		}
+
+	}
+	private void time() {
+		Calendar mCal = Calendar.getInstance();
+		String dateformat = "yyyy/MM/dd HH:mm:ss";
+		SimpleDateFormat df = new SimpleDateFormat(dateformat);
+		today = df.format(mCal.getTime());
 
 	}
 

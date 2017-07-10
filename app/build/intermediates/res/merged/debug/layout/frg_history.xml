@@ -85,7 +85,8 @@
         <ScrollView
             android:id="@+id/ScrollView_H1"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:layout_height="fill_parent"
+            android:visibility="visible">
 
             <LinearLayout
                 android:id="@+id/LinearLayout_Step1"
@@ -95,7 +96,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp">
+                    android:layout_height="30dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -111,14 +112,15 @@
                         android:textSize="16sp" />
                 </LinearLayout>
 
+
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp">
+                    android:layout_height="30dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="派送時間 ："
+                        android:text="更新時間 ："
                         android:textSize="16sp" />
 
                     <TextView
@@ -131,12 +133,12 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp">
+                    android:layout_height="30dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="案件編號 ："
+                        android:text="託運單號 ："
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:textSize="16sp" />
 
@@ -151,13 +153,31 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="60dp">
+                    android:layout_height="30dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="寄件人 ："
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/TextView_SendMan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="538-MZW"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp">
 
                     <TextView
                         android:id="@+id/textView1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="取件地址 ："
+                        android:text="送達地址 ："
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:textSize="16sp" />
 
@@ -170,10 +190,45 @@
                         android:text="台北市中山區附近"
                         android:textSize="16sp" />
                 </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="收件人 ："
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/TextView_GetMan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="538-MZW"
+                        android:textSize="16sp" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp">
+                    android:layout_height="30dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="連絡電話 ："
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/TextView_TEL"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="538-MZW"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -192,32 +247,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="取件距離 ："
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:id="@+id/editText_Distant"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="500"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="公尺"
-                        android:textSize="16sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp">
+                    android:layout_height="30dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -237,6 +267,44 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="件"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="到付 ："
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/EditText_Money"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="10x20x30"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="代收貸款 ："
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/EditText_Cash"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="10x20x30"
                         android:textSize="16sp" />
                 </LinearLayout>
 

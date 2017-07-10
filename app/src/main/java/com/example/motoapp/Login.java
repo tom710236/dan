@@ -29,10 +29,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -68,6 +69,8 @@ public class Login extends Activity {
 	ProgressDialog myDialog;
 	int textInt = 0 ;
 	String Updata = "V1.00";
+	dbLocations objDB;
+	String datetime;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -109,8 +112,18 @@ public class Login extends Activity {
 		int intStatus  =objLoginInfo.Check();
 		if(intStatus==1)
 		{
-			Intent intent = new Intent(Login.this, DataListFrg.class);
-		    startActivity(intent);
+			//Intent intent = new Intent(Login.this, DataListFrg.class);
+		    //startActivity(intent);
+
+		}else if (intStatus==0){
+
+			EditText_Account.setText("");
+			//EditText_Password.setText("");
+			EditText_Car.setText("");
+			//EditText_Area.setText("");
+			EditText_Account.requestFocus();
+			EditText_No.setText("");
+
 		}
 		
 		/*
@@ -138,14 +151,18 @@ public class Login extends Activity {
 
 		SharedPreferences setting =
 				getSharedPreferences("Login", MODE_PRIVATE);
-		EditText_Account.setText(setting.getString("Account", "123456"));
-		EditText_Car.setText(setting.getString("Car", "1234567"));
-		EditText_No.setText(setting.getString("NO", "32"));
+		EditText_Account.setText(setting.getString("Account", ""));
+		EditText_Car.setText(setting.getString("Car", ""));
+		EditText_No.setText(setting.getString("NO", ""));
 		//EditText_Area.setText(setting.getString("Area", "123"));
 
 		//時間到清除欄位
-		Log.e("Application.datatime",Application.datatime);
-		if(Application.datatime.equals("0100")||Application.datatime.equals("0101")||Application.datatime.equals("0102")||Application.datatime.equals("0102")){
+		/* 取出資料 */
+		/*
+		objDB.openDB();
+		clsTask objT = objDB.LoadTask(Application.strCaseID);
+		objDB.DBClose();
+		if(objT.LoginTime!=datetime){
 			//清除欄位
 			Log.e("YES","YES");
 			EditText_Account.setText("");
@@ -155,7 +172,7 @@ public class Login extends Activity {
 			EditText_Account.requestFocus();
 			EditText_No.setText("");
 		}
-
+			*/
 		btnLogin = (Button)findViewById(R.id.button_Login);
 		btnLogin.setOnClickListener(new OnClickListener() {
 			@Override
@@ -169,13 +186,14 @@ public class Login extends Activity {
 						@Override
 						public void run() {
 							try{
-								Thread.sleep(15000);
+								Thread.sleep(20000);
 							}
 							catch(Exception e){
 								e.printStackTrace();
 							}
 							finally{
 								myDialog.dismiss();
+
 							}
 						}
 					}).start();
@@ -530,8 +548,7 @@ public class Login extends Activity {
 					"&key="+Application.strKey;
 			final OkHttpClient client = new OkHttpClient();
 			//要上傳的內容(JSON)--帳號登入
-			final MediaType JSON
-					= MediaType.parse("application/json; charset=utf-8");
+
 
 			Request request = new Request.Builder()
 					.url(strUrl)
@@ -713,6 +730,11 @@ public class Login extends Activity {
 			});
 		}
 	}
-
+	private void time() {
+		Calendar mCal = Calendar.getInstance();
+		String datetime = "yyyyHHmm";
+		SimpleDateFormat df2 = new SimpleDateFormat(datetime);
+		datetime = df2.format(mCal.getTime());
+	}
 
 }

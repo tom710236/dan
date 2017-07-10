@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -16,6 +17,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 
@@ -230,5 +232,40 @@ public class GetTaskFrg extends Activity {
                             }).show();
         }
         return super.onKeyDown(keyCode, event);
-    }	
+    }
+
+	//取件完成前 掃描
+	public void onScan (View v){
+		Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+		if (getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).size() == 0) {
+			// 未安裝
+			Toast.makeText(this, "請至 Play 商店安裝 ZXing 條碼掃描器", Toast.LENGTH_LONG).show();
+		} else {
+			// SCAN_MODE, 可判別所有支援的條碼
+			// QR_CODE_MODE, 只判別 QRCode
+			// PRODUCT_MODE, UPC and EAN 碼
+			// ONE_D_MODE, 1 維條碼
+			intent.putExtra("SCAN_MODE", "SCAN_MODE");
+
+			// 呼叫ZXing Scanner，完成動作後回傳 1 給 onActivityResult 的 requestCode 參數
+			startActivityForResult(intent, 1);
+		}
+
+	}
+	//掃描後的動作
+	protected void onActivityResult (int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+
+		if (requestCode == 1) {
+			if (resultCode == RESULT_OK) {
+				// ZXing回傳的內容
+				String contents = data.getStringExtra("SCAN_RESULT");
+				final EditText editText = (EditText) findViewById(R.id.TextView_OrderNo3);
+				editText.setText(contents);
+
+			}
+
+		}
+	}
 }

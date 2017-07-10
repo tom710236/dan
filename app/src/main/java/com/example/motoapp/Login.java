@@ -31,6 +31,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -546,10 +547,15 @@ public class Login extends Activity {
 					"&Odometer="+EditText_No.getText().toString()+
 					"&TransportID="+EditText_Car.getText().toString()+
 					"&key="+Application.strKey;
-			final OkHttpClient client = new OkHttpClient();
+			OkHttpClient client = new OkHttpClient();
+
+			//處理 java.net.SocketTimeoutException in okhttp
+			OkHttpClient.Builder builder = new OkHttpClient.Builder();
+			builder.connectTimeout(30, TimeUnit.SECONDS);
+			builder.readTimeout(30, TimeUnit.SECONDS);
+			builder.writeTimeout(30, TimeUnit.SECONDS);
+			client = builder.build();
 			//要上傳的內容(JSON)--帳號登入
-
-
 			Request request = new Request.Builder()
 					.url(strUrl)
 					.build();

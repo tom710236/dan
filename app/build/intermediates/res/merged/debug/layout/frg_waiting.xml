@@ -528,6 +528,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/linearCash"
                         android:layout_width="match_parent"
                         android:layout_height="40dp">
 
@@ -535,7 +536,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:text="代收貸款 :"
+                            android:text="代收貨款 :"
                             android:textSize="16sp" />
 
                         <Spinner
@@ -720,7 +721,8 @@
                     android:id="@+id/LinearLayout_Arrivals"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="visible">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -775,6 +777,7 @@
                             android:text="A123456789"
                             android:textSize="16sp" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="30dp">
@@ -793,6 +796,7 @@
                             android:text="台北市中山區大同路599號3樓"
                             android:textSize="16sp"></TextView>
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="30dp">
@@ -874,6 +878,7 @@
                             android:text="件"
                             android:textSize="16sp" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="30dp">
@@ -936,13 +941,14 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/linearCash2"
                         android:layout_width="match_parent"
                         android:layout_height="30dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="代收貸款 : "
+                            android:text="代收貨款 : "
                             android:textSize="16sp" />
 
                         <TextView
@@ -1213,7 +1219,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <include
             android:id="@+id/footer"

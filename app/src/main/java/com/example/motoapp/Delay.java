@@ -1,5 +1,6 @@
 package com.example.motoapp;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Service;
 import android.content.Context;
@@ -71,7 +72,9 @@ public class Delay extends Service implements LocationListener {
                 String best = mgr.getBestProvider(new Criteria(), true);
                 if (best != null) {
 
-                    if (ActivityCompat.checkSelfPermission(Delay.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Delay.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(Delay.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                            ActivityCompat.checkSelfPermission(Delay.this, Manifest.permission.ACCESS_WIFI_STATE) != PackageManager.PERMISSION_GRANTED&&
+                            ActivityCompat.checkSelfPermission(Delay.this, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) {
                         // TODO: Consider calling
                         //    ActivityCompat#requestPermissions
                         // here to request the missing permissions, and then overriding

@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Sun Jul 09 13:55:15 CST 2017
+#Tue Jul 11 17:51:54 CST 2017
 210.set=ANDROID_RESOURCE
 14.set=ANDROID_RESOURCE
 180.file=C\:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\drawable\\abc_ic_clear_material.xml

@@ -102,6 +102,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 	int KeyinFile = 0;
 	Camera camera;
 	ProgressDialog myDialog;
+	ProgressDialog myDialog2;
 	PPLZPrinter printer;
 
 	GCMActivity gcm = new GCMActivity();
@@ -177,7 +178,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 //		surfaceHolder.addCallback(this);
 
 		/* 接單 */
-		Button Button_Get = (Button) findViewById(R.id.button_Get);
+		final Button Button_Get = (Button) findViewById(R.id.button_Get);
 		Button_Get.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -186,21 +187,19 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 				 */
 				// 顯示Progress對話方塊
 					//new clsHttpPostAPI().CallAPI(context, "API002");
+					Button_Get.setEnabled(false);
 					clsHttpPostAPI clsHttpPostAPI = new clsHttpPostAPI();
 					clsHttpPostAPI.CallAPI(context, "API002");
-
+					myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
 					int i = clsHttpPostAPI.from_get_json;
 					Log.e("clsHttpPostAPI", String.valueOf(i));
 					display();
-
-					myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
-
 
 					new Thread(new Runnable(){
 						@Override
 						public void run() {
 							try{
-								Thread.sleep(20000);
+								Thread.sleep(15000);
 							}
 							catch(Exception e){
 								e.printStackTrace();
@@ -237,6 +236,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 				EditText editText = (EditText)findViewById(R.id.EditText_Receive);
 				if(editText.length()!=0){
 					/* 更新預計時間欄位 */
+					Application.IsCreateData =false;
 					Log.e("cash_on_delivery GCM",Application.cash_on_delivery);
 					Log.e("strCaseID GCM",Application.strCaseID);
 					objDB.openDB();
@@ -576,7 +576,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 					Log.e("GCM cash_on_delivery",cash_on_delivery);
 					Application.cash_on_delivery = cash_on_delivery;
 					if (status.equals("0")) {
-						myDialog.dismiss();
+						//myDialog2.dismiss();
 						Application.objForm = json;
 						// cCaseID,cOrderID,cCustAddress,cDistance,cSize,cItemCount,cRequestDate,cType
 
@@ -1367,7 +1367,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			((EditText) findViewById(R.id.EditText_Count1))
 					.setText(objT.ItemCount);
 
-			/*
+
 			for (int j = 0; j < Spinner_PayType.getAdapter().getCount(); j++) {
 				if(((ClsDropDownItem)Spinner_PayType.getAdapter().getItem(j)).GetID().equals(objT.PayType))
 				{
@@ -1375,7 +1375,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 
 				}
 			}
-			*/
+
 			((EditText) findViewById(R.id.EditText_Money))
 					.setText(objT.PayAmount);
 			((EditText) findViewById(R.id.EditText_Cash))
@@ -1484,7 +1484,9 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 					.setText(objT.CustPhone);
 			((TextView) findViewById(R.id.EditText_Count1))
 					.setText(objT.ItemCount);
-			
+
+			CheckBox chk = (CheckBox) findViewById(R.id.chkCreateData);
+			chk.setVisibility(View.VISIBLE);
 			for (int j = 0; j < Spinner_PayType.getAdapter().getCount(); j++) {
 				if(((ClsDropDownItem)Spinner_PayType.getAdapter().getItem(j)).GetID().equals(objT.PayType))
 				{
@@ -1502,6 +1504,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		if (type.equals("41"))// 直送或回站畫面
 		{
 			/* 設定主框 */
+
 			LinearLayout LinearLayout_List = (LinearLayout) findViewById(R.id.LinearLayout_list);
 			LinearLayout_List.setVisibility(View.GONE);
 			ScrollView ScrollView_Step1 = (ScrollView) findViewById(R.id.ScrollView_Step1);
@@ -1575,6 +1578,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		if (type.equals("06"))// 選直送
 		{
 			/* 設定主框 */
+
 			LinearLayout LinearLayout_List = (LinearLayout) findViewById(R.id.LinearLayout_list);
 			LinearLayout_List.setVisibility(View.GONE);
 			ScrollView ScrollView_Step1 = (ScrollView) findViewById(R.id.ScrollView_Step1);
@@ -1609,7 +1613,6 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			LinearLayout_SG.setVisibility(View.GONE);
 			LinearLayout_ButtonPrint2.setVisibility(View.GONE);
 
-			/* 取出資料 */
 			objDB.openDB();
 			clsTask objT = objDB.LoadTask(Application.strCaseID);
 			if(Application.strCaseID!=null){
@@ -1636,6 +1639,12 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 					.GetPayType(objT.PayType));
 			((TextView) findViewById(R.id.EditText_Money2))
 					.setText(objT.PayAmount);
+			((TextView) findViewById(R.id.editText_SendMan))
+					.setText(objT.CustName);
+			((TextView) findViewById(R.id.EditText_Size2))
+					.setText(objT.Size);
+			((TextView) findViewById(R.id.EditText_Cash2))
+					.setText(objT.Cash);
 			Log.e("type",type);
 		}
 		
@@ -2123,8 +2132,10 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 
 		if (Application.IsCreateData == true) {
 			KeyinFile = 1;
+			Application.IsCreateData =false;
 		} else {
 			KeyinFile = 0;
+			Application.IsCreateData =false;
 		}
 
 		Log.e("IsCreateData", String.valueOf(KeyinFile));

@@ -80,6 +80,7 @@ public class InOutFrg extends Activity {
 	String onClickNum;
 	String BrushDate,BrushTime,UP_DATE,UP_TIME;
 	private dbLocations objDB;
+	ProgressDialog myDialog;
 	Handler handler;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -230,12 +231,14 @@ public class InOutFrg extends Activity {
 
 						PostBasic post = new PostBasic();
 						post.run();
+						myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
 						//資訊更新API
 
 						getBrushDate();
 						getUPDate();
 						PostCondition_UP post2 = new PostCondition_UP();
 						post2.run();
+
 						/*上傳AS400API
 						JSONObject json = new JSONObject();
 						Log.e("配送前", String.valueOf(json));
@@ -403,7 +406,7 @@ public class InOutFrg extends Activity {
 			}
 		});
 
-		/* 查詢-點返回 */
+		/* 查詢-點確認 */
 		Button button_Ecancel3 = (Button) findViewById(R.id.button_Ecancel3);
 		button_Ecancel3.setOnClickListener(new OnClickListener() {
 			@Override
@@ -435,6 +438,7 @@ public class InOutFrg extends Activity {
 					post.run();
 					EditText editText2 = (EditText)findViewById(R.id.EditText_SearchVal);
 					editText2.setText("");
+					myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
 				}else {
 					clsDialog.Show(context, "提示", "請輸入10碼以上的託運單號！");
 				}
@@ -513,7 +517,7 @@ public class InOutFrg extends Activity {
 						onClickNum =((EditText) findViewById(R.id.EditText_ENO1)).getText().toString();
 						final TextView textview = (TextView) findViewById(R.id.TextView_ENO1);
 						textview.setText(onClickNum);
-
+						myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
 						//上傳AS400API
 						/*
 						JSONObject json = new JSONObject();
@@ -1019,11 +1023,11 @@ public class InOutFrg extends Activity {
 					post.run();
 					//託運單上傳
 					//資訊更新API
-
 					getBrushDate();
 					getUPDate();
 					PostCondition_UP post2 = new PostCondition_UP();
 					post2.run();
+					myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
 					/*
 					JSONObject json = new JSONObject();
 					try {
@@ -1102,6 +1106,7 @@ public class InOutFrg extends Activity {
 					 * */
 					PostBasic post = new PostBasic();
 					post.run();
+					myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
 					/*
 					JSONObject json = new JSONObject();
 					try {
@@ -1451,13 +1456,16 @@ public class InOutFrg extends Activity {
 					.build();
 			Call call = client.newCall(request);
 			call.enqueue(new Callback() {
+
 				@Override
 				public void onFailure(Call call, IOException e) {
 					Log.e("basic e", String.valueOf(e));
+
 				}
 
 				@Override
 				public void onResponse(Call call, Response response) throws IOException {
+
 					String json = response.body().string();
 					Log.e("託運單資訊回傳", json);
 					parseJson(json);
@@ -1477,6 +1485,9 @@ public class InOutFrg extends Activity {
 								@Override
 								public void run() {
 									//配送
+
+									myDialog.dismiss();
+
 									TextView TextView_SAddress1 = (TextView) findViewById(R.id.TextView_SAddress1);
 									TextView_SAddress1.setText(ADDRESS);
 									TextView TextView_SMoney = (TextView)findViewById(R.id.TextView_SMoney);
@@ -1484,6 +1495,7 @@ public class InOutFrg extends Activity {
 									TextView TextView_SMoney2 = (TextView)findViewById(R.id.TextView_SMoney2);
 									TextView_SMoney2.setText(COD_AMT);
 									//配達
+									myDialog.dismiss();
 									TextView TextView_EAddress1 = (TextView)findViewById(R.id.TextView_EAddress1);
 									TextView_EAddress1.setText(ADDRESS);
 									TextView TextView_EMoney = (TextView)findViewById(R.id.TextView_EMoney);
@@ -1491,6 +1503,7 @@ public class InOutFrg extends Activity {
 									TextView TextView_EMoney2 = (TextView)findViewById(R.id.TextView_EMoney2);
 									TextView_EMoney2.setText(COD_AMT);
 									//查詢
+									myDialog.dismiss();
 									TextView TextView_AD = (TextView)findViewById(R.id.TextView_AD);
 									TextView_AD.setText(ADDRESS);
 									TextView TextView_ADMoney = (TextView)findViewById(R.id.TextView_ADMoney);
@@ -1522,6 +1535,7 @@ public class InOutFrg extends Activity {
 			getUPDate();
 			PostCondition_UP post = new PostCondition_UP();
 			post.run();
+
 			TextView TextView_EAddress1 = (TextView)findViewById(R.id.TextView_EAddress1);
 			TextView_EAddress1.setText("");
 			TextView TextView_EMoney = (TextView)findViewById(R.id.TextView_EMoney);
@@ -1579,6 +1593,7 @@ public class InOutFrg extends Activity {
 				@Override
 				public void onFailure(Call call, IOException e) {
 					Log.e("GetCondition_UP e", String.valueOf(e));
+
 				}
 
 				@Override
@@ -1586,6 +1601,7 @@ public class InOutFrg extends Activity {
 					String json = response.body().string();
 					Log.e("託運單資訊更新",url);
 					Log.e("託運單資訊更新回傳", json);
+
 					if(json.equals("\"True\"")){
 						if(CARTYPE == 8 ){
 							//TODO 更新數量
@@ -1606,6 +1622,7 @@ public class InOutFrg extends Activity {
 								@Override
 								public void run() {
 									//TODO 顯示數量
+
 									TextView TextView_SCount = (TextView) findViewById(R.id.TextView_SCount);
 									TextView_SCount.setText(String.format("%04d", Integer.valueOf(objLoginInfo.In)));
 								}

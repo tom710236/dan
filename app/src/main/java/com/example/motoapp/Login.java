@@ -107,26 +107,7 @@ public class Login extends Activity {
 
 		}
 
-		//TODO 判斷是否隔天了，如果是的話清掉登入資訊
-		clsLoginInfo objLoginInfo = new clsLoginInfo(Login.this);
-		objLoginInfo.Load();
-		int intStatus  =objLoginInfo.Check();
-		if(intStatus==1)
-		{
-			//Intent intent = new Intent(Login.this, DataListFrg.class);
-		    //startActivity(intent);
 
-		}else if (intStatus==0){
-
-			EditText_Account.setText("");
-			//EditText_Password.setText("");
-			EditText_Car.setText("");
-			//EditText_Area.setText("");
-			EditText_Account.requestFocus();
-			EditText_No.setText("");
-
-		}
-		
 		/*
 		 
 		 */
@@ -174,6 +155,29 @@ public class Login extends Activity {
 			EditText_No.setText("");
 		}
 			*/
+
+		//TODO 判斷是否隔天了，如果是的話清掉登入資訊
+		clsLoginInfo objLoginInfo = new clsLoginInfo(Login.this);
+		objLoginInfo.Load();
+		int intStatus  = objLoginInfo.Check();
+		Log.e("intStatus", String.valueOf(intStatus));
+		if(intStatus==1)
+		{
+
+			//Intent intent = new Intent(Login.this, DataListFrg.class);
+			//startActivity(intent);
+			//清除欄位
+
+		}else if (intStatus==0){
+			EditText_Account.setText("");
+			//EditText_Password.setText("");
+			EditText_Car.setText("");
+			//EditText_Area.setText("");
+			EditText_Account.requestFocus();
+			EditText_No.setText("");
+
+		}
+
 		btnLogin = (Button)findViewById(R.id.button_Login);
 		btnLogin.setOnClickListener(new OnClickListener() {
 			@Override
@@ -187,14 +191,13 @@ public class Login extends Activity {
 						@Override
 						public void run() {
 							try{
-								Thread.sleep(20000);
+								Thread.sleep(30000);
 							}
 							catch(Exception e){
 								e.printStackTrace();
 							}
 							finally{
 								myDialog.dismiss();
-
 							}
 						}
 					}).start();

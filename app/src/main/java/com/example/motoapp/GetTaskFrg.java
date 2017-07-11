@@ -165,7 +165,7 @@ public class GetTaskFrg extends Activity {
 						//cCaseID,cOrderID,cCustAddress,cDistance,cSize,cItemCount,cRequestDate,cType
 						objDB = new dbLocations(context);
 						objDB.openDB();
-						objDB.InsertTaskAllData(new Object[]{json.getString("caseID"),objEdit.getText().toString(),"","","",json.getString("item_count"),json.getString("request_time"),"1","","",json.getString("recipient_name"),json.getString("recipient_phoneNo"),json.getString("recipient_address"),json.getString("request_time"),json.getString("pay_type"),json.getString("pay_amount")});
+						objDB.InsertTaskAllData(new Object[]{json.getString("caseID"),objEdit.getText().toString(),"","",json.getString("size"),json.getString("item_count"),json.getString("status_time"),"1",json.getString("customer_name"),"",json.getString("recipient_name"),json.getString("recipient_phoneNo"),json.getString("recipient_address"),json.getString("request_time"),json.getString("pay_type"),json.getString("pay_amount"),json.getString("cash_on_delivery")});
 						objDB.DBClose();
 						
 						clsDialog.Show(context, "提示", "取得案件資料！");

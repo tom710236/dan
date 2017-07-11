@@ -207,16 +207,6 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 							}
 							finally{
 								myDialog.dismiss();
-								runOnUiThread(new Runnable() {
-									@Override
-									public void run() {
-										//Toast.makeText(DataListFrg.this, "單號有誤", Toast.LENGTH_SHORT).show();
-										//clsDialog.Show(context, "提示訊息", "接單失敗");
-										//new clsHttpPostAPI().CallAPI(context, "API002");
-										//display();
-									}
-								});
-
 							}
 						}
 					}).start();
@@ -229,6 +219,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			@Override
 			public void onClick(View v) {
 				new clsHttpPostAPI().CallAPI(context, "API003");
+				myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
 				objDB.openDB();
 				objDB.UpdateTaskStatus("00", Application.strCaseID);
 				objDB.DBClose();
@@ -260,6 +251,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 				 * 呼叫API 前往取件
 				 */
 					new clsHttpPostAPI().CallAPI(context, "API004");
+					myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
 					EditText_OrderID1.requestFocus();
 
 
@@ -322,7 +314,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 				objDB.UpdateTask("", "", "", EditText_CustomName.getText().toString(), editText_Address1.getText().toString(), editText_Phone.getText().toString(), ((ClsDropDownItem)Spinner_PayType.getSelectedItem()).GetID(), EditText_Money.getText().toString(), "03", Application.strCaseID,Application.newstrObuID,Application.cash_on_delivery);
 				objDB.close();
 				new clsHttpPostAPI().CallAPI(context, "API005");
-
+				myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
 			}
 		});
 		
@@ -420,6 +412,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			@Override
 			public void onClick(View v) {
 				new clsHttpPostAPI().CallAPI(context, "API007");
+				myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
 			}
 		});
 
@@ -429,7 +422,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			@Override
 			public void onClick(View v) {
 				new clsHttpPostAPI().CallAPI(context, "API012");
-
+				myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
 				// 取得站所資料
 			}
 		});
@@ -450,6 +443,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 						.getSelectedItem()).GetID());
 				new clsHttpPostAPI().CallAPI(context, "API010",((ClsDropDownStation) Spinner_SetGoods
 						.getSelectedItem()).GetStationType());
+				myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
 
 			}
 		});
@@ -491,6 +485,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			@Override
 			public void onClick(View v) {
 				new clsHttpPostAPI().CallAPI(context, "API008");
+				myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
 				time();
 				Log.e("today",today);
 				objDB.openDB();
@@ -506,6 +501,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		button_NG.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				new clsHttpPostAPI().CallAPI(context, "API015");
 				type = "08";
 				display();
 			}
@@ -527,6 +523,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 				objDB.DBClose();
 
 				new clsHttpPostAPI().CallAPI(context, "API009");
+				myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
 			}
 		});
 		//送達失敗，返回
@@ -536,6 +533,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			public void onClick(View v) {
 
 				new clsHttpPostAPI().CallAPI(context, "API007");
+				myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
 			}
 		});
 
@@ -546,6 +544,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			public void onClick(View v) {
 
 				new clsHttpPostAPI().CallAPI(context, "API017");
+				myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
 			}
 		});
 		
@@ -560,6 +559,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
                 objDB.UpdateDate(today, Application.strCaseID);
                 objDB.DBClose();
 				new clsHttpPostAPI().CallAPI(context, "API018");
+				myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
 			}
 		});
 
@@ -664,9 +664,16 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			public void handleMessage(Message msg) {
 				JSONObject json = (JSONObject) msg.obj;
 				Log.e("handlerTask JSON", String.valueOf(json));
+
+
 				try {
 					String Result = json.getString("Result");
-
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							myDialog.dismiss();
+						}
+					});
 					if (Result.equals("1")) {
 						String strType = "";
 						switch (json.getString("Type")) {
@@ -902,10 +909,14 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 					if (Result.equals("7")) {
 						clsDialog.Show(context, "ERROR", "集貨站ID不存在");
 					}
+					if (Result.equals("200")) {
+						clsDialog.Show(context, "ERROR", "系統忙碌或其他原因造成沒有完成服務，請重試");
+					}
 
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+
 				}
 			}
 		};
@@ -2133,6 +2144,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		if (bmp != null) {
+			myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
 			bmp.compress(Bitmap.CompressFormat.JPEG, 70, bos);
 
 			RequestBody requestBody = new MultipartBody.Builder()
@@ -2159,6 +2171,12 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 					String string = response.body().string();
 					Log.e("request", String.valueOf(request));
 					Log.e("回傳訊息", string);
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							myDialog.dismiss();
+						}
+					});
 					//new clsHttpPostAPI().CallAPI(context, "API006");
 					if (type.equals("070")) {
 						// 簽收單
@@ -2168,6 +2186,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 						runOnUiThread(new Runnable() {
 							@Override
 							public void run() {
+								myDialog.dismiss();
 								type = "71";
 								display();
 							}
@@ -2186,6 +2205,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 								ImageView imv;
 								imv = (ImageView) findViewById(R.id.imageView);
 								imv.setImageBitmap(bmp);
+								myDialog.dismiss();
 								type = "41";
 								display();
 

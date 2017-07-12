@@ -3,6 +3,7 @@ package com.example.motoapp;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -187,29 +188,41 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 				 */
 				// 顯示Progress對話方塊
 					//new clsHttpPostAPI().CallAPI(context, "API002");
-					Button_Get.setEnabled(false);
+					//Button_Get.setEnabled(false);
 					clsHttpPostAPI clsHttpPostAPI = new clsHttpPostAPI();
 					clsHttpPostAPI.CallAPI(context, "API002");
-					myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
+					//myDialog2 = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
+				myDialog2 = new ProgressDialog(DataListFrg.this);
+				myDialog2.setTitle("接單中");
+				myDialog2.setMessage("接單資訊檢查中，請稍後！");
+				myDialog2.setButton("關閉", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						myDialog2.dismiss();
+					}
+
+				});
+				myDialog2.setCancelable(false);
+				myDialog2.show();
+				new Thread(new Runnable(){
+					@Override
+					public void run() {
+						try{
+							Thread.sleep(20000);
+						}
+						catch(Exception e){
+							e.printStackTrace();
+						}
+						finally{
+							myDialog2.dismiss();
+						}
+					}
+				}).start();
+
 					int i = clsHttpPostAPI.from_get_json;
 					Log.e("clsHttpPostAPI", String.valueOf(i));
+
 					display();
-
-					new Thread(new Runnable(){
-						@Override
-						public void run() {
-							try{
-								Thread.sleep(15000);
-							}
-							catch(Exception e){
-								e.printStackTrace();
-							}
-							finally{
-								myDialog.dismiss();
-							}
-						}
-					}).start();
-
 			}
 		});
 		/* 拒絕 */
@@ -218,7 +231,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			@Override
 			public void onClick(View v) {
 				new clsHttpPostAPI().CallAPI(context, "API003");
-				myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
+				setDialog();
 				objDB.openDB();
 				objDB.UpdateTaskStatus("00", Application.strCaseID);
 				objDB.DBClose();
@@ -251,7 +264,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 				 * 呼叫API 前往取件
 				 */
 					new clsHttpPostAPI().CallAPI(context, "API004");
-					myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
+					setDialog();
 					EditText_OrderID1.requestFocus();
 
 
@@ -314,7 +327,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 				objDB.UpdateTask("", "", "", EditText_CustomName.getText().toString(), editText_Address1.getText().toString(), editText_Phone.getText().toString(), ((ClsDropDownItem)Spinner_PayType.getSelectedItem()).GetID(), EditText_Money.getText().toString(), "03", Application.strCaseID,Application.newstrObuID,Application.cash_on_delivery);
 				objDB.close();
 				new clsHttpPostAPI().CallAPI(context, "API005");
-				myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
+				setDialog();
 			}
 		});
 		
@@ -412,7 +425,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			@Override
 			public void onClick(View v) {
 				new clsHttpPostAPI().CallAPI(context, "API007");
-				myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
+				setDialog();
 			}
 		});
 
@@ -422,7 +435,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			@Override
 			public void onClick(View v) {
 				new clsHttpPostAPI().CallAPI(context, "API012");
-				myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
+				setDialog();
 				// 取得站所資料
 			}
 		});
@@ -443,7 +456,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 						.getSelectedItem()).GetID());
 				new clsHttpPostAPI().CallAPI(context, "API010",((ClsDropDownStation) Spinner_SetGoods
 						.getSelectedItem()).GetStationType());
-				myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
+				setDialog();
 
 			}
 		});
@@ -485,7 +498,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			@Override
 			public void onClick(View v) {
 				new clsHttpPostAPI().CallAPI(context, "API008");
-				myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
+				setDialog();
 				time();
 				Log.e("today",today);
 				objDB.openDB();
@@ -523,7 +536,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 				objDB.DBClose();
 
 				new clsHttpPostAPI().CallAPI(context, "API009");
-				myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
+				setDialog();
 			}
 		});
 		//送達失敗，返回
@@ -533,7 +546,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			public void onClick(View v) {
 
 				new clsHttpPostAPI().CallAPI(context, "API007");
-				myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
+				setDialog();
 			}
 		});
 
@@ -544,7 +557,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			public void onClick(View v) {
 
 				new clsHttpPostAPI().CallAPI(context, "API017");
-				myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
+				setDialog();
 			}
 		});
 		
@@ -559,7 +572,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
                 objDB.UpdateDate(today, Application.strCaseID);
                 objDB.DBClose();
 				new clsHttpPostAPI().CallAPI(context, "API018");
-				myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
+				setDialog();
 			}
 		});
 
@@ -1865,6 +1878,41 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			LinearLayout_OKNG.setVisibility(View.GONE);
 			LinearLayout_SetGoods.setVisibility(View.GONE);
 			LinearLayout_SG.setVisibility(View.VISIBLE);
+			Button button = (Button)findViewById(R.id.button_Next2);
+			button.setVisibility(View.GONE);
+
+			objDB.openDB();
+			clsTask objT = objDB.LoadTask(Application.strCaseID);
+			if(Application.strCaseID!=null){
+				Log.e("直送",Application.strCaseID);
+			}else {
+				Log.e("直送","null");
+			}
+			objDB.DBClose();
+			((TextView) findViewById(R.id.TextView_CarNo2))
+					.setText(Application.strCar);
+			((TextView) findViewById(R.id.TextView_DateTime2))
+					.setText(objT.RequestDate);
+			((TextView) findViewById(R.id.TextView_OrderID2))
+					.setText(objT.OrderID);
+			((TextView) findViewById(R.id.editText_Address2))
+					.setText(objT.RecAddress);
+			((TextView) findViewById(R.id.EditText_CustomName2))
+					.setText(objT.RecName);
+			((TextView) findViewById(R.id.editText_Phone2))
+					.setText(objT.RecPhone);
+			((TextView) findViewById(R.id.EditText_Count2))
+					.setText(objT.ItemCount);
+			((TextView) findViewById(R.id.EditText_PayType2)).setText(clsTask
+					.GetPayType(objT.PayType));
+			((TextView) findViewById(R.id.EditText_Money2))
+					.setText(objT.PayAmount);
+			((TextView) findViewById(R.id.editText_SendMan))
+					.setText(objT.CustName);
+			((TextView) findViewById(R.id.EditText_Size2))
+					.setText(objT.Size);
+			((TextView) findViewById(R.id.EditText_Cash2))
+					.setText(objT.Cash);
 			Log.e("type",type);
 		}
 
@@ -2156,6 +2204,20 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		if (bmp != null) {
 			myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
+			new Thread(new Runnable(){
+				@Override
+				public void run() {
+					try{
+						Thread.sleep(15000);
+					}
+					catch(Exception e){
+						e.printStackTrace();
+					}
+					finally{
+						myDialog.dismiss();
+					}
+				}
+			}).start();
 			bmp.compress(Bitmap.CompressFormat.JPEG, 70, bos);
 
 			RequestBody requestBody = new MultipartBody.Builder()
@@ -2259,5 +2321,18 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		today = df.format(mCal.getTime());
 
 	}
+	private void setDialog(){
+		myDialog = new ProgressDialog(DataListFrg.this);
+		myDialog.setTitle("載入中");
+		myDialog.setMessage("載入資訊中，請稍後！");
+		myDialog.setButton("關閉", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				myDialog.dismiss();
+			}
 
+		});
+		myDialog.setCancelable(false);
+		myDialog.show();
+	}
 }

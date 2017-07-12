@@ -1443,9 +1443,9 @@ public class InOutFrg extends Activity {
 
 			final OkHttpClient client = new OkHttpClient()
 					.newBuilder()
-					.connectTimeout(15, TimeUnit.SECONDS)
-					.readTimeout(15, TimeUnit.SECONDS)
-					.writeTimeout(15, TimeUnit.SECONDS)
+					.connectTimeout(30, TimeUnit.SECONDS)
+					.readTimeout(30, TimeUnit.SECONDS)
+					.writeTimeout(30, TimeUnit.SECONDS)
 					//.addInterceptor(new LogInterceptor())
 					//.addInterceptor(new TokenInterceptor())
 					.sslSocketFactory(SSLSocketClient.getSSLSocketFactory())
@@ -1460,7 +1460,12 @@ public class InOutFrg extends Activity {
 				@Override
 				public void onFailure(Call call, IOException e) {
 					Log.e("basic e", String.valueOf(e));
-
+					new Thread(new Runnable(){
+						@Override
+						public void run() {
+							myDialog.dismiss();
+						}
+					}).start();
 				}
 
 				@Override

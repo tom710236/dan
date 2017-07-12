@@ -186,21 +186,9 @@ public class Login extends Activity {
 					new GCMTask().execute();
 					Post post = new Post();
 					post.run();
-					myDialog = ProgressDialog.show(Login.this, "登入中", "登入資訊檢查中，請稍後！", false);
-					new Thread(new Runnable(){
-						@Override
-						public void run() {
-							try{
-								Thread.sleep(30000);
-							}
-							catch(Exception e){
-								e.printStackTrace();
-							}
-							finally{
-								myDialog.dismiss();
-							}
-						}
-					}).start();
+					//myDialog = ProgressDialog.show(Login.this, "登入中", "登入資訊檢查中，請稍後！", false);
+					setDialog();
+
 					Application.strAccount = EditText_Account.getText().toString();//員工單號
 					Application.strPass = EditText_No.getText().toString();//運輸單號
 					Application.strCar = EditText_Car.getText().toString();//路瑪里程
@@ -744,6 +732,20 @@ public class Login extends Activity {
 		String datetime = "yyyyHHmm";
 		SimpleDateFormat df2 = new SimpleDateFormat(datetime);
 		datetime = df2.format(mCal.getTime());
+	}
+	private void setDialog(){
+		myDialog = new ProgressDialog(Login.this);
+		myDialog.setTitle("登入中");
+		myDialog.setMessage("登入資訊檢查中，請稍後！");
+		myDialog.setButton("關閉", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				myDialog.dismiss();
+			}
+
+		});
+		myDialog.setCancelable(false);
+		myDialog.show();
 	}
 
 }

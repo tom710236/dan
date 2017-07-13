@@ -110,7 +110,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 	Uri imgUri;    //用來參照拍照存檔的 Uri 物件
 	ImageView imv; //用來參照 ImageView 物件
 	Bitmap bmp;
-
+	int chickInt = 0;
 
 
 	@Override
@@ -183,6 +183,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		Button_Get.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				chickInt=1;
 				/*
 				 * 呼叫API 接單
 				 */
@@ -191,33 +192,38 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 					//Button_Get.setEnabled(false);
 					clsHttpPostAPI clsHttpPostAPI = new clsHttpPostAPI();
 					clsHttpPostAPI.CallAPI(context, "API002");
-					//myDialog2 = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
-				myDialog2 = new ProgressDialog(DataListFrg.this);
-				myDialog2.setTitle("接單中");
-				myDialog2.setMessage("接單資訊檢查中，請稍後！");
-				myDialog2.setButton("關閉", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						myDialog2.dismiss();
-					}
-
-				});
-				myDialog2.setCancelable(false);
-				myDialog2.show();
-				new Thread(new Runnable(){
-					@Override
-					public void run() {
-						try{
-							Thread.sleep(20000);
-						}
-						catch(Exception e){
-							e.printStackTrace();
-						}
-						finally{
+				//myDialog2 = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
+				if(chickInt==1){
+					myDialog2 = new ProgressDialog(DataListFrg.this);
+					myDialog2.setTitle("接單中");
+					myDialog2.setMessage("接單資訊檢查中，請稍後！");
+					myDialog2.setButton("關閉", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
 							myDialog2.dismiss();
 						}
-					}
-				}).start();
+
+					});
+					myDialog2.setCancelable(false);
+					myDialog2.show();
+					new Thread(new Runnable(){
+						@Override
+						public void run() {
+							try{
+								Thread.sleep(60000);
+							}
+							catch(Exception e){
+								e.printStackTrace();
+							}
+							finally{
+								myDialog2.dismiss();
+							}
+						}
+					}).start();
+
+				}
+
+
 
 					int i = clsHttpPostAPI.from_get_json;
 					Log.e("clsHttpPostAPI", String.valueOf(i));
@@ -321,10 +327,14 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 					}
 				});
 					*/
+				//照片清除
 				bmp = null;
 				ImageView imv;
 				imv = (ImageView) findViewById(R.id.imageView);
 				imv.setImageBitmap(bmp);
+				//協助修改 清除
+				CheckBox c1 = (CheckBox)findViewById(R.id.chkCreateData);
+				c1.setChecked(false);
 
 				// 資料變更後資料庫更新
 				objDB.openDB();
@@ -584,7 +594,10 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			@Override
 			public void handleMessage(Message msg) {
 				Bundle json = (Bundle) msg.obj;
-				//myDialog.dismiss();
+				if(chickInt==1){
+					myDialog2.dismiss();
+					chickInt=0;
+				}
 				Log.e("GCM資料", String.valueOf(json));
 				try {
 					String status = json.getString("status");
@@ -592,8 +605,9 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 					String cash_on_delivery = json.getString("cash_on_delivery");
 					Log.e("GCM cash_on_delivery",cash_on_delivery);
 					Application.cash_on_delivery = cash_on_delivery;
+
 					if (status.equals("0")) {
-						//myDialog2.dismiss();
+
 						Application.objForm = json;
 						// cCaseID,cOrderID,cCustAddress,cDistance,cSize,cItemCount,cRequestDate,cType
 
@@ -612,6 +626,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 
 						type = "02";
 						display();
+
 					}
 					if (status.equals("1")) {
 
@@ -2209,21 +2224,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		if (bmp != null) {
-			myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
-			new Thread(new Runnable(){
-				@Override
-				public void run() {
-					try{
-						Thread.sleep(15000);
-					}
-					catch(Exception e){
-						e.printStackTrace();
-					}
-					finally{
-						myDialog.dismiss();
-					}
-				}
-			}).start();
+			setDialog();
 			bmp.compress(Bitmap.CompressFormat.JPEG, 70, bos);
 
 			RequestBody requestBody = new MultipartBody.Builder()

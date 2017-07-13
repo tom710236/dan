@@ -3,21 +3,21 @@
 
     <item
         is-multidex="true"
-        jar="C:\work\dan\MotoAPP2\app\libs\argox-android-sdk.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="18c691ce2c07d471a9e822daf36efee9f2610554">
-        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\2\argox-android-sdk_3078932b44d9a28fb079746a6605b8583fe4fa96\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="C:\work\dan\MotoAPP2\app\libs\json.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.3"
         sha1="f6c8bfbe2c1c3395a1d587c265258a9eb265c511">
         <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\2\json_141100cb246c7118e4f667256c5cb6670ecffa43\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\work\dan\MotoAPP2\app\libs\argox-android-sdk.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="18c691ce2c07d471a9e822daf36efee9f2610554">
+        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\2\argox-android-sdk_3078932b44d9a28fb079746a6605b8583fe4fa96\classes.dex" />
     </item>
     <item
         is-multidex="true"

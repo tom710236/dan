@@ -231,7 +231,7 @@ public class InOutFrg extends Activity {
 
 						PostBasic post = new PostBasic();
 						post.run();
-						myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
+						setDialog();
 						//資訊更新API
 
 						getBrushDate();
@@ -438,7 +438,7 @@ public class InOutFrg extends Activity {
 					post.run();
 					EditText editText2 = (EditText)findViewById(R.id.EditText_SearchVal);
 					editText2.setText("");
-					myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
+					setDialog();
 				}else {
 					clsDialog.Show(context, "提示", "請輸入10碼以上的託運單號！");
 				}
@@ -517,7 +517,7 @@ public class InOutFrg extends Activity {
 						onClickNum =((EditText) findViewById(R.id.EditText_ENO1)).getText().toString();
 						final TextView textview = (TextView) findViewById(R.id.TextView_ENO1);
 						textview.setText(onClickNum);
-						myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
+						setDialog();
 						//上傳AS400API
 						/*
 						JSONObject json = new JSONObject();
@@ -1027,7 +1027,7 @@ public class InOutFrg extends Activity {
 					getUPDate();
 					PostCondition_UP post2 = new PostCondition_UP();
 					post2.run();
-					myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
+					setDialog();
 					/*
 					JSONObject json = new JSONObject();
 					try {
@@ -1106,7 +1106,7 @@ public class InOutFrg extends Activity {
 					 * */
 					PostBasic post = new PostBasic();
 					post.run();
-					myDialog = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
+					setDialog();
 					/*
 					JSONObject json = new JSONObject();
 					try {
@@ -1704,7 +1704,20 @@ public class InOutFrg extends Activity {
 		UP_TIME = df.format(mCal.getTime());
 		Log.e("DATE",BrushDate + BrushTime);
 	}
+	private void setDialog(){
+		myDialog = new ProgressDialog(InOutFrg.this);
+		myDialog.setTitle("載入中");
+		myDialog.setMessage("載入資訊中，請稍後！");
+		myDialog.setButton("關閉", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				myDialog.dismiss();
+			}
 
+		});
+		myDialog.setCancelable(false);
+		myDialog.show();
+	}
 
 
 }

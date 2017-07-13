@@ -296,6 +296,10 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
                 //objDB.UpdateTaskPayAmount(Application.newPay,Application.strCardNo);
                 //objDB.close();
 
+				//代收貨款更新
+				Application.cash_on_delivery = ((EditText) findViewById(R.id.EditText_Cash)).getText().toString();
+				Log.e("cash_on_delivery",Application.cash_on_delivery);
+
                 //付款方式更新
 				/*
 				final int[] indexSpinner = new int[1];
@@ -1394,7 +1398,9 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			((EditText) findViewById(R.id.EditText_Cash))
 					.setText(objT.Cash);
 			((EditText) findViewById(R.id.EditText_OrderID1)).requestFocus();
+
 			Log.e("type",type);
+
 		}
 
 		if (type.equals("04"))// 列印

@@ -417,18 +417,18 @@ public class Login extends Activity {
 		
 		*/
 	}
-	/*
+
 	public void onStart() {
 		super.onStart();
-		//clsHttpPostAPI.handlerLogin = handler;
+		clsHttpPostAPI.handlerLogin = handler;
 	}
 
 	public void onStop() {
 		super.onStop();
-		//clsHttpPostAPI.handlerLogin =null;
+		clsHttpPostAPI.handlerLogin =null;
 	}
 
-	*/
+
 	/**************************
 	 * GCM註冊
 	 * 

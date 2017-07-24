@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
+import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -29,6 +30,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
@@ -161,8 +163,7 @@ public class Login extends Activity {
 		objLoginInfo.Load();
 		int intStatus  = objLoginInfo.Check();
 		Log.e("intStatus", String.valueOf(intStatus));
-		if(intStatus==1)
-		{
+		if(intStatus==1) {
 
 			//Intent intent = new Intent(Login.this, DataListFrg.class);
 			//startActivity(intent);
@@ -515,14 +516,7 @@ public class Login extends Activity {
                     REQUEST_CONTACTS);
         }
     }
-    public void onGCM (View v){
-		new GCMTask().execute();
 
-		if (regId!=null){
-			button = (Button)findViewById(R.id.GCM);
-			button.setVisibility(View.GONE);
-		}
-	}
 
 	class Post extends Thread{
 		@Override
@@ -747,5 +741,7 @@ public class Login extends Activity {
 		myDialog.setCancelable(false);
 		myDialog.show();
 	}
+
+
 
 }

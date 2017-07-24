@@ -1,11 +1,19 @@
 [
     {
+        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\raw\\zxing_beep.ogg",
+        "source": "C:\\Users\\TOM\\.android\\build-cache\\0106adbf8a43a0424c8cbc5513a4491279503718\\output\\res\\raw\\zxing_beep.ogg"
+    },
+    {
         "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\raw\\windows_8_notify.mp3",
         "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\raw\\windows_8_notify.mp3"
     },
     {
         "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\raw\\windows_8_notify.mp3",
         "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\raw\\windows_8_notify.mp3"
+    },
+    {
+        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\raw\\zxinglegacy_beep.ogg",
+        "source": "C:\\Users\\TOM\\.android\\build-cache\\b560ecb4837316f4018484a425242a75d349dbad\\output\\res\\raw\\zxinglegacy_beep.ogg"
     },
     {
         "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\raw\\windows_8_notify.mp3",

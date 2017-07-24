@@ -236,6 +236,8 @@ public class GetTaskFrg extends Activity {
 
 	//取件完成前 掃描
 	public void onScan (View v){
+
+
 		Intent intent = new Intent("com.google.zxing.client.android.SCAN");
 		if (getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).size() == 0) {
 			// 未安裝
@@ -251,11 +253,11 @@ public class GetTaskFrg extends Activity {
 			startActivityForResult(intent, 1);
 		}
 
+
 	}
 	//掃描後的動作
 	protected void onActivityResult (int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-
 
 		if (requestCode == 1) {
 			if (resultCode == RESULT_OK) {
@@ -263,7 +265,8 @@ public class GetTaskFrg extends Activity {
 				String contents = data.getStringExtra("SCAN_RESULT");
 				final EditText editText = (EditText) findViewById(R.id.TextView_OrderNo3);
 				editText.setText(contents);
-
+				//startActivityForResult(data, 1);//連續-重複掃描的動作
+				Toast.makeText(this, contents, Toast.LENGTH_LONG).show();
 			}
 
 		}

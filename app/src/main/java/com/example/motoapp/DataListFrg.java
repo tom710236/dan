@@ -19,6 +19,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.SurfaceHolder;
@@ -48,6 +49,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -120,10 +122,6 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 
 
 
-
-
-
-
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.frg_waiting);
 		SysApplication.getInstance().addActivity(this);
@@ -150,6 +148,8 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		/*printer = new PPLZPrinter();
 		((PPLZPrinter) this.printer).initPrinter(this);*/
 
+
+
 		
 
 		/* 失敗原因 */
@@ -165,7 +165,19 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		TextView tName = (TextView)findViewById(R.id.TextName);
 		tID.setText(objL.UserID);
 		tName.setText(objL.UserName);
+		//TODO 判斷是否隔天了，如果是的話清掉登入資訊
+		int intStatus  = objL.Check();
+		Log.e("intStatus", String.valueOf(intStatus));
+		if(intStatus==1) {
 
+			//Intent intent = new Intent(Login.this, DataListFrg.class);
+			//startActivity(intent);
+			//清除欄位
+
+		}else if (intStatus==0){
+			Intent intent1 = new Intent(DataListFrg.this,Login.class);
+			startActivity(intent1);
+		}
 
 
 		// 0代表橫向、1代表縱向
@@ -303,7 +315,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
                 //objDB.close();
 
 				//代收貨款更新
-				Application.cash_on_delivery = ((EditText) findViewById(R.id.EditText_Cash)).getText().toString();
+				Application.cash_on_delivery = ((TextView) findViewById(R.id.textView_Cash)).getText().toString();
 				Log.e("cash_on_delivery",Application.cash_on_delivery);
 
                 //付款方式更新
@@ -334,7 +346,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 				imv.setImageBitmap(bmp);
 				//協助修改 清除
 				CheckBox c1 = (CheckBox)findViewById(R.id.chkCreateData);
-				c1.setChecked(false);
+				c1.setChecked(false);//checkbox狀態
 
 				// 資料變更後資料庫更新
 				objDB.openDB();
@@ -1410,7 +1422,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 
 			((EditText) findViewById(R.id.EditText_Money))
 					.setText(objT.PayAmount);
-			((EditText) findViewById(R.id.EditText_Cash))
+			((TextView) findViewById(R.id.textView_Cash))
 					.setText(objT.Cash);
 			((EditText) findViewById(R.id.EditText_OrderID1)).requestFocus();
 
@@ -2323,7 +2335,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 	}
 	private void time() {
 		Calendar mCal = Calendar.getInstance();
-		String dateformat = "yyyy/MM/dd HH:mm:ss";
+		String dateformat = "HH:mm";
 		SimpleDateFormat df = new SimpleDateFormat(dateformat);
 		today = df.format(mCal.getTime());
 
@@ -2341,5 +2353,34 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		});
 		myDialog.setCancelable(false);
 		myDialog.show();
+	}
+
+	//加密
+	private String setEncryp (String EncrypString){
+		SetAES AES = new SetAES();
+		EncrypMD5 encrypMD5 = new EncrypMD5();
+		EncrypSHA encrypSHA = new EncrypSHA();
+		try {
+			byte[] TextByte = AES.EncryptAES(encrypMD5.eccrypt(),encrypSHA.eccrypt(),EncrypString.getBytes());
+			EncrypString = Base64.encodeToString(TextByte,Base64.DEFAULT);
+
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return EncrypString;
+	}
+	//解密
+	private String setDecrypt (String DecryptString){
+		SetAES AES = new SetAES();
+		EncrypMD5 encrypMD5 = new EncrypMD5();
+		EncrypSHA encrypSHA = new EncrypSHA();
+		try {
+			byte[] TextByte2 = AES.DecryptAES(encrypMD5.eccrypt(),encrypSHA.eccrypt(), Base64.decode(DecryptString.getBytes(),Base64.DEFAULT));
+			DecryptString = new String(TextByte2);
+
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return DecryptString;
 	}
 }

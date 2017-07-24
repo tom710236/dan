@@ -40,7 +40,7 @@ public class Delay extends Service implements LocationListener {
     LocationManager mgr; //取得定位管理員
     Runnable runnable;
     Handler handler;
-    String today,datatime;
+    String today, datatime;
     String IMEI;
     String GPSPeriod;
     Context context;
@@ -54,14 +54,14 @@ public class Delay extends Service implements LocationListener {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public int onStartCommand(final Intent intent, int flags, int startId) {
         // activity向service传值
 
 
         Employee = intent.getStringExtra("Employee");
         regID = intent.getStringExtra("regID");
         GPSPeriod = intent.getStringExtra("GPSPeriod");
-        Log.e("GPSPeriod",GPSPeriod);
+        Log.e("GPSPeriod", GPSPeriod);
         handler = new Handler();
         runnable = new Runnable() {
             @TargetApi(Build.VERSION_CODES.M)
@@ -71,7 +71,7 @@ public class Delay extends Service implements LocationListener {
                 mgr = (LocationManager) getSystemService(LOCATION_SERVICE);
                 String best = mgr.getBestProvider(new Criteria(), true);
                 if (best != null) {
-
+                    /*
                     if (ActivityCompat.checkSelfPermission(Delay.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                             ActivityCompat.checkSelfPermission(Delay.this, Manifest.permission.ACCESS_WIFI_STATE) != PackageManager.PERMISSION_GRANTED&&
                             ActivityCompat.checkSelfPermission(Delay.this, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) {
@@ -84,6 +84,17 @@ public class Delay extends Service implements LocationListener {
                         // for ActivityCompat#requestPermissions for more details.
 
                         return;
+                    }*/
+
+                    if (ActivityCompat.checkSelfPermission(Delay.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Delay.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        return;
                     }
                     mgr.requestLocationUpdates(best,
                             MIN_TIME, MIN_DIST, Delay.this);
@@ -92,9 +103,16 @@ public class Delay extends Service implements LocationListener {
                     IMEI = mTelManager.getDeviceId();
                     Get get = new Get();
                     get.start();
-                    //Log.e("time",datatime);
 
-                   // Application.datatime=datatime;
+                    //時間到跳到Login
+                    Application.datatime=datatime;
+                    if(datatime.equals("0100")){
+                        Intent intent1 = new Intent(Delay.this,Login.class);
+                        // 錯誤代碼 Calling startActivity() from outside of an Activity context requires the , FLAG_ACTIVITY_NEW_TASK , Is this really what you want
+                        //使用 intent1.addFlags(intent1.FLAG_ACTIVITY_NEW_TASK);
+                        intent1.addFlags(intent1.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent1);
+                    }
                 } else {
                     Log.e("定位中", "定位中");
                 }
@@ -118,12 +136,12 @@ public class Delay extends Service implements LocationListener {
                 location.getLongitude(),
                 location.getAltitude()
         );
-        //Log.e("str", str);
+
         //Log.e("today", today);
         lon = String.valueOf(location.getLongitude());
         lat = String.valueOf(location.getLatitude());
         //Toast.makeText(Delay.this, str + today, Toast.LENGTH_SHORT).show();
-        //Log.e("str",str);
+
         Toast.makeText(Delay.this, "已成功定位", Toast.LENGTH_SHORT).show();
     }
 

@@ -69,7 +69,7 @@ public class HistoryFragment extends Activity {
 				String strCaseID = cursor.getString(cursor.getColumnIndex("cCaseID"));
 				String strStatus = cursor.getString(cursor.getColumnIndex("cStatus"));
 
-				rowitem.add(new HistoryItem(strOrderID,clsTask.GetStatus(strStatus),cursor.getString(cursor.getColumnIndex("cRequestDate"))));
+				rowitem.add(new HistoryItem(strOrderID,clsTask.GetStatus(strStatus),cursor.getString(cursor.getColumnIndex("cLastDate")))); //時間
 
 				if(cursor.isLast())
 					break;

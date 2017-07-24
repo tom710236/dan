@@ -58,6 +58,7 @@ import okhttp3.Response;
 import static android.icu.util.Currency.CurrencyUsage.CASH;
 import static com.example.motoapp.R.id.EditText_ENO1;
 import static com.example.motoapp.R.id.EditText_SNO1;
+import static com.example.motoapp.R.id.TextView_ECount;
 
 public class InOutFrg extends Activity {
 	MainActivity objActivity;
@@ -79,6 +80,7 @@ public class InOutFrg extends Activity {
 	String type7="73",type8="02",typeNUM;
 	String onClickNum;
 	String BrushDate,BrushTime,UP_DATE,UP_TIME;
+	String ADDRESS;
 	private dbLocations objDB;
 	ProgressDialog myDialog;
 	Handler handler;
@@ -1015,6 +1017,7 @@ public class InOutFrg extends Activity {
 						"&BOL_NO="+contents;
 				onClickNum = contents;
 				if (editText.length() == 11) {
+
 					/**
 					 * 呼叫API
 					 * */
@@ -1082,6 +1085,8 @@ public class InOutFrg extends Activity {
 
 					editText.setText("");
 					*/
+					startActivityForResult(intent, 1);//連續掃描
+					Toast.makeText(this, contents, Toast.LENGTH_LONG).show();
 				}
 
 			}
@@ -1482,42 +1487,51 @@ public class InOutFrg extends Activity {
 						JSONArray array = new JSONArray(json);
 						for(int i = 0 ; i<array.length() ; i++) {
 							JSONObject obj = array.getJSONObject(i);
-							final String ADDRESS = String.valueOf(obj.get("ADDRESS"));
+							ADDRESS = String.valueOf(obj.get("ADDRESS"));
 							final String CASH = String.valueOf(obj.get("CASH"));
 							final String COD_AMT = String.valueOf(obj.get("COD_AMT"));
+							if(ADDRESS.equals("null")){
+								runOnUiThread(new Runnable() {
+									@Override
+									public void run() {
+										myDialog.dismiss();
+										Log.e("無此單號","無此單號");
+									}
+								});
 
-							runOnUiThread(new Runnable() {
-								@Override
-								public void run() {
-									//配送
+							}else{
+								runOnUiThread(new Runnable() {
+									@Override
+									public void run() {
+										//配送
+										myDialog.dismiss();
+										TextView TextView_SAddress1 = (TextView) findViewById(R.id.TextView_SAddress1);
+										TextView_SAddress1.setText(ADDRESS);
+										TextView TextView_SMoney = (TextView)findViewById(R.id.TextView_SMoney);
+										TextView_SMoney.setText(CASH);
+										TextView TextView_SMoney2 = (TextView)findViewById(R.id.TextView_SMoney2);
+										TextView_SMoney2.setText(COD_AMT);
+										//配達
+										myDialog.dismiss();
+										TextView TextView_EAddress1 = (TextView)findViewById(R.id.TextView_EAddress1);
+										TextView_EAddress1.setText(ADDRESS);
+										TextView TextView_EMoney = (TextView)findViewById(R.id.TextView_EMoney);
+										TextView_EMoney.setText(CASH);
+										TextView TextView_EMoney2 = (TextView)findViewById(R.id.TextView_EMoney2);
+										TextView_EMoney2.setText(COD_AMT);
+										//查詢
+										myDialog.dismiss();
+										TextView TextView_AD = (TextView)findViewById(R.id.TextView_AD);
+										TextView_AD.setText(ADDRESS);
+										TextView TextView_ADMoney = (TextView)findViewById(R.id.TextView_ADMoney);
+										TextView_ADMoney.setText(CASH);
+										TextView TextView_ADMoney2 = (TextView)findViewById(R.id.TextView_ADMoney2);
+										TextView_ADMoney2.setText(COD_AMT);
 
-									myDialog.dismiss();
+									}
+								});
+							}
 
-									TextView TextView_SAddress1 = (TextView) findViewById(R.id.TextView_SAddress1);
-									TextView_SAddress1.setText(ADDRESS);
-									TextView TextView_SMoney = (TextView)findViewById(R.id.TextView_SMoney);
-									TextView_SMoney.setText(CASH);
-									TextView TextView_SMoney2 = (TextView)findViewById(R.id.TextView_SMoney2);
-									TextView_SMoney2.setText(COD_AMT);
-									//配達
-									myDialog.dismiss();
-									TextView TextView_EAddress1 = (TextView)findViewById(R.id.TextView_EAddress1);
-									TextView_EAddress1.setText(ADDRESS);
-									TextView TextView_EMoney = (TextView)findViewById(R.id.TextView_EMoney);
-									TextView_EMoney.setText(CASH);
-									TextView TextView_EMoney2 = (TextView)findViewById(R.id.TextView_EMoney2);
-									TextView_EMoney2.setText(COD_AMT);
-									//查詢
-									myDialog.dismiss();
-									TextView TextView_AD = (TextView)findViewById(R.id.TextView_AD);
-									TextView_AD.setText(ADDRESS);
-									TextView TextView_ADMoney = (TextView)findViewById(R.id.TextView_ADMoney);
-									TextView_ADMoney.setText(CASH);
-									TextView TextView_ADMoney2 = (TextView)findViewById(R.id.TextView_ADMoney2);
-									TextView_ADMoney2.setText(COD_AMT);
-
-								}
-							});
 
 						}
 
@@ -1607,7 +1621,7 @@ public class InOutFrg extends Activity {
 					Log.e("託運單資訊更新",url);
 					Log.e("託運單資訊更新回傳", json);
 
-					if(json.equals("\"True\"")){
+					if(json.equals("\"True\"")&& !ADDRESS.equals("null")){
 						if(CARTYPE == 8 ){
 							//TODO 更新數量
 							objLoginInfo.UpdateInOut("Out");
@@ -1615,6 +1629,7 @@ public class InOutFrg extends Activity {
 								@Override
 								public void run() {
 									//TODO 顯示數量
+
 									TextView TextView_ECount = (TextView) findViewById(R.id.TextView_ECount);
 									TextView_ECount.setText(String.format("%04d", Integer.valueOf(objLoginInfo.Out)) + " / " + String.format("%04d", Integer.valueOf(objLoginInfo.In)));
 								}

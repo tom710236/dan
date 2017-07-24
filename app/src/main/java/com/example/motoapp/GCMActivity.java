@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.security.NoSuchAlgorithmException;
 
 public class GCMActivity extends Activity {
 
@@ -66,6 +69,12 @@ public class GCMActivity extends Activity {
 		if (strStatus.equals("1")) {
 
 			final dbLocations objDB = new dbLocations(GCMActivity.this);
+			String customer_address2 = setEncryp(bundle.getString("customer_address"));
+			String customer_name2 = setEncryp(bundle.getString("customer_name"));
+			String customer_phoneNo2 = setEncryp(bundle.getString("customer_phoneNo"));
+			String recipient_name2 = setEncryp(bundle.getString("recipient_name"));
+			String recipient_address2 = setEncryp(bundle.getString("recipient_address"));
+			String recipient_phoneNo2 = setEncryp(bundle.getString("recipient_phoneNo"));
 
 			Log.e("GCM2","GCM2");
 			Application.strCaseID = bundle.getString("caseID");
@@ -73,10 +82,11 @@ public class GCMActivity extends Activity {
 			Application.objFormInfo = bundle;
 
 			objDB.openDB();
+
 			objDB.InsertTask(new Object[] {
 					bundle.getString("caseID"),
 					bundle.getString("orderID"),
-					bundle.getString("customer_address"),
+					customer_address2,
 					bundle.getString("distance"),
 					bundle.getString("size"),
 					bundle.getString("item_count"),
@@ -84,13 +94,16 @@ public class GCMActivity extends Activity {
 			objDB.DBClose();
 
 			objDB.openDB();
+
+
+
 			objDB.UpdateTask(
-					bundle.getString("customer_address"),
-					bundle.getString("customer_name"),
-					bundle.getString("customer_phoneNo"),
-					bundle.getString("recipient_name"),
-					bundle.getString("recipient_address"),
-					bundle.getString("recipient_phoneNo"),
+					customer_address2,
+					customer_name2,
+					customer_phoneNo2,
+					recipient_name2,
+					recipient_address2,
+					recipient_phoneNo2,
 					bundle.getString("pay_type"),
 					bundle.getString("pay_amount"), "21",
 					bundle.getString("caseID"),
@@ -180,5 +193,34 @@ public class GCMActivity extends Activity {
 			}
 		});
 	}
+	//加密
+	private String setEncryp (String EncrypString){
+		SetAES AES = new SetAES();
+		EncrypMD5 encrypMD5 = new EncrypMD5();
+		EncrypSHA encrypSHA = new EncrypSHA();
+		try {
+			byte[] TextByte = AES.EncryptAES(encrypMD5.eccrypt(),encrypSHA.eccrypt(),EncrypString.getBytes());
+			EncrypString = Base64.encodeToString(TextByte,Base64.DEFAULT);
 
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return EncrypString;
+	}
+	//解密
+	private String setDecrypt (String DecryptString){
+		SetAES AES = new SetAES();
+		EncrypMD5 encrypMD5 = new EncrypMD5();
+		EncrypSHA encrypSHA = new EncrypSHA();
+		Log.e("DecryptString",DecryptString);
+		try {
+			byte[] TextByte2 = AES.DecryptAES(encrypMD5.eccrypt(),encrypSHA.eccrypt(), Base64.decode(DecryptString.getBytes(),Base64.DEFAULT));
+			DecryptString = new String(TextByte2);
+
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+
+		}
+		return DecryptString;
+	}
 }

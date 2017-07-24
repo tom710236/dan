@@ -11,7 +11,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
@@ -60,7 +62,7 @@ import static com.example.motoapp.R.id.EditText_ENO1;
 import static com.example.motoapp.R.id.EditText_SNO1;
 import static com.example.motoapp.R.id.TextView_ECount;
 
-public class InOutFrg extends Activity {
+public class InOutFrg extends Activity implements GestureDetector.OnGestureListener{
 	MainActivity objActivity;
 	ProgressDialog dialog;
 	ListView listView;
@@ -84,6 +86,7 @@ public class InOutFrg extends Activity {
 	private dbLocations objDB;
 	ProgressDialog myDialog;
 	Handler handler;
+	GestureDetector detector;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -93,7 +96,7 @@ public class InOutFrg extends Activity {
 		setContentView(R.layout.frg_inout);
 
 
-
+		detector = new GestureDetector(this,this);
 		context = InOutFrg.this;
 
 		objLoginInfo = new clsLoginInfo(context);
@@ -1232,6 +1235,50 @@ public class InOutFrg extends Activity {
 			}
 
 		}
+	}
+
+	@Override
+	public boolean onDown(MotionEvent e) {
+		return false;
+	}
+
+	@Override
+	public void onShowPress(MotionEvent e) {
+
+	}
+
+	@Override
+	public boolean onSingleTapUp(MotionEvent e) {
+		return false;
+	}
+
+	@Override
+	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+		return false;
+	}
+
+	@Override
+	public void onLongPress(MotionEvent e) {
+
+	}
+
+	@Override
+	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+		float distance = e2.getX()-e1.getX();
+		if(distance>100){
+			Log.e("方向","右邊");
+			Intent intent = new Intent(InOutFrg.this, GetTaskFrg.class);
+			startActivity(intent);
+		}else if(distance<-100){
+			Intent intent = new Intent(InOutFrg.this, Login.class);
+			startActivity(intent);
+			Log.e("方向","左邊");
+		}
+		return false;
+	}
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		return detector.onTouchEvent(event);
 	}
 
 	//貨況 7-配送 8-配達

@@ -21,7 +21,9 @@ import android.os.Message;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -66,7 +68,8 @@ import okhttp3.Response;
 
 import static com.example.motoapp.R.id.button_Save;
 
-public class DataListFrg extends Activity implements SurfaceHolder.Callback {
+public class DataListFrg extends Activity implements GestureDetector.OnGestureListener , SurfaceHolder.Callback {
+
 
 	MainActivity objActivity;
 	ListView listView;
@@ -113,17 +116,18 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 	ImageView imv; //用來參照 ImageView 物件
 	Bitmap bmp;
 	int chickInt = 0;
+    GestureDetector detector;
+	//覆寫掉沒有用的onTouchEvent
 
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d("=====>", "GoogleFragment onCreateView");
-
-
-
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.frg_waiting);
+
+        detector = new GestureDetector(this,this);
 		SysApplication.getInstance().addActivity(this);
 		context = DataListFrg.this;
 
@@ -623,11 +627,12 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 						Application.objForm = json;
 						// cCaseID,cOrderID,cCustAddress,cDistance,cSize,cItemCount,cRequestDate,cType
 
+						String customer_address = setEncryp(json.getString("customer_address"));
 						objDB.openDB();
 						objDB.InsertTask(new Object[] {
 								json.getString("caseID"),
 								json.getString("orderID"),
-								json.getString("customer_address"),
+								customer_address,
 								json.getString("distance"),
 								json.getString("size"),
 								json.getString("item_count"),
@@ -643,6 +648,9 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 					if (status.equals("1")) {
 
 						Log.e("GCM2","GCM2");
+						String orderID = setEncryp(json.getString("orderID"));
+						String customer_address = setEncryp(json.getString("customer_address"));
+						customer_address = setEncryp(customer_address);
 						Application.strCaseID = json.getString("caseID");
 						Application.strObuID = json.getString("obuid");
 						Application.objFormInfo = json;
@@ -650,22 +658,27 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 						objDB.openDB();
 						objDB.InsertTask(new Object[] {
 								json.getString("caseID"),
-								json.getString("orderID"),
-								json.getString("customer_address"),
+								orderID,
+								customer_address,
 								json.getString("distance"),
 								json.getString("size"),
 								json.getString("item_count"),
 								json.getString("request_time"), "0" });
 						objDB.DBClose();
-
 						objDB.openDB();
+						String customer_address2 = setEncryp(json.getString("customer_address"));
+						String customer_name2 = setEncryp(json.getString("customer_name"));
+						String customer_phoneNo2 = setEncryp(json.getString("customer_phoneNo"));
+						String recipient_name2 = setEncryp(json.getString("recipient_name"));
+						String recipient_address2 = setEncryp(json.getString("recipient_address"));
+						String recipient_phoneNo2 = setEncryp(json.getString("recipient_phoneNo"));
 						objDB.UpdateTask(
-								json.getString("customer_address"),
-								json.getString("customer_name"),
-								json.getString("customer_phoneNo"),
-								json.getString("recipient_name"),
-								json.getString("recipient_address"),
-								json.getString("recipient_phoneNo"),
+								customer_address2,
+								customer_name2,
+								customer_phoneNo2,
+								recipient_name2,
+								recipient_address2,
+								recipient_phoneNo2,
 								json.getString("pay_type"),
 								json.getString("pay_amount"), "21",
 								json.getString("caseID"),
@@ -746,7 +759,10 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 						case "4":
 							strType = "取件完成回覆";
 							objDB.openDB();
-							objDB.UpdateTask("", "", "", EditText_CustomName.getText().toString(), editText_Address1.getText().toString(), editText_Phone.getText().toString(), ((ClsDropDownItem)Spinner_PayType.getSelectedItem()).GetID(), EditText_Money.getText().toString(), "03", Application.strCaseID,Application.newstrObuID,Application.cash_on_delivery);
+							String CustomName = setEncryp(EditText_CustomName.getText().toString());
+							String Address1 = setEncryp(editText_Address1.getText().toString());
+							String Phone = setEncryp(editText_Phone.getText().toString());
+							objDB.UpdateTask("", "", "", CustomName, Address1, Phone, ((ClsDropDownItem)Spinner_PayType.getSelectedItem()).GetID(), EditText_Money.getText().toString(), "03", Application.strCaseID,Application.newstrObuID,Application.cash_on_delivery);
 							//呼叫API
 							clsTask.postToAS400(context, EditText_OrderID1.getText().toString(), "01");
 
@@ -1067,7 +1083,51 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 
 		button_DoList.setBackgroundResource(R.drawable.menu01b);
 
+
+
 	}
+
+    @Override
+    public boolean onDown(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        float distance = e2.getX()-e1.getX();
+        if(distance>100){
+            Log.e("方向","右邊");
+            Intent intent = new Intent(DataListFrg.this, InOutFrg.class);
+            startActivity(intent);
+        }else if(distance<-100){
+            Log.e("方向","左邊");
+        }
+        return false;
+    }
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return detector.onTouchEvent(event);
+    }
 
 	/**
 	 * Bind ListView Data
@@ -1346,6 +1406,8 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			objDB.openDB();
 			clsTask objT = objDB.LoadTask(Application.strCaseID);
 			objDB.DBClose();
+			String CustAddress = setDecrypt(objT.CustAddress);
+
 			((TextView) findViewById(R.id.TextView_CarNo))
 					.setText(Application.strCar);
 			((TextView) findViewById(R.id.TextView_DateTime))
@@ -1353,7 +1415,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			((TextView) findViewById(R.id.TextView_OrderID))
 					.setText(objT.OrderID);
 			((TextView) findViewById(R.id.editText_Address))
-					.setText(objT.CustAddress);
+					.setText(CustAddress);
 			((TextView) findViewById(R.id.EditText_Size))
 					.setText(objT.Size);
 			((TextView) findViewById(R.id.EditText_Count))
@@ -1394,7 +1456,9 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			/* 取出資料 */
 			objDB.openDB();
 			clsTask objT = objDB.LoadTask(Application.strCaseID);
-
+			String RecAddress2 = setDecrypt(objT.RecAddress);
+			String RecName2 = setDecrypt(objT.RecName);
+			String RecPhone2 = setDecrypt(objT.RecPhone);
 			objDB.DBClose();
 			((TextView) findViewById(R.id.TextView_CarNo1))
 					.setText(Application.strCar);
@@ -1403,11 +1467,11 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			((EditText) findViewById(R.id.EditText_OrderID1))
 					.setText(objT.OrderID);
 			((EditText) findViewById(R.id.editText_Address1))
-					.setText(objT.RecAddress);
+					.setText(RecAddress2);
 			((EditText) findViewById(R.id.EditText_CustomName))
-					.setText(objT.RecName);
+					.setText(RecName2);
 			((EditText) findViewById(R.id.editText_Phone))
-					.setText(objT.RecPhone);
+					.setText(RecPhone2);
 			((EditText) findViewById(R.id.EditText_Count1))
 					.setText(objT.ItemCount);
 
@@ -1594,6 +1658,10 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 				Log.e("直送","null");
 			}
 			objDB.DBClose();
+			String RecAddress = setDecrypt(objT.RecAddress);
+			String RecName = setDecrypt(objT.RecName);
+			String RecPhone = setDecrypt(objT.RecPhone);
+			String CustName = setDecrypt(objT.CustName);
 			((TextView) findViewById(R.id.TextView_CarNo2))
 					.setText(Application.strCar);
 			((TextView) findViewById(R.id.TextView_DateTime2))
@@ -1601,11 +1669,11 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			((TextView) findViewById(R.id.TextView_OrderID2))
 					.setText(objT.OrderID);
 			((TextView) findViewById(R.id.editText_Address2))
-					.setText(objT.RecAddress);
+					.setText(RecAddress);
 			((TextView) findViewById(R.id.EditText_CustomName2))
-					.setText(objT.RecName);
+					.setText(RecName);
 			((TextView) findViewById(R.id.editText_Phone2))
-					.setText(objT.RecPhone);
+					.setText(RecPhone);
 			((TextView) findViewById(R.id.EditText_Count2))
 					.setText(objT.ItemCount);
 			((TextView) findViewById(R.id.EditText_PayType2)).setText(clsTask
@@ -1613,7 +1681,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			((TextView) findViewById(R.id.EditText_Money2))
 					.setText(objT.PayAmount);
 			((TextView) findViewById(R.id.editText_SendMan))
-					.setText(objT.CustName);
+					.setText(CustName);
 			((TextView) findViewById(R.id.EditText_Size2))
 					.setText(objT.Size);
 			((TextView) findViewById(R.id.EditText_Cash2))
@@ -1667,6 +1735,11 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 				Log.e("直送","null");
 			}
 			objDB.DBClose();
+			String RecAddress = setDecrypt(objT.RecAddress);
+			String RecName = setDecrypt(objT.RecName);
+			String RecPhone = setDecrypt(objT.RecPhone);
+			String CustName = setDecrypt(objT.CustName);
+
 			((TextView) findViewById(R.id.TextView_CarNo2))
 					.setText(Application.strCar);
 			((TextView) findViewById(R.id.TextView_DateTime2))
@@ -1674,11 +1747,11 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			((TextView) findViewById(R.id.TextView_OrderID2))
 					.setText(objT.OrderID);
 			((TextView) findViewById(R.id.editText_Address2))
-					.setText(objT.RecAddress);
+					.setText(RecAddress);
 			((TextView) findViewById(R.id.EditText_CustomName2))
-					.setText(objT.RecName);
+					.setText(RecName);
 			((TextView) findViewById(R.id.editText_Phone2))
-					.setText(objT.RecPhone);
+					.setText(RecPhone);
 			((TextView) findViewById(R.id.EditText_Count2))
 					.setText(objT.ItemCount);
 			((TextView) findViewById(R.id.EditText_PayType2)).setText(clsTask
@@ -1686,7 +1759,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			((TextView) findViewById(R.id.EditText_Money2))
 					.setText(objT.PayAmount);
 			((TextView) findViewById(R.id.editText_SendMan))
-					.setText(objT.CustName);
+					.setText(CustName);
 			((TextView) findViewById(R.id.EditText_Size2))
 					.setText(objT.Size);
 			((TextView) findViewById(R.id.EditText_Cash2))
@@ -1828,6 +1901,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			/* 取出資料 */
 			objDB.openDB();
 			clsTask objT = objDB.LoadTask(Application.strCaseID);
+
 			if(Application.strCaseID!=null){
 				Log.e("直送",Application.strCaseID);
 			}else {
@@ -1921,6 +1995,10 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			}else {
 				Log.e("直送","null");
 			}
+			String RecAddress = setDecrypt(objT.RecAddress);
+			String RecName = setDecrypt(objT.RecName);
+			String RecPhone = setDecrypt(objT.RecPhone);
+			String CustName = setDecrypt(objT.CustName);
 			objDB.DBClose();
 			((TextView) findViewById(R.id.TextView_CarNo2))
 					.setText(Application.strCar);
@@ -1929,11 +2007,11 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			((TextView) findViewById(R.id.TextView_OrderID2))
 					.setText(objT.OrderID);
 			((TextView) findViewById(R.id.editText_Address2))
-					.setText(objT.RecAddress);
+					.setText(RecAddress);
 			((TextView) findViewById(R.id.EditText_CustomName2))
-					.setText(objT.RecName);
+					.setText(RecName);
 			((TextView) findViewById(R.id.editText_Phone2))
-					.setText(objT.RecPhone);
+					.setText(RecPhone);
 			((TextView) findViewById(R.id.EditText_Count2))
 					.setText(objT.ItemCount);
 			((TextView) findViewById(R.id.EditText_PayType2)).setText(clsTask
@@ -1941,7 +2019,7 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 			((TextView) findViewById(R.id.EditText_Money2))
 					.setText(objT.PayAmount);
 			((TextView) findViewById(R.id.editText_SendMan))
-					.setText(objT.CustName);
+					.setText(CustName);
 			((TextView) findViewById(R.id.EditText_Size2))
 					.setText(objT.Size);
 			((TextView) findViewById(R.id.EditText_Cash2))
@@ -2190,7 +2268,9 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		}
 
 	}
-	// 執行緒 - 執行PostUserInfo()方法
+
+
+    // 執行緒 - 執行PostUserInfo()方法
 	class Post extends Thread {
 		@Override
 		public void run() {
@@ -2374,13 +2454,16 @@ public class DataListFrg extends Activity implements SurfaceHolder.Callback {
 		SetAES AES = new SetAES();
 		EncrypMD5 encrypMD5 = new EncrypMD5();
 		EncrypSHA encrypSHA = new EncrypSHA();
-		try {
+		Log.e("DecryptString",DecryptString);
+        try {
 			byte[] TextByte2 = AES.DecryptAES(encrypMD5.eccrypt(),encrypSHA.eccrypt(), Base64.decode(DecryptString.getBytes(),Base64.DEFAULT));
 			DecryptString = new String(TextByte2);
 
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
+
 		}
-		return DecryptString;
+        return DecryptString;
 	}
+
 }

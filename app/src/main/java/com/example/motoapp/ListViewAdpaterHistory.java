@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Handler;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -176,7 +178,10 @@ public class ListViewAdpaterHistory extends BaseAdapter implements AdapterView.O
 
 			objDB.openDB();
 			clsTask objT = objDB.LoadTask(caseID);
-
+			String RecAddress = setDecrypt(objT.RecAddress);
+			String RecName = setDecrypt(objT.RecName);
+			String RecPhone = setDecrypt(objT.RecPhone);
+			String CustName = setDecrypt(objT.CustName);
 			objDB.DBClose();
 			((TextView) objLayout.findViewById(R.id.TextView_CarNo))
 					.setText(Application.strCar);
@@ -185,17 +190,17 @@ public class ListViewAdpaterHistory extends BaseAdapter implements AdapterView.O
 			((TextView) objLayout.findViewById(R.id.TextView_CaseID))
 					.setText(objT.OrderID);
 			((TextView) objLayout.findViewById(R.id.editText_Address))
-					.setText(objT.RecAddress);
+					.setText(RecAddress);
 			((TextView) objLayout.findViewById(R.id.EditText_Size))
 					.setText(objT.Size);
 			((TextView) objLayout.findViewById(R.id.EditText_Count))
 					.setText(objT.ItemCount);
 			((TextView) objLayout.findViewById(R.id.TextView_SendMan))
-					.setText(objT.CustName);
+					.setText(CustName);
 			((TextView) objLayout.findViewById(R.id.TextView_GetMan))
-					.setText(objT.RecName);
+					.setText(RecName);
 			((TextView) objLayout.findViewById(R.id.TextView_TEL))
-					.setText(objT.RecPhone);
+					.setText(RecPhone);
 			((TextView) objLayout.findViewById(R.id.EditText_Money))
 					.setText(objT.PayAmount);
 			((TextView) objLayout.findViewById(R.id.EditText_Cash))
@@ -204,6 +209,33 @@ public class ListViewAdpaterHistory extends BaseAdapter implements AdapterView.O
 		}
 
 	}
+	//加密
+	private String setEncryp (String EncrypString){
+		SetAES AES = new SetAES();
+		EncrypMD5 encrypMD5 = new EncrypMD5();
+		EncrypSHA encrypSHA = new EncrypSHA();
+		try {
+			byte[] TextByte = AES.EncryptAES(encrypMD5.eccrypt(),encrypSHA.eccrypt(),EncrypString.getBytes());
+			EncrypString = Base64.encodeToString(TextByte,Base64.DEFAULT);
 
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return EncrypString;
+	}
+	//解密
+	private String setDecrypt (String DecryptString){
+		SetAES AES = new SetAES();
+		EncrypMD5 encrypMD5 = new EncrypMD5();
+		EncrypSHA encrypSHA = new EncrypSHA();
+		try {
+			byte[] TextByte2 = AES.DecryptAES(encrypMD5.eccrypt(),encrypSHA.eccrypt(), Base64.decode(DecryptString.getBytes(),Base64.DEFAULT));
+			DecryptString = new String(TextByte2);
+
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return DecryptString;
+	}
 
 }

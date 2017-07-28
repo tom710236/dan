@@ -178,15 +178,29 @@ public class ListViewAdpaterHistory extends BaseAdapter implements AdapterView.O
 
 			objDB.openDB();
 			clsTask objT = objDB.LoadTask(caseID);
-			String RecAddress = setDecrypt(objT.RecAddress);
-			String RecName = setDecrypt(objT.RecName);
-			String RecPhone = setDecrypt(objT.RecPhone);
+			String RecAddress = null;
+			String RecPhone = null;
+			String RecName= null;
+
+			RecAddress = setDecrypt(objT.RecAddress);
+			RecPhone = setDecrypt(objT.RecPhone);
+			RecName = setDecrypt(objT.RecName);
+
+
 			String CustName = setDecrypt(objT.CustName);
+			String RequestDate;
+			RequestDate = objT.RequestDate.substring(11,objT.RequestDate.length()-3);
 			objDB.DBClose();
 			((TextView) objLayout.findViewById(R.id.TextView_CarNo))
 					.setText(Application.strCar);
-			((TextView)objLayout.findViewById(R.id.TextView_DateTime))
-					.setText(objT.LastDate);
+			if(objT.LastDate != null && !objT.LastDate.equals("")){
+				((TextView)objLayout.findViewById(R.id.TextView_DateTime))
+						.setText(objT.LastDate);
+			}else {
+				((TextView)objLayout.findViewById(R.id.TextView_DateTime))
+						.setText(RequestDate);
+			}
+
 			((TextView) objLayout.findViewById(R.id.TextView_CaseID))
 					.setText(objT.OrderID);
 			((TextView) objLayout.findViewById(R.id.editText_Address))
@@ -225,15 +239,18 @@ public class ListViewAdpaterHistory extends BaseAdapter implements AdapterView.O
 	}
 	//解密
 	private String setDecrypt (String DecryptString){
-		SetAES AES = new SetAES();
-		EncrypMD5 encrypMD5 = new EncrypMD5();
-		EncrypSHA encrypSHA = new EncrypSHA();
-		try {
-			byte[] TextByte2 = AES.DecryptAES(encrypMD5.eccrypt(),encrypSHA.eccrypt(), Base64.decode(DecryptString.getBytes(),Base64.DEFAULT));
-			DecryptString = new String(TextByte2);
+		if(DecryptString!=null && !DecryptString.equals("")){
+			SetAES AES = new SetAES();
+			EncrypMD5 encrypMD5 = new EncrypMD5();
+			EncrypSHA encrypSHA = new EncrypSHA();
+			try {
+				byte[] TextByte2 = AES.DecryptAES(encrypMD5.eccrypt(),encrypSHA.eccrypt(), Base64.decode(DecryptString.getBytes(),Base64.DEFAULT));
+				DecryptString = new String(TextByte2);
 
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
+			} catch (NoSuchAlgorithmException e) {
+				e.printStackTrace();
+			}
+			return DecryptString;
 		}
 		return DecryptString;
 	}

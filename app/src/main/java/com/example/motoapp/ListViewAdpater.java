@@ -133,15 +133,20 @@ public class ListViewAdpater extends BaseAdapter {
 			objDB.close();
 			if(Application.strCaseID!=null){
 				Log.e("LISTVIEW",Application.strCaseID);
+				Log.e("handler2", String.valueOf(handler));
+
+
 			}else {
 				Log.e("LISTVIEW","null");
 			}
-			if(handler!=null)
-			{
+			if(handler!=null) {
+				Log.e("handler", String.valueOf(handler));
 				Message objMessage = new Message();
 				objMessage.obj = objT.Status;
 				handler.sendMessage(objMessage);
 
+			}else {
+				Log.e("handler3", String.valueOf(handler));
 
 			}
 /*

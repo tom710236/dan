@@ -14,11 +14,13 @@ import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.PictureCallback;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.util.Base64;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -44,6 +46,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -66,6 +69,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static com.example.motoapp.R.id.Spinner_Reasion;
 import static com.example.motoapp.R.id.button_Save;
 
 public class DataListFrg extends Activity implements GestureDetector.OnGestureListener , SurfaceHolder.Callback {
@@ -97,6 +101,8 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 	//Button Button_Print1;
 	Spinner Spinner_PayType;
 	String today;
+	Message msg;
+
 	/*
 	 * 01列表 02接單 03前往取件 04取件完成，拍照上傳 05回站 06直送 07已送達，拍照上傳 08送達失敗，失敗原因
 	 */
@@ -117,6 +123,9 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 	Bitmap bmp;
 	int chickInt = 0;
     GestureDetector detector;
+	float upX,upY,downX,downY ;
+	JSONArray objArray1;
+	List<ClsDropDownItem> objList1;
 	//覆寫掉沒有用的onTouchEvent
 
 
@@ -127,7 +136,15 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.frg_waiting);
 
-        detector = new GestureDetector(this,this);
+
+		PostFail post = new PostFail();
+		post.start();
+
+        //手勢滑動
+        detector = new GestureDetector(DataListFrg.this,this);
+		detector.setIsLongpressEnabled(true);
+
+
 		SysApplication.getInstance().addActivity(this);
 		context = DataListFrg.this;
 
@@ -136,18 +153,18 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 
 		objDB = new dbLocations(context);
 
-		final Intent intent = getIntent();
-		final Bundle bundle = intent.getExtras();
-
-		if(bundle!=null)
-		{
-			type=bundle.getString("type");
+		Intent intent = getIntent();
+		Bundle bag = intent.getExtras();
+		//type = bundle.getString("type",null);
+		Log.e("bundle", String.valueOf(bag));
+		if(bag!=null) {
+			Log.e("bundle1", String.valueOf(bag));
+			type=bag.getString("type",null);
 			display();
-		}else
-		{
-
+		}else {
+			Log.e("bundle2", String.valueOf(bag));
 			setListView();
-
+			Log.e("type2",type);
 		}
 		/*printer = new PPLZPrinter();
 		((PPLZPrinter) this.printer).initPrinter(this);*/
@@ -158,9 +175,11 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 
 		/* 失敗原因 */
 		setDropDownListReason();
-
+		//setSpinner();
 		/*鍵盤事件*///
 		setKeyListener();
+
+
 
 		//員工卡號姓名設定
 		final clsLoginInfo objL = new clsLoginInfo(context);
@@ -238,8 +257,6 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 					}).start();
 
 				}
-
-
 
 					int i = clsHttpPostAPI.from_get_json;
 					Log.e("clsHttpPostAPI", String.valueOf(i));
@@ -533,6 +550,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 				Log.e("today",today);
 				objDB.openDB();
 				objDB.UpdateDate(today, Application.strCaseID);
+
 				objDB.DBClose();
 				//type="070";
 				//display();
@@ -545,6 +563,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 			@Override
 			public void onClick(View v) {
 				new clsHttpPostAPI().CallAPI(context, "API015");
+
 				type = "08";
 				display();
 			}
@@ -556,17 +575,24 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 			@Override
 			public void onClick(View v) {
 
-				Spinner Reason = (Spinner) findViewById(R.id.Spinner_Reasion);
+				Spinner Reason = (Spinner) findViewById(Spinner_Reasion);
+				Log.e("getSelectedItem()", String.valueOf(Reason.getSelectedItem()));
+				if(!String.valueOf(Reason.getSelectedItem()).equals(null)&&String.valueOf(Reason.getSelectedItem())!=null&&Reason.getSelectedItem()!=null){
+					objDB.openDB();
+					objDB.UpdateTaskFailReasonID(
+							((ClsDropDownItem) Reason.getSelectedItem()).GetID(),
+							Application.strCaseID);
+					objDB.UpdateTaskStatus("81", Application.strCaseID);
+					objDB.DBClose();
+					new clsHttpPostAPI().CallAPI(context, "API009");
 
-				objDB.openDB();
-				objDB.UpdateTaskFailReasonID(
-						((ClsDropDownItem) Reason.getSelectedItem()).GetID(),
-						Application.strCaseID);
-				objDB.UpdateTaskStatus("81", Application.strCaseID);
-				objDB.DBClose();
+					setDialog();
+				}else {
+					Toast.makeText(DataListFrg.this, "請返回", Toast.LENGTH_SHORT).show();
+				}
 
-				new clsHttpPostAPI().CallAPI(context, "API009");
-				setDialog();
+
+
 			}
 		});
 		//送達失敗，返回
@@ -720,18 +746,20 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 			@Override
 			public void handleMessage(Message msg) {
 				JSONObject json = (JSONObject) msg.obj;
-				Log.e("handlerTask JSON", String.valueOf(json));
-
-
+				Log.e("handlerTask JSON3", String.valueOf(json));
 				try {
-					String Result = json.getString("Result");
 					runOnUiThread(new Runnable() {
 						@Override
 						public void run() {
 							myDialog.dismiss();
 						}
 					});
+					String Result = json.getString("Result");
+					Log.e("Result", String.valueOf(Result));
+
 					if (Result.equals("1")) {
+						Log.e("handlerTask JSON2", String.valueOf(json));
+						Log.e("json.getString",json.getString("Type"));
 						String strType = "";
 						switch (json.getString("Type")) {
 						case "1":
@@ -759,18 +787,20 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 						case "4":
 							strType = "取件完成回覆";
 							objDB.openDB();
+
 							String CustomName = setEncryp(EditText_CustomName.getText().toString());
 							String Address1 = setEncryp(editText_Address1.getText().toString());
 							String Phone = setEncryp(editText_Phone.getText().toString());
 							objDB.UpdateTask("", "", "", CustomName, Address1, Phone, ((ClsDropDownItem)Spinner_PayType.getSelectedItem()).GetID(), EditText_Money.getText().toString(), "03", Application.strCaseID,Application.newstrObuID,Application.cash_on_delivery);
 							//呼叫API
 							clsTask.postToAS400(context, EditText_OrderID1.getText().toString(), "01");
-
+							objDB.UpdateTaskStatus("040", Application.strCaseID);
 							objDB.DBClose();
 
 							//type = "04";
 							type = "040";
 							display();
+
 							break;
 						case "5":
 							strType = "回站回覆";
@@ -793,7 +823,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 						case "7":
 							strType = "已送達";
 							objDB.openDB();
-							objDB.UpdateTaskStatus("06", Application.strCaseID);
+							objDB.UpdateTaskStatus("070", Application.strCaseID);//06
 							clsTask objTask1 = objDB
 									.LoadTask(Application.strCaseID);
 							/*DataListFrg.this.printer.clearData();
@@ -823,8 +853,10 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 
 							//DataListFrg.this.printer.printF(DataListFrg.this);
 							//type = "07";
+
 							type = "070";
 							display();
+
 							break;
 						case "8":
 							strType = "已送達回報";
@@ -844,12 +876,10 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 							objDB.UpdateTaskStatus("81", Application.strCaseID);
 							objDB.DBClose();
 							
-							Spinner Reason = (Spinner) findViewById(R.id.Spinner_Reasion);
+							Spinner Reason = (Spinner) findViewById(Spinner_Reasion);
 							String strProStatus = String.format("%02d", Integer.valueOf(((ClsDropDownItem) Reason.getSelectedItem()).GetID()));
 							//呼叫API
 							clsTask.postToAS400(context, EditText_OrderID1.getText().toString(), strProStatus);
-							
-
 							new clsHttpPostAPI().CallAPI(context, "API012");
 							break;
 						case "10":
@@ -892,8 +922,8 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 							strType = "取得失敗原因";
 							/* 顯示結果須等post回來的資訊決定，測試先寫 */
 							Spinner Spinner_Reasion = (Spinner) findViewById(R.id.Spinner_Reasion);
-							List<ClsDropDownItem> objList1 = new ArrayList<ClsDropDownItem>();
-							JSONArray objArray1 = json
+							objList1 = new ArrayList<ClsDropDownItem>();
+							objArray1 = json
 									.getJSONArray("DataContents");
 							JSONObject jsonItem1 = null;
 							for (int i = 0; i < objArray1.length(); i++) {
@@ -905,8 +935,11 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 
 							ArrayAdapter<ClsDropDownItem> Adapter1 = new ArrayAdapter<ClsDropDownItem>(
 									context, R.layout.myspinner, objList1);
-							Spinner_Reasion.setAdapter(Adapter1);
-
+							for(int i =0; i < objList1.size() ;i++){
+                                Log.e("objList1", String.valueOf(objList1.get(i)));
+                            }
+                            Spinner_Reasion.setAdapter(Adapter1);
+							Log.e("Adapter", String.valueOf(Adapter1));
 							break;
 						case "13":
 							strType = "續配";
@@ -985,6 +1018,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 			@Override
 			public void handleMessage(Message msg) {
 				type = (String) msg.obj;
+				Log.e("listview", String.valueOf(msg));
 				display();
 
 			}
@@ -996,15 +1030,43 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 				String strType = (String) msg.obj;
 				switch (strType) {
 				case "ListView":
-
 					//myDialog.dismiss();
 					break;
 				}
 			}
 		};
+		//手勢滑動設定
+		ListView listView = (ListView)findViewById(R.id.listView);
+		listView.setOnTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				return detector.onTouchEvent(event);
+			}
+		});
 
-
-
+		/*
+		ScrollView scrollView = (ScrollView)findViewById(R.id.ScrollView_Step1);
+		scrollView.setOnTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				return detector.onTouchEvent(event);
+			}
+		});
+		ScrollView scrollView2 = (ScrollView)findViewById(R.id.ScrollView_Step2);
+		scrollView2.setOnTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				return detector.onTouchEvent(event);
+			}
+		});
+		ScrollView scrollView3 = (ScrollView)findViewById(R.id.ScrollView_Delivery);
+		scrollView3.setOnTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				return detector.onTouchEvent(event);
+			}
+		});
+			*/
 		//上排按鈕設定
 		button_DoList = (Button) findViewById(R.id.button_DoList);
 		button_DoList.setOnClickListener(new OnClickListener() {
@@ -1012,6 +1074,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 			public void onClick(View v) {
 				type = "71";
 				display();
+
 			}
 		});
 
@@ -1019,9 +1082,10 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 		button_IO.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+
 				Intent intent = new Intent(DataListFrg.this, InOutFrg.class);
 				startActivity(intent);
-
+				DataListFrg.this.finish();
 			}
 		});
 
@@ -1029,9 +1093,10 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 		button_GT.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+
 				Intent intent = new Intent(DataListFrg.this, GetTaskFrg.class);
 				startActivity(intent);
-
+				DataListFrg.this.finish();
 			}
 		});
 
@@ -1039,9 +1104,9 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 		button_DoneList.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(DataListFrg.this,
-						HistoryFragment.class);
+				Intent intent = new Intent(DataListFrg.this, HistoryFragment.class);
 				startActivity(intent);
+				DataListFrg.this.finish();
 			}
 		});
 		//登出 關閉service
@@ -1087,47 +1152,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 
 	}
 
-    @Override
-    public boolean onDown(MotionEvent e) {
-        return false;
-    }
 
-    @Override
-    public void onShowPress(MotionEvent e) {
-
-    }
-
-    @Override
-    public boolean onSingleTapUp(MotionEvent e) {
-        return false;
-    }
-
-    @Override
-    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        return false;
-    }
-
-    @Override
-    public void onLongPress(MotionEvent e) {
-
-    }
-
-    @Override
-    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        float distance = e2.getX()-e1.getX();
-        if(distance>100){
-            Log.e("方向","右邊");
-            Intent intent = new Intent(DataListFrg.this, InOutFrg.class);
-            startActivity(intent);
-        }else if(distance<-100){
-            Log.e("方向","左邊");
-        }
-        return false;
-    }
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        return detector.onTouchEvent(event);
-    }
 
 	/**
 	 * Bind ListView Data
@@ -1139,10 +1164,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 			public void run() {
 
 				try {
-
-					
 					objDB.openDB();
-
 					Cursor cursor = objDB
 							.Load1("tblTask",
 									"cStatus<>'71' and cStatus<>'81' and cStatus<>'2' and cStatus<>'3' and cStatus<>'09'",
@@ -1188,6 +1210,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 				}
 			}
 		}).start();
+
 
 		/*
 		 * Message msg = new Message(); msg.obj = "ListView";
@@ -1327,6 +1350,73 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 		});
 		
 	}
+
+
+	public void onStart() {
+		super.onStart();
+		GCMIntentService.handlerGCM = handlerGCM;
+		clsHttpPostAPI.handlerTask = handlerTask;
+		ListViewAdpater.handler = handlerListView;
+	}
+
+
+	//手勢滑動設定 implements GestureDetector.OnGestureListener 產生以下方法
+	@Override
+	public boolean onDown(MotionEvent e) {
+		return false;
+	}
+
+	@Override
+	public void onShowPress(MotionEvent e) {
+
+	}
+
+	@Override
+	public boolean onSingleTapUp(MotionEvent e) {
+		return false;
+	}
+
+	@Override
+	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+		float distance = e2.getX()-e1.getX();
+		Log.e("distance2", String.valueOf(distance));
+		if(distance>100){
+			Log.e("方向2","右邊");
+			Intent intent = new Intent(DataListFrg.this, HistoryFragment.class);
+			startActivity(intent);
+		}else if(distance<-100){
+			Log.e("方向2","左邊");
+		}
+		return false;
+	}
+
+	@Override
+	public void onLongPress(MotionEvent e) {
+
+	}
+
+	@Override
+	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+		float distance = e2.getX()-e1.getX();
+		Log.e("distance", String.valueOf(distance));
+		if(distance>100){
+
+			Log.e("方向","右邊");
+			Intent intent = new Intent(DataListFrg.this, InOutFrg.class);
+			startActivity(intent);
+		}else if(distance<-100){
+			Log.e("方向","左邊");
+
+			Intent intent = new Intent(DataListFrg.this, HistoryFragment.class);
+			startActivity(intent);
+		}
+		return false;
+	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		return detector.onTouchEvent(event);
+	}
 	//畫面處理 點選明細後畫面新增
 	public void display() {
 		if (type.equals("02"))// 接單畫面
@@ -1451,8 +1541,8 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 
 			LinearLayout_ButtonSend.setVisibility(View.VISIBLE);
 			LinearLayout_ButtonPrint1.setVisibility(View.GONE);
-			
-			
+
+
 			/* 取出資料 */
 			objDB.openDB();
 			clsTask objT = objDB.LoadTask(Application.strCaseID);
@@ -1511,13 +1601,13 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 
 			ScrollView_Step2.setVisibility(View.VISIBLE);
 			LinearLayout_Pickup.setVisibility(View.VISIBLE);
-			
+
 			LinearLayout LinearLayout_ButtonSend = (LinearLayout) findViewById(R.id.LinearLayout_ButtonSend);
 			LinearLayout LinearLayout_ButtonPrint1 = (LinearLayout) findViewById(R.id.LinearLayout_ButtonPrint1);
 
 			LinearLayout_ButtonSend.setVisibility(View.GONE);
 			LinearLayout_ButtonPrint1.setVisibility(View.VISIBLE);
-			
+
 			/* 取出資料 */
 			objDB.openDB();
 			clsTask objT = objDB.LoadTask(Application.strCaseID);
@@ -1551,11 +1641,11 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 			String payAmount = editText.getText().toString();
 			Log.e("PayAmount1",payAmount);
 			Application.strPayAmounts = payAmount;
-			
+
 			((EditText) findViewById(R.id.EditText_OrderID1)).requestFocus();
 			Log.e("type",type);
 		}
-		
+
 		if (type.equals("040"))// 拍託運單
 		{
 			/* Panel的顯示隱藏 */
@@ -1648,7 +1738,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 			LinearLayout_OKNG.setVisibility(View.GONE);
 			LinearLayout_SetGoods.setVisibility(View.GONE);
 			LinearLayout_ButtonPrint2.setVisibility(View.GONE);
-			
+
 			/* 取出資料 */
 			objDB.openDB();
 			clsTask objT = objDB.LoadTask(Application.strCaseID);
@@ -1766,7 +1856,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 					.setText(objT.Cash);
 			Log.e("type",type);
 		}
-		
+
 		if (type.equals("07"))// 列印簽收單
 		{
 			/* 設定主框 */
@@ -1954,7 +2044,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 		{
 			LinearLayout LinearLayout_List = (LinearLayout) findViewById(R.id.LinearLayout_list);
 			LinearLayout_List.setVisibility(View.GONE);
-			
+
 			/* 設定主框 */
 			ScrollView ScrollView_Step1 = (ScrollView) findViewById(R.id.ScrollView_Step1);
 
@@ -2075,21 +2165,6 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 		}
 
 	}
-
-	public void onStart() {
-		super.onStart();
-		GCMIntentService.handlerGCM = handlerGCM;
-		clsHttpPostAPI.handlerTask = handlerTask;
-		ListViewAdpater.handler = handlerListView;
-	}
-
-	public void onStop() {
-		super.onStop();
-		GCMIntentService.handlerGCM = null;
-		clsHttpPostAPI.handlerTask = null;
-		ListViewAdpater.handler = null;
-	}
-
 	PictureCallback jpeg = new PictureCallback() {
 
 		public void onPictureTaken(byte[] data, Camera camera) {
@@ -2358,6 +2433,10 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 						runOnUiThread(new Runnable() {
 							@Override
 							public void run() {
+								bmp = null;
+								ImageView imv;
+								imv = (ImageView) findViewById(R.id.imageView);
+								imv.setImageBitmap(bmp);
 								myDialog.dismiss();
 								type = "71";
 								display();
@@ -2437,6 +2516,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 
 	//加密
 	private String setEncryp (String EncrypString){
+
 		SetAES AES = new SetAES();
 		EncrypMD5 encrypMD5 = new EncrypMD5();
 		EncrypSHA encrypSHA = new EncrypSHA();
@@ -2451,19 +2531,93 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 	}
 	//解密
 	private String setDecrypt (String DecryptString){
-		SetAES AES = new SetAES();
-		EncrypMD5 encrypMD5 = new EncrypMD5();
-		EncrypSHA encrypSHA = new EncrypSHA();
-		Log.e("DecryptString",DecryptString);
-        try {
-			byte[] TextByte2 = AES.DecryptAES(encrypMD5.eccrypt(),encrypSHA.eccrypt(), Base64.decode(DecryptString.getBytes(),Base64.DEFAULT));
-			DecryptString = new String(TextByte2);
+        if(DecryptString!=null && !DecryptString.equals("")){
+            SetAES AES = new SetAES();
+            EncrypMD5 encrypMD5 = new EncrypMD5();
+            EncrypSHA encrypSHA = new EncrypSHA();
+            try {
+                byte[] TextByte2 = AES.DecryptAES(encrypMD5.eccrypt(),encrypSHA.eccrypt(), Base64.decode(DecryptString.getBytes(),Base64.DEFAULT));
+                DecryptString = new String(TextByte2);
 
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
 
-		}
+            }
+            return DecryptString;
+        }
         return DecryptString;
+	}
+
+	public void onStop() {
+		super.onStop();
+		//GCMIntentService.handlerGCM = null;
+		//clsHttpPostAPI.handlerTask = null;
+		//ListViewAdpater.handler = null;
+	}
+	class PostFail extends Thread{
+		@Override
+		public void run() {
+			PostFailInfo();
+		}
+
+		private void PostFailInfo() {
+			final OkHttpClient client = new OkHttpClient();
+			String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Get_DispatchFailReason.aspx?key="+Application.strKey;
+			Request request = new Request.Builder()
+					.url(strUrl)
+					.build();
+			Call call = client.newCall(request);
+			call.enqueue(new Callback() {
+				@Override
+				public void onFailure(Call call, IOException e) {
+
+				}
+
+				@RequiresApi(api = Build.VERSION_CODES.KITKAT)
+				@Override
+				public void onResponse(Call call, Response response) throws IOException {
+					String json = response.body().string();
+					Log.e("回傳", json);
+					JSONObject json2 = null;
+					List<ClsDropDownItem> objList = new ArrayList<>();
+					ArrayAdapter<ClsDropDownItem> Adapter2;
+					try {
+						json2 = new JSONObject(json);
+						JSONArray objArray = json2
+								.getJSONArray("DataContents");
+
+						Log.e("json2", String.valueOf(objArray));
+						JSONObject jsonItem1 = null;
+						for(int i = 0 ; i<objArray.length();i++){
+							jsonItem1 = objArray.getJSONObject(i);
+							objList.add(new ClsDropDownItem(jsonItem1
+									.getString("FailReasonID"), jsonItem1
+									.getString("Reason")));
+							Log.e("objArray", String.valueOf(objArray.getJSONObject(i)));
+
+							Adapter2 = new ArrayAdapter<ClsDropDownItem>(
+									context, R.layout.myspinner, objList);
+							final ArrayAdapter<ClsDropDownItem> finalAdapter = Adapter2;
+							runOnUiThread(new Runnable() {
+
+								@Override
+								public void run() {
+									Spinner Spinner_Reasion = (Spinner) findViewById(R.id.Spinner_Reasion);
+									Spinner_Reasion.setAdapter(finalAdapter);
+
+								}
+							});
+
+
+						}
+
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+
+				}
+			});
+		}
 	}
 
 }

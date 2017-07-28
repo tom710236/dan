@@ -205,7 +205,7 @@ public class Delay extends Service implements LocationListener {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     String json = response.body().string();
-                    Log.e("URL",url1);
+                    //Log.e("URL",url1);
                     //Log.e("回傳",json);
 
                 }

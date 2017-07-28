@@ -148,6 +148,10 @@ public class clsTask {
 			return "拒絕";
 		if(pStrStatus.equals("AA"))
 			return "案件編號不存在";
+		if(pStrStatus.equals("040"))
+			return "拍託運單";
+		if(pStrStatus.equals("070"))
+			return "拍簽收單";
 		return "";
 	}
 

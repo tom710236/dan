@@ -18,11 +18,12 @@
     </LinearLayout>
 
     <ScrollView
+        android:id="@+id/ScrollViewT"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@+id/LinearLayout_h"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/LinearLayout_h">
 
         <LinearLayout
             android:layout_width="match_parent"

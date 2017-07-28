@@ -1,4 +1,4 @@
-#Mon Jul 24 19:38:09 CST 2017
+#Fri Jul 28 15:30:07 CST 2017
 file.2=C\:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\okhttp-3.6.0_cbd188e6112cb7fba81e3c8b5224a9b228aa5438\\classes.dex
 base.2=C\:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\okhttp-3.6.0_cbd188e6112cb7fba81e3c8b5224a9b228aa5438
 file.1=C\:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\2\\json_141100cb246c7118e4f667256c5cb6670ecffa43\\classes.dex

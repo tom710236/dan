@@ -69,7 +69,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 	Context context;
 	View view;
 	clsLoginInfo objLoginInfo;
-	int CARTYPE;
+	int CARTYPE; //7配送 8配達
 	int intType;
 	EditText EditText_Val;
 	Button button_DoList;
@@ -78,6 +78,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 	Button button_DoneList;
 	Handler handlerGCM;
 	Handler handlerTask;
+	Handler handlerListView;
 	String BasicUrl;
 	String type7="73",type8="02",typeNUM;
 	String onClickNum;
@@ -97,6 +98,8 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 
 
 		detector = new GestureDetector(this,this);
+		//detector.setIsLongpressEnabled(true);
+
 		context = InOutFrg.this;
 
 		objLoginInfo = new clsLoginInfo(context);
@@ -130,6 +133,9 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 		//SetListView(1);
 		ScrollView ScrollViewT = (ScrollView) findViewById(R.id.ScrollViewT);
 		LinearLayout LinearLayout_doType = (LinearLayout) findViewById(R.id.LinearLayout_doType);
+
+
+
 
 		LinearLayout LinearLayout_Start2 = (LinearLayout)
 				findViewById(R.id.LinearLayout_Start2);
@@ -238,7 +244,6 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 						post.run();
 						setDialog();
 						//資訊更新API
-
 						getBrushDate();
 						getUPDate();
 						PostCondition_UP post2 = new PostCondition_UP();
@@ -654,6 +659,27 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 				return true;
 			}
 		});
+
+		handlerTask = new Handler() {
+			@Override
+			public void handleMessage(Message msg) {
+				JSONObject json = (JSONObject) msg.obj;
+
+				try {
+					String Result = json.getString("Result");
+
+					//if (Result.equals("1")) {
+					TextView TextView_SAddress1 = (TextView) findViewById(R.id.TextView_SAddress1);
+					TextView_SAddress1.setText(json.getString("Address"));
+					TextView textViewAD = (TextView) findViewById(R.id.TextView_AD);
+					textViewAD.setText(json.getString("Address"));
+					//}
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		};
 		//查詢鍵
 		Button button_Search = (Button) findViewById(R.id.button_Search);
 		button_Search.setOnClickListener(new OnClickListener() {
@@ -673,12 +699,15 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 			}
 		});
 
+		//上排按鈕設定
 		button_DoList = (Button) findViewById(R.id.button_DoList);
 		button_DoList.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+
 				Intent intent = new Intent(InOutFrg.this, DataListFrg.class);
 				startActivity(intent);
+				InOutFrg.this.finish();
 			}
 		});
 
@@ -686,8 +715,9 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 		button_IO.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
-
+				Intent intent = new Intent(InOutFrg.this,InOutFrg.class);
+				startActivity(intent);
+				InOutFrg.this.finish();
 			}
 		});
 
@@ -695,9 +725,10 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 		button_GT.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+
 				Intent intent = new Intent(InOutFrg.this, GetTaskFrg.class);
 				startActivity(intent);
-
+				InOutFrg.this.finish();
 			}
 		});
 
@@ -705,10 +736,24 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 		button_DoneList.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+
 				Intent intent = new Intent(InOutFrg.this, HistoryFragment.class);
 				startActivity(intent);
+				InOutFrg.this.finish();
 			}
 		});
+
+		//手勢 滑動設定
+
+		ScrollView ScrollViewT2 = (ScrollView) findViewById(R.id.ScrollViewT);
+		ScrollViewT2.setOnTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				return detector.onTouchEvent(event);
+			}
+		});
+
+
 		//登出 關閉SERVICE
 		Button button_Logout = (Button) findViewById(R.id.Button_Logout);
 		button_Logout.setOnClickListener(new OnClickListener() {
@@ -744,39 +789,21 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 		button_IO.setBackgroundResource(R.drawable.menu02b);
 		//return view;
 
-		handlerTask = new Handler() {
-			@Override
-			public void handleMessage(Message msg) {
-				JSONObject json = (JSONObject) msg.obj;
 
-				try {
-					String Result = json.getString("Result");
-
-					//if (Result.equals("1")) {
-					TextView TextView_SAddress1 = (TextView) findViewById(R.id.TextView_SAddress1);
-					TextView_SAddress1.setText(json.getString("Address"));
-					TextView textViewAD = (TextView) findViewById(R.id.TextView_AD);
-					textViewAD.setText(json.getString("Address"));
-					//}
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		};
 
 	}
 
 	public void onStart() {
 		super.onStart();
-		clsHttpPostAPI.handlerInOut = handlerTask;
 		GCMIntentService.handlerGCM = handlerGCM;
+		clsHttpPostAPI.handlerTask = handlerTask;
+		ListViewAdpater.handler = handlerListView;
 	}
 
 	public void onStop() {
 		super.onStop();
-		clsHttpPostAPI.handlerInOut = null;
-		GCMIntentService.handlerGCM = null;
+		//clsHttpPostAPI.handlerInOut = null;
+		//GCMIntentService.handlerGCM = null;
 	}
 
 	private void SetSearch() {
@@ -1254,6 +1281,17 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 
 	@Override
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+		float distance = e2.getX()-e1.getX();
+		if(distance>50){
+			//Intent intent = new Intent(InOutFrg.this, GetTaskFrg.class); 這樣設定才可以點明細 原因不明
+			Log.e("方向1","右邊");
+			Intent intent = new Intent(InOutFrg.this, GetTaskFrg.class);
+			startActivity(intent);
+		}else if(distance<-50){
+			Intent intent = new Intent(InOutFrg.this,GetTaskFrg.class);
+			startActivity(intent);
+			Log.e("方向1","左邊");
+		}
 		return false;
 	}
 
@@ -1265,14 +1303,14 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 	@Override
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 		float distance = e2.getX()-e1.getX();
-		if(distance>100){
-			Log.e("方向","右邊");
+		if(distance>50){
+			Log.e("方向2","右邊");
 			Intent intent = new Intent(InOutFrg.this, GetTaskFrg.class);
 			startActivity(intent);
-		}else if(distance<-100){
-			Intent intent = new Intent(InOutFrg.this, Login.class);
+		}else if(distance<-50){
+			Intent intent = new Intent(InOutFrg.this, DataListFrg.class);
 			startActivity(intent);
-			Log.e("方向","左邊");
+			Log.e("方向2","左邊");
 		}
 		return false;
 	}
@@ -1667,8 +1705,8 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 					String json = response.body().string();
 					Log.e("託運單資訊更新",url);
 					Log.e("託運單資訊更新回傳", json);
-
-					if(json.equals("\"True\"")&& !ADDRESS.equals("null")){
+					Log.e("CARTYPE", String.valueOf(CARTYPE));
+					if(json.equals("\"True\"")){
 						if(CARTYPE == 8 ){
 							//TODO 更新數量
 							objLoginInfo.UpdateInOut("Out");
@@ -1682,6 +1720,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 								}
 							});
 						}
+
 						if(CARTYPE == 7 ){
 							//TODO 更新數量
 							objLoginInfo.UpdateInOut("In");

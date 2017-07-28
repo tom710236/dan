@@ -10,31 +10,35 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONObject;
 
-public class GetTaskFrg extends Activity {
+public class GetTaskFrg extends Activity implements GestureDetector.OnGestureListener{
 
 	Context context;
 	View view;
 	Handler handlerTask;
+	Handler handlerListView;
 	EditText objEdit;
 	private dbLocations objDB;
 	clsLoginInfo objLoginInfo;
-	
+	Handler handlerGCM;
 	Button button_DoList;
 	Button button_IO;
 	Button button_GT;
 	Button button_DoneList;
-
+	GestureDetector detector;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -45,6 +49,19 @@ public class GetTaskFrg extends Activity {
 
 
 
+		detector = new GestureDetector(this,this);
+		detector.setIsLongpressEnabled(true);
+
+
+		ScrollView ScrollViewT = (ScrollView) findViewById(R.id.ScrollViewT);
+		//滑動設定
+		ScrollViewT.setOnTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				return detector.onTouchEvent(event);
+			}
+		});
+
 		context = GetTaskFrg.this;
 
 		objLoginInfo = new clsLoginInfo(context);
@@ -53,11 +70,14 @@ public class GetTaskFrg extends Activity {
 		SysApplication.getInstance().addActivity(this);
 		objEdit = (EditText)findViewById(R.id.TextView_OrderNo3);
 		//objEdit.setText("40000200023");
-		
+
+		//上排按鈕
 		button_DoList = (Button)findViewById(R.id.button_DoList);
 		button_DoList.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				Intent intent2 = new Intent(GetTaskFrg.this, HistoryFragment.class);
+				startActivity(intent2);
 				Intent intent = new Intent(GetTaskFrg.this, DataListFrg.class);
 			    startActivity(intent);
 			}
@@ -67,6 +87,8 @@ public class GetTaskFrg extends Activity {
 		button_IO.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				Intent intent2 = new Intent(GetTaskFrg.this, HistoryFragment.class);
+				startActivity(intent2);
 				Intent intent = new Intent(GetTaskFrg.this, InOutFrg.class);
 			    startActivity(intent);
 			    
@@ -77,7 +99,10 @@ public class GetTaskFrg extends Activity {
 		button_GT.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
+				Intent intent2 = new Intent(GetTaskFrg.this, HistoryFragment.class);
+				startActivity(intent2);
+				Intent intent = new Intent(GetTaskFrg.this, GetTaskFrg.class);
+				startActivity(intent);
 			}
 		});
 		
@@ -85,6 +110,7 @@ public class GetTaskFrg extends Activity {
 		button_DoneList.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+
 				Intent intent = new Intent(GetTaskFrg.this, HistoryFragment.class);
 			    startActivity(intent);
 			}
@@ -196,11 +222,13 @@ public class GetTaskFrg extends Activity {
 	public void onStart() {
 		super.onStart();
 		clsHttpPostAPI.handlerGetTask = handlerTask;
+		GCMIntentService.handlerGCM = handlerGCM;
+		ListViewAdpater.handler = handlerListView;
 	}
 
 	public void onStop() {
 		super.onStop();
-		clsHttpPostAPI.handlerGetTask = null;
+		//clsHttpPostAPI.handlerGetTask = null;
 	}
 	
 	@Override
@@ -270,5 +298,59 @@ public class GetTaskFrg extends Activity {
 			}
 
 		}
+	}
+
+	@Override
+	public boolean onDown(MotionEvent e) {
+		return false;
+	}
+
+	@Override
+	public void onShowPress(MotionEvent e) {
+
+	}
+
+	@Override
+	public boolean onSingleTapUp(MotionEvent e) {
+		return false;
+	}
+
+	@Override
+	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+		float distance = e2.getX()-e1.getX();
+		if(distance>50){
+			Log.e("方向","右邊");
+			Intent intent = new Intent(GetTaskFrg.this, HistoryFragment.class);
+			startActivity(intent);
+		}else if(distance<-50){
+			Intent intent = new Intent(GetTaskFrg.this, InOutFrg.class);
+			startActivity(intent);
+			Log.e("方向","左邊");
+		}
+		return false;
+	}
+
+	@Override
+	public void onLongPress(MotionEvent e) {
+
+	}
+
+	@Override
+	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+		float distance = e2.getX()-e1.getX();
+		if(distance>50){
+			Log.e("方向","右邊");
+			Intent intent = new Intent(GetTaskFrg.this, HistoryFragment.class);
+			startActivity(intent);
+		}else if(distance<-50){
+			Intent intent = new Intent(GetTaskFrg.this, InOutFrg.class);
+			startActivity(intent);
+			Log.e("方向","左邊");
+		}
+		return false;
+	}
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		return detector.onTouchEvent(event);
 	}
 }

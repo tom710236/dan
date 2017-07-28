@@ -13,7 +13,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
-import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -30,7 +29,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
@@ -179,6 +177,14 @@ public class Login extends Activity {
 
 		}
 
+		if(Application.datatime.equals("0100")){
+			EditText_Account.setText("");
+			//EditText_Password.setText("");
+			EditText_Car.setText("");
+			//EditText_Area.setText("");
+			EditText_Account.requestFocus();
+			EditText_No.setText("");
+		}
 		btnLogin = (Button)findViewById(R.id.button_Login);
 		btnLogin.setOnClickListener(new OnClickListener() {
 			@Override

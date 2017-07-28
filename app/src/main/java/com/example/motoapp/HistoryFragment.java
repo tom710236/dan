@@ -8,7 +8,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -22,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class HistoryFragment extends Activity {
+public class HistoryFragment extends Activity implements GestureDetector.OnGestureListener{
 
 	private String value = "";
 	ListView listView;
@@ -33,8 +37,10 @@ public class HistoryFragment extends Activity {
 	Button button_IO;
 	Button button_GT;
 	Button button_DoneList;
-
-
+	GestureDetector detector;
+	Handler handlerGCM;
+	Handler handlerTask;
+	Handler handlerListView;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -46,13 +52,38 @@ public class HistoryFragment extends Activity {
 		objLoginInfo = new clsLoginInfo(context);
 		objLoginInfo.Load();
 
+		detector = new GestureDetector(this,this);
+		detector.setIsLongpressEnabled(true);
+
+		LinearLayout linearLayout = (LinearLayout)this.findViewById(R.id.linear);
+		linearLayout.setOnTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				return detector.onTouchEvent(event);
+			}
+		});
+
 		dbLocations objDB = new dbLocations(HistoryFragment.this);
 		objDB.openDB();
 		SysApplication.getInstance().addActivity(this);
 		Cursor cursor= objDB.Load1("tblTask", "cStatus='71' or cStatus='81' or cStatus='2' or cStatus='3' or cStatus='09'", "cRequestDate desc", "");
 		List rowitem = new ArrayList();
+		//設定手勢滑動
 		listView = (ListView) findViewById(R.id.listView);
+		listView.setOnTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				return detector.onTouchEvent(event);
+			}
+		});
 
+		ScrollView scrollView = (ScrollView)findViewById(R.id.ScrollView_H1);
+		scrollView.setOnTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				return detector.onTouchEvent(event);
+			}
+		});
 		//員工卡號姓名設定
 		clsLoginInfo objL = new clsLoginInfo(context);
 		objL.Load();
@@ -68,8 +99,20 @@ public class HistoryFragment extends Activity {
 				String strOrderID = cursor.getString(cursor.getColumnIndex("cOrderID"));
 				String strCaseID = cursor.getString(cursor.getColumnIndex("cCaseID"));
 				String strStatus = cursor.getString(cursor.getColumnIndex("cStatus"));
+				String strDate = cursor.getString(cursor.getColumnIndex("cLastDate"));
+				String oldStrDate = cursor.getString(cursor.getColumnIndex("cRequestDate"));
+				String oldStrDate2 = oldStrDate.substring(11,oldStrDate.length()-3);
 
-				rowitem.add(new HistoryItem(strOrderID,clsTask.GetStatus(strStatus),cursor.getString(cursor.getColumnIndex("cLastDate")))); //時間
+
+				if(strDate != null && !strDate.equals("")){
+					rowitem.add(new HistoryItem(strOrderID,clsTask.GetStatus(strStatus),cursor.getString(cursor.getColumnIndex("cLastDate")))); //時間
+				}else{
+					rowitem.add(new HistoryItem(strOrderID,clsTask.GetStatus(strStatus),oldStrDate2)); //時間
+					Log.e("oldStrDate2",oldStrDate2);
+				}
+
+
+
 
 				if(cursor.isLast())
 					break;
@@ -118,6 +161,8 @@ public class HistoryFragment extends Activity {
 		ScrollView_H1.setVisibility(View.GONE);
 
 
+
+
 		/* 取出資料 */
 		/*
 		objDB.openDB();
@@ -153,6 +198,7 @@ public class HistoryFragment extends Activity {
 			}
 		});
 
+		//上排按鈕
 		button_DoList = (Button)findViewById(R.id.button_DoList);
 		button_DoList.setOnClickListener(new OnClickListener() {
 			@Override
@@ -166,6 +212,8 @@ public class HistoryFragment extends Activity {
 		button_IO.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				Intent intent2 = new Intent(HistoryFragment.this, InOutFrg.class);
+				startActivity(intent2);
 				Intent intent = new Intent(HistoryFragment.this, InOutFrg.class);
 				startActivity(intent);
 
@@ -176,6 +224,8 @@ public class HistoryFragment extends Activity {
 		button_GT.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				Intent intent2 = new Intent(HistoryFragment.this, InOutFrg.class);
+				startActivity(intent2);
 				Intent intent = new Intent(HistoryFragment.this, GetTaskFrg.class);
 				startActivity(intent);
 
@@ -186,6 +236,8 @@ public class HistoryFragment extends Activity {
 		button_DoneList.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				Intent intent2 = new Intent(HistoryFragment.this, InOutFrg.class);
+				startActivity(intent2);
 				Intent intent = new Intent(HistoryFragment.this, HistoryFragment.class);
 				startActivity(intent);
 			}
@@ -258,4 +310,69 @@ public class HistoryFragment extends Activity {
 		return super.onKeyDown(keyCode, event);
 	}
 
+	public void onStart() {
+		super.onStart();
+		clsHttpPostAPI.handlerGetTask = handlerTask;
+		GCMIntentService.handlerGCM = handlerGCM;
+		ListViewAdpater.handler = handlerListView;
+	}
+
+	public void onStop() {
+		super.onStop();
+		//clsHttpPostAPI.handlerGetTask = null;
+	}
+
+	@Override
+	public boolean onDown(MotionEvent e) {
+		return false;
+	}
+
+	@Override
+	public void onShowPress(MotionEvent e) {
+
+	}
+
+	@Override
+	public boolean onSingleTapUp(MotionEvent e) {
+		return false;
+	}
+
+	@Override
+	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+		float distance = e2.getX()-e1.getX();
+		if(distance>100){
+			Log.e("方向1","右邊");
+			Intent intent = new Intent(HistoryFragment.this, HistoryFragment.class);
+			startActivity(intent);
+		}else if(distance<-100){
+			Intent intent = new Intent(HistoryFragment.this, GetTaskFrg.class);
+			startActivity(intent);
+			Log.e("方向1","左邊");
+		}
+		return false;
+	}
+
+	@Override
+	public void onLongPress(MotionEvent e) {
+
+	}
+
+	@Override
+	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+		float distance = e2.getX()-e1.getX();
+		if(distance>100){
+			Log.e("方向2","右邊");
+			Intent intent = new Intent(HistoryFragment.this, DataListFrg.class);
+			startActivity(intent);
+		}else if(distance<-100){
+			Intent intent = new Intent(HistoryFragment.this, GetTaskFrg.class);
+			startActivity(intent);
+			Log.e("方向2","左邊");
+		}
+		return false;
+	}
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		return detector.onTouchEvent(event);
+	}
 }

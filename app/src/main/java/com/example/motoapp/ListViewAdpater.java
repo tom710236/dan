@@ -144,6 +144,7 @@ public class ListViewAdpater extends BaseAdapter {
 				Message objMessage = new Message();
 				objMessage.obj = objT.Status;
 				handler.sendMessage(objMessage);
+				Log.e("objMessage.obj", String.valueOf(objMessage.obj));
 
 			}else {
 				Log.e("handler3", String.valueOf(handler));

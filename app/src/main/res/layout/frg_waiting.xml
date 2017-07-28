@@ -381,8 +381,8 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="2"
-                            android:inputType="number"
                             android:imeOptions="actionDone"
+                            android:inputType="number"
                             android:text="A123456789"
                             android:textSize="16sp">
 
@@ -480,8 +480,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="3"
                             android:ems="10"
-                            android:inputType="number"
                             android:imeOptions="actionDone"
+                            android:inputType="number"
                             android:text="3"
                             android:textSize="16sp" />
 
@@ -528,8 +528,8 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1.5"
-                            android:inputType="number"
                             android:imeOptions="actionDone"
+                            android:inputType="number"
                             android:text="0"
                             android:textColor="@android:color/holo_red_light"
                             android:textSize="18sp"
@@ -582,8 +582,8 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1.5"
-                            android:inputType="number"
                             android:imeOptions="actionDone"
+                            android:inputType="number"
                             android:text="0"
                             android:textColor="@android:color/holo_red_light"
                             android:textSize="18sp"
@@ -1066,7 +1066,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_weight="1"
-                            android:text="下一步" />
+                            android:text="下一步"
+                            android:visibility="gone" />
                     </LinearLayout>
 
                     <LinearLayout

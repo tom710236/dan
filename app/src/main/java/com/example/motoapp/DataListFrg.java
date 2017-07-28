@@ -140,6 +140,8 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 		PostFail post = new PostFail();
 		post.start();
 
+		PostStation post2 = new PostStation();
+		post2.start();
         //手勢滑動
         detector = new GestureDetector(DataListFrg.this,this);
 		detector.setIsLongpressEnabled(true);
@@ -175,7 +177,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 
 		/* 失敗原因 */
 		setDropDownListReason();
-		//setSpinner();
+
 		/*鍵盤事件*///
 		setKeyListener();
 
@@ -885,6 +887,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 						case "10":
 							strType = "取得站所資訊";
 							/* 集貨 */
+
 							Spinner Spinner_SetGoods = (Spinner) findViewById(R.id.Spinner_SetGoods);
 							List<ClsDropDownStation> objList = new ArrayList<ClsDropDownStation>();
 							JSONArray objArray = json
@@ -900,10 +903,11 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 
 							ArrayAdapter<ClsDropDownStation> Adapter = new ArrayAdapter<ClsDropDownStation>(
 									context, R.layout.myspinner, objList);
-
+							objDB.openDB();
+							objDB.UpdateTaskStatus("05", Application.strCaseID);
+							objDB.DBClose();
 							Spinner_SetGoods.setAdapter(Adapter);
 							type = "05";
-
 							display();
 
 							break;
@@ -921,6 +925,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 						case "12":
 							strType = "取得失敗原因";
 							/* 顯示結果須等post回來的資訊決定，測試先寫 */
+							/*
 							Spinner Spinner_Reasion = (Spinner) findViewById(R.id.Spinner_Reasion);
 							objList1 = new ArrayList<ClsDropDownItem>();
 							objArray1 = json
@@ -940,7 +945,10 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
                             }
                             Spinner_Reasion.setAdapter(Adapter1);
 							Log.e("Adapter", String.valueOf(Adapter1));
+							*/
+
 							break;
+
 						case "13":
 							strType = "續配";
 							objDB.openDB();
@@ -2007,6 +2015,9 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 
 		if (type.equals("05"))// 回集貨站
 		{
+
+			LinearLayout LinearLayout_List = (LinearLayout) findViewById(R.id.LinearLayout_list);
+			LinearLayout_List.setVisibility(View.GONE);
 			/* 設定主框 */
 			ScrollView ScrollView_Step1 = (ScrollView) findViewById(R.id.ScrollView_Step1);
 
@@ -2037,7 +2048,42 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 			LinearLayout_OKNG.setVisibility(View.GONE);
 			LinearLayout_SetGoods.setVisibility(View.VISIBLE);
 			LinearLayout_SG.setVisibility(View.GONE);
-			Log.e("type",type);
+			Log.e("type5",type);
+
+			/* 取出資料 */
+			objDB.openDB();
+			clsTask objT = objDB.LoadTask(Application.strCaseID);
+			objDB.DBClose();
+			String RecAddress = setDecrypt(objT.RecAddress);
+			String RecName = setDecrypt(objT.RecName);
+			String RecPhone = setDecrypt(objT.RecPhone);
+			String CustName = setDecrypt(objT.CustName);
+
+			((TextView) findViewById(R.id.TextView_CarNo2))
+					.setText(Application.strCar);
+			((TextView) findViewById(R.id.TextView_DateTime2))
+					.setText(objT.RequestDate);
+			((TextView) findViewById(R.id.TextView_OrderID2))
+					.setText(objT.OrderID);
+			((TextView) findViewById(R.id.editText_Address2))
+					.setText(RecAddress);
+			((TextView) findViewById(R.id.EditText_CustomName2))
+					.setText(RecName);
+			((TextView) findViewById(R.id.editText_Phone2))
+					.setText(RecPhone);
+			((TextView) findViewById(R.id.EditText_Count2))
+					.setText(objT.ItemCount);
+			((TextView) findViewById(R.id.EditText_PayType2)).setText(clsTask
+					.GetPayType(objT.PayType));
+			((TextView) findViewById(R.id.EditText_Money2))
+					.setText(objT.PayAmount);
+			((TextView) findViewById(R.id.editText_SendMan))
+					.setText(CustName);
+			((TextView) findViewById(R.id.EditText_Size2))
+					.setText(objT.Size);
+			((TextView) findViewById(R.id.EditText_Cash2))
+					.setText(objT.Cash);
+
 		}
 
 		if (type.equals("51"))// 續配 & 卸集貨
@@ -2610,6 +2656,61 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 
 
 						}
+
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+
+				}
+			});
+		}
+	}
+	class PostStation extends Thread{
+		@Override
+		public void run() {
+			PostFailInfo();
+		}
+
+		private void PostFailInfo() {
+			final OkHttpClient client = new OkHttpClient();
+			final String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Get_StationList.aspx?Status=5&obuID="+"&key="+Application.strKey;
+			Request request = new Request.Builder()
+					.url(strUrl)
+					.build();
+			Call call = client.newCall(request);
+			call.enqueue(new Callback() {
+				@Override
+				public void onFailure(Call call, IOException e) {
+
+				}
+
+				@RequiresApi(api = Build.VERSION_CODES.KITKAT)
+				@Override
+				public void onResponse(Call call, Response response) throws IOException {
+					Log.e("站",strUrl);
+					String json = response.body().string();
+					Log.e("回傳", json);
+					JSONObject json2 = null;
+					Spinner Spinner_SetGoods = (Spinner) findViewById(R.id.Spinner_SetGoods);
+					List<ClsDropDownStation> objList = new ArrayList<ClsDropDownStation>();
+					try {
+						json2 = new JSONObject(json);
+						JSONArray objArray = json2
+								.getJSONArray("DataContents");
+						JSONObject jsonItem2 = null;
+
+						for(int i = 0 ; i<objArray.length();i++){
+							jsonItem2 = objArray.getJSONObject(i);
+							objList.add(new ClsDropDownStation(
+									jsonItem2.getString("StationID"),
+									jsonItem2.getString("StationName"),
+									jsonItem2.getString("StationType")));
+						}
+
+						ArrayAdapter<ClsDropDownStation> Adapter = new ArrayAdapter<ClsDropDownStation>(
+								context, R.layout.myspinner, objList);
+
+						Spinner_SetGoods.setAdapter(Adapter);
 
 					} catch (JSONException e) {
 						e.printStackTrace();

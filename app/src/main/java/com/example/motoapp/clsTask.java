@@ -152,6 +152,8 @@ public class clsTask {
 			return "拍託運單";
 		if(pStrStatus.equals("070"))
 			return "拍簽收單";
+		if(pStrStatus.equals("05"))
+			return "回站";
 		return "";
 	}
 

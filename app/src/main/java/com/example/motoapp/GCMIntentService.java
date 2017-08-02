@@ -92,7 +92,6 @@ public class GCMIntentService extends GCMBaseIntentService {
 		// 接收 GCM server 傳來的訊息
 		Bundle bData = intent.getExtras();
 
-
 		PowerManager pm=(PowerManager) getSystemService(Context.POWER_SERVICE);
 		//获取电源管理器对象
 		PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.SCREEN_DIM_WAKE_LOCK, "bright");
@@ -117,7 +116,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 			String message = getString(R.string.gcm_message);
 			displayMessage(context, message);
 			generateNotification(context, intent);
-
+			Log.e("gcm訊息", String.valueOf(bData));
 
 
 		} catch (Exception e1) {

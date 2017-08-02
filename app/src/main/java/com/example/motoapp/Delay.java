@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
@@ -68,7 +69,7 @@ public class Delay extends Service implements LocationListener {
             @Override
             public void run() {
 
-                mgr = (LocationManager) getSystemService(LOCATION_SERVICE);
+                mgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                 String best = mgr.getBestProvider(new Criteria(), true);
                 if (best != null) {
                     /*
@@ -140,8 +141,8 @@ public class Delay extends Service implements LocationListener {
         //Log.e("today", today);
         lon = String.valueOf(location.getLongitude());
         lat = String.valueOf(location.getLatitude());
-        //Toast.makeText(Delay.this, str + today, Toast.LENGTH_SHORT).show();
 
+        Log.e("定位",str);
         Toast.makeText(Delay.this, "已成功定位", Toast.LENGTH_SHORT).show();
     }
 
@@ -168,6 +169,18 @@ public class Delay extends Service implements LocationListener {
         SimpleDateFormat df2 = new SimpleDateFormat(datetime);
         today = df.format(mCal.getTime());
         datatime = df2.format(mCal.getTime());
+    }
+    @Override
+    public void onStart(Intent intent, int startId) {
+        // TODO Auto-generated method stub
+        super.onStart(intent, startId);
+        PowerManager pm;
+        PowerManager.WakeLock wakeLock;
+        //创建PowerManager对象
+        pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        //保持cpu一直运行，不管屏幕是否黑屏
+        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "CPUKeepRunning");
+        wakeLock.acquire();
     }
 
     class Get extends Thread {

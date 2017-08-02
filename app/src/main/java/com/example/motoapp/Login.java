@@ -185,6 +185,8 @@ public class Login extends Activity {
 			EditText_Account.requestFocus();
 			EditText_No.setText("");
 		}
+
+
 		btnLogin = (Button)findViewById(R.id.button_Login);
 		btnLogin.setOnClickListener(new OnClickListener() {
 			@Override

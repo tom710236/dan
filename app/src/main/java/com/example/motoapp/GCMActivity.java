@@ -90,7 +90,8 @@ public class GCMActivity extends Activity {
 					bundle.getString("distance"),
 					bundle.getString("size"),
 					bundle.getString("item_count"),
-					bundle.getString("request_time"), "0" });
+					bundle.getString("request_time"),
+					"0" });
 			objDB.DBClose();
 
 			objDB.openDB();

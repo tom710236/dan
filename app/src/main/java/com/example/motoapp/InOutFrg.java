@@ -57,10 +57,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import static android.icu.util.Currency.CurrencyUsage.CASH;
 import static com.example.motoapp.R.id.EditText_ENO1;
 import static com.example.motoapp.R.id.EditText_SNO1;
-import static com.example.motoapp.R.id.TextView_ECount;
 
 public class InOutFrg extends Activity implements GestureDetector.OnGestureListener{
 	MainActivity objActivity;
@@ -1116,7 +1114,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 					editText.setText("");
 					*/
 					startActivityForResult(intent, 1);//連續掃描
-					Toast.makeText(this, contents, Toast.LENGTH_LONG).show();
+					//Toast.makeText(this, contents, Toast.LENGTH_SHORT).show();
 				}
 
 			}
@@ -1702,7 +1700,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 
 				@Override
 				public void onResponse(Call call, Response response) throws IOException {
-					String json = response.body().string();
+					final String json = response.body().string();
 					Log.e("託運單資訊更新",url);
 					Log.e("託運單資訊更新回傳", json);
 					Log.e("CARTYPE", String.valueOf(CARTYPE));
@@ -1714,7 +1712,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 								@Override
 								public void run() {
 									//TODO 顯示數量
-
+									Toast.makeText(InOutFrg.this,json,Toast.LENGTH_SHORT).show();
 									TextView TextView_ECount = (TextView) findViewById(R.id.TextView_ECount);
 									TextView_ECount.setText(String.format("%04d", Integer.valueOf(objLoginInfo.Out)) + " / " + String.format("%04d", Integer.valueOf(objLoginInfo.In)));
 								}
@@ -1728,9 +1726,16 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 								@Override
 								public void run() {
 									//TODO 顯示數量
-
+									Toast.makeText(InOutFrg.this,json,Toast.LENGTH_SHORT).show();
 									TextView TextView_SCount = (TextView) findViewById(R.id.TextView_SCount);
 									TextView_SCount.setText(String.format("%04d", Integer.valueOf(objLoginInfo.In)));
+									//存入資料庫
+									final dbLocations objDB = new dbLocations(InOutFrg.this);
+									objDB.openDB();
+
+									objDB.InsertTask(new Object[] {
+											});
+									objDB.DBClose();
 								}
 							});
 						}
@@ -1738,7 +1743,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 						runOnUiThread(new Runnable() {
 							@Override
 							public void run() {
-								Toast.makeText(InOutFrg.this,"配達失敗",Toast.LENGTH_SHORT).show();
+								Toast.makeText(InOutFrg.this,json,Toast.LENGTH_SHORT).show();
 							}
 						});
 					}

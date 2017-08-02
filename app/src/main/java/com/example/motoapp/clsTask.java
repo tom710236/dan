@@ -154,6 +154,10 @@ public class clsTask {
 			return "拍簽收單";
 		if(pStrStatus.equals("05"))
 			return "回站";
+		if(pStrStatus.equals("BB"))
+			return "配送";
+		if(pStrStatus.equals("CC"))
+			return "配達";
 		return "";
 	}
 

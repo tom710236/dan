@@ -65,6 +65,7 @@
                 android:ems="10"
                 android:hint="請輸入員工卡號"
                 android:singleLine="true"
+                android:imeOptions="actionNext"
                 android:textSize="16sp">
 
                 <requestFocus />
@@ -149,6 +150,7 @@
                 android:layout_weight="8"
                 android:ems="10"
                 android:hint="請輸入運輸單號"
+                android:imeOptions="actionNext"
                 android:singleLine="true"
                 android:textSize="16sp"></EditText>
 
@@ -181,6 +183,8 @@
                 android:layout_weight="4"
                 android:gravity="right"
                 android:text="路碼里程 : "
+                android:singleLine="true"
+                android:imeOptions="actionNext"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="16sp" />
 
@@ -191,6 +195,7 @@
                 android:layout_weight="8"
                 android:ems="10"
                 android:hint="請輸入路碼里程"
+                android:imeOptions="actionNext"
                 android:singleLine="true"
                 android:textSize="16sp"></EditText>
 

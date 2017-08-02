@@ -2623,7 +2623,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 				@Override
 				public void onResponse(Call call, Response response) throws IOException {
 					String json = response.body().string();
-					Log.e("回傳", json);
+					//Log.e("回傳", json);
 					JSONObject json2 = null;
 					List<ClsDropDownItem> objList = new ArrayList<>();
 					ArrayAdapter<ClsDropDownItem> Adapter2;
@@ -2632,14 +2632,14 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 						JSONArray objArray = json2
 								.getJSONArray("DataContents");
 
-						Log.e("json2", String.valueOf(objArray));
+						//Log.e("json2", String.valueOf(objArray));
 						JSONObject jsonItem1 = null;
 						for(int i = 0 ; i<objArray.length();i++){
 							jsonItem1 = objArray.getJSONObject(i);
 							objList.add(new ClsDropDownItem(jsonItem1
 									.getString("FailReasonID"), jsonItem1
 									.getString("Reason")));
-							Log.e("objArray", String.valueOf(objArray.getJSONObject(i)));
+							//Log.e("objArray", String.valueOf(objArray.getJSONObject(i)));
 
 							Adapter2 = new ArrayAdapter<ClsDropDownItem>(
 									context, R.layout.myspinner, objList);
@@ -2687,12 +2687,12 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 				@RequiresApi(api = Build.VERSION_CODES.KITKAT)
 				@Override
 				public void onResponse(Call call, Response response) throws IOException {
-					Log.e("站",strUrl);
+					//Log.e("站",strUrl);
 					String json = response.body().string();
-					Log.e("回傳", json);
+					//Log.e("回傳", json);
 					JSONObject json2 = null;
-					Spinner Spinner_SetGoods = (Spinner) findViewById(R.id.Spinner_SetGoods);
-					List<ClsDropDownStation> objList = new ArrayList<ClsDropDownStation>();
+					final Spinner Spinner_SetGoods = (Spinner) findViewById(R.id.Spinner_SetGoods);
+					final List<ClsDropDownStation> objList = new ArrayList<ClsDropDownStation>();
 					try {
 						json2 = new JSONObject(json);
 						JSONArray objArray = json2
@@ -2707,10 +2707,17 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 									jsonItem2.getString("StationType")));
 						}
 
-						ArrayAdapter<ClsDropDownStation> Adapter = new ArrayAdapter<ClsDropDownStation>(
-								context, R.layout.myspinner, objList);
 
-						Spinner_SetGoods.setAdapter(Adapter);
+						runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								final ArrayAdapter<ClsDropDownStation> Adapter = new ArrayAdapter<ClsDropDownStation>(
+										context, R.layout.myspinner, objList);
+								Spinner Spinner_SetGoods = (Spinner) findViewById(R.id.Spinner_SetGoods);
+								Spinner_SetGoods.setAdapter(Adapter);
+							}
+						});
+
 
 					} catch (JSONException e) {
 						e.printStackTrace();

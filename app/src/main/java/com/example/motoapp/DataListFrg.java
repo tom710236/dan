@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.util.Base64;
@@ -422,11 +423,24 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 						Environment.DIRECTORY_PICTURES).toString();
 				String fname = "p" + System.currentTimeMillis() + ".jpg";  //利用目前時間組合出一個不會重複的檔名
 				imgUri = Uri.parse("file://" + dir + "/" + fname);    //依前面的路徑及檔名建立 Uri 物件
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+					StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+					StrictMode.setVmPolicy(builder.build());
+					Intent it = new Intent("android.media.action.IMAGE_CAPTURE");
+					it.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);    //將 uri 加到拍照 Intent 的額外資料中
+					startActivityForResult(it, 100);
+					Log.e("imgUri", String.valueOf(imgUri));
+					Button button_Send = (Button) findViewById(R.id.button_Send);
+					button_Send.setText("上傳");
+				}else {
+					Intent it = new Intent("android.media.action.IMAGE_CAPTURE");
+					it.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);    //將 uri 加到拍照 Intent 的額外資料中
+					startActivityForResult(it, 100);
+					Log.e("imgUri", String.valueOf(imgUri));
+					Button button_Send = (Button) findViewById(R.id.button_Send);
+					button_Send.setText("上傳");
+				}
 
-				Intent it = new Intent("android.media.action.IMAGE_CAPTURE");
-				it.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);    //將 uri 加到拍照 Intent 的額外資料中
-				startActivityForResult(it, 100);
-				Log.e("imgUri", String.valueOf(imgUri));
 
 			}
 		});
@@ -474,6 +488,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 			@Override
 			public void onClick(View v) {
 				new clsHttpPostAPI().CallAPI(context, "API007");
+
 				setDialog();
 			}
 		});
@@ -819,7 +834,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 							objDB.openDB();
 							objDB.UpdateTaskStatus("06", Application.strCaseID);
 							objDB.DBClose();
-							type = "06";
+							type = "71";
 							display();
 							break;
 						case "7":
@@ -1972,6 +1987,9 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 			CheckBox chk = (CheckBox) findViewById(R.id.chkCreateData);
 			chk.setVisibility(View.GONE);
 			LinearLayout_pic.setVisibility(View.VISIBLE);
+
+			Button button_Send = (Button) findViewById(R.id.button_Send);
+			button_Send.setText("略過");
 			Log.e("type",type);
 		}
 
@@ -2454,7 +2472,6 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 		final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/jpg");
 		OkHttpClient client = new OkHttpClient();
 
-
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		if (bmp != null) {
 			setDialog();
@@ -2535,7 +2552,26 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 
 
 		} else {
-			Toast.makeText(DataListFrg.this, "請確認是否有拍照", Toast.LENGTH_SHORT).show();
+			if(type.equals("070")){
+				objDB.openDB(); //狀態
+				objDB.UpdateTaskStatus("71", objT.CaseID);
+				objDB.DBClose();
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						bmp = null;
+						ImageView imv;
+						imv = (ImageView) findViewById(R.id.imageView);
+						imv.setImageBitmap(bmp);
+						type = "71";
+						display();
+					}
+				});
+			}
+			else {
+				Toast.makeText(DataListFrg.this, "請確認是否有拍照", Toast.LENGTH_SHORT).show();
+			}
+
 
 		}
 	}

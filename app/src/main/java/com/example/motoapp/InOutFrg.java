@@ -57,6 +57,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static android.icu.util.Currency.CurrencyUsage.CASH;
 import static com.example.motoapp.R.id.EditText_ENO1;
 import static com.example.motoapp.R.id.EditText_SNO1;
 
@@ -426,12 +427,19 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 		button_Search2.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+
+				TextView TextView_AD = (TextView)findViewById(R.id.TextView_AD);
+				TextView_AD.setText("");
+				TextView TextView_ADMoney = (TextView)findViewById(R.id.TextView_ADMoney);
+				TextView_ADMoney.setText("");
+				TextView TextView_ADMoney2 = (TextView)findViewById(R.id.TextView_ADMoney2);
+				TextView_ADMoney2.setText("");
 				/**
 				 * 呼叫API
 				 * */
 				EditText EditText_SearchVal = (EditText)findViewById(R.id.EditText_SearchVal);
 
-				if(EditText_SearchVal.getText().toString().length()>10){
+				if(EditText_SearchVal.getText().toString().length()==11||EditText_SearchVal.getText().toString().length()==8){
 					EditText editText = (EditText) findViewById(R.id.EditText_SearchVal);
 					JSONObject json = new JSONObject();
 					TextView textView = (TextView) findViewById(R.id.TextView_ENO2);
@@ -448,7 +456,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 					editText2.setText("");
 					setDialog();
 				}else {
-					clsDialog.Show(context, "提示", "請輸入10碼以上的託運單號！");
+					clsDialog.Show(context, "提示", "請輸入正確格式的託運單號！");
 				}
 
 
@@ -994,7 +1002,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 			startActivityForResult(intent, 1);
 		}
 	}
-
+	//配達 按掃描
 	public void onScran2(View v) {
 		Intent intent = new Intent("com.google.zxing.client.android.SCAN");
 		if (getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).size() == 0) {
@@ -1011,7 +1019,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 			startActivityForResult(intent, 2);
 		}
 	}
-
+	//查詢 - 按掃描
 	public void onScran3(View v) {
 		Intent intent = new Intent("com.google.zxing.client.android.SCAN");
 		if (getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).size() == 0) {
@@ -1044,7 +1052,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 						"&CAR_NO="+Application.strCar+
 						"&BOL_NO="+contents;
 				onClickNum = contents;
-				if (editText.length() == 11) {
+				if (editText.length() == 11 || editText.length() == 8) {
 
 					/**
 					 * 呼叫API
@@ -1115,6 +1123,9 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 					*/
 					startActivityForResult(intent, 1);//連續掃描
 					//Toast.makeText(this, contents, Toast.LENGTH_SHORT).show();
+				}else{
+					startActivityForResult(intent, 1);
+                    Toast.makeText(InOutFrg.this,"條碼格式不符",Toast.LENGTH_SHORT).show();
 				}
 
 			}
@@ -1132,7 +1143,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 						"ID="+Application.strAccount+
 						"&CAR_NO="+Application.strCar+
 						"&BOL_NO="+contents;
-				if (editText.length() == 11) {
+				if (editText.length() == 11 || editText.length() == 8) {
 
 					/**
 					 * 呼叫API
@@ -1195,6 +1206,9 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 					//EditText_ENO1.requestFocus();
 					editText.setText("");
 					*/
+				}else {
+					startActivityForResult(intent, 2);
+					Toast.makeText(InOutFrg.this,"條碼格式不符",Toast.LENGTH_SHORT).show();
 				}
 			}
 		//查詢
@@ -1210,7 +1224,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 						"ID="+Application.strAccount+
 						"&CAR_NO="+Application.strCar+
 						"&BOL_NO="+contents;
-				if (editText.length() == 11) {
+				if (editText.length() == 11 || editText.length() == 8) {
 					/**
 					 * 呼叫API
 					 * */
@@ -1256,6 +1270,10 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 					Log.e("strPOSTData", strPOSTData);
 					editText.setText("");
 				*/
+				}
+				else {
+					startActivityForResult(intent, 3);
+					Toast.makeText(InOutFrg.this,"條碼格式不符",Toast.LENGTH_SHORT).show();
 				}
 			}
 
@@ -1633,7 +1651,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 	//配達 確認鍵
 	public void onClick (View v){
 		EditText EditText_ENO1 = (EditText)findViewById(R.id.EditText_ENO1);
-		if(EditText_ENO1.getText().toString().length()>10){
+		if(EditText_ENO1.getText().toString().length()==11 || EditText_ENO1.getText().toString().length()==8){
 			getUPDate();
 			PostCondition_UP post = new PostCondition_UP();
 			post.run();
@@ -1645,7 +1663,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 			TextView TextView_EMoney2 = (TextView)findViewById(R.id.TextView_EMoney2);
 			TextView_EMoney2.setText("");
 		}else {
-			clsDialog.Show(context, "提示", "請輸入10碼以上的託運單號！");
+			clsDialog.Show(context, "提示", "請輸入正確格式託運單號！");
 		}
 
 
@@ -1730,12 +1748,21 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 									TextView TextView_SCount = (TextView) findViewById(R.id.TextView_SCount);
 									TextView_SCount.setText(String.format("%04d", Integer.valueOf(objLoginInfo.In)));
 									//存入資料庫
+									/*
 									final dbLocations objDB = new dbLocations(InOutFrg.this);
 									objDB.openDB();
 
 									objDB.InsertTask(new Object[] {
-											});
+											onClickNum,
+											onClickNum,
+											json,
+											"null",
+											"null",
+											"null",
+											BrushTime,
+											"0" });
 									objDB.DBClose();
+									*/
 								}
 							});
 						}

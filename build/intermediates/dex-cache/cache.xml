@@ -174,21 +174,21 @@
     </item>
     <item
         is-multidex="true"
-        jar="C:\Users\TOM\.android\build-cache\465845c61b5a757bdae6f6d9476a7e05b80e67d5\output\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="73ccb92b70112f2e463e415ef8d7275de7da6516">
-        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_266712c343c4c6093740b4945385857c0c27b5f8\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="C:\work\dan\MotoAPP2\app\libs\gcm.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.3"
         sha1="a6d7bce795a14c7f86111756c4ceb44b79de14aa">
         <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\2\gcm_dc5d913adef8afc51ce2bd9a2914f9c533c6f70c\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\TOM\.android\build-cache\465845c61b5a757bdae6f6d9476a7e05b80e67d5\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="73ccb92b70112f2e463e415ef8d7275de7da6516">
+        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_266712c343c4c6093740b4945385857c0c27b5f8\classes.dex" />
     </item>
     <item
         is-multidex="true"

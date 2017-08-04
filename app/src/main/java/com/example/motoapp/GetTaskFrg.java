@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Base64;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
@@ -23,6 +24,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONObject;
+
+import java.security.NoSuchAlgorithmException;
 
 public class GetTaskFrg extends Activity implements GestureDetector.OnGestureListener{
 
@@ -191,20 +194,27 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 						//cCaseID,cOrderID,cCustAddress,cDistance,cSize,cItemCount,cRequestDate,cType
 						objDB = new dbLocations(context);
 						objDB.openDB();
-						objDB.InsertTaskAllData(new Object[]{json.getString("caseID"),objEdit.getText().toString(),"","",json.getString("size"),json.getString("item_count"),json.getString("status_time"),"1",json.getString("customer_name"),"",json.getString("recipient_name"),json.getString("recipient_phoneNo"),json.getString("recipient_address"),json.getString("request_time"),json.getString("pay_type"),json.getString("pay_amount"),json.getString("cash_on_delivery")});
+						String customer_name  = setEncryp (json.getString("customer_name"));
+						String recipient_name = setEncryp(json.getString("recipient_name")) ;
+						String recipient_phoneNo = setEncryp(json.getString("recipient_phoneNo"));
+						String recipient_address = setEncryp(json.getString("recipient_address")) ;
+						objDB.InsertTaskAllData(new Object[]{json.getString("caseID"),objEdit.getText().toString(),"","",json.getString("size"),json.getString("item_count"),json.getString("status_time"),"1",customer_name,"",recipient_name,recipient_phoneNo,recipient_address,json.getString("request_time"),json.getString("pay_type"),json.getString("pay_amount"),json.getString("cash_on_delivery")});
 						objDB.DBClose();
-						
-						clsDialog.Show(context, "提示", "取得案件資料！");
+						Toast.makeText(GetTaskFrg.this,"取得"+Application.getTask+"資料！",Toast.LENGTH_SHORT).show();
+						//clsDialog.Show(context, "提示", "取得案件資料！");
 						
 					}
 					if (status.equals("2")) {
-						clsDialog.Show(context, "錯誤訊息", "輸入的授權碼不合法！");
+						//clsDialog.Show(context, "錯誤訊息", "輸入的授權碼不合法！");
+						Toast.makeText(GetTaskFrg.this,"輸入的授權碼不合法！",Toast.LENGTH_SHORT).show();
 					}
 					if (status.equals("4")) {
-						clsDialog.Show(context, "提示訊息", "託運單號不存在！");
+						//clsDialog.Show(context, "提示訊息", "託運單號不存在！");
+						Toast.makeText(GetTaskFrg.this,"託運單號不存在！",Toast.LENGTH_SHORT).show();
 					}
 					if (status.equals("200")) {
-						clsDialog.Show(context, "提示訊息", "系統忙碌中，請重試！");
+						//clsDialog.Show(context, "提示訊息", "系統忙碌中，請重試！");
+						Toast.makeText(GetTaskFrg.this,"系統忙碌中，請重試！",Toast.LENGTH_SHORT).show();
 					}
 					
 					objEdit.setText("");
@@ -293,8 +303,21 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 				String contents = data.getStringExtra("SCAN_RESULT");
 				final EditText editText = (EditText) findViewById(R.id.TextView_OrderNo3);
 				editText.setText(contents);
-				//startActivityForResult(data, 1);//連續-重複掃描的動作
-				Toast.makeText(this, contents, Toast.LENGTH_LONG).show();
+				if(contents.length()==11 || contents.length() ==8){
+					if(!objEdit.getText().toString().trim().equals("")) {
+					/*
+					 * 呼叫API 接單*/
+						Application.getTask=contents;
+						new clsHttpPostAPI().CallAPI(context,"API013",objEdit.getText().toString());
+					}else {
+						Toast.makeText(this,"無此託運單號",Toast.LENGTH_SHORT).show();
+					}
+				}else{
+					Toast.makeText(this,"託運編號格式不符",Toast.LENGTH_SHORT).show();
+				}
+
+				startActivityForResult(data, 1);//連續-重複掃描的動作
+				//Toast.makeText(this, contents, Toast.LENGTH_LONG).show();
 			}
 
 		}
@@ -352,5 +375,21 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		return detector.onTouchEvent(event);
+	}
+
+	//加密
+	private String setEncryp (String EncrypString){
+
+		SetAES AES = new SetAES();
+		EncrypMD5 encrypMD5 = new EncrypMD5();
+		EncrypSHA encrypSHA = new EncrypSHA();
+		try {
+			byte[] TextByte = AES.EncryptAES(encrypMD5.eccrypt(),encrypSHA.eccrypt(),EncrypString.getBytes());
+			EncrypString = Base64.encodeToString(TextByte,Base64.DEFAULT);
+
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return EncrypString;
 	}
 }

@@ -503,11 +503,20 @@
                             android:text="付款方式 :"
                             android:textSize="16sp" />
 
+                        <TextView
+                            android:id="@+id/textView13"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2.5"
+                            android:text="TextView"
+                            android:textSize="16sp" />
+
                         <Spinner
                             android:id="@+id/Spinner_PayType"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="2.5" />
+                            android:layout_weight="2.5"
+                            android:visibility="gone" />
                         <!-- <EditText
                             android:id="@+id/EditText_PayType"
                             android:layout_width="0dp"

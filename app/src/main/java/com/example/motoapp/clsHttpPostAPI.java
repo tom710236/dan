@@ -738,6 +738,8 @@ public class clsHttpPostAPI extends Activity {
 				{
 					Message objMessage = new Message();
 					objMessage.obj = json;
+					Log.e("轉單", String.valueOf(json));
+					Log.e("轉單2", String.valueOf(objMessage));
 					handlerGetTask.sendMessage(objMessage);
 				}
 			} catch (Exception e) {

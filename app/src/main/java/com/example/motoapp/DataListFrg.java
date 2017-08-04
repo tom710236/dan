@@ -1572,8 +1572,16 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 					.setText(RecPhone2);
 			((EditText) findViewById(R.id.EditText_Count1))
 					.setText(objT.ItemCount);
-
-
+			String PayType = null;
+			if(objT.PayType.equals("0")){
+				PayType = "月結";
+			}else if (objT.PayType.equals("1")){
+				PayType = "現金";
+			}else if (objT.PayType.equals("2")){
+				PayType = "到付";
+			}
+			((TextView) findViewById(R.id.textView13))
+					.setText(PayType);
 			for (int j = 0; j < Spinner_PayType.getAdapter().getCount(); j++) {
 				if(((ClsDropDownItem)Spinner_PayType.getAdapter().getItem(j)).GetID().equals(objT.PayType))
 				{
@@ -1709,7 +1717,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 			Log.e("type",type);
 		}
 
-		if (type.equals("41"))// 直送或回站畫面
+		if (type.equals("41"))// 直送或回站畫面 //轉單後
 		{
 			/* 設定主框 */
 
@@ -1756,10 +1764,16 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 				Log.e("直送","null");
 			}
 			objDB.DBClose();
-			String RecAddress = setDecrypt(objT.RecAddress);
-			String RecName = setDecrypt(objT.RecName);
-			String RecPhone = setDecrypt(objT.RecPhone);
-			String CustName = setDecrypt(objT.CustName);
+			String RecAddress2 ;
+			String RecName2 ;
+			String RecPhone2 ;
+			String CustName2 ;
+
+			RecAddress2 = setDecrypt(objT.RecAddress);
+			RecName2 = setDecrypt(objT.RecName);
+			RecPhone2 = setDecrypt(objT.RecPhone);
+			CustName2 = setDecrypt(objT.CustName);
+
 			((TextView) findViewById(R.id.TextView_CarNo2))
 					.setText(Application.strCar);
 			((TextView) findViewById(R.id.TextView_DateTime2))
@@ -1767,11 +1781,11 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 			((TextView) findViewById(R.id.TextView_OrderID2))
 					.setText(objT.OrderID);
 			((TextView) findViewById(R.id.editText_Address2))
-					.setText(RecAddress);
+					.setText(RecAddress2);
 			((TextView) findViewById(R.id.EditText_CustomName2))
-					.setText(RecName);
+					.setText(RecName2);
 			((TextView) findViewById(R.id.editText_Phone2))
-					.setText(RecPhone);
+					.setText(RecPhone2);
 			((TextView) findViewById(R.id.EditText_Count2))
 					.setText(objT.ItemCount);
 			((TextView) findViewById(R.id.EditText_PayType2)).setText(clsTask
@@ -1779,7 +1793,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 			((TextView) findViewById(R.id.EditText_Money2))
 					.setText(objT.PayAmount);
 			((TextView) findViewById(R.id.editText_SendMan))
-					.setText(CustName);
+					.setText(CustName2);
 			((TextView) findViewById(R.id.EditText_Size2))
 					.setText(objT.Size);
 			((TextView) findViewById(R.id.EditText_Cash2))
@@ -2344,12 +2358,18 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
             if (resultCode == RESULT_OK) {
                 // ZXing回傳的內容
                 String contents = data.getStringExtra("SCAN_RESULT");
-                final EditText editText = (EditText) findViewById(R.id.EditText_OrderID1);
-                editText.setText(contents);
-                objDB.openDB();
-                objDB.UpdateTaskOrdID(contents,Application.strCaseID);
-                objDB.close();
-                Application.newstrObuID = contents;
+				if(contents.length()== 11 || contents.length() ==8){
+					final EditText editText = (EditText) findViewById(R.id.EditText_OrderID1);
+					editText.setText(contents);
+					objDB.openDB();
+					objDB.UpdateTaskOrdID(contents,Application.strCaseID);
+					objDB.close();
+					Application.newstrObuID = contents;
+				}else {
+					Toast.makeText(this,"託運單號格式不符",Toast.LENGTH_SHORT).show();
+					startActivityForResult(data, 1);//連續掃描
+				}
+
 
             }
         }else if(requestCode==100){
@@ -2577,13 +2597,15 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 	}
 	//解密
 	private String setDecrypt (String DecryptString){
+		Log.e("DecryptString",DecryptString);
         if(DecryptString!=null && !DecryptString.equals("")){
             SetAES AES = new SetAES();
             EncrypMD5 encrypMD5 = new EncrypMD5();
             EncrypSHA encrypSHA = new EncrypSHA();
             try {
                 byte[] TextByte2 = AES.DecryptAES(encrypMD5.eccrypt(),encrypSHA.eccrypt(), Base64.decode(DecryptString.getBytes(),Base64.DEFAULT));
-                DecryptString = new String(TextByte2);
+				Log.e("DecryptString2",DecryptString);
+				DecryptString = new String(TextByte2);
 
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();

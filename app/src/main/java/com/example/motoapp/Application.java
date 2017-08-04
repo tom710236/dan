@@ -52,4 +52,5 @@ public class Application extends android.app.Application {
 	public static String newPayType="";
 	public static String datatime="";
     public static String cash_on_delivery="";
+	public static String getTask="";
 }

@@ -12,12 +12,12 @@
         "source": "C:\\Users\\TOM\\.android\\build-cache\\465845c61b5a757bdae6f6d9476a7e05b80e67d5\\output\\res\\drawable-xxhdpi\\powered_by_google_dark.png"
     },
     {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi\\common_signin_btn_text_disabled_dark.9.png",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\9b9459ac8b5c4b8817be60f4209b2ff495aa61f0\\output\\res\\drawable-xxhdpi\\common_signin_btn_text_disabled_dark.9.png"
-    },
-    {
         "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi\\common_signin_btn_text_pressed_dark.9.png",
         "source": "C:\\Users\\TOM\\.android\\build-cache\\9b9459ac8b5c4b8817be60f4209b2ff495aa61f0\\output\\res\\drawable-xxhdpi\\common_signin_btn_text_pressed_dark.9.png"
+    },
+    {
+        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi\\common_signin_btn_text_disabled_dark.9.png",
+        "source": "C:\\Users\\TOM\\.android\\build-cache\\9b9459ac8b5c4b8817be60f4209b2ff495aa61f0\\output\\res\\drawable-xxhdpi\\common_signin_btn_text_disabled_dark.9.png"
     },
     {
         "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi\\common_signin_btn_icon_pressed_light.9.png",
@@ -40,12 +40,12 @@
         "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-xxhdpi\\ic_launcher.png"
     },
     {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi\\common_signin_btn_text_disabled_light.9.png",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\9b9459ac8b5c4b8817be60f4209b2ff495aa61f0\\output\\res\\drawable-xxhdpi\\common_signin_btn_text_disabled_light.9.png"
-    },
-    {
         "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi\\ic_plusone_tall_off_client.png",
         "source": "C:\\Users\\TOM\\.android\\build-cache\\9b9459ac8b5c4b8817be60f4209b2ff495aa61f0\\output\\res\\drawable-xxhdpi\\ic_plusone_tall_off_client.png"
+    },
+    {
+        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi\\common_signin_btn_text_disabled_light.9.png",
+        "source": "C:\\Users\\TOM\\.android\\build-cache\\9b9459ac8b5c4b8817be60f4209b2ff495aa61f0\\output\\res\\drawable-xxhdpi\\common_signin_btn_text_disabled_light.9.png"
     },
     {
         "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi\\common_signin_btn_text_focus_dark.9.png",

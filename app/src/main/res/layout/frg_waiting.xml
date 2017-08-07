@@ -36,7 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -76,7 +76,7 @@
             <ListView
                 android:id="@+id/listView"
                 android:layout_width="match_parent"
-                android:layout_height="380dp"
+                android:layout_height="420dp"
                 android:scrollbars="vertical"
                 android:visibility="visible"></ListView>
         </LinearLayout>
@@ -85,7 +85,7 @@
             android:id="@+id/ScrollView_Step1"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <LinearLayout
                 android:layout_width="match_parent"

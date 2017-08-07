@@ -79,6 +79,10 @@ uses-permission#com.example.motoapp.permission.C2D_MESSAGE
 ADDED from C:\work\dan\MotoAPP2\app\src\main\AndroidManifest.xml:19:5-82
 	android:name
 		ADDED from C:\work\dan\MotoAPP2\app\src\main\AndroidManifest.xml:19:22-79
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from C:\work\dan\MotoAPP2\app\src\main\AndroidManifest.xml:20:5-78
+	android:name
+		ADDED from C:\work\dan\MotoAPP2\app\src\main\AndroidManifest.xml:20:22-76
 uses-permission#android.permission.INTERNET
 ADDED from C:\work\dan\MotoAPP2\app\src\main\AndroidManifest.xml:24:5-67
 	android:name

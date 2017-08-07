@@ -209,7 +209,7 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 						Toast.makeText(GetTaskFrg.this,"輸入的授權碼不合法！",Toast.LENGTH_SHORT).show();
 					}
 					if (status.equals("4")) {
-						//clsDialog.Show(context, "提示訊息", "託運單號不存在！");
+
 						Toast.makeText(GetTaskFrg.this,"託運單號不存在！",Toast.LENGTH_SHORT).show();
 					}
 					if (status.equals("200")) {

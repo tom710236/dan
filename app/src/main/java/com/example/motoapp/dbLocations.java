@@ -367,6 +367,7 @@ public class dbLocations extends SQLiteOpenHelper {
 			args.put("cOrderID",pStrOrderID);
 		if(pStrCash.length()>0)
 			args.put("cCash",pStrCash);
+
 		objDBLocations.update("tblTask", args, "cCaseID='"+pStrPK+"'", null);
 
 	}
@@ -379,6 +380,17 @@ public class dbLocations extends SQLiteOpenHelper {
 
 		if(pStrRecTime.length()>0)
 			args.put("cRecTime", pStrRecTime);
+
+		objDBLocations.update("tblTask", args, "cCaseID='"+pStrPK+"'", null);
+	}
+	/** EX：
+	 * 更新託運單照片
+	 * */
+	public void UpdateRecPicture(String pRecPicture, String pStrPK) {
+		ContentValues args = new ContentValues();
+
+		if(pRecPicture.length()>0)
+			args.put("cRecPicture", pRecPicture);
 
 		objDBLocations.update("tblTask", args, "cCaseID='"+pStrPK+"'", null);
 	}

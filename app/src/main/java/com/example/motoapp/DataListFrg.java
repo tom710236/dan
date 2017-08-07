@@ -13,6 +13,8 @@ import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.PictureCallback;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -103,6 +105,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 	Spinner Spinner_PayType;
 	String today;
 	Message msg;
+	int CheckNet = 0 ;
 
 	/*
 	 * 01列表 02接單 03前往取件 04取件完成，拍照上傳 05回站 06直送 07已送達，拍照上傳 08送達失敗，失敗原因
@@ -221,50 +224,55 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 		Button_Get.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				chickInt=1;
+				if(isConnected()){
+					chickInt=1;
 				/*
 				 * 呼叫API 接單
 				 */
-				// 顯示Progress對話方塊
+					// 顯示Progress對話方塊
 					//new clsHttpPostAPI().CallAPI(context, "API002");
 					//Button_Get.setEnabled(false);
 					clsHttpPostAPI clsHttpPostAPI = new clsHttpPostAPI();
 					clsHttpPostAPI.CallAPI(context, "API002");
-				//myDialog2 = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
-				if(chickInt==1){
-					myDialog2 = new ProgressDialog(DataListFrg.this);
-					myDialog2.setTitle("接單中");
-					myDialog2.setMessage("接單資訊檢查中，請稍後！");
-					myDialog2.setButton("關閉", new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							myDialog2.dismiss();
-						}
-
-					});
-					myDialog2.setCancelable(false);
-					myDialog2.show();
-					new Thread(new Runnable(){
-						@Override
-						public void run() {
-							try{
-								Thread.sleep(60000);
-							}
-							catch(Exception e){
-								e.printStackTrace();
-							}
-							finally{
+					//myDialog2 = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
+					if(chickInt==1){
+						myDialog2 = new ProgressDialog(DataListFrg.this);
+						myDialog2.setTitle("接單中");
+						myDialog2.setMessage("接單資訊檢查中，請稍後！");
+						myDialog2.setButton("關閉", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
 								myDialog2.dismiss();
 							}
-						}
-					}).start();
+
+						});
+						myDialog2.setCancelable(false);
+						myDialog2.show();
+						new Thread(new Runnable(){
+							@Override
+							public void run() {
+								try{
+									Thread.sleep(60000);
+								}
+								catch(Exception e){
+									e.printStackTrace();
+								}
+								finally{
+									myDialog2.dismiss();
+								}
+							}
+						}).start();
+						int i = clsHttpPostAPI.from_get_json;
+						Log.e("clsHttpPostAPI", String.valueOf(i));
+
+						display();
+					}else {
+						clsDialog.Show(context, "提示訊息", "請確認網路是否正常！");
+					}
+
 
 				}
 
-					int i = clsHttpPostAPI.from_get_json;
-					Log.e("clsHttpPostAPI", String.valueOf(i));
-
-					display();
 			}
 		});
 		/* 拒絕 */
@@ -288,30 +296,34 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 		button_Go.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				EditText editText = (EditText)findViewById(R.id.EditText_Receive);
-				if(editText.length()!=0){
+				if(isConnected()){
+					EditText editText = (EditText)findViewById(R.id.EditText_Receive);
+					if(editText.length()!=0){
 					/* 更新預計時間欄位 */
-					Application.IsCreateData =false;
-					Log.e("cash_on_delivery GCM",Application.cash_on_delivery);
-					Log.e("strCaseID GCM",Application.strCaseID);
-					objDB.openDB();
-					objDB.UpdateTaskRecTime(
-							((TextView) findViewById(R.id.EditText_Receive))
-									.getText().toString(), Application.strCaseID);
+						Application.IsCreateData =false;
+						Log.e("cash_on_delivery GCM",Application.cash_on_delivery);
+						Log.e("strCaseID GCM",Application.strCaseID);
+						objDB.openDB();
+						objDB.UpdateTaskRecTime(
+								((TextView) findViewById(R.id.EditText_Receive))
+										.getText().toString(), Application.strCaseID);
 
-					clsTask objT = objDB.LoadTask(Application.strCaseID);
-					Log.e("time",objT.RecTime);
-					objDB.DBClose();
+						clsTask objT = objDB.LoadTask(Application.strCaseID);
+						Log.e("time",objT.RecTime);
+						objDB.DBClose();
 				/*
 				 * 呼叫API 前往取件
 				 */
-					new clsHttpPostAPI().CallAPI(context, "API004");
-					setDialog();
-					EditText_OrderID1.requestFocus();
+						new clsHttpPostAPI().CallAPI(context, "API004");
+						setDialog();
+						EditText_OrderID1.requestFocus();
 
 
-				}else{
-					Toast.makeText(DataListFrg.this, "請輸入時間", Toast.LENGTH_SHORT).show();
+					}else{
+						Toast.makeText(DataListFrg.this, "請輸入時間", Toast.LENGTH_SHORT).show();
+					}
+				}else {
+					clsDialog.Show(context, "提示訊息", "請確認網路是否正常！");
 				}
 
 			}
@@ -322,27 +334,27 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 		button_Sucess.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-                //運輸單號更新
+				if(isConnected()){
+					//運輸單號更新
+					EditText editText = (EditText)findViewById(R.id.EditText_OrderID1);
+					Application.newstrObuID = editText.getText().toString();
 
-                EditText editText = (EditText)findViewById(R.id.EditText_OrderID1);
-                Application.newstrObuID = editText.getText().toString();
+					//objDB.openDB();
+					//objDB.UpdateTaskOrdID(Application.newstrObuID,Application.strCardNo);
+					//objDB.close();
 
-                //objDB.openDB();
-                //objDB.UpdateTaskOrdID(Application.newstrObuID,Application.strCardNo);
-                //objDB.close();
+					//付款金額更新
+					EditText editText1 = (EditText)findViewById(R.id.EditText_Money);
+					Application.newPay = editText1.getText().toString();
+					//objDB.openDB();
+					//objDB.UpdateTaskPayAmount(Application.newPay,Application.strCardNo);
+					//objDB.close();
 
-                //付款金額更新
-                EditText editText1 = (EditText)findViewById(R.id.EditText_Money);
-                Application.newPay = editText1.getText().toString();
-                //objDB.openDB();
-                //objDB.UpdateTaskPayAmount(Application.newPay,Application.strCardNo);
-                //objDB.close();
+					//代收貨款更新
+					Application.cash_on_delivery = ((TextView) findViewById(R.id.textView_Cash)).getText().toString();
+					Log.e("cash_on_delivery",Application.cash_on_delivery);
 
-				//代收貨款更新
-				Application.cash_on_delivery = ((TextView) findViewById(R.id.textView_Cash)).getText().toString();
-				Log.e("cash_on_delivery",Application.cash_on_delivery);
-
-                //付款方式更新
+					//付款方式更新
 				/*
 				final int[] indexSpinner = new int[1];
 
@@ -363,21 +375,25 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 					}
 				});
 					*/
-				//照片清除
-				bmp = null;
-				ImageView imv;
-				imv = (ImageView) findViewById(R.id.imageView);
-				imv.setImageBitmap(bmp);
-				//協助修改 清除
-				CheckBox c1 = (CheckBox)findViewById(R.id.chkCreateData);
-				c1.setChecked(false);//checkbox狀態
+					//照片清除
+					bmp = null;
+					ImageView imv;
+					imv = (ImageView) findViewById(R.id.imageView);
+					imv.setImageBitmap(bmp);
+					//協助修改 清除
+					CheckBox c1 = (CheckBox)findViewById(R.id.chkCreateData);
+					c1.setChecked(false);//checkbox狀態
 
-				// 資料變更後資料庫更新
-				objDB.openDB();
-				objDB.UpdateTask("", "", "", EditText_CustomName.getText().toString(), editText_Address1.getText().toString(), editText_Phone.getText().toString(), ((ClsDropDownItem)Spinner_PayType.getSelectedItem()).GetID(), EditText_Money.getText().toString(), "03", Application.strCaseID,Application.newstrObuID,Application.cash_on_delivery);
-				objDB.close();
-				new clsHttpPostAPI().CallAPI(context, "API005");
-				setDialog();
+					// 資料變更後資料庫更新
+					objDB.openDB();
+					objDB.UpdateTask("", "", "", EditText_CustomName.getText().toString(), editText_Address1.getText().toString(), editText_Phone.getText().toString(), ((ClsDropDownItem)Spinner_PayType.getSelectedItem()).GetID(), EditText_Money.getText().toString(), "03", Application.strCaseID,Application.newstrObuID,Application.cash_on_delivery);
+					objDB.close();
+					new clsHttpPostAPI().CallAPI(context, "API005");
+					setDialog();
+				}else{
+					clsDialog.Show(context, "提示訊息", "請確認網路是否正常！");
+				}
+
 			}
 		});
 		
@@ -423,13 +439,22 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 						Environment.DIRECTORY_PICTURES).toString();
 				String fname = "p" + System.currentTimeMillis() + ".jpg";  //利用目前時間組合出一個不會重複的檔名
 				imgUri = Uri.parse("file://" + dir + "/" + fname);    //依前面的路徑及檔名建立 Uri 物件
-				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+				//android 版本> android N 拍照會有問題 需另外加判斷(strictmode)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 					StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
 					StrictMode.setVmPolicy(builder.build());
 					Intent it = new Intent("android.media.action.IMAGE_CAPTURE");
 					it.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);    //將 uri 加到拍照 Intent 的額外資料中
 					startActivityForResult(it, 100);
 					Log.e("imgUri", String.valueOf(imgUri));
+					//把照片路徑存入DB
+					objDB.openDB();
+					objDB.UpdateRecPicture(
+							(String.valueOf(imgUri)) , Application.strCaseID);
+					clsTask objT = objDB.LoadTask(Application.strCaseID);
+					Log.e("imgUri2",objT.RecPicture);
+					objDB.close();
+
 					Button button_Send = (Button) findViewById(R.id.button_Send);
 					button_Send.setText("上傳");
 				}else {
@@ -437,6 +462,13 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 					it.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);    //將 uri 加到拍照 Intent 的額外資料中
 					startActivityForResult(it, 100);
 					Log.e("imgUri", String.valueOf(imgUri));
+					//把照片路徑存入DB
+					objDB.openDB();
+					objDB.UpdateRecPicture(
+							(String.valueOf(imgUri)) , Application.strCaseID);
+					clsTask objT = objDB.LoadTask(Application.strCaseID);
+					Log.e("imgUri2",objT.RecPicture);
+					objDB.close();
 					Button button_Send = (Button) findViewById(R.id.button_Send);
 					button_Send.setText("上傳");
 				}
@@ -447,35 +479,57 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 
 
 
-		/* 託運單拍照後傳送 */
+		/* 託運單拍照後傳送 */ //上傳
 		Button button_Send = (Button) findViewById(R.id.button_Send);
 		button_Send.setOnClickListener(new OnClickListener() {
 
-
 			@Override
 			public void onClick(View v) {
-
-				Post post = new Post();
-				post.run();
-
-
-				/*
-				 * 上傳照片及是否協助建檔
-
-
-				if (type.equals("070")) {
-					// 簽收單
-					new clsHttpPostAPI().CallAPI(context, "API011");
-				} else {
+				String check;
+                if (isConnected()) {
+                    Log.e("網路狀態","正常");
+					Post post = new Post();
+					post.run();
+					//協助修改 清除
 					Application.IsCreateData = ((CheckBox) findViewById(R.id.chkCreateData))
 							.isChecked();
-					objDB.openDB();
+					CheckBox c1 = (CheckBox)findViewById(R.id.chkCreateData);
+					c1.setChecked(false);//checkbox狀態
+                }else{
+					CheckNet = 1;
+					//網路不穩時 協助更新存入DB在直送或回站時上傳
+					if(bmp!=null){
+						Application.IsCreateData = ((CheckBox) findViewById(R.id.chkCreateData))
+								.isChecked();
+						if(Application.IsCreateData==true){
+							check="1";
+						}else {
+							check="0";
+						}
+						objDB.openDB(); //更新狀態 和是否需協助更新
+						clsTask objT = objDB.LoadTask(Application.strCaseID);
+						objDB.UpdateTaskIsCreateData(
+								check , Application.strCaseID);
+						objDB.UpdateTaskStatus("41", objT.CaseID);
+						objDB.DBClose();
+                        type = "41";
+                        display();
+						//刪除照片
+						bmp = null;
+						ImageView imv;
+						imv = (ImageView) findViewById(R.id.imageView);
+						imv.setImageBitmap(bmp);
 
-					new clsHttpPostAPI().CallAPI(context, "API006");
-					imageView1.setImageDrawable(null);
-					// imageView1.setImageResource(0);
-				}
-				 */
+						//協助修改 清除
+						CheckBox c1 = (CheckBox)findViewById(R.id.chkCreateData);
+						c1.setChecked(false);//checkbox狀態
+
+					}else {
+						Toast.makeText(DataListFrg.this, "請確認是否有拍照", Toast.LENGTH_SHORT).show();
+					}
+
+                }
+
 			}
 
 		});
@@ -487,9 +541,16 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 		button_Online.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				new clsHttpPostAPI().CallAPI(context, "API007");
+				if(isConnected()){
+					new clsHttpPostAPI().CallAPI(context, "API007");
+					setDialog();
+					Post2 post = new Post2();
+					post.run();
 
-				setDialog();
+				}else {
+					clsDialog.Show(context, "提示訊息", "請確認網路是否正常！");
+				}
+
 			}
 		});
 
@@ -498,9 +559,16 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 		button_BackStation.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				new clsHttpPostAPI().CallAPI(context, "API012");
-				setDialog();
-				// 取得站所資料
+				if(isConnected()){
+					new clsHttpPostAPI().CallAPI(context, "API012");
+					setDialog();
+					Post2 post = new Post2();
+					post.run();
+					// 取得站所資料
+				}else {
+					clsDialog.Show(context, "提示訊息", "請確認網路是否正常！");
+				}
+
 			}
 		});
 
@@ -509,18 +577,21 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 		button_SetGoods2.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
-				/* 顯示結果須等post回來的資訊決定，測試先寫 */
-				Spinner Spinner_SetGoods = (Spinner) findViewById(R.id.Spinner_SetGoods);
-				objDB.openDB();
-				objDB.UpdateTaskStationID(((ClsDropDownStation) Spinner_SetGoods
-						.getSelectedItem()).GetID(), Application.strCaseID);
-				objDB.DBClose();
-				Log.e("11",((ClsDropDownStation) Spinner_SetGoods
-						.getSelectedItem()).GetID());
-				new clsHttpPostAPI().CallAPI(context, "API010",((ClsDropDownStation) Spinner_SetGoods
-						.getSelectedItem()).GetStationType());
-				setDialog();
+				if(isConnected()){
+					/* 顯示結果須等post回來的資訊決定，測試先寫 */
+					Spinner Spinner_SetGoods = (Spinner) findViewById(R.id.Spinner_SetGoods);
+					objDB.openDB();
+					objDB.UpdateTaskStationID(((ClsDropDownStation) Spinner_SetGoods
+							.getSelectedItem()).GetID(), Application.strCaseID);
+					objDB.DBClose();
+					Log.e("11",((ClsDropDownStation) Spinner_SetGoods
+							.getSelectedItem()).GetID());
+					new clsHttpPostAPI().CallAPI(context, "API010",((ClsDropDownStation) Spinner_SetGoods
+							.getSelectedItem()).GetStationType());
+					setDialog();
+				}else {
+					clsDialog.Show(context, "提示訊息", "請確認網路是否正常！");
+				}
 
 			}
 		});
@@ -561,16 +632,25 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 		button_OK.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				new clsHttpPostAPI().CallAPI(context, "API008");
-				setDialog();
-				time();
-				Log.e("today",today);
-				objDB.openDB();
-				objDB.UpdateDate(today, Application.strCaseID);
+				if(isConnected()){
+					//照片清除
+					bmp = null;
+					ImageView imv;
+					imv = (ImageView) findViewById(R.id.imageView);
+					imv.setImageBitmap(bmp);
+					new clsHttpPostAPI().CallAPI(context, "API008");
+					setDialog();
+					time();
+					Log.e("today",today);
+					objDB.openDB();
+					objDB.UpdateDate(today, Application.strCaseID);
+					objDB.DBClose();
+					//type="070";
+					//display();
+				}else {
+					clsDialog.Show(context, "提示訊息", "請確認網路是否正常！");
+				}
 
-				objDB.DBClose();
-				//type="070";
-				//display();
 			}
 		});
 
@@ -579,10 +659,14 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 		button_NG.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				new clsHttpPostAPI().CallAPI(context, "API015");
+				if(isConnected()){
+					new clsHttpPostAPI().CallAPI(context, "API015");
+					type = "08";
+					display();
+				}else {
+					clsDialog.Show(context, "提示訊息", "請確認網路是否正常！");
+				}
 
-				type = "08";
-				display();
 			}
 		});
 
@@ -591,22 +675,26 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 		button_Save2.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				if(isConnected()){
+					Spinner Reason = (Spinner) findViewById(Spinner_Reasion);
+					Log.e("getSelectedItem()", String.valueOf(Reason.getSelectedItem()));
+					if(!String.valueOf(Reason.getSelectedItem()).equals(null)&&String.valueOf(Reason.getSelectedItem())!=null&&Reason.getSelectedItem()!=null){
+						objDB.openDB();
+						objDB.UpdateTaskFailReasonID(
+								((ClsDropDownItem) Reason.getSelectedItem()).GetID(),
+								Application.strCaseID);
+						objDB.UpdateTaskStatus("81", Application.strCaseID);
+						objDB.DBClose();
+						new clsHttpPostAPI().CallAPI(context, "API009");
 
-				Spinner Reason = (Spinner) findViewById(Spinner_Reasion);
-				Log.e("getSelectedItem()", String.valueOf(Reason.getSelectedItem()));
-				if(!String.valueOf(Reason.getSelectedItem()).equals(null)&&String.valueOf(Reason.getSelectedItem())!=null&&Reason.getSelectedItem()!=null){
-					objDB.openDB();
-					objDB.UpdateTaskFailReasonID(
-							((ClsDropDownItem) Reason.getSelectedItem()).GetID(),
-							Application.strCaseID);
-					objDB.UpdateTaskStatus("81", Application.strCaseID);
-					objDB.DBClose();
-					new clsHttpPostAPI().CallAPI(context, "API009");
-
-					setDialog();
+						setDialog();
+					}else {
+						Toast.makeText(DataListFrg.this, "請返回", Toast.LENGTH_SHORT).show();
+					}
 				}else {
-					Toast.makeText(DataListFrg.this, "請返回", Toast.LENGTH_SHORT).show();
+					clsDialog.Show(context, "提示訊息", "請確認網路是否正常！");
 				}
+
 
 
 
@@ -617,9 +705,13 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 		button_back.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				if(isConnected()){
+					new clsHttpPostAPI().CallAPI(context, "API007");
+					setDialog();
+				}else {
+					clsDialog.Show(context, "提示訊息", "請確認網路是否正常！");
+				}
 
-				new clsHttpPostAPI().CallAPI(context, "API007");
-				setDialog();
 			}
 		});
 
@@ -628,9 +720,13 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 		button_Resend.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				if(isConnected()){
+					new clsHttpPostAPI().CallAPI(context, "API017");
+					setDialog();
+				}else {
+					clsDialog.Show(context, "提示訊息", "請確認網路是否正常！");
+				}
 
-				new clsHttpPostAPI().CallAPI(context, "API017");
-				setDialog();
 			}
 		});
 		
@@ -639,13 +735,18 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 		button_Discharge.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-                time();
-                Log.e("today",today);
-                objDB.openDB();
-                objDB.UpdateDate(today, Application.strCaseID);
-                objDB.DBClose();
-				new clsHttpPostAPI().CallAPI(context, "API018");
-				setDialog();
+				if(isConnected()){
+					time();
+					Log.e("today",today);
+					objDB.openDB();
+					objDB.UpdateDate(today, Application.strCaseID);
+					objDB.DBClose();
+					new clsHttpPostAPI().CallAPI(context, "API018");
+					setDialog();
+				}else {
+					clsDialog.Show(context, "提示訊息", "請確認網路是否正常！");
+				}
+
 			}
 		});
 
@@ -1380,6 +1481,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 		GCMIntentService.handlerGCM = handlerGCM;
 		clsHttpPostAPI.handlerTask = handlerTask;
 		ListViewAdpater.handler = handlerListView;
+
 	}
 
 
@@ -1401,16 +1503,20 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 
 	@Override
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-		float distance = e2.getX()-e1.getX();
-		Log.e("distance2", String.valueOf(distance));
-		if(distance>100){
-			Log.e("方向2","右邊");
-			Intent intent = new Intent(DataListFrg.this, HistoryFragment.class);
-			startActivity(intent);
-		}else if(distance<-100){
-			Log.e("方向2","左邊");
+		if(e2!=null){
+			float distance = e2.getX()-e1.getX();
+			Log.e("distance2", String.valueOf(distance));
+			if(distance>100){
+				Log.e("方向2","右邊");
+				Intent intent = new Intent(DataListFrg.this, HistoryFragment.class);
+				startActivity(intent);
+			}else if(distance<-100){
+				Log.e("方向2","左邊");
+			}
+			return false;
 		}
 		return false;
+
 	}
 
 	@Override
@@ -2394,13 +2500,21 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
             if(resultCode == Activity.RESULT_OK){
                 showImg();
             }else {
-                Toast.makeText(this, "沒有拍到照片1", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "沒有拍到照片", Toast.LENGTH_LONG).show();
                 display();
             }
         }
 
 	}
-
+	//判斷網路有無訊號
+	private boolean isConnected(){
+		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+		if (networkInfo != null && networkInfo.isConnected()) {
+			return true;
+		}
+		return false;
+	}
 
 	void showImg() {
 		int iw, ih, vw, vh;
@@ -2419,10 +2533,15 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 			imv = (ImageView) findViewById(R.id.imageView);
 			option.inJustDecodeBounds = false;  //關閉只載入圖檔資訊的選項
 			option.inSampleSize = 2;  //設定縮小比例, 例如 2 則長寬都將縮小為原來的 1/2
-			bmp = BitmapFactory.decodeFile(imgUri.getPath(), option); //載入圖檔
+			//取出DB的照片路徑
+			objDB.openDB();
+			clsTask objT = objDB.LoadTask(Application.strCaseID);
+			Log.e("imgUri3",objT.RecPicture);
+			objDB.close();
+			bmp = BitmapFactory.decodeFile(Uri.parse(objT.RecPicture).getPath(), option); //載入圖檔
 			imv.setImageBitmap(bmp);
 		}else{
-			Toast.makeText(this, "沒有拍到照片2", Toast.LENGTH_LONG).show();
+			//Toast.makeText(this, "沒有拍到照片", Toast.LENGTH_LONG).show();
 			display();
 		}
 
@@ -2476,7 +2595,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 		if (bmp != null) {
 			setDialog();
 			bmp.compress(Bitmap.CompressFormat.JPEG, 70, bos);
-
+			Log.e("bmp", String.valueOf(bmp));
 			RequestBody requestBody = new MultipartBody.Builder()
 					.setType(MultipartBody.FORM)
 					.addFormDataPart("file", "test", RequestBody.create(MEDIA_TYPE_PNG, bos.toByteArray()))
@@ -2576,6 +2695,84 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 		}
 	}
 	}
+
+	class Post2 extends Thread{
+		@Override
+		public void run() {
+			//上傳 照片
+			Postfile2();
+		}
+
+		private void Postfile2() {
+			int typeInt = 0;
+			if (type.equals("070")) {
+				typeInt = 2;
+			} else {
+				typeInt = 1;
+			}
+
+
+
+
+			objDB = new dbLocations(context);
+			objDB.openDB();
+			final clsTask objT = objDB.LoadTask(Application.strCaseID);
+			//Log.e("IsCreateData",objT.IsCreateData);
+
+			objDB.DBClose();
+			clsLoginInfo objL = new clsLoginInfo(context);
+			objL.Load();
+
+
+			String url = Application.ChtUrl + "Services/API/Motor_Dispatch/Upload_For\n" +
+					"wardOrder.aspx";
+			final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/jpg");
+			OkHttpClient client = new OkHttpClient();
+			Log.e("bmp", String.valueOf(bmp));
+			//把照片路徑轉成bmp
+			showImg();
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			if (bmp != null) {
+
+				bmp.compress(Bitmap.CompressFormat.JPEG, 70, bos);
+				RequestBody requestBody = new MultipartBody.Builder()
+						.setType(MultipartBody.FORM)
+						.addFormDataPart("file", "test", RequestBody.create(MEDIA_TYPE_PNG, bos.toByteArray()))
+						.addFormDataPart("Key", "7092a3c1-8ad6-48b5-b354-577378c282a5")
+						.addFormDataPart("caseID", objT.CaseID)
+						.addFormDataPart("KeyinFile", String.valueOf(objT.IsCreateData))
+						.addFormDataPart("FileType", "jpg")
+						.addFormDataPart("Type", String.valueOf(typeInt))
+						.build();
+
+				final Request request = new Request.Builder().url(url)
+						.post(requestBody).build();
+
+				client.newCall(request).enqueue(new Callback() {
+					@Override
+					public void onFailure(Call call, IOException e) {
+
+					}
+
+					@Override
+					public void onResponse(Call call, Response response) throws IOException {
+						String json = response.body().string();
+						Log.e("回傳", json);
+						//刪除照片
+						bmp = null;
+						ImageView imv;
+						imv = (ImageView) findViewById(R.id.imageView);
+						imv.setImageBitmap(bmp);
+
+						//協助修改 清除
+						CheckBox c1 = (CheckBox)findViewById(R.id.chkCreateData);
+						c1.setChecked(false);//checkbox狀態
+					}
+				});
+			}
+		}
+	}
+
 	//取件完成前 掃描
 	public void onScan (View v){
 		Intent intent = new Intent("com.google.zxing.client.android.SCAN");
@@ -2784,6 +2981,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 				}
 			});
 		}
+
 	}
 
 }

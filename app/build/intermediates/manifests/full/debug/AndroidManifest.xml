@@ -15,7 +15,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="com.example.motoapp.permission.C2D_MESSAGE" />
-
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- 使用GCM -->
     <uses-permission android:name="com.example.motoapp.permission.C2D_MESSAGE" />
     <!-- 存取 internet -->

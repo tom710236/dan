@@ -2686,8 +2686,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 						display();
 					}
 				});
-			}
-			else {
+			} else {
 				Toast.makeText(DataListFrg.this, "請確認是否有拍照", Toast.LENGTH_SHORT).show();
 			}
 

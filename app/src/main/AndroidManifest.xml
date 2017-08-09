@@ -126,7 +126,7 @@
         <activity
             android:name=".GetTaskFrg"
             android:label="@string/title_activity_main_activityk"
-            android:windowSoftInputMode="stateHidden"
+            android:windowSoftInputMode="stateHidden|adjustPan"
             android:screenOrientation="portrait">
         </activity>
         <activity

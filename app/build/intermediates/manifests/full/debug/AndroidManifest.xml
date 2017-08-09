@@ -148,7 +148,7 @@
             android:name="com.example.motoapp.GetTaskFrg"
             android:label="@string/title_activity_main_activityk"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" >
+            android:windowSoftInputMode="stateHidden|adjustPan" >
         </activity>
         <activity
             android:name="com.example.motoapp.GCMActivity"

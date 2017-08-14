@@ -3,39 +3,39 @@
 
     <item
         is-multidex="true"
-        jar="C:\Users\TOM\.android\build-cache\2eea211b884dff6a2e319d085115a63250ee82b9\output\jars\classes.jar"
+        jar="C:\Users\TOM\.android\build-cache\de6f6482188fd191d9136e8b65ce72a16b7773ef\output\jars\classes.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.3"
-        sha1="9224bc4c54ba95147c7eabd874573763c07cb6be">
-        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_8b202f3ad130520850b29212ff3e7f89dade8967\classes.dex" />
+        sha1="c9630706335cdd15258938115c0ffe72ef2f24da">
+        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_7f1571f3e16c01f007eb1fb5d0d78506849ec035\classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="C:\Users\TOM\.android\build-cache\0cab6b738d0fa4e5e267afd607a5346898fa4e9a\output\jars\classes.jar"
+        jar="C:\Users\TOM\.android\build-cache\4e5640f49a7e994c7f9168192e2a053d614fa822\output\jars\classes.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.3"
-        sha1="1c5a76debf0c2857ccad422c4a80ed785982f8df">
-        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_a975b449b75f2e117a22f8407a64970426115caf\classes.dex" />
+        sha1="433f4d6aa5f21f19552afe0e6c5eff0fedba73ad">
+        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_a0bffbf465c3545bf3133b38f55e2a90df65ef1e\classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="C:\Users\TOM\.android\build-cache\b560ecb4837316f4018484a425242a75d349dbad\output\jars\classes.jar"
+        jar="C:\Users\TOM\.android\build-cache\1995a87c934a9ea9dda729c7a92c36e6d8e8e3e6\output\jars\classes.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.3"
-        sha1="7eb68150c290a271a716675ebdfd176eac694124">
-        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_06efd85d380c0f4a5177849347c6c2cc1d343cef\classes.dex" />
+        sha1="de29a39f9260f88151b1ef453140e71c76b6c415">
+        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_67a1308407bc6cbd216455ed509a8b4a8505ce8d\classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="C:\Users\TOM\.android\build-cache\2edce76f734880af98e35de0e66d7a535037f9be\output\jars\classes.jar"
+        jar="C:\Users\TOM\.android\build-cache\b5da4a5731daf70e574399395403eba0e3d9d6df\output\jars\classes.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.3"
-        sha1="0e8228b4bc69c6a2c8d7c18498a77e53417d2574">
-        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_ed8832a77e17ca8ca1bfaf8cabc5eb30ff19963f\classes.dex" />
+        sha1="44ee06abb66da30f5855e6bf54574e64cdcd982a">
+        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_0267d1e251a7ee3c01cdf9ff7df1afd71073bb17\classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -48,87 +48,6 @@
     </item>
     <item
         is-multidex="true"
-        jar="C:\Users\TOM\.android\build-cache\9649ed1c270b37abb7eb0d75e76c7fce3c87d090\output\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="ef5f051e7308febe289dc93c67c5f32785b4260a">
-        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_c35a65e7e26428686693263594f80d1d471e0fc9\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\TOM\.android\build-cache\9fcd882d3e0a0a98e8301fd99f2b8ddb757783bd\output\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="d4d7d4290dc3f13bdb95a92b2377d78e66084dfa">
-        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_1a76354386a15dd9e7469a48047a8bc8ba4b4786\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\TOM\.android\build-cache\ffb64d3714b88f593ce92faa83da3e1993500144\output\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="e3d791b42eaa90416cd0b2d2e608092794a3baa4">
-        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_6658610b7b011ac8686cdc95408056d1bf8501c9\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\TOM\.android\build-cache\3d2d7158bc6cbf096d3f07988ad83a4851cac604\output\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="29fd6d3794b71491c2789708cd8d03c71feb8954">
-        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_311a5d0cd2ec7bef6389a5808c434b3c00348405\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\TOM\.android\build-cache\3aad42f65f881906006eb591dfbcda9d6c6b304b\output\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="7ff613bf78ab057293892fdbd4169eda899c89b9">
-        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_31eb75b20554282ec4fa6830e7d4b731bde20f83\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\TOM\.android\build-cache\ffd74899896630bfe729477dd54225700b8f6019\output\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="055783146ba9654a725442563be78cad303aad1f">
-        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_06b58b4c86acf6a0ba4393ac84b495f84b673d55\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\TOM\.android\build-cache\ed0d320674661e416aff21d290affd2c7adf7e28\output\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="4cd0b093824b3228fffc21ea369b98d0b1db6566">
-        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_7764412d68cd4156e8caad319fc3c0128355ec69\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\TOM\.android\build-cache\cca1821913274203377e05c17c9ccc637b6ca333\output\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="3c0b099f9de16b265ecd6122fcb603e7d0d29f90">
-        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_2fbc152cb6f4945de91f1a9653b965ecc4e12f6a\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\TOM\.android\build-cache\6d74563e4eed313d53304690631820ea4d3e65d9\output\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="c976518693e89ad44fbfccfc654941eaec198d08">
-        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_cd11e82d15c40b09ab5462f3b5f20aa20b610aba\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="C:\work\dan\MotoAPP2\app\libs\json.jar"
         jumboMode="false"
         optimize="true"
@@ -138,39 +57,57 @@
     </item>
     <item
         is-multidex="true"
-        jar="C:\Users\TOM\.android\build-cache\a906a7008a06e674e95a44a7580f48e8047ae86a\output\jars\classes.jar"
+        jar="C:\Users\TOM\.android\build-cache\16d978efe43040a5a51ba24ed99e7b2eb6b872ed\output\jars\classes.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.3"
-        sha1="41b3870cbe5fa546d8095b5b89d42cb69f3dd175">
-        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_c72228cc6dc36a4224ae4f7e6664f201e9a1a806\classes.dex" />
+        sha1="756f6297eef79784f5e356dcd4f39865028b2bd0">
+        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_30c7e8814c4215b5485452cc06bbc0a52ee57f2e\classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="C:\Users\TOM\.android\build-cache\d4f208e9d21226bb8615e4f5d5f33777b6dee82d\output\jars\classes.jar"
+        jar="C:\Users\TOM\AppData\Local\Android\Sdk\extras\m2repository\com\android\support\constraint\constraint-layout-solver\1.0.2\constraint-layout-solver-1.0.2.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.3"
-        sha1="3033cc3a2c68dff3e5b646d6d084bdbdf7d00b25">
-        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_cb9e433ed333bbc926d4cfcbd1b6f75e9419c364\classes.dex" />
+        sha1="b9cd8fc6bd15cb915735d34535db30ece0c44603">
+        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\constraint-layout-solver-1.0.2_947fca20e0a7cf020d67ea0c1f6f15169f4acb8e\classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="C:\Users\TOM\.android\build-cache\44e35b212e819dd8a22cbd51821521e3b91c9d93\output\jars\classes.jar"
+        jar="C:\Users\TOM\.android\build-cache\658d7231f450da2fc0e18634efa21a8ce39a1eec\output\jars\classes.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.3"
-        sha1="a96b762bde4139de855735f175ec4d17dca55a6d">
-        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_c78d7b8fc123900cb13df814274f23b3a3735ed0\classes.dex" />
+        sha1="486371f97baad8e607f332f20fee1d3dd00a731a">
+        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_73f257760c198a762e542578e7ddd46772e0e1ab\classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="C:\Users\TOM\.android\build-cache\9b9459ac8b5c4b8817be60f4209b2ff495aa61f0\output\jars\classes.jar"
+        jar="C:\Users\TOM\.android\build-cache\a7bf4e586a2973a26be9bd5ad23191146ce1de6c\output\jars\classes.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.3"
-        sha1="4c93d99d454c975536bbe3b42283eee847f03ea3">
-        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_62b308adf9de0aa6bacf4f0e894f2555a55395a7\classes.dex" />
+        sha1="230e709fa5570d06f174585ae483ed566be4242a">
+        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_793e77acbb45abe58243ad98ab5c96f819f6e9ef\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\TOM\.android\build-cache\a7bf4e586a2973a26be9bd5ad23191146ce1de6c\output\jars\libs\core-3.3.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="a401911b86797eb56a18a4a7ee00a9e8335eb64b">
+        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\core-3.3.0_c8fc5528295cbe449e733393a86b562c79dab94e\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\TOM\.android\build-cache\6e439a2cf5047f92d08bea60f3b70fcc21208111\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="6addaba208e21c6da776d0ca75b6b23a6ccd5499">
+        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_c4b62a02c428a332471359045e72ede018f50ea5\classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -183,57 +120,39 @@
     </item>
     <item
         is-multidex="true"
-        jar="C:\Users\TOM\.android\build-cache\465845c61b5a757bdae6f6d9476a7e05b80e67d5\output\jars\classes.jar"
+        jar="C:\Users\TOM\.android\build-cache\95feb4ca55b21a1cb5a3b8f601ec9158fcdb329c\output\jars\classes.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.3"
-        sha1="73ccb92b70112f2e463e415ef8d7275de7da6516">
-        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_266712c343c4c6093740b4945385857c0c27b5f8\classes.dex" />
+        sha1="6116e0e7069de7fc259aac8e08b84f32c2038231">
+        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_5f4a6027b6a78229b27cd83c063ad213bd25ce17\classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="C:\Users\TOM\.android\build-cache\cd19199e0efbc5188185a9af5c11f97bea3ec84d\output\jars\classes.jar"
+        jar="C:\Users\TOM\.android\build-cache\ac99ce4c6d4e8895980f2d8cf42161ef02483eb0\output\jars\classes.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.3"
-        sha1="a08d65794b844d8e7540bf9a33859bf3b2482d7f">
-        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_64e66295a4d7bce0a5114087a72321a9c1f72432\classes.dex" />
+        sha1="eb0d830e3eabb9deb9ec44869cf7ac7ea1ad794c">
+        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_2e378a52baf4f732fa7c47e0694b27787e62e9d7\classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="C:\Users\TOM\.gradle\caches\modules-2\files-2.1\com.google.zxing\core\3.0.1\9ebf6cd580d67601fbf88fd007aab4703b19e4c2\core-3.0.1.jar"
+        jar="C:\Users\TOM\.android\build-cache\a7bf4e586a2973a26be9bd5ad23191146ce1de6c\output\jars\libs\android-core-3.3.0.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.3"
-        sha1="9ebf6cd580d67601fbf88fd007aab4703b19e4c2">
-        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\core-3.0.1_961577a088edfbe62d0f6beab2fabd0f94fb4ba5\classes.dex" />
+        sha1="bb833b2fc6c9177f06d96529a854ceb2319832a6">
+        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\android-core-3.3.0_905457bd0bc11a708bdbd455a20920eb240cc597\classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="C:\Users\TOM\.android\build-cache\e327b083a0a4b98f02d5e8d680e289ba0a0ca60b\output\jars\classes.jar"
+        jar="C:\Users\TOM\.android\build-cache\12b81d42e7ac1c4071430cf082d9ab5e5ab04215\output\jars\classes.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.3"
-        sha1="17f8750d5c0749e44dd7c54aa390d9c937803825">
-        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_19fd0459385c5a7629eb86f968714ed5e175f74c\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\TOM\.android\build-cache\0106adbf8a43a0424c8cbc5513a4491279503718\output\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="f38c1fe0ee3d0ef717e7f32131719fccf07fd6c7">
-        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_a96c14f5cb01749ac5612711198d3fb0fa010818\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\TOM\.android\build-cache\181e07059c8d99d8ee871d0a1bbb464056fdee93\output\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="fb04b12526b0073c7fb1ebb70c5842d82ee95596">
-        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_143275c9041239105972291b2337c0391e846365\classes.dex" />
+        sha1="432921a1dc94a95bbe682a08780b91231dbf54d0">
+        <dex dex="C:\work\dan\MotoAPP2\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_03865ed8703fd272eaf1f46d8e6c6c97f104b240\classes.dex" />
     </item>
 
 </items>

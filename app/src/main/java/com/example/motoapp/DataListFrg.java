@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
@@ -106,7 +107,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 	String today;
 	Message msg;
 	int CheckNet = 0 ;
-
+	int CheckGPS = 0 ;
 	/*
 	 * 01列表 02接單 03前往取件 04取件完成，拍照上傳 05回站 06直送 07已送達，拍照上傳 08送達失敗，失敗原因
 	 */
@@ -544,8 +545,16 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 				if(isConnected()){
 					new clsHttpPostAPI().CallAPI(context, "API007");
 					setDialog();
-					Post2 post = new Post2();
-					post.run();
+					type="06";
+					display();
+					if(CheckNet == 1){
+						setDialog();
+						Post2 post = new Post2();
+						post.run();
+						type="06";
+						display();
+					}
+
 
 				}else {
 					clsDialog.Show(context, "提示訊息", "請確認網路是否正常！");
@@ -562,8 +571,17 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 				if(isConnected()){
 					new clsHttpPostAPI().CallAPI(context, "API012");
 					setDialog();
-					Post2 post = new Post2();
-					post.run();
+					type="05";
+					display();
+					if(CheckNet == 1){
+
+						setDialog();
+						Post2 post = new Post2();
+						post.run();
+						type="05";
+						display();
+					}
+
 					// 取得站所資料
 				}else {
 					clsDialog.Show(context, "提示訊息", "請確認網路是否正常！");
@@ -583,9 +601,11 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 					objDB.openDB();
 					objDB.UpdateTaskStationID(((ClsDropDownStation) Spinner_SetGoods
 							.getSelectedItem()).GetID(), Application.strCaseID);
+					objDB.UpdateTaskStationName(((ClsDropDownStation) Spinner_SetGoods
+							.getSelectedItem()).GetValue(), Application.strCaseID);
 					objDB.DBClose();
 					Log.e("11",((ClsDropDownStation) Spinner_SetGoods
-							.getSelectedItem()).GetID());
+							.getSelectedItem()).GetValue());
 					new clsHttpPostAPI().CallAPI(context, "API010",((ClsDropDownStation) Spinner_SetGoods
 							.getSelectedItem()).GetStationType());
 					setDialog();
@@ -683,6 +703,9 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 						objDB.UpdateTaskFailReasonID(
 								((ClsDropDownItem) Reason.getSelectedItem()).GetID(),
 								Application.strCaseID);
+                        objDB.UpdateTaskFailReasonName(
+                                (String.valueOf(Reason.getSelectedItem())),
+                                Application.strCaseID);
 						objDB.UpdateTaskStatus("81", Application.strCaseID);
 						objDB.DBClose();
 						new clsHttpPostAPI().CallAPI(context, "API009");
@@ -1014,7 +1037,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 								objList.add(new ClsDropDownStation(
 										jsonItem.getString("StationID"),
 										jsonItem.getString("StationName"),
-										jsonItem.getString("StationType")));
+										"1"));
 							}
 
 							ArrayAdapter<ClsDropDownStation> Adapter = new ArrayAdapter<ClsDropDownStation>(
@@ -1249,6 +1272,10 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 		// 休息中 接單中
 		Button Button_Status = (Button)findViewById(R.id.Button_Status);
 		Button_Status.setText(objLoginInfo.GetStatus());
+		if(Application.GPS!=null && !Application.GPS.equals("")){
+			Button_Status.setTextColor(Color.GREEN);
+		}
+
 		Button_Status.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -1476,6 +1503,8 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 	}
 
 
+
+
 	public void onStart() {
 		super.onStart();
 		GCMIntentService.handlerGCM = handlerGCM;
@@ -1483,6 +1512,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 		ListViewAdpater.handler = handlerListView;
 
 	}
+
 
 
 	//手勢滑動設定 implements GestureDetector.OnGestureListener 產生以下方法
@@ -1505,7 +1535,6 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
 		if(e2!=null){
 			float distance = e2.getX()-e1.getX();
-			Log.e("distance2", String.valueOf(distance));
 			if(distance>100){
 				Log.e("方向2","右邊");
 				Intent intent = new Intent(DataListFrg.this, HistoryFragment.class);
@@ -1527,7 +1556,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 	@Override
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 		float distance = e2.getX()-e1.getX();
-		Log.e("distance", String.valueOf(distance));
+
 		if(distance>100){
 
 			Log.e("方向","右邊");
@@ -1544,7 +1573,10 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		return detector.onTouchEvent(event);
+		if(detector!=null){
+			return detector.onTouchEvent(event);
+		}
+		return false;
 	}
 	//畫面處理 點選明細後畫面新增
 	public void display() {
@@ -1625,6 +1657,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 			objDB.openDB();
 			clsTask objT = objDB.LoadTask(Application.strCaseID);
 			objDB.DBClose();
+			//測試
 			String CustAddress = setDecrypt(objT.CustAddress);
 
 			((TextView) findViewById(R.id.TextView_CarNo))
@@ -1835,6 +1868,8 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 					.GetPayType(objT.PayType));*/
 			((TextView) findViewById(R.id.EditText_Money))
 					.setText(objT.PayAmount);
+            Button button_Send = (Button) findViewById(R.id.button_Send);
+            button_Send.setText("上傳");
 			Log.e("type",type);
 		}
 
@@ -2756,7 +2791,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 					@Override
 					public void onResponse(Call call, Response response) throws IOException {
 						String json = response.body().string();
-						Log.e("回傳", json);
+						Log.e("照片回傳", json);
 						//刪除照片
 						bmp = null;
 						ImageView imv;
@@ -2829,14 +2864,14 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 	}
 	//解密
 	private String setDecrypt (String DecryptString){
-		Log.e("DecryptString",DecryptString);
+		//Log.e("DecryptString",DecryptString);
         if(DecryptString!=null && !DecryptString.equals("")){
             SetAES AES = new SetAES();
             EncrypMD5 encrypMD5 = new EncrypMD5();
             EncrypSHA encrypSHA = new EncrypSHA();
             try {
                 byte[] TextByte2 = AES.DecryptAES(encrypMD5.eccrypt(),encrypSHA.eccrypt(), Base64.decode(DecryptString.getBytes(),Base64.DEFAULT));
-				Log.e("DecryptString2",DecryptString);
+				//Log.e("DecryptString2",DecryptString);
 				DecryptString = new String(TextByte2);
 
             } catch (NoSuchAlgorithmException e) {
@@ -2862,7 +2897,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 
 		private void PostFailInfo() {
 			final OkHttpClient client = new OkHttpClient();
-			String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Get_DispatchFailReason.aspx?key="+Application.strKey;
+			String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Get_DispatchFailReason.aspx?key="+Application.strKey+"&Company="+Application.Company;
 			Request request = new Request.Builder()
 					.url(strUrl)
 					.build();
@@ -2927,7 +2962,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 
 		private void PostFailInfo() {
 			final OkHttpClient client = new OkHttpClient();
-			final String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Get_StationList.aspx?Status=5&obuID="+"&key="+Application.strKey;
+			final String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Get_StationList.aspx?Status=5&obuID="+"&key="+Application.strKey+"&Company="+Application.Company;
 			Request request = new Request.Builder()
 					.url(strUrl)
 					.build();
@@ -2941,9 +2976,9 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 				@RequiresApi(api = Build.VERSION_CODES.KITKAT)
 				@Override
 				public void onResponse(Call call, Response response) throws IOException {
-					//Log.e("站",strUrl);
+					Log.e("URL站",strUrl);
 					String json = response.body().string();
-					//Log.e("回傳", json);
+					Log.e("回傳站", json);
 					JSONObject json2 = null;
 					final Spinner Spinner_SetGoods = (Spinner) findViewById(R.id.Spinner_SetGoods);
 					final List<ClsDropDownStation> objList = new ArrayList<ClsDropDownStation>();
@@ -2958,7 +2993,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 							objList.add(new ClsDropDownStation(
 									jsonItem2.getString("StationID"),
 									jsonItem2.getString("StationName"),
-									jsonItem2.getString("StationType")));
+									"1"));//集貨站TYPE寫死
 						}
 
 

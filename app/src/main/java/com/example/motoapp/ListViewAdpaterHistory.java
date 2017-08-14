@@ -219,6 +219,22 @@ public class ListViewAdpaterHistory extends BaseAdapter implements AdapterView.O
 					.setText(objT.PayAmount);
 			((TextView) objLayout.findViewById(R.id.EditText_Cash))
 					.setText(objT.Cash);
+			if(objT.PayType!=null&&!objT.PayType.equals("")){
+				if(objT.PayType.equals("1")){
+					((TextView) objLayout.findViewById(R.id.TextMoney))
+							.setText("現金     		：");
+				}else if (objT.PayType.equals("2")){
+					((TextView) objLayout.findViewById(R.id.TextMoney))
+							.setText("到付     		：");
+				}else if (objT.PayType.equals("0")){
+					((TextView) objLayout.findViewById(R.id.TextMoney))
+							.setText("月結     		：");
+				}
+
+			}else {
+				((TextView) objLayout.findViewById(R.id.TextMoney))
+						.setText("無       		：");
+			}
 
 		}
 

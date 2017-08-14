@@ -26,6 +26,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/LinearLayout_h"
+        android:layout_marginBottom="50dp"
         android:background="@drawable/page_bg"
         android:orientation="vertical"
         android:padding="5dp"
@@ -84,7 +85,7 @@
         <ScrollView
             android:id="@+id/ScrollView_Step1"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="match_parent"
             android:visibility="visible">
 
             <LinearLayout
@@ -310,7 +311,7 @@
         <ScrollView
             android:id="@+id/ScrollView_Step2"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="match_parent"
             android:visibility="visible">
 
             <LinearLayout
@@ -740,7 +741,7 @@
         <ScrollView
             android:id="@+id/ScrollView_Delivery"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="match_parent"
             android:visibility="visible">
 
             <LinearLayout
@@ -1250,7 +1251,7 @@
     <LinearLayout
         android:id="@+id/LinearLayout_footer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:visibility="visible">
 

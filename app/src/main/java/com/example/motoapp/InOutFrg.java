@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -57,7 +58,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import static android.icu.util.Currency.CurrencyUsage.CASH;
 import static com.example.motoapp.R.id.EditText_ENO1;
 import static com.example.motoapp.R.id.EditText_SNO1;
 
@@ -773,6 +773,9 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 
 		Button Button_Status = (Button) findViewById(R.id.Button_Status);
 		Button_Status.setText(objLoginInfo.GetStatus());
+		if(Application.GPS!=null && !Application.GPS.equals("")){
+			Button_Status.setTextColor(Color.GREEN);
+		}
 		Button_Status.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -1332,7 +1335,10 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 	}
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		return detector.onTouchEvent(event);
+		if(detector!=null){
+			return detector.onTouchEvent(event);
+		}
+		return false;
 	}
 
 	//貨況 7-配送 8-配達

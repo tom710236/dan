@@ -53,4 +53,8 @@ public class Application extends android.app.Application {
 	public static String datatime="";
     public static String cash_on_delivery="";
 	public static String getTask="";
+	public static String Updata ="";
+	public static String Company ="";
+	public static String VersionResult="";
+	public static String GPS="";
 }

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -255,6 +256,9 @@ public class HistoryFragment extends Activity implements GestureDetector.OnGestu
 
 		Button Button_Status = (Button)findViewById(R.id.Button_Status);
 		Button_Status.setText(objLoginInfo.GetStatus());
+		if(Application.GPS!=null && !Application.GPS.equals("")){
+			Button_Status.setTextColor(Color.GREEN);
+		}
 		Button_Status.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -339,6 +343,7 @@ public class HistoryFragment extends Activity implements GestureDetector.OnGestu
 
 	@Override
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+
 		float distance = e2.getX()-e1.getX();
 		if(distance>100){
 			Log.e("方向1","右邊");
@@ -373,6 +378,9 @@ public class HistoryFragment extends Activity implements GestureDetector.OnGestu
 	}
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		return detector.onTouchEvent(event);
+		if(detector!=null){
+			return detector.onTouchEvent(event);
+		}
+		return false;
 	}
 }

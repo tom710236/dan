@@ -108,10 +108,23 @@ public class clsTask {
 	public String LastDate;
 
 
+
 	/**
 	 * 登入更新時間
 	 * */
 	public String LoginTime;
+
+	/**
+	 * 送達失敗原因(NAME)
+	 * */
+	public String FailReasonName;
+
+	/**
+	 * 集貨站所名
+	 稱
+
+	 * */
+	public String StationName;
 
 
 	public static String GetStatus(String pStrStatus)

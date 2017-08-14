@@ -17,7 +17,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="接單中" />
+            android:text="接單中"
+            android:textSize="16sp" />
 
 
         <LinearLayout
@@ -89,7 +90,8 @@
             android:layout_alignParentRight="true"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="登出" />
+            android:text="登出"
+            android:textSize="16sp" />
     </LinearLayout>
 
 </RelativeLayout>

@@ -12,7 +12,7 @@ public class dbLocations extends SQLiteOpenHelper {
 
 
 	private static final String DATABASE_NAME = "dbKerry.db";	//資料庫名稱
-	private static final int DATABASE_VERSION = 23;	//資料庫版本
+	private static final int DATABASE_VERSION = 25;	//資料庫版本
 	private SQLiteDatabase objDBLocations;
 
 	public dbLocations(Context context) {
@@ -86,6 +86,8 @@ public class dbLocations extends SQLiteOpenHelper {
 					+ "[cLastDate] [varchar](20) NULL,"
 					+ "[cRecPicture] [varchar](200) NULL,"
 					+ "[cReqPicture] [varchar](200) NULL,"
+					+ "[cFailReasonName] [varchar](200) NULL,"
+					+ "[cStationName] [varchar](200) NULL,"
 					+ "[cLoginTime] [varchar](200) NULL"+
 					")";
 
@@ -293,6 +295,8 @@ public class dbLocations extends SQLiteOpenHelper {
 			objTask.RecPicture = cursor.getString(cursor.getColumnIndex("cRecPicture"));
 			objTask.ReqPicture = cursor.getString(cursor.getColumnIndex("cReqPicture"));
 			objTask.LoginTime = cursor.getString(cursor.getColumnIndex("cLoginTime"));
+			objTask.FailReasonName = cursor.getString(cursor.getColumnIndex("cFailReasonName"));
+			objTask.StationName = cursor.getString(cursor.getColumnIndex("cStationName"));
 			cursor.close();
 		}
 
@@ -371,7 +375,17 @@ public class dbLocations extends SQLiteOpenHelper {
 		objDBLocations.update("tblTask", args, "cCaseID='"+pStrPK+"'", null);
 
 	}
+	/** EX：
+	 * 更新預計到達時間
+	 * */
+	public void UpdateTaskStationName (String pStrStationName ,String pStrPK) {
+		ContentValues args = new ContentValues();
 
+		if(pStrStationName .length()>0)
+			args.put("cStationName ", pStrStationName );
+
+		objDBLocations.update("tblTask", args, "cCaseID='"+pStrPK+"'", null);
+	}
 	/** EX：
 	 * 更新預計到達時間
 	 * */
@@ -380,6 +394,17 @@ public class dbLocations extends SQLiteOpenHelper {
 
 		if(pStrRecTime.length()>0)
 			args.put("cRecTime", pStrRecTime);
+
+		objDBLocations.update("tblTask", args, "cCaseID='"+pStrPK+"'", null);
+	}
+	/** EX：
+	 * 更新送達失敗(NAME)
+	 * */
+	public void UpdateTaskFailReasonName(String pStrFailReasonName,String pStrPK) {
+		ContentValues args = new ContentValues();
+
+		if(pStrFailReasonName.length()>0)
+			args.put("cFailReasonName", pStrFailReasonName);
 
 		objDBLocations.update("tblTask", args, "cCaseID='"+pStrPK+"'", null);
 	}

@@ -22,6 +22,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/LinearLayout_h"
+        android:layout_marginBottom="50dp"
         android:background="@drawable/page_bg"
         android:orientation="vertical"
         android:padding="5dp"
@@ -275,9 +276,10 @@
                     android:layout_height="30dp">
 
                     <TextView
+                        android:id="@+id/TextMoney"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="到付         ："
+                        android:text="到付(現金): "
                         android:textSize="16sp" />
 
                     <TextView

@@ -15,11 +15,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -45,6 +45,7 @@ public class Delay extends Service implements LocationListener {
     String IMEI;
     String GPSPeriod;
     Context context;
+    int CheckGPS,CheckGPS2;
 
     public static String Employee, regID, lon, lat, UserID, GCMID;
 
@@ -114,6 +115,15 @@ public class Delay extends Service implements LocationListener {
                         intent1.addFlags(intent1.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent1);
                     }
+                    if(Application.GPS!=null && !Application.GPS.equals("") && CheckGPS == 0){
+                        Intent intent1 = new Intent(Delay.this,DataListFrg.class);
+                        // 錯誤代碼 Calling startActivity() from outside of an Activity context requires the , FLAG_ACTIVITY_NEW_TASK , Is this really what you want
+                        //使用 intent1.addFlags(intent1.FLAG_ACTIVITY_NEW_TASK);
+                        intent1.addFlags(intent1.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent1);
+                        vibrator ();
+                        CheckGPS = 1;
+                    }
                 } else {
                     Log.e("定位中", "定位中");
                 }
@@ -142,8 +152,11 @@ public class Delay extends Service implements LocationListener {
         lon = String.valueOf(location.getLongitude());
         lat = String.valueOf(location.getLatitude());
 
-        Log.e("定位",str);
-        Toast.makeText(Delay.this, "已成功定位", Toast.LENGTH_SHORT).show();
+        //Log.e("定位",str);
+        //Toast.makeText(Delay.this, "已成功定位", Toast.LENGTH_SHORT).show();
+        Application.GPS = str;
+
+
     }
 
     @Override
@@ -237,6 +250,11 @@ public class Delay extends Service implements LocationListener {
         }
         super.onDestroy();
         Log.e("STOP", "STOP");
+        Application.GPS = null;
     }
+    private void vibrator (){
+        Vibrator vb = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
+        vb.vibrate(1500);
 
+    }
 }

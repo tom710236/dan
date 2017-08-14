@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,7 +22,7 @@ import android.view.View.OnKeyListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 
 import com.google.android.gcm.GCMRegistrar;
 
@@ -69,31 +70,25 @@ public class Login extends Activity {
 	Button button;
 	ProgressDialog myDialog;
 	int textInt = 0 ;
-	String Updata = "V1.00";
+	String Updata ="1.0";
 	dbLocations objDB;
-	String datetime;
+	String datetime2;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_login);
 
-		// 版本更新
-		TextView textView = (TextView)findViewById(R.id.textView9);
-		textView.setText(Updata);
-
-		Button button = (Button)findViewById(R.id.button2);
-		button.setEnabled(false);
-		button.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-
-			}
-		});
-
+		//過了20171030後就不能用
+		time();
+		Log.e("datetime2",datetime2);
+		if( Integer.parseInt(datetime2)>20171030){
+			LinearLayout linearLayout = (LinearLayout)findViewById(R.id.linear);
+			linearLayout.setVisibility(View.GONE);
+		}
 
 		new GCMTask().execute();
-
+		Application.VersionResult = Updata;
 		SysApplication.getInstance().addActivity(this);
 		dbLocations objLocation = new dbLocations(Login.this);
 		objLocation.CheckDB();
@@ -539,6 +534,7 @@ public class Login extends Activity {
 					"&EmployeeID="+EditText_Account.getText().toString()+
 					"&Odometer="+EditText_No.getText().toString()+
 					"&TransportID="+EditText_Car.getText().toString()+
+					"&Version="+Updata+
 					"&key="+Application.strKey;
 			OkHttpClient client = new OkHttpClient();
 
@@ -607,30 +603,46 @@ public class Login extends Activity {
 							//Log.e("UserID",EditText_Account.getText().toString());
 							//記Log
 							String GPSPeriod = new JSONObject(json).getString("GPSPeriod");
+							String Company = new JSONObject(json).getString("Company");
+							String VersionResult = new JSONObject(json).getString("VersionResult");
+							Application.Company = Company;
+							Application.VersionResult = VersionResult;
 							//new clsHttpPostAPI().CallAPI(objContext, "API021");
+							if(Application.VersionResult.equals(",版本正確")){
+								//記住帳號
+								SharedPreferences setting =
+										getSharedPreferences("Login", MODE_PRIVATE);
+								setting.edit()
+										.putString("Account", Account)
+										.putString("Car",carID)
+										.putString("NO",NO)
+										.commit();
+
+								//String EmployeeName =  objLogin.UserName;
+								//String Employee;
+								//Employee =  EmployeeName.substring(0, 3);
+								Intent it = new Intent(Login.this,Delay.class);
+								//Log.e("Account",Account);
+								it.putExtra("Employee",Account);
+								it.putExtra("regID",regId);
+								it.putExtra("GPSPeriod",GPSPeriod);
+								startService(it);
+								Intent intent = new Intent(Login.this, DataListFrg.class);
+								startActivity(intent);
+							}else {
+								runOnUiThread(new Runnable() {
+									@Override
+									public void run() {
+										myDialog.dismiss();
+										Uri uri = Uri.parse("http://ga.kerrytj.com/Cht_Motor/CHT_APK/kerry_Motor.apk");
+										Intent i=new Intent(Intent.ACTION_VIEW,uri);
+										startActivity(i);
+									}
+								});
+							}
 
 
 
-							//記住帳號
-							SharedPreferences setting =
-									getSharedPreferences("Login", MODE_PRIVATE);
-							setting.edit()
-									.putString("Account", Account)
-									.putString("Car",carID)
-									.putString("NO",NO)
-									.commit();
-
-							//String EmployeeName =  objLogin.UserName;
-							//String Employee;
-							//Employee =  EmployeeName.substring(0, 3);
-							Intent it = new Intent(Login.this,Delay.class);
-							//Log.e("Account",Account);
-							it.putExtra("Employee",Account);
-							it.putExtra("regID",regId);
-							it.putExtra("GPSPeriod",GPSPeriod);
-							startService(it);
-							Intent intent = new Intent(Login.this, DataListFrg.class);
-							startActivity(intent);
 
 						}if (Result.equals("2")) {
 							runOnUiThread(new Runnable() {
@@ -731,9 +743,9 @@ public class Login extends Activity {
 	}
 	private void time() {
 		Calendar mCal = Calendar.getInstance();
-		String datetime = "yyyyHHmm";
+		String datetime = "yyyyMMdd";
 		SimpleDateFormat df2 = new SimpleDateFormat(datetime);
-		datetime = df2.format(mCal.getTime());
+		datetime2 = df2.format(mCal.getTime());
 	}
 	private void setDialog(){
 		myDialog = new ProgressDialog(Login.this);

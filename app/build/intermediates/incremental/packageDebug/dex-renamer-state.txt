@@ -1,4 +1,4 @@
-#Thu Aug 17 15:54:06 CST 2017
+#Thu Aug 17 16:28:15 CST 2017
 file.9=C\:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\2\\argox-android-sdk_3078932b44d9a28fb079746a6605b8583fe4fa96\\classes.dex
 base.10=C\:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\classes_e4cc11bf972c6df61b1f419eeea83ca048d2fffe
 file.8=C\:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\classes_2e378a52baf4f732fa7c47e0694b27787e62e9d7\\classes.dex

@@ -236,45 +236,55 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 					// 顯示Progress對話方塊
 					//new clsHttpPostAPI().CallAPI(context, "API002");
 					//Button_Get.setEnabled(false);
-					clsHttpPostAPI clsHttpPostAPI = new clsHttpPostAPI();
-					clsHttpPostAPI.CallAPI(context, "API002");
-					//myDialog2 = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
-					if(chickInt==1){
-						myDialog2 = new ProgressDialog(DataListFrg.this);
-						myDialog2.setTitle("接單中");
-						myDialog2.setMessage("接單資訊檢查中，請稍後！");
-						myDialog2.setButton("關閉", new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								myDialog2.dismiss();
-							}
-
-						});
-						myDialog2.setCancelable(false);
-						myDialog2.show();
-						new Thread(new Runnable(){
-							@Override
-							public void run() {
-								try{
-									Thread.sleep(60000);
-								}
-								catch(Exception e){
-									e.printStackTrace();
-								}
-								finally{
+					objDB.openDB();
+					clsTask objT = objDB.LoadTask(Application.strCaseID);
+					objDB.close();
+					if(!objT.Status.equals("2")){
+						clsHttpPostAPI clsHttpPostAPI = new clsHttpPostAPI();
+						clsHttpPostAPI.CallAPI(context, "API002");
+						//myDialog2 = ProgressDialog.show(context, "載入中", "資料讀取中，請稍後！", false);
+						if(chickInt==1){
+							myDialog2 = new ProgressDialog(DataListFrg.this);
+							myDialog2.setTitle("接單中");
+							myDialog2.setMessage("接單資訊檢查中，請稍後！");
+							myDialog2.setButton("關閉", new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
 									myDialog2.dismiss();
 								}
-							}
-						}).start();
-						int i = clsHttpPostAPI.from_get_json;
-						Log.e("clsHttpPostAPI", String.valueOf(i));
 
+							});
+							myDialog2.setCancelable(false);
+							myDialog2.show();
+							new Thread(new Runnable(){
+								@Override
+								public void run() {
+									try{
+										Thread.sleep(40000);
+									}
+									catch(Exception e){
+										e.printStackTrace();
+									}
+									finally{
+										myDialog2.dismiss();
+									}
+								}
+							}).start();
+							int i = clsHttpPostAPI.from_get_json;
+							Log.e("clsHttpPostAPI", String.valueOf(i));
+
+							display();
+						}
+					}else{
+						myDialog2.dismiss();
+						type="71";
 						display();
-					}else {
-						clsDialog.Show(context, "提示訊息", "請確認網路是否正常！");
 					}
 
 
+
+				}else {
+					clsDialog.Show(context, "提示訊息", "請確認網路是否正常！");
 				}
 
 			}

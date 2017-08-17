@@ -11,6 +11,7 @@ import android.util.Log;
 import org.json.JSONObject;
 
 import static com.example.motoapp.Application.Company;
+import static com.example.motoapp.Application.Updata;
 
 
 public class clsHttpPostAPI extends Activity {
@@ -177,7 +178,7 @@ public class clsHttpPostAPI extends Activity {
 						"&EmployeeID="+Application.strAccount+
 						"&Odometer="+Application.strPass+
 						"&TransportID="+Application.strCar+
-						"&Version="+Application.Updata+
+						"&Version="+ Updata+
 						"&key="+Application.strKey;
 						//"&lon=121.48225"+ "&lat=25.02479";
 				//Log.e("strUrl",strUrl);
@@ -610,7 +611,7 @@ public class clsHttpPostAPI extends Activity {
 				clsLoginInfo objL = new clsLoginInfo(context);
 				objL.Load();
 				Log.e("回站站所",objT.StationName);
-				String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?CaseID="+ Application.strCaseID + "&Status=5"+"&key="+Application.strKey+"&StationID="+objT.StationID+"&StationName="+objL.StationName+"&EmployeeID="+objL.UserID+"&Company="+ Company;
+				String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DispatchStatus.aspx?CaseID="+ Application.strCaseID + "&Status=5"+"&key="+Application.strKey+"&StationID="+objT.StationID+"&StationName="+objT.StationName+"&EmployeeID="+objL.UserID+"&Company="+ Company;
 				clsLogger.i("form_Back", strUrl);
 				strRequestJSON = objHttppost.Invoke(strUrl, "");
 				JSONObject json = new JSONObject(strRequestJSON);
@@ -939,7 +940,7 @@ public class clsHttpPostAPI extends Activity {
 						"&EmployeeID="+objL.UserID+
 						"&Odometer="+Application.strPass+
 						"&TransportID="+Application.strCar+
-						"&Version="+Application.Updata+
+						"&Version="+ Updata+
 						"&key="+Application.strKey;
 						//"&lon=121.48225"+ "&lat=25.02479";
 						/*
@@ -995,6 +996,7 @@ public class clsHttpPostAPI extends Activity {
 						"&EmployeeID="+objL.UserID+
 						"&Odometer="+Application.strPass+
 						"&TransportID="+Application.strCar+
+						"&Version="+Application.Version+
 						"&key="+Application.strKey;
 
 				clsLogger.i("Form_Reset", strUrl);
@@ -1028,6 +1030,7 @@ public class clsHttpPostAPI extends Activity {
 						"&EmployeeID="+objL.UserID+
 						"&Odometer="+Application.strPass+
 						"&TransportID="+Application.strCar+
+						"&Version="+Application.Version+
 						"&key="+Application.strKey;
 				clsLogger.i("Form_Get", strUrl);
 				strRequestJSON = objHttppost.Invoke(strUrl, "");

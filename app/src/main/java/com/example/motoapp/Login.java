@@ -23,6 +23,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.android.gcm.GCMRegistrar;
 
@@ -30,8 +31,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -71,24 +75,30 @@ public class Login extends Activity {
 	ProgressDialog myDialog;
 	int textInt = 0 ;
 	String Updata ="1.0";
+	int timeOut = 20171030 ;
 	dbLocations objDB;
 	String datetime2;
+	String datetime3;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_login);
 
+		GetDT post = new GetDT();
+		post.run();
 		//過了20171030後就不能用
 		time();
-		Log.e("datetime2",datetime2);
-		if( Integer.parseInt(datetime2)>20171030){
+		Log.e("datetime2",datetime2 );
+
+		if( Integer.parseInt(datetime2)>timeOut){
 			LinearLayout linearLayout = (LinearLayout)findViewById(R.id.linear);
 			linearLayout.setVisibility(View.GONE);
+
 		}
 
 		new GCMTask().execute();
-		Application.VersionResult = Updata;
+		Application.Version = Updata;
 		SysApplication.getInstance().addActivity(this);
 		dbLocations objLocation = new dbLocations(Login.this);
 		objLocation.CheckDB();
@@ -101,7 +111,8 @@ public class Login extends Activity {
 		    serial = Build.SERIAL;
 
 		}
-
+		TextView textView = (TextView)findViewById(R.id.textView9);
+		textView.setText(Updata);
 
 		/*
 		 
@@ -158,8 +169,8 @@ public class Login extends Activity {
 		Log.e("intStatus", String.valueOf(intStatus));
 		if(intStatus==1) {
 
-			//Intent intent = new Intent(Login.this, DataListFrg.class);
-			//startActivity(intent);
+			Intent intent = new Intent(Login.this, DataListFrg.class);
+			startActivity(intent);
 			//清除欄位
 
 		}else if (intStatus==0){
@@ -171,7 +182,7 @@ public class Login extends Activity {
 			EditText_No.setText("");
 
 		}
-
+		// 時間到0100清除帳密
 		if(Application.datatime.equals("0100")){
 			EditText_Account.setText("");
 			//EditText_Password.setText("");
@@ -179,6 +190,15 @@ public class Login extends Activity {
 			//EditText_Area.setText("");
 			EditText_Account.requestFocus();
 			EditText_No.setText("");
+
+			//記住帳號
+			SharedPreferences setting2 =
+					getSharedPreferences("Login", MODE_PRIVATE);
+			setting2.edit()
+					.putString("Account", "")
+					.putString("Car","")
+					.putString("NO","")
+					.commit();
 		}
 
 
@@ -519,7 +539,45 @@ public class Login extends Activity {
                     REQUEST_CONTACTS);
         }
     }
+	class GetDT extends Thread{
+		public void run() {
+			GetDTInfo();
+		}
 
+		private void GetDTInfo() {
+			final String strUrl ="http://demo.shinda.com.tw/getDT.aspx";
+			OkHttpClient client = new OkHttpClient();
+			Request request = new Request.Builder()
+					.url(strUrl)
+					.build();
+			Call call = client.newCall(request);
+			call.enqueue(new Callback() {
+				@Override
+				public void onFailure(Call call, IOException e) {
+
+				}
+
+				@Override
+				public void onResponse(Call call, Response response) throws IOException {
+					String json = response.body().string();
+					String json2 = String.valueOf(json.subSequence(0,10));
+					datetime3 = json2.replaceAll("-","");
+					Application.NETTime = datetime3;
+					if( Integer.parseInt(datetime3)>timeOut){
+						runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								LinearLayout linearLayout = (LinearLayout)findViewById(R.id.linear);
+								linearLayout.setVisibility(View.GONE);
+							}
+						});
+
+
+					}
+				}
+			});
+		}
+	}
 
 	class Post extends Thread{
 		@Override
@@ -549,6 +607,7 @@ public class Login extends Activity {
 					.url(strUrl)
 					.build();
 			Call call = client.newCall(request);
+			Log.e("Loginin",strUrl);
 			call.enqueue(new Callback(){
 
 				@Override
@@ -604,11 +663,11 @@ public class Login extends Activity {
 							//記Log
 							String GPSPeriod = new JSONObject(json).getString("GPSPeriod");
 							String Company = new JSONObject(json).getString("Company");
-							String VersionResult = new JSONObject(json).getString("VersionResult");
+							final String VersionResult = new JSONObject(json).getString("VersionResult");
 							Application.Company = Company;
 							Application.VersionResult = VersionResult;
 							//new clsHttpPostAPI().CallAPI(objContext, "API021");
-							if(Application.VersionResult.equals(",版本正確")){
+							if(VersionResult.equals(",版本正確") || VersionResult.equals(Updata)){
 								//記住帳號
 								SharedPreferences setting =
 										getSharedPreferences("Login", MODE_PRIVATE);
@@ -633,8 +692,11 @@ public class Login extends Activity {
 								runOnUiThread(new Runnable() {
 									@Override
 									public void run() {
+										int V = VersionResult.indexOf(",");
+										String VURI = (String) VersionResult.subSequence(0, V);
+										Log.e("VURI",VURI);
 										myDialog.dismiss();
-										Uri uri = Uri.parse("http://ga.kerrytj.com/Cht_Motor/CHT_APK/kerry_Motor.apk");
+										Uri uri = Uri.parse(VURI);
 										Intent i=new Intent(Intent.ACTION_VIEW,uri);
 										startActivity(i);
 									}
@@ -660,8 +722,8 @@ public class Login extends Activity {
 								@Override
 								public void run() {
 									myDialog.dismiss();
-									//clsDialog.Show(Login.this,"ERROR", "輸入的參數有缺漏");
-									clsDialog.Show(Login.this,"ERROR", "GCM收尋中");
+									clsDialog.Show(Login.this,"ERROR", "輸入的參數有缺漏或GCM收尋中");
+									//clsDialog.Show(Login.this,"ERROR", "GCM收尋中");
 								}
 							});
 
@@ -762,6 +824,21 @@ public class Login extends Activity {
 		myDialog.show();
 	}
 
+	private void UrlTime(){
+
+		try {
+			URL url=new URL("http://www.baidu.com");//取得资源对象
+			URLConnection uc=url.openConnection();//生成连接对象
+			uc.connect(); //发出连接
+			long ld=uc.getDate(); //取得网站日期时间
+			Date date=new Date(ld); //转换为标准时间对象
+			//分别取得时间中的小时，分钟和秒，并输出
+			Log.e("網路時間",date.getHours()+"时"+date.getMinutes()+"分"+date.getSeconds()+"秒");
+		} catch (Exception e) {
+			e.printStackTrace();
+			Log.e("錯誤", String.valueOf(e));
+		}
+	}
 
 
 }

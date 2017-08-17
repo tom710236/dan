@@ -57,4 +57,6 @@ public class Application extends android.app.Application {
 	public static String Company ="";
 	public static String VersionResult="";
 	public static String GPS="";
+	public static String Version="";
+	public static String NETTime="";
 }

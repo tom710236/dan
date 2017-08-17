@@ -4,24 +4,8 @@
         "source": "C:\\Users\\TOM\\.android\\build-cache\\a7bf4e586a2973a26be9bd5ad23191146ce1de6c\\output\\res\\menu\\encode.xml"
     },
     {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\menu\\zxinglegacy_encode.xml",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\b560ecb4837316f4018484a425242a75d349dbad\\output\\res\\menu\\zxinglegacy_encode.xml"
-    },
-    {
-        "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\menu\\option_menu.xml",
-        "source": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\src\\main\\res\\menu\\option_menu.xml"
-    },
-    {
         "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\menu\\option_menu.xml",
         "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\menu\\option_menu.xml"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\menu\\zxing_capture.xml",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\0106adbf8a43a0424c8cbc5513a4491279503718\\output\\res\\menu\\zxing_capture.xml"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\menu\\zxinglegacy_capture.xml",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\b560ecb4837316f4018484a425242a75d349dbad\\output\\res\\menu\\zxinglegacy_capture.xml"
     },
     {
         "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\menu\\history.xml",
@@ -30,13 +14,5 @@
     {
         "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\menu\\capture.xml",
         "source": "C:\\Users\\TOM\\.android\\build-cache\\a7bf4e586a2973a26be9bd5ad23191146ce1de6c\\output\\res\\menu\\capture.xml"
-    },
-    {
-        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\menu\\option_menu.xml",
-        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\menu\\option_menu.xml"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\menu\\zxing_encode.xml",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\0106adbf8a43a0424c8cbc5513a4491279503718\\output\\res\\menu\\zxing_encode.xml"
     }
 ]

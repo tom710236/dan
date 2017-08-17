@@ -1,119 +1,27 @@
 [
     {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\common_full_open_on_phone.png",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\9b9459ac8b5c4b8817be60f4209b2ff495aa61f0\\output\\res\\drawable-hdpi\\common_full_open_on_phone.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\bg.png",
-        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-hdpi\\bg.png"
-    },
-    {
-        "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\camera.png",
-        "source": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\src\\main\\res\\drawable-hdpi\\camera.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\compass.png",
-        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-hdpi\\compass.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\box.png",
-        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-hdpi\\box.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\logo_b.png",
-        "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\logo_b.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\logo.png",
-        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-hdpi\\logo.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\documents.png",
-        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-hdpi\\documents.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\btn.png",
-        "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\btn.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\btnhover.png",
-        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-hdpi\\btnhover.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\common_signin_btn_text_disabled_dark.9.png",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\9b9459ac8b5c4b8817be60f4209b2ff495aa61f0\\output\\res\\drawable-hdpi\\common_signin_btn_text_disabled_dark.9.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\common_signin_btn_text_focus_light.9.png",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\9b9459ac8b5c4b8817be60f4209b2ff495aa61f0\\output\\res\\drawable-hdpi\\common_signin_btn_text_focus_light.9.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\powered_by_google_dark.png",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\465845c61b5a757bdae6f6d9476a7e05b80e67d5\\output\\res\\drawable-hdpi\\powered_by_google_dark.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\camera.png",
-        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-hdpi\\camera.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\common_signin_btn_text_focus_dark.9.png",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\9b9459ac8b5c4b8817be60f4209b2ff495aa61f0\\output\\res\\drawable-hdpi\\common_signin_btn_text_focus_dark.9.png"
-    },
-    {
-        "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\menu02a.png",
-        "source": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\src\\main\\res\\drawable-hdpi\\menu02a.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\ic_plusone_medium_off_client.png",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\9b9459ac8b5c4b8817be60f4209b2ff495aa61f0\\output\\res\\drawable-hdpi\\ic_plusone_medium_off_client.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\common_signin_btn_icon_normal_light.9.png",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\9b9459ac8b5c4b8817be60f4209b2ff495aa61f0\\output\\res\\drawable-hdpi\\common_signin_btn_icon_normal_light.9.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\menu03b.png",
-        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-hdpi\\menu03b.png"
-    },
-    {
-        "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\page_bg.png",
-        "source": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\src\\main\\res\\drawable-hdpi\\page_bg.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\menu03b.png",
-        "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\menu03b.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\page_bg.png",
-        "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\page_bg.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\common_signin_btn_text_normal_light.9.png",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\9b9459ac8b5c4b8817be60f4209b2ff495aa61f0\\output\\res\\drawable-hdpi\\common_signin_btn_text_normal_light.9.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\menu02a.png",
-        "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\menu02a.png"
-    },
-    {
-        "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\menu03b.png",
-        "source": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\src\\main\\res\\drawable-hdpi\\menu03b.png"
+        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\ic_launcher.png",
+        "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\ic_launcher.png"
     },
     {
         "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\menu03a.png",
         "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\menu03a.png"
     },
     {
-        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\pagebg.png",
-        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-hdpi\\pagebg.png"
+        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\menu04b.png",
+        "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\menu04b.png"
     },
     {
-        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\page_bg.png",
-        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-hdpi\\page_bg.png"
+        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\logo_b.png",
+        "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\logo_b.png"
     },
     {
-        "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\bg05.png",
-        "source": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\src\\main\\res\\drawable-hdpi\\bg05.png"
+        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\menu01b.png",
+        "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\menu01b.png"
+    },
+    {
+        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\btn.png",
+        "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\btn.png"
     },
     {
         "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\bg.png",
@@ -124,128 +32,12 @@
         "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\footer_bg.png"
     },
     {
-        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\bg05.png",
-        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-hdpi\\bg05.png"
-    },
-    {
         "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\menu02b.png",
         "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\menu02b.png"
     },
     {
-        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\menu04a.png",
-        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-hdpi\\menu04a.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\arrow.png",
-        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-hdpi\\arrow.png"
-    },
-    {
-        "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\logo.png",
-        "source": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\src\\main\\res\\drawable-hdpi\\logo.png"
-    },
-    {
-        "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\pagebg.png",
-        "source": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\src\\main\\res\\drawable-hdpi\\pagebg.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\ic_plusone_tall_off_client.png",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\9b9459ac8b5c4b8817be60f4209b2ff495aa61f0\\output\\res\\drawable-hdpi\\ic_plusone_tall_off_client.png"
-    },
-    {
-        "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\btnhover.png",
-        "source": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\src\\main\\res\\drawable-hdpi\\btnhover.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\menu04a.png",
-        "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\menu04a.png"
-    },
-    {
-        "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\footer_bg.png",
-        "source": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\src\\main\\res\\drawable-hdpi\\footer_bg.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\camera.png",
-        "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\camera.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\btnhover.png",
-        "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\btnhover.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\menu03a.png",
-        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-hdpi\\menu03a.png"
-    },
-    {
-        "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\compass.png",
-        "source": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\src\\main\\res\\drawable-hdpi\\compass.png"
-    },
-    {
-        "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\btn.png",
-        "source": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\src\\main\\res\\drawable-hdpi\\btn.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\menu01b.png",
-        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-hdpi\\menu01b.png"
-    },
-    {
-        "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\kerryicon.png",
-        "source": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\src\\main\\res\\drawable-hdpi\\kerryicon.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\ic_launcher.png",
-        "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\ic_launcher.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\powered_by_google_light.png",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\465845c61b5a757bdae6f6d9476a7e05b80e67d5\\output\\res\\drawable-hdpi\\powered_by_google_light.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\common_signin_btn_text_disabled_light.9.png",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\9b9459ac8b5c4b8817be60f4209b2ff495aa61f0\\output\\res\\drawable-hdpi\\common_signin_btn_text_disabled_light.9.png"
-    },
-    {
-        "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\arrow.png",
-        "source": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\src\\main\\res\\drawable-hdpi\\arrow.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\menu04b.png",
-        "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\menu04b.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\common_ic_googleplayservices.png",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\9b9459ac8b5c4b8817be60f4209b2ff495aa61f0\\output\\res\\drawable-hdpi\\common_ic_googleplayservices.png"
-    },
-    {
-        "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\menu04b.png",
-        "source": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\src\\main\\res\\drawable-hdpi\\menu04b.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\menu02b.png",
-        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-hdpi\\menu02b.png"
-    },
-    {
-        "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\bg.png",
-        "source": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\src\\main\\res\\drawable-hdpi\\bg.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\common_signin_btn_icon_disabled_focus_light.9.png",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\9b9459ac8b5c4b8817be60f4209b2ff495aa61f0\\output\\res\\drawable-hdpi\\common_signin_btn_icon_disabled_focus_light.9.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\menu01b.png",
-        "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\menu01b.png"
-    },
-    {
-        "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\menu04a.png",
-        "source": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\src\\main\\res\\drawable-hdpi\\menu04a.png"
-    },
-    {
         "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\menu01a.png",
         "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\menu01a.png"
-    },
-    {
-        "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\menu01a.png",
-        "source": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\src\\main\\res\\drawable-hdpi\\menu01a.png"
     },
     {
         "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\bg05.png",
@@ -256,147 +48,51 @@
         "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\box.png"
     },
     {
-        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\menu02a.png",
-        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-hdpi\\menu02a.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\footer_bg.png",
-        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-hdpi\\footer_bg.png"
-    },
-    {
         "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\kerryicon.png",
         "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\kerryicon.png"
     },
     {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\common_signin_btn_text_pressed_dark.9.png",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\9b9459ac8b5c4b8817be60f4209b2ff495aa61f0\\output\\res\\drawable-hdpi\\common_signin_btn_text_pressed_dark.9.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\btn.png",
-        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-hdpi\\btn.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\common_signin_btn_icon_pressed_dark.9.png",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\9b9459ac8b5c4b8817be60f4209b2ff495aa61f0\\output\\res\\drawable-hdpi\\common_signin_btn_icon_pressed_dark.9.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\common_signin_btn_text_pressed_light.9.png",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\9b9459ac8b5c4b8817be60f4209b2ff495aa61f0\\output\\res\\drawable-hdpi\\common_signin_btn_text_pressed_light.9.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\common_signin_btn_text_disabled_focus_dark.9.png",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\9b9459ac8b5c4b8817be60f4209b2ff495aa61f0\\output\\res\\drawable-hdpi\\common_signin_btn_text_disabled_focus_dark.9.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\ic_plusone_standard_off_client.png",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\9b9459ac8b5c4b8817be60f4209b2ff495aa61f0\\output\\res\\drawable-hdpi\\ic_plusone_standard_off_client.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\documents.png",
-        "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\documents.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\ic_plusone_small_off_client.png",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\9b9459ac8b5c4b8817be60f4209b2ff495aa61f0\\output\\res\\drawable-hdpi\\ic_plusone_small_off_client.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\pagebg.png",
-        "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\pagebg.png"
-    },
-    {
-        "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\ic_launcher.png",
-        "source": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\src\\main\\res\\drawable-hdpi\\ic_launcher.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\common_signin_btn_icon_focus_light.9.png",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\9b9459ac8b5c4b8817be60f4209b2ff495aa61f0\\output\\res\\drawable-hdpi\\common_signin_btn_icon_focus_light.9.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\menu01a.png",
-        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-hdpi\\menu01a.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\menu04b.png",
-        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-hdpi\\menu04b.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\common_signin_btn_icon_disabled_light.9.png",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\9b9459ac8b5c4b8817be60f4209b2ff495aa61f0\\output\\res\\drawable-hdpi\\common_signin_btn_icon_disabled_light.9.png"
-    },
-    {
-        "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\menu03a.png",
-        "source": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\src\\main\\res\\drawable-hdpi\\menu03a.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\logo_b.png",
-        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-hdpi\\logo_b.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\common_signin_btn_icon_focus_dark.9.png",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\9b9459ac8b5c4b8817be60f4209b2ff495aa61f0\\output\\res\\drawable-hdpi\\common_signin_btn_icon_focus_dark.9.png"
-    },
-    {
-        "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\menu02b.png",
-        "source": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\src\\main\\res\\drawable-hdpi\\menu02b.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\common_signin_btn_icon_disabled_dark.9.png",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\9b9459ac8b5c4b8817be60f4209b2ff495aa61f0\\output\\res\\drawable-hdpi\\common_signin_btn_icon_disabled_dark.9.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\common_signin_btn_icon_normal_dark.9.png",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\9b9459ac8b5c4b8817be60f4209b2ff495aa61f0\\output\\res\\drawable-hdpi\\common_signin_btn_icon_normal_dark.9.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\common_signin_btn_icon_disabled_focus_dark.9.png",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\9b9459ac8b5c4b8817be60f4209b2ff495aa61f0\\output\\res\\drawable-hdpi\\common_signin_btn_icon_disabled_focus_dark.9.png"
-    },
-    {
-        "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\documents.png",
-        "source": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\src\\main\\res\\drawable-hdpi\\documents.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\kerryicon.png",
-        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-hdpi\\kerryicon.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\common_signin_btn_text_disabled_focus_light.9.png",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\9b9459ac8b5c4b8817be60f4209b2ff495aa61f0\\output\\res\\drawable-hdpi\\common_signin_btn_text_disabled_focus_light.9.png"
-    },
-    {
-        "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\menu01b.png",
-        "source": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\src\\main\\res\\drawable-hdpi\\menu01b.png"
+        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\menu04a.png",
+        "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\menu04a.png"
     },
     {
         "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\compass.png",
         "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\compass.png"
     },
     {
+        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\camera.png",
+        "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\camera.png"
+    },
+    {
+        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\btnhover.png",
+        "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\btnhover.png"
+    },
+    {
         "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\logo.png",
         "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\logo.png"
     },
     {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\common_signin_btn_icon_pressed_light.9.png",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\9b9459ac8b5c4b8817be60f4209b2ff495aa61f0\\output\\res\\drawable-hdpi\\common_signin_btn_icon_pressed_light.9.png"
+        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\menu03b.png",
+        "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\menu03b.png"
+    },
+    {
+        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\page_bg.png",
+        "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\page_bg.png"
+    },
+    {
+        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\documents.png",
+        "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\documents.png"
+    },
+    {
+        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\pagebg.png",
+        "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\pagebg.png"
+    },
+    {
+        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\menu02a.png",
+        "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\menu02a.png"
     },
     {
         "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\arrow.png",
         "source": "C:\\work\\dan\\MotoAPP2\\app\\src\\main\\res\\drawable-hdpi\\arrow.png"
-    },
-    {
-        "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\logo_b.png",
-        "source": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\src\\main\\res\\drawable-hdpi\\logo_b.png"
-    },
-    {
-        "merged": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\box.png",
-        "source": "C:\\work\\0206\\Test0206.1\\MotoAPP1\\app\\src\\main\\res\\drawable-hdpi\\box.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\John\\MotoAPP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\ic_launcher.png",
-        "source": "C:\\work\\dan\\John\\MotoAPP\\app\\src\\main\\res\\drawable-hdpi\\ic_launcher.png"
-    },
-    {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\common_signin_btn_text_normal_dark.9.png",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\9b9459ac8b5c4b8817be60f4209b2ff495aa61f0\\output\\res\\drawable-hdpi\\common_signin_btn_text_normal_dark.9.png"
     }
 ]

@@ -126,6 +126,12 @@ public class clsTask {
 	 * */
 	public String StationName;
 
+	/**
+	 * 轉單單號
+
+	 * */
+	public String GetID;
+
 
 	public static String GetStatus(String pStrStatus)
 	{

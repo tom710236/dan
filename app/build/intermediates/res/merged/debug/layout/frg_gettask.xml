@@ -54,7 +54,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
-                        android:layout_weight="4"
+                        android:layout_weight="3"
                         android:text="託運單號："
                         android:textSize="16sp" />
 
@@ -62,23 +62,23 @@
                         android:id="@+id/TextView_OrderNo3"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="6"
+                        android:layout_weight="5"
                         android:singleLine="true"
                         android:text=""
-                        android:textSize="16sp" />
+                        android:textSize="18sp" />
 
                     <Button
                         android:id="@+id/button5"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
+                        android:layout_weight="2.5"
                         android:onClick="onScan"
                         android:text="掃描" />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="2"
                         android:text="" />
                 </LinearLayout>
 
@@ -88,6 +88,7 @@
                     android:layout_marginTop="10dp">
 
                     <TextView
+                        android:id="@+id/textView15"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="8"
@@ -99,7 +100,14 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="5"
-                        android:text="確認" />
+                        android:text="確認"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/textView14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2.28" />
 
                     <TextView
                         android:layout_width="0dp"

@@ -108,6 +108,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 	Message msg;
 	int CheckNet = 0 ;
 	int CheckGPS = 0 ;
+	int checkInt2 = 0;
 	/*
 	 * 01列表 02接單 03前往取件 04取件完成，拍照上傳 05回站 06直送 07已送達，拍照上傳 08送達失敗，失敗原因
 	 */
@@ -160,6 +161,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 
 		objDB = new dbLocations(context);
 
+
 		Intent intent = getIntent();
 		Bundle bag = intent.getExtras();
 		//type = bundle.getString("type",null);
@@ -173,6 +175,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 			setListView();
 			Log.e("type2",type);
 		}
+
 		/*printer = new PPLZPrinter();
 		((PPLZPrinter) this.printer).initPrinter(this);*/
 
@@ -333,29 +336,40 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 		/* 取件完成 */
 		Button button_Sucess = (Button) findViewById(R.id.button_Sucess);
 		button_Sucess.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
+
 				if(isConnected()){
 					//運輸單號更新
 					EditText editText = (EditText)findViewById(R.id.EditText_OrderID1);
 					Application.newstrObuID = editText.getText().toString();
+					/* 取出資料 */
+					objDB.openDB();
+					clsTask objT = objDB.LoadTask(Application.strCaseID);
+					objDB.DBClose();
+					if(Application.newstrObuID.equals(objT.OrderID) && checkInt2 == 0){
+						Log.e("newstrObuID",Application.newstrObuID);
+						Log.e("objT.OrderID",objT.OrderID);
+						clsDialog.Show(context, "提示訊息", "請確認託運單號是否更新！");
+						checkInt2 =1;
+					}else {
+						//objDB.openDB();
+						//objDB.UpdateTaskOrdID(Application.newstrObuID,Application.strCardNo);
+						//objDB.close();
 
-					//objDB.openDB();
-					//objDB.UpdateTaskOrdID(Application.newstrObuID,Application.strCardNo);
-					//objDB.close();
+						//付款金額更新
+						EditText editText1 = (EditText)findViewById(R.id.EditText_Money);
+						Application.newPay = editText1.getText().toString();
+						//objDB.openDB();
+						//objDB.UpdateTaskPayAmount(Application.newPay,Application.strCardNo);
+						//objDB.close();
 
-					//付款金額更新
-					EditText editText1 = (EditText)findViewById(R.id.EditText_Money);
-					Application.newPay = editText1.getText().toString();
-					//objDB.openDB();
-					//objDB.UpdateTaskPayAmount(Application.newPay,Application.strCardNo);
-					//objDB.close();
+						//代收貨款更新
+						Application.cash_on_delivery = ((TextView) findViewById(R.id.textView_Cash)).getText().toString();
+						Log.e("cash_on_delivery",Application.cash_on_delivery);
 
-					//代收貨款更新
-					Application.cash_on_delivery = ((TextView) findViewById(R.id.textView_Cash)).getText().toString();
-					Log.e("cash_on_delivery",Application.cash_on_delivery);
-
-					//付款方式更新
+						//付款方式更新
 				/*
 				final int[] indexSpinner = new int[1];
 
@@ -376,21 +390,24 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 					}
 				});
 					*/
-					//照片清除
-					bmp = null;
-					ImageView imv;
-					imv = (ImageView) findViewById(R.id.imageView);
-					imv.setImageBitmap(bmp);
-					//協助修改 清除
-					CheckBox c1 = (CheckBox)findViewById(R.id.chkCreateData);
-					c1.setChecked(false);//checkbox狀態
+						//照片清除
+						bmp = null;
+						ImageView imv;
+						imv = (ImageView) findViewById(R.id.imageView);
+						imv.setImageBitmap(bmp);
+						//協助修改 清除
+						CheckBox c1 = (CheckBox)findViewById(R.id.chkCreateData);
+						c1.setChecked(false);//checkbox狀態
 
-					// 資料變更後資料庫更新
-					objDB.openDB();
-					objDB.UpdateTask("", "", "", EditText_CustomName.getText().toString(), editText_Address1.getText().toString(), editText_Phone.getText().toString(), ((ClsDropDownItem)Spinner_PayType.getSelectedItem()).GetID(), EditText_Money.getText().toString(), "03", Application.strCaseID,Application.newstrObuID,Application.cash_on_delivery);
-					objDB.close();
-					new clsHttpPostAPI().CallAPI(context, "API005");
-					setDialog();
+						// 資料變更後資料庫更新
+						objDB.openDB();
+						objDB.UpdateTask("", "", "", EditText_CustomName.getText().toString(), editText_Address1.getText().toString(), editText_Phone.getText().toString(), ((ClsDropDownItem)Spinner_PayType.getSelectedItem()).GetID(), EditText_Money.getText().toString(), "03", Application.strCaseID,Application.newstrObuID,Application.cash_on_delivery);
+						objDB.close();
+						new clsHttpPostAPI().CallAPI(context, "API005");
+						setDialog();
+						checkInt2 =0;
+					}
+
 				}else{
 					clsDialog.Show(context, "提示訊息", "請確認網路是否正常！");
 				}
@@ -914,7 +931,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 							objDB.openDB();
 							objDB.UpdateTaskStatus("00", Application.strCaseID);
 							objDB.DBClose();
-							type = "01";
+							//type = "01";
 							break;
 						case "3":
 							strType = "前往取件回覆";
@@ -1219,8 +1236,11 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 		button_DoList.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				type = "71";
-				display();
+				//type = "71";
+				//display();
+				Intent intent = new Intent(DataListFrg.this, DataListFrg.class);
+				startActivity(intent);
+				DataListFrg.this.finish();
 
 			}
 		});
@@ -1316,9 +1336,15 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 
 				try {
 					objDB.openDB();
+					/*
 					Cursor cursor = objDB
 							.Load1("tblTask",
 									"cStatus<>'71' and cStatus<>'81' and cStatus<>'2' and cStatus<>'3' and cStatus<>'09'",
+									"cRequestDate desc", "");
+									*/
+					Cursor cursor = objDB
+							.Load1("tblTask",
+									"cStatus<>'71' and cStatus<>'81' and cStatus<>'2' and cStatus<>'3' and cStatus<>'09' and cStatus<>'00'",
 									"cRequestDate desc", "");
 					List rowitem = new ArrayList();
 					listView = (ListView) findViewById(R.id.listView);
@@ -1347,7 +1373,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 					adpater = new ListViewAdpater(context,
 							rowitem);
 					listView.setAdapter(adpater);
-					//adpater.notifyDataSetChanged();
+
 				} catch (Exception e) {
 					Log.i("Error", e.getMessage());
 					try {
@@ -1533,7 +1559,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 
 	@Override
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-		if(e2!=null){
+		if(e2!=null && !e2.equals("")){
 			float distance = e2.getX()-e1.getX();
 			if(distance>100){
 				Log.e("方向2","右邊");
@@ -1708,6 +1734,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 			/* 取出資料 */
 			objDB.openDB();
 			clsTask objT = objDB.LoadTask(Application.strCaseID);
+
 			String RecAddress2 = setDecrypt(objT.RecAddress);
 			String RecName2 = setDecrypt(objT.RecName);
 			String RecPhone2 = setDecrypt(objT.RecPhone);
@@ -1743,12 +1770,25 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 
 				}
 			}
+			if (objT.PayType.equals("0")){
+				TextView textView = (TextView)findViewById(R.id.Text_Money);
+				textView.setVisibility(View.INVISIBLE);
+				EditText editText = (EditText)findViewById(R.id.EditText_Money);
+				editText.setVisibility(View.INVISIBLE);
+				}else {
+				TextView textView = (TextView)findViewById(R.id.Text_Money);
+				textView.setVisibility(View.VISIBLE);
+				EditText editText = (EditText)findViewById(R.id.EditText_Money);
+				editText.setVisibility(View.VISIBLE);
+			}
+
 
 			((EditText) findViewById(R.id.EditText_Money))
 					.setText(objT.PayAmount);
 			((TextView) findViewById(R.id.textView_Cash))
 					.setText(objT.Cash);
 			((EditText) findViewById(R.id.EditText_OrderID1)).requestFocus();
+
 
 			Log.e("type",type);
 
@@ -2337,7 +2377,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 		}
 
 		/* 回列表 */
-		if (type.equals("71") || type.equals("81") || type.equals("09")) {
+		if (type.equals("71") || type.equals("81") || type.equals("09") || type.equals("00")) {
 			LinearLayout LinearLayout_List = (LinearLayout) findViewById(R.id.LinearLayout_list);
 			LinearLayout_List.setVisibility(View.VISIBLE);
 
@@ -2353,7 +2393,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 			objDB.openDB();
 
 			Cursor cursor = objDB.Load1("tblTask",
-					"cStatus<>'71' and cStatus<>'81' and cStatus<>'2' and cStatus<>'3' and cStatus<>'09'", "cRequestDate desc", "");
+					"cStatus<>'71' and cStatus<>'81' and cStatus<>'2' and cStatus<>'3' and cStatus<>'09'and cStatus<>'00'", "cRequestDate desc", "");
 			List rowitem = new ArrayList();
 			listView = (ListView) findViewById(R.id.listView);
 
@@ -2520,9 +2560,10 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 				if(contents.length()== 11 || contents.length() ==8){
 					final EditText editText = (EditText) findViewById(R.id.EditText_OrderID1);
 					editText.setText(contents);
-					objDB.openDB();
-					objDB.UpdateTaskOrdID(contents,Application.strCaseID);
-					objDB.close();
+
+					//objDB.openDB();
+					//objDB.UpdateTaskOrdID(contents,Application.strCaseID);
+					//objDB.close();
 					Application.newstrObuID = contents;
 				}else {
 					Toast.makeText(this,"託運單號格式不符",Toast.LENGTH_SHORT).show();

@@ -67,7 +67,7 @@ public class HistoryFragment extends Activity implements GestureDetector.OnGestu
 		dbLocations objDB = new dbLocations(HistoryFragment.this);
 		objDB.openDB();
 		SysApplication.getInstance().addActivity(this);
-		Cursor cursor= objDB.Load1("tblTask", "cStatus='71' or cStatus='81' or cStatus='2' or cStatus='3' or cStatus='09'", "cRequestDate desc", "");
+		Cursor cursor= objDB.Load1("tblTask", "cStatus='71' or cStatus='81' or cStatus='2' or cStatus='3' or cStatus='09' or cStatus='00'", "cRequestDate desc", "");
 		List rowitem = new ArrayList();
 		//設定手勢滑動
 		listView = (ListView) findViewById(R.id.listView);
@@ -343,16 +343,18 @@ public class HistoryFragment extends Activity implements GestureDetector.OnGestu
 
 	@Override
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-
-		float distance = e2.getX()-e1.getX();
-		if(distance>100){
-			Log.e("方向1","右邊");
-			Intent intent = new Intent(HistoryFragment.this, HistoryFragment.class);
-			startActivity(intent);
-		}else if(distance<-100){
-			Intent intent = new Intent(HistoryFragment.this, GetTaskFrg.class);
-			startActivity(intent);
-			Log.e("方向1","左邊");
+		if(e2!=null && !e2.equals("")){
+			float distance = e2.getX()-e1.getX();
+			if(distance>100){
+				Log.e("方向1","右邊");
+				Intent intent = new Intent(HistoryFragment.this, HistoryFragment.class);
+				startActivity(intent);
+			}else if(distance<-100){
+				Intent intent = new Intent(HistoryFragment.this, GetTaskFrg.class);
+				startActivity(intent);
+				Log.e("方向1","左邊");
+			}
+			return false;
 		}
 		return false;
 	}

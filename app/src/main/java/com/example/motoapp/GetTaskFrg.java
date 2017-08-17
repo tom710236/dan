@@ -48,6 +48,7 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 	Button button_DoneList;
 	GestureDetector detector;
 	ArrayList Value;
+
 	private final int REQUEST_CODE = 0xa1;
 	private boolean isSingleSacn = false;
 	@Override
@@ -81,6 +82,36 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 		SysApplication.getInstance().addActivity(this);
 		objEdit = (EditText)findViewById(R.id.TextView_OrderNo3);
 		//objEdit.setText("40000200023");
+		objEdit.setOnKeyListener(new View.OnKeyListener() {
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+
+				if(!objEdit.getText().toString().equals("") && objEdit.getText().toString()!=null){
+					final TextView textView = (TextView)findViewById(R.id.textView14);
+					textView.setText(objEdit.getText().toString());
+
+				}else {
+					final TextView textView = (TextView)findViewById(R.id.textView14);
+					textView.setText(Application.getTask);
+
+				}
+
+
+				if (event.getAction() == event.ACTION_DOWN) {
+					if(!objEdit.getText().toString().trim().equals("")) {
+					/*
+					 * 呼叫API 接單*/
+						new clsHttpPostAPI().CallAPI(context,"API013",objEdit.getText().toString());
+					}else {
+						clsDialog.Show(context, "提示", "請輸入託運編號！");
+
+					}
+					return false;
+				}
+				return true;
+			}
+		});
+
 
 		//上排按鈕
 		button_DoList = (Button)findViewById(R.id.button_DoList);
@@ -135,17 +166,15 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 			@Override
 			public void onClick(View v) {
 				
-				if(!objEdit.getText().toString().trim().equals(""))
-				{
+				if(!objEdit.getText().toString().trim().equals("")) {
 					/*
 					 * 呼叫API 接單*/
 					new clsHttpPostAPI().CallAPI(context,"API013",objEdit.getText().toString());
-				}else
-				{
+				}else {
 					clsDialog.Show(context, "提示", "請輸入託運編號！");
-					
+
 				}
-				
+
 			}
 		});
 		// 登出 關閉SERVICE
@@ -192,7 +221,9 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 		TextView tName = (TextView)findViewById(R.id.TextName);
 		tID.setText(objL.UserID);
 		tName.setText(objL.UserName);
-		
+
+
+
 		handlerTask = new Handler() {
 			@Override
 			public void handleMessage(Message msg) {
@@ -213,7 +244,9 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 						objDB.DBClose();
 						Toast.makeText(GetTaskFrg.this,"取得"+Application.getTask+"資料！",Toast.LENGTH_SHORT).show();
 						//clsDialog.Show(context, "提示", "取得案件資料！");
-						
+
+
+
 					}
 					if (status.equals("2")) {
 						//clsDialog.Show(context, "錯誤訊息", "輸入的授權碼不合法！");
@@ -227,8 +260,9 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 						//clsDialog.Show(context, "提示訊息", "系統忙碌中，請重試！");
 						Toast.makeText(GetTaskFrg.this,"系統忙碌中，請重試！",Toast.LENGTH_SHORT).show();
 					}
-					
+
 					objEdit.setText("");
+
 
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
@@ -344,20 +378,27 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 				// ZXing回傳的內容
 				//String contents = data.getStringExtra("SCAN_RESULT");
 				final EditText editText = (EditText) findViewById(R.id.TextView_OrderNo3);
+
 				editText.setText(contents);
+
 				if(contents.length()==11 || contents.length() ==8){
+
 					if(!objEdit.getText().toString().trim().equals("")) {
 						Application.getTask=contents;
 						new clsHttpPostAPI().CallAPI(context,"API013",objEdit.getText().toString());
+
 					}else {
+
 						Toast.makeText(this,"無此託運單號",Toast.LENGTH_SHORT).show();
+
 					}
 				}else{
-					Toast.makeText(this,"託運編號格式不符",Toast.LENGTH_SHORT).show();
-				}
 
+					Toast.makeText(this,"託運編號格式不符",Toast.LENGTH_SHORT).show();
+
+				}
 				startActivityForResult(data, 1);//連續-重複掃描的動作
-				//Toast.makeText(this, contents, Toast.LENGTH_LONG).show();
+
 			}
 
 		}
@@ -381,15 +422,18 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 
 	@Override
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-		float distance = e2.getX()-e1.getX();
-		if(distance>50){
-			Log.e("方向","右邊");
-			Intent intent = new Intent(GetTaskFrg.this, HistoryFragment.class);
-			startActivity(intent);
-		}else if(distance<-50){
-			Intent intent = new Intent(GetTaskFrg.this, InOutFrg.class);
-			startActivity(intent);
-			Log.e("方向","左邊");
+		if(e2!=null && !e2.equals("")){
+			float distance = e2.getX()-e1.getX();
+			if(distance>50){
+				Log.e("方向","右邊");
+				Intent intent = new Intent(GetTaskFrg.this, HistoryFragment.class);
+				startActivity(intent);
+			}else if(distance<-50){
+				Intent intent = new Intent(GetTaskFrg.this, InOutFrg.class);
+				startActivity(intent);
+				Log.e("方向","左邊");
+			}
+			return false;
 		}
 		return false;
 	}

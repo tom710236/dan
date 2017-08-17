@@ -402,7 +402,6 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 				//TODO 顯示數量
 				TextView TextView_ECount = (TextView) findViewById(R.id.TextView_ECount);
 				TextView_ECount.setText(String.format("%04d", Integer.valueOf(objLoginInfo.Out)) + " / " + String.format("%04d", Integer.valueOf(objLoginInfo.In)));
-
 			}
 		});
 
@@ -1300,16 +1299,19 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 
 	@Override
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-		float distance = e2.getX()-e1.getX();
-		if(distance>50){
-			//Intent intent = new Intent(InOutFrg.this, GetTaskFrg.class); 這樣設定才可以點明細 原因不明
-			Log.e("方向1","右邊");
-			Intent intent = new Intent(InOutFrg.this, GetTaskFrg.class);
-			startActivity(intent);
-		}else if(distance<-50){
-			Intent intent = new Intent(InOutFrg.this,GetTaskFrg.class);
-			startActivity(intent);
-			Log.e("方向1","左邊");
+		if(e2!=null && !e2.equals("")){
+			float distance = e2.getX()-e1.getX();
+			if(distance>50){
+				//Intent intent = new Intent(InOutFrg.this, GetTaskFrg.class); 這樣設定才可以點明細 原因不明
+				Log.e("方向1","右邊");
+				Intent intent = new Intent(InOutFrg.this, GetTaskFrg.class);
+				startActivity(intent);
+			}else if(distance<-50){
+				Intent intent = new Intent(InOutFrg.this,GetTaskFrg.class);
+				startActivity(intent);
+				Log.e("方向1","左邊");
+			}
+			return false;
 		}
 		return false;
 	}
@@ -1351,8 +1353,8 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 		private void GetConditionInfo() {
 
 
-			String url = "https://ga.kerrytj.com/Cht_Motor/api/GetEmployee/GetCondition?CARTYPE=" + CARTYPE;
-
+			//String url = "https://ga.kerrytj.com/Cht_Motor/api/GetEmployee/GetCondition?CARTYPE=" + CARTYPE;
+			String url = "https://ga.kerrytj.com/Cht_Motor/api/GetCondition/GET?CARTYPE=" + CARTYPE+"&Company="+Application.Company;
 			final OkHttpClient client = new OkHttpClient()
 					.newBuilder()
 					.connectTimeout(15, TimeUnit.SECONDS)
@@ -1399,7 +1401,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 					Log.e("NUM", NUM);
 					Log.e("DES", DES);
 					where73 = NUMArray.indexOf("73 配送");
-					where02 = NUMArray.indexOf("02 配達");
+					where02 = NUMArray.indexOf("00 配達");
 
 				}
 				//配送
@@ -1603,6 +1605,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 									public void run() {
 										myDialog.dismiss();
 										Log.e("無此單號","無此單號");
+										Toast.makeText(InOutFrg.this, "無此單號",Toast.LENGTH_SHORT).show();
 									}
 								});
 
@@ -1618,6 +1621,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 										TextView_SMoney.setText(CASH);
 										TextView TextView_SMoney2 = (TextView)findViewById(R.id.TextView_SMoney2);
 										TextView_SMoney2.setText(COD_AMT);
+
 										//配達
 										myDialog.dismiss();
 										TextView TextView_EAddress1 = (TextView)findViewById(R.id.TextView_EAddress1);
@@ -1626,6 +1630,9 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 										TextView_EMoney.setText(CASH);
 										TextView TextView_EMoney2 = (TextView)findViewById(R.id.TextView_EMoney2);
 										TextView_EMoney2.setText(COD_AMT);
+
+
+
 										//查詢
 										myDialog.dismiss();
 										TextView TextView_AD = (TextView)findViewById(R.id.TextView_AD);
@@ -1674,6 +1681,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 
 
 	}
+	//貨況 7-配送 8-配達
 	class PostCondition_UP extends Thread {
 		@Override
 		public void run() {
@@ -1681,7 +1689,10 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 		}
 
 		private void GetCondition_UPInfo() {
-
+			/**
+			 * KTJ
+			 */
+			/*
 			final String url = "https://ga.kerrytj.com/Cht_Motor/api/GetEmployee/Condition_UP?" +
 					"NUM=" + typeNUM +
 					"&BOL_NO=" + onClickNum +
@@ -1696,7 +1707,25 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 					"&BusinessID=" +"1"+
 					"&UP_DATE=" + UP_DATE +
 					"&UP_TIME="+ UP_TIME ;
-
+				*/
+			/**
+			 * KE
+			 */
+			final String url = "https://ga.kerrytj.com/Cht_Motor/api/Condition_UP/GET?" +
+					"NUM=" + typeNUM +
+					"&BOL_NO=" + onClickNum +
+					"&CAR_NO=" + Application.strCar +
+					"&BrushDate=" +BrushDate+
+					"&BrushTime=" +BrushTime+
+					"&BrushDept=" +"0078"+
+					"&Area=" +"777"+
+					"&ID=" +objLoginInfo.UserID+
+					"&HTnumber=" +"ABCD"+
+					"&DataResource=" +"B"+
+					"&BusinessID=" +"1"+
+					"&UP_DATE=" + UP_DATE +
+					"&Company=" + Application.Company +
+					"&UP_TIME="+ UP_TIME ;
 			final OkHttpClient client = new OkHttpClient()
 					.newBuilder()
 					.connectTimeout(15, TimeUnit.SECONDS)
@@ -1728,7 +1757,8 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 					Log.e("託運單資訊更新",url);
 					Log.e("託運單資訊更新回傳", json);
 					Log.e("CARTYPE", String.valueOf(CARTYPE));
-					if(json.equals("\"True\"")){
+
+					if(json.equals("[{\"MESSAGE\":\"TRUE\"}]")){
 						if(CARTYPE == 8 ){
 							//TODO 更新數量
 							objLoginInfo.UpdateInOut("Out");
@@ -1757,7 +1787,6 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 									/*
 									final dbLocations objDB = new dbLocations(InOutFrg.this);
 									objDB.openDB();
-
 									objDB.InsertTask(new Object[] {
 											onClickNum,
 											onClickNum,
@@ -1780,6 +1809,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 							}
 						});
 					}
+
 					/*
 					if(CARTYPE == 8 && json.equals("\"True\"") ){
 						//TODO 更新數量

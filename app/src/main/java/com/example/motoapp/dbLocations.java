@@ -12,7 +12,7 @@ public class dbLocations extends SQLiteOpenHelper {
 
 
 	private static final String DATABASE_NAME = "dbKerry.db";	//資料庫名稱
-	private static final int DATABASE_VERSION = 25;	//資料庫版本
+	private static final int DATABASE_VERSION = 26;	//資料庫版本
 	private SQLiteDatabase objDBLocations;
 
 	public dbLocations(Context context) {
@@ -88,6 +88,7 @@ public class dbLocations extends SQLiteOpenHelper {
 					+ "[cReqPicture] [varchar](200) NULL,"
 					+ "[cFailReasonName] [varchar](200) NULL,"
 					+ "[cStationName] [varchar](200) NULL,"
+					+ "[cGetID] [varchar](200) NULL,"
 					+ "[cLoginTime] [varchar](200) NULL"+
 					")";
 
@@ -297,6 +298,7 @@ public class dbLocations extends SQLiteOpenHelper {
 			objTask.LoginTime = cursor.getString(cursor.getColumnIndex("cLoginTime"));
 			objTask.FailReasonName = cursor.getString(cursor.getColumnIndex("cFailReasonName"));
 			objTask.StationName = cursor.getString(cursor.getColumnIndex("cStationName"));
+			objTask.GetID = cursor.getString(cursor.getColumnIndex("cGetID"));
 			cursor.close();
 		}
 
@@ -377,6 +379,17 @@ public class dbLocations extends SQLiteOpenHelper {
 	}
 	/** EX：
 	 * 更新預計到達時間
+	 * */
+	public void UpdateGetID (String pStrGetID ,String pStrPK) {
+		ContentValues args = new ContentValues();
+
+		if(pStrGetID .length()>0)
+			args.put("cGetID ", pStrGetID );
+
+		objDBLocations.update("tblTask", args, "cCaseID='"+pStrPK+"'", null);
+	}
+	/** EX：
+	 * 轉運站名稱(NAME)
 	 * */
 	public void UpdateTaskStationName (String pStrStationName ,String pStrPK) {
 		ContentValues args = new ContentValues();

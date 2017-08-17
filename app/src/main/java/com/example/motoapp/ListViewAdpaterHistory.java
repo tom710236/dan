@@ -143,7 +143,7 @@ public class ListViewAdpaterHistory extends BaseAdapter implements AdapterView.O
 
 
 			objDB.openDB();
-			Cursor cursor= objDB.Load1("tblTask", "cStatus='71' or cStatus='81' or cStatus='2' or cStatus='3' or cStatus='09'", "cRequestDate desc", "");
+			Cursor cursor= objDB.Load1("tblTask", "cStatus='71' or cStatus='81' or cStatus='2' or cStatus='3' or cStatus='09'or cStatus='00'", "cRequestDate desc", "");
 
 			List rowitem = new ArrayList();
 			myList = new ArrayList<>();

@@ -1569,7 +1569,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 
 	@Override
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-		if(e2!=null && !e2.equals("")){
+		if(e2!=null && !e2.equals("")&& e2.getX()!=0 ){
 			float distance = e2.getX()-e1.getX();
 			if(distance>100){
 				Log.e("方向2","右邊");

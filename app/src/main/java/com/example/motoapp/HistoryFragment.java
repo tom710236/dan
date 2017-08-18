@@ -343,7 +343,8 @@ public class HistoryFragment extends Activity implements GestureDetector.OnGestu
 
 	@Override
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-		if(e2!=null && !e2.equals("")){
+		if(e2!=null && !e2.equals("") && e2.getX()!=0 ){
+			Log.e("e2.getX()", String.valueOf(e2.getX()));
 			float distance = e2.getX()-e1.getX();
 			if(distance>100){
 				Log.e("方向1","右邊");
@@ -380,9 +381,10 @@ public class HistoryFragment extends Activity implements GestureDetector.OnGestu
 	}
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		if(detector!=null){
+		try {
 			return detector.onTouchEvent(event);
+		}catch (Exception e){
+			return false;
 		}
-		return false;
 	}
 }

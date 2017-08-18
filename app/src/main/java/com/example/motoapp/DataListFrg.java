@@ -276,6 +276,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 							display();
 						}
 					}else{
+						clsDialog.Show(context, "提示訊息", "接單失敗！");
 						myDialog2.dismiss();
 						type="71";
 						display();
@@ -1554,6 +1555,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 	//手勢滑動設定 implements GestureDetector.OnGestureListener 產生以下方法
 	@Override
 	public boolean onDown(MotionEvent e) {
+
 		return false;
 	}
 
@@ -1569,19 +1571,24 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 
 	@Override
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-		if(e2!=null && !e2.equals("")&& e2.getX()!=0 ){
-			float distance = e2.getX()-e1.getX();
-			if(distance>100){
-				Log.e("方向2","右邊");
-				Intent intent = new Intent(DataListFrg.this, HistoryFragment.class);
-				startActivity(intent);
-			}else if(distance<-100){
-				Log.e("方向2","左邊");
+		Log.e("E2", String.valueOf(e2));
+		try {
+			if(e2!=null && !e2.equals("")&& e2.getX()!=0 ){
+				float distance = e2.getX()-e1.getX();
+				if(distance>100){
+					Log.e("方向2","右邊");
+					Intent intent = new Intent(DataListFrg.this, HistoryFragment.class);
+					startActivity(intent);
+				}else if(distance<-100){
+					Log.e("方向2","左邊");
+				}
+				return false;
 			}
+		}catch (Exception e){
 			return false;
 		}
-		return false;
 
+		return false;
 	}
 
 	@Override
@@ -1609,10 +1616,11 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		if(detector!=null){
+		try {
 			return detector.onTouchEvent(event);
+		}catch (Exception e){
+			return false;
 		}
-		return false;
 	}
 	//畫面處理 點選明細後畫面新增
 	public void display() {

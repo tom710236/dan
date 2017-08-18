@@ -8,6 +8,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -31,11 +33,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -74,8 +73,9 @@ public class Login extends Activity {
 	Button button;
 	ProgressDialog myDialog;
 	int textInt = 0 ;
-	String Updata ="1.0";
+	String Updata ="1.1";
 	int timeOut = 20171030 ;
+	String timeClear = "0100";
 	dbLocations objDB;
 	String datetime2;
 	String datetime3;
@@ -85,12 +85,18 @@ public class Login extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_login);
 
+		//取得網路時間 (新達API)
 		GetDT post = new GetDT();
 		post.run();
-		//過了20171030後就不能用
+
+		//跳到登入頁後 要登出 才不會收到推播
+		Logout post2 = new Logout();
+		post2.run();
+
+		//過了20171030(手機時間)後 按鍵隱藏
 		time();
 		Log.e("datetime2",datetime2 );
-
+		Application.timeClear = timeClear;
 		if( Integer.parseInt(datetime2)>timeOut){
 			LinearLayout linearLayout = (LinearLayout)findViewById(R.id.linear);
 			linearLayout.setVisibility(View.GONE);
@@ -98,6 +104,7 @@ public class Login extends Activity {
 		}
 
 		new GCMTask().execute();
+		//
 		Application.Version = Updata;
 		SysApplication.getInstance().addActivity(this);
 		dbLocations objLocation = new dbLocations(Login.this);
@@ -169,8 +176,8 @@ public class Login extends Activity {
 		Log.e("intStatus", String.valueOf(intStatus));
 		if(intStatus==1) {
 
-			Intent intent = new Intent(Login.this, DataListFrg.class);
-			startActivity(intent);
+			//Intent intent = new Intent(Login.this, DataListFrg.class);
+			//startActivity(intent);
 			//清除欄位
 
 		}else if (intStatus==0){
@@ -183,14 +190,13 @@ public class Login extends Activity {
 
 		}
 		// 時間到0100清除帳密
-		if(Application.datatime.equals("0100")){
+		if(Application.datatime.equals(Application.timeClear) && textInt ==0){
 			EditText_Account.setText("");
 			//EditText_Password.setText("");
 			EditText_Car.setText("");
 			//EditText_Area.setText("");
 			EditText_Account.requestFocus();
 			EditText_No.setText("");
-
 			//記住帳號
 			SharedPreferences setting2 =
 					getSharedPreferences("Login", MODE_PRIVATE);
@@ -199,6 +205,10 @@ public class Login extends Activity {
 					.putString("Car","")
 					.putString("NO","")
 					.commit();
+			objDB = new dbLocations(this);
+            objDB.openDB();
+            objDB.DeleteAll();
+            objDB.close();
 		}
 
 
@@ -206,7 +216,7 @@ public class Login extends Activity {
 		btnLogin.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
+				if(isConnected()){
 					new GCMTask().execute();
 					Post post = new Post();
 					post.run();
@@ -224,8 +234,8 @@ public class Login extends Activity {
 
 
 
-				//AREA = EditText_Area.getText().toString();
-				//Log.e("regId",regId);
+					//AREA = EditText_Area.getText().toString();
+					//Log.e("regId",regId);
 				/*
 				if(regId!=null){
 					new clsHttpPostAPI().CallAPI(objContext, "API001");
@@ -250,6 +260,10 @@ public class Login extends Activity {
 					clsDialog.Show(Login.this, "", "GCMID收尋中");
 				}
 				*/
+				}else {
+					clsDialog.Show(Login.this, "提示訊息", "請確認網路是否正常！");
+				}
+
 			}
 		});
 
@@ -578,7 +592,38 @@ public class Login extends Activity {
 			});
 		}
 	}
+	class Logout extends Thread{
+		public void run() {
+			GetDTInfo();
+		}
 
+		private void GetDTInfo() {
+			final String strUrl =Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DeviceInfo.aspx?" +
+					"DeviceID="+ regId +
+					"&Status=2" +
+					"&EmployeeID="+Application.strAccount+
+					"&Odometer="+Application.strPass+
+					"&TransportID="+Application.strCar+
+					"&Version="+Updata+
+					"&key="+Application.strKey;
+			OkHttpClient client = new OkHttpClient();
+			Request request = new Request.Builder()
+					.url(strUrl)
+					.build();
+			Call call = client.newCall(request);
+			call.enqueue(new Callback() {
+				@Override
+				public void onFailure(Call call, IOException e) {
+
+				}
+
+				@Override
+				public void onResponse(Call call, Response response) throws IOException {
+
+				}
+			});
+		}
+	}
 	class Post extends Thread{
 		@Override
 		public void run() {
@@ -628,12 +673,12 @@ public class Login extends Activity {
 				@Override
 				public void onResponse(Call call, Response response) throws IOException {
 					//取得回傳資料json 還是JSON檔
-					Log.e("strUrl",strUrl);
+					Log.e("登入strUrl",strUrl);
 					String json = response.body().string();
-					Log.e("json",json);
+					Log.e("登入json",json);
 					try {
 						String Result = new JSONObject(json).getString("Result");
-						Log.e("Result",Result);
+						Log.e("登入Result",Result);
 							if (Result.equals("1")) {
 							runOnUiThread(new Runnable() {
 								@Override
@@ -824,20 +869,14 @@ public class Login extends Activity {
 		myDialog.show();
 	}
 
-	private void UrlTime(){
-
-		try {
-			URL url=new URL("http://www.baidu.com");//取得资源对象
-			URLConnection uc=url.openConnection();//生成连接对象
-			uc.connect(); //发出连接
-			long ld=uc.getDate(); //取得网站日期时间
-			Date date=new Date(ld); //转换为标准时间对象
-			//分别取得时间中的小时，分钟和秒，并输出
-			Log.e("網路時間",date.getHours()+"时"+date.getMinutes()+"分"+date.getSeconds()+"秒");
-		} catch (Exception e) {
-			e.printStackTrace();
-			Log.e("錯誤", String.valueOf(e));
+	//判斷網路有無訊號
+	private boolean isConnected(){
+		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+		if (networkInfo != null && networkInfo.isConnected()) {
+			return true;
 		}
+		return false;
 	}
 
 

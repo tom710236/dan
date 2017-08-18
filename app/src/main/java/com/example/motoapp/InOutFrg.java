@@ -1299,7 +1299,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 
 	@Override
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-		if(e2!=null && !e2.equals("")){
+		if(e2!=null && !e2.equals("")&& e2.getX()!=0 ){
 			float distance = e2.getX()-e1.getX();
 			if(distance>50){
 				//Intent intent = new Intent(InOutFrg.this, GetTaskFrg.class); 這樣設定才可以點明細 原因不明
@@ -1337,10 +1337,11 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 	}
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		if(detector!=null){
+		try {
 			return detector.onTouchEvent(event);
+		}catch (Exception e){
+			return false;
 		}
-		return false;
 	}
 
 	//貨況 7-配送 8-配達

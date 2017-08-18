@@ -31,6 +31,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+
 /**
  * Created by TOM on 2017/6/2.
  */
@@ -46,7 +47,7 @@ public class Delay extends Service implements LocationListener {
     String GPSPeriod;
     Context context;
     int CheckGPS,CheckGPS2;
-
+    PowerManager.WakeLock mWakeLock;
     public static String Employee, regID, lon, lat, UserID, GCMID;
 
     @Nullable
@@ -57,9 +58,10 @@ public class Delay extends Service implements LocationListener {
 
     @Override
     public int onStartCommand(final Intent intent, int flags, int startId) {
+        // 讓CPU一直運行
+        acquireWakeLock();
+
         // activity向service传值
-
-
         Employee = intent.getStringExtra("Employee");
         regID = intent.getStringExtra("regID");
         GPSPeriod = intent.getStringExtra("GPSPeriod");
@@ -108,20 +110,24 @@ public class Delay extends Service implements LocationListener {
 
                     //時間到跳到Login
                     Application.datatime=datatime;
-                    if(datatime.equals("0100")){
+
+                    if(datatime.equals(Application.timeClear)){
+                        //new clsHttpPostAPI().CallAPI(context, "API014");
                         Intent intent1 = new Intent(Delay.this,Login.class);
                         // 錯誤代碼 Calling startActivity() from outside of an Activity context requires the , FLAG_ACTIVITY_NEW_TASK , Is this really what you want
                         //使用 intent1.addFlags(intent1.FLAG_ACTIVITY_NEW_TASK);
                         intent1.addFlags(intent1.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent1);
                     }
+
+                    //GPS第一次啟動後 跳到DataListFrg
                     if(Application.GPS!=null && !Application.GPS.equals("") && CheckGPS == 0){
                         Intent intent1 = new Intent(Delay.this,DataListFrg.class);
                         // 錯誤代碼 Calling startActivity() from outside of an Activity context requires the , FLAG_ACTIVITY_NEW_TASK , Is this really what you want
                         //使用 intent1.addFlags(intent1.FLAG_ACTIVITY_NEW_TASK);
                         intent1.addFlags(intent1.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent1);
-                        vibrator ();
+                        vibrator();
                         CheckGPS = 1;
                     }
                 } else {
@@ -137,6 +143,7 @@ public class Delay extends Service implements LocationListener {
         handler.postAtTime(runnable, android.os.SystemClock.uptimeMillis() + 10 * 1000);
         //return super.onStartCommand(intent, flags, startId);
         return START_NOT_STICKY;
+
     }
 
     @Override
@@ -187,6 +194,7 @@ public class Delay extends Service implements LocationListener {
     public void onStart(Intent intent, int startId) {
         // TODO Auto-generated method stub
         super.onStart(intent, startId);
+        /*
         PowerManager pm;
         PowerManager.WakeLock wakeLock;
         //创建PowerManager对象
@@ -194,6 +202,7 @@ public class Delay extends Service implements LocationListener {
         //保持cpu一直运行，不管屏幕是否黑屏
         wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "CPUKeepRunning");
         wakeLock.acquire();
+        */
     }
 
     class Get extends Thread {
@@ -244,6 +253,7 @@ public class Delay extends Service implements LocationListener {
     @Override
     public void onDestroy() {
 
+        releaseWakeLock();
         handler.removeCallbacks(runnable);
         if(mgr!=null){
             mgr.removeUpdates(this);
@@ -251,10 +261,34 @@ public class Delay extends Service implements LocationListener {
         super.onDestroy();
         Log.e("STOP", "STOP");
         Application.GPS = null;
+
     }
     private void vibrator (){
         Vibrator vb = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
         vb.vibrate(1500);
 
     }
+
+
+    //申請設備電源鎖
+    private void acquireWakeLock() {
+        Log.e("MyGPS","正在申請電源鎖"); if (null == mWakeLock) {
+        PowerManager pm = (PowerManager) this.getSystemService(Context.POWER_SERVICE);
+        mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK |PowerManager.ON_AFTER_RELEASE, "");
+        if (null != mWakeLock) {
+            mWakeLock.acquire();
+            Log.e("MyGPS","電源鎖申請成功");
+            }
+        }
+    }
+    //釋放設備電源鎖
+    private void releaseWakeLock() {
+        Log.e("MyGPS","正在釋放電源鎖");
+        if (null != mWakeLock) {
+            mWakeLock.release();
+            mWakeLock = null;
+            Log.e("MyGPS","電源鎖釋放成功");
+        }
+    }
+
 }

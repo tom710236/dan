@@ -380,11 +380,11 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 				final EditText editText = (EditText) findViewById(R.id.TextView_OrderNo3);
 
 				editText.setText(contents);
-
+				Application.getTask=contents;
 				if(contents.length()==11 || contents.length() ==8){
 
 					if(!objEdit.getText().toString().trim().equals("")) {
-						Application.getTask=contents;
+						//Application.getTask=contents;
 						new clsHttpPostAPI().CallAPI(context,"API013",objEdit.getText().toString());
 
 					}else {
@@ -422,7 +422,7 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 
 	@Override
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-		if(e2!=null && !e2.equals("")){
+		if(e2!=null && !e2.equals("")&& e2.getX()!=0 ){
 			float distance = e2.getX()-e1.getX();
 			if(distance>50){
 				Log.e("方向","右邊");
@@ -460,10 +460,11 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 	}
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		if(detector!=null){
+		try {
 			return detector.onTouchEvent(event);
+		}catch (Exception e){
+			return false;
 		}
-		return false;
 	}
 
 	//加密

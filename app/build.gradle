@@ -71,7 +71,7 @@ dependencies {
     compile 'com.kaopiz:kprogresshud:1.0.2'
     compile 'com.google.firebase:firebase-crash:10.0.1'
     testCompile 'junit:junit:4.12'
-
+    compile project(':zxinglib2_android')
 }
 
 apply plugin: 'com.google.gms.google-services'
@@ -82,5 +82,5 @@ repositories {
 }
 
 dependencies {
-    compile(name:'zxinglib_android', ext:'aar')
+    //compile(name:'zxinglib_android', ext:'aar')
 }

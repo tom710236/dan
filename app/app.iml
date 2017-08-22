@@ -85,17 +85,13 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/jniLibs" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/manifests" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/multi-dex" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/pre-dexed" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/res" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/rs" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/shaders" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/symbols" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/transforms" />
       <excludeFolder url="file://$MODULE_DIR$/build/outputs" />
-      <excludeFolder url="file://$MODULE_DIR$/build/reports" />
       <excludeFolder url="file://$MODULE_DIR$/build/tmp" />
-      <excludeFolder url="file://$MODULE_DIR$/build/zxing-scan-demo.apk" />
-      <excludeFolder url="jar://$MODULE_DIR$/build/zxing-scan-demo.zip!/" />
     </content>
     <orderEntry type="jdk" jdkName="Android API 25 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -105,18 +101,17 @@
     <orderEntry type="library" exported="" name="firebase-core-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="constraint-layout-1.0.2" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="hamcrest-library-1.3" level="project" />
-    <orderEntry type="library" exported="" name="zxinglib_android-" level="project" />
     <orderEntry type="library" exported="" name="play-services-tasks-10.0.1" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="hamcrest-integration-1.3" level="project" />
     <orderEntry type="library" exported="" name="gcm" level="project" />
+    <orderEntry type="library" exported="" name="support-core-ui-25.3.1" level="project" />
     <orderEntry type="library" exported="" name="progressmanager-1.3.3" level="project" />
-    <orderEntry type="library" exported="" name="support-core-ui-25.3.0" level="project" />
     <orderEntry type="library" exported="" name="json" level="project" />
-    <orderEntry type="library" exported="" name="support-core-utils-25.3.0" level="project" />
     <orderEntry type="library" exported="" name="firebase-crash-10.0.1" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="jsr305-2.0.1" level="project" />
+    <orderEntry type="library" exported="" name="support-core-utils-25.3.1" level="project" />
+    <orderEntry type="library" exported="" name="support-fragment-25.3.1" level="project" />
     <orderEntry type="library" exported="" name="firebase-iid-10.0.1" level="project" />
-    <orderEntry type="library" exported="" name="support-fragment-25.3.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="multidex-instrumentation-1.0.1" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="espresso-core-2.2.2" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="exposed-instrumentation-api-publish-0.5" level="project" />
@@ -129,19 +124,22 @@
     <orderEntry type="library" exported="" name="okio-1.11.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-basement-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="okhttp-3.6.0" level="project" />
-    <orderEntry type="library" exported="" name="support-compat-25.3.0" level="project" />
-    <orderEntry type="library" exported="" name="support-v4-25.3.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="javawriter-2.1.1" level="project" />
     <orderEntry type="library" exported="" name="multidex-1.0.1" level="project" />
+    <orderEntry type="library" exported="" name="support-v4-25.3.1" level="project" />
+    <orderEntry type="library" exported="" name="support-media-compat-25.3.1" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="hamcrest-core-1.3" level="project" />
-    <orderEntry type="library" exported="" name="support-media-compat-25.3.0" level="project" />
     <orderEntry type="library" exported="" name="argox-android-sdk" level="project" />
     <orderEntry type="library" exported="" name="kprogresshud-1.0.2" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="junit-4.12" level="project" />
-    <orderEntry type="library" exported="" name="appcompat-v7-25.3.0" level="project" />
-    <orderEntry type="library" exported="" name="animated-vector-drawable-25.3.0" level="project" />
-    <orderEntry type="library" exported="" name="support-annotations-25.3.0" level="project" />
-    <orderEntry type="library" exported="" name="support-vector-drawable-25.3.0" level="project" />
+    <orderEntry type="library" exported="" name="support-annotations-25.3.1" level="project" />
+    <orderEntry type="library" exported="" name="appcompat-v7-25.3.1" level="project" />
+    <orderEntry type="library" exported="" name="support-vector-drawable-25.3.1" level="project" />
+    <orderEntry type="library" exported="" name="support-compat-25.3.1" level="project" />
+    <orderEntry type="library" exported="" name="animated-vector-drawable-25.3.1" level="project" />
+    <orderEntry type="module" module-name="zxinglib2_android" exported="" />
     <orderEntry type="library" exported="" name="org.apache.http.legacy-android-25" level="project" />
+    <orderEntry type="library" exported="" name="core-3.3.0" level="project" />
+    <orderEntry type="library" exported="" name="android-core-3.3.0" level="project" />
   </component>
 </module>

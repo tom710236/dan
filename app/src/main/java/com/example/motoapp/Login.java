@@ -73,7 +73,7 @@ public class Login extends Activity {
 	Button button;
 	ProgressDialog myDialog;
 	int textInt = 0 ;
-	String Updata ="1.1";
+	String Updata ="1.0";
 	int timeOut = 20171030 ;
 	String timeClear = "0100";
 	dbLocations objDB;
@@ -84,6 +84,11 @@ public class Login extends Activity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_login);
+
+		objDB = new dbLocations(this);
+		objDB.openDB();
+		objDB.DeleteAll();
+		objDB.close();
 
 		//取得網路時間 (新達API)
 		GetDT post = new GetDT();

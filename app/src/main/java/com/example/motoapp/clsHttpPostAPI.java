@@ -722,6 +722,7 @@ public class clsHttpPostAPI extends Activity {
 			objDB.openDB();
 			objDB.Delete("tblTask", "cOrderID='"+strData+"'");
 			clsTask objT = objDB.LoadTask(Application.strCaseID);
+			Log.e("cOrderID",strData);
 			objDB.DBClose();
 
 			clsHttpPost objHttppost = new clsHttpPost();
@@ -743,7 +744,7 @@ public class clsHttpPostAPI extends Activity {
 					Message objMessage = new Message();
 					objMessage.obj = json;
 					Log.e("轉單", String.valueOf(json));
-					Log.e("轉單2", String.valueOf(objMessage));
+					Log.e("轉單URL", String.valueOf(strUrl));
 					handlerGetTask.sendMessage(objMessage);
 				}
 			} catch (Exception e) {

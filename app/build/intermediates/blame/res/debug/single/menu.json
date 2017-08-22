@@ -1,7 +1,7 @@
 [
     {
         "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\menu\\encode.xml",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\a7bf4e586a2973a26be9bd5ad23191146ce1de6c\\output\\res\\menu\\encode.xml"
+        "source": "C:\\work\\dan\\MotoAPP2\\zxinglib2_android\\build\\intermediates\\bundles\\default\\res\\menu\\encode.xml"
     },
     {
         "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\menu\\option_menu.xml",
@@ -9,10 +9,10 @@
     },
     {
         "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\menu\\history.xml",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\a7bf4e586a2973a26be9bd5ad23191146ce1de6c\\output\\res\\menu\\history.xml"
+        "source": "C:\\work\\dan\\MotoAPP2\\zxinglib2_android\\build\\intermediates\\bundles\\default\\res\\menu\\history.xml"
     },
     {
         "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\menu\\capture.xml",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\a7bf4e586a2973a26be9bd5ad23191146ce1de6c\\output\\res\\menu\\capture.xml"
+        "source": "C:\\work\\dan\\MotoAPP2\\zxinglib2_android\\build\\intermediates\\bundles\\default\\res\\menu\\capture.xml"
     }
 ]

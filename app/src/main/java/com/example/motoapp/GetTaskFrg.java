@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,10 +26,18 @@ import android.widget.Toast;
 import com.google.zxing.client.android.CaptureActivity;
 import com.google.zxing.client.android.Intents;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class GetTaskFrg extends Activity implements GestureDetector.OnGestureListener{
 
@@ -88,17 +95,18 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 
 				if(!objEdit.getText().toString().equals("") && objEdit.getText().toString()!=null){
 					final TextView textView = (TextView)findViewById(R.id.textView14);
-					textView.setText(objEdit.getText().toString());
+					textView.setText(String.valueOf(CaptureActivity.num));
 
 				}else {
 					final TextView textView = (TextView)findViewById(R.id.textView14);
-					textView.setText(Application.getTask);
+					textView.setText(String.valueOf(CaptureActivity.num));
 
 				}
 
 
 				if (event.getAction() == event.ACTION_DOWN) {
 					if(!objEdit.getText().toString().trim().equals("")) {
+						CaptureActivity.num = null;
 					/*
 					 * 呼叫API 接單*/
 						new clsHttpPostAPI().CallAPI(context,"API013",objEdit.getText().toString());
@@ -231,20 +239,26 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 
 				try {
 					String status = json.getString("Result");
-					
+
 					if (status.equals("1")) {
 						//cCaseID,cOrderID,cCustAddress,cDistance,cSize,cItemCount,cRequestDate,cType
+
 						objDB = new dbLocations(context);
 						objDB.openDB();
+
 						String customer_name  = setEncryp (json.getString("customer_name"));
 						String recipient_name = setEncryp(json.getString("recipient_name")) ;
 						String recipient_phoneNo = setEncryp(json.getString("recipient_phoneNo"));
 						String recipient_address = setEncryp(json.getString("recipient_address")) ;
-						objDB.InsertTaskAllData(new Object[]{json.getString("caseID"),objEdit.getText().toString(),"","",json.getString("size"),json.getString("item_count"),json.getString("status_time"),"1",customer_name,"",recipient_name,recipient_phoneNo,recipient_address,json.getString("request_time"),json.getString("pay_type_MD"),json.getString("pay_amount_MD"),json.getString("cash_on_delivery")});
+						objDB.InsertTaskAllData(new Object[]{json.getString("caseID"),objEdit.getText().toString() ,"","",json.getString("size"),json.getString("item_count"),json.getString("status_time"),"1",customer_name,"",recipient_name,recipient_phoneNo,recipient_address,json.getString("request_time"),json.getString("pay_type_MD"),json.getString("pay_amount_MD"),json.getString("cash_on_delivery")});
+						//objDB.InsertTaskAllData(new Object[]{json.getString("caseID"),contents,"","",json.getString("size"),json.getString("item_count"),json.getString("status_time"),"1",customer_name,"",recipient_name,recipient_phoneNo,recipient_address,json.getString("request_time"),json.getString("pay_type_MD"),json.getString("pay_amount_MD"),json.getString("cash_on_delivery")});
+
 						objDB.DBClose();
+
+
 						Toast.makeText(GetTaskFrg.this,"取得"+Application.getTask+"資料！",Toast.LENGTH_SHORT).show();
 						//clsDialog.Show(context, "提示", "取得案件資料！");
-
+						Log.e("Array", String.valueOf(CaptureActivity.num));
 
 
 					}
@@ -319,7 +333,7 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 
 	//取件完成前 掃描
 	public void onScan (View v){
-        /*
+
 		isSingleSacn = false;
 		Intent intent = new Intent(GetTaskFrg.this, CaptureActivity.class);
 		intent.setAction(Intents.Scan.ACTION); //啟動掃描動作，一定要設定
@@ -330,11 +344,10 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 		//intent.putExtra(Scan.MODE, Scan.ONE_D_MODE);  //限制只能掃一維條碼(預設為全部條碼都支援)
         //intent.putExtra(CaptureActivity.SACN_MODE_NAME, CaptureActivity.SCAN_SIGLE_MODE);
 		intent.putExtra(CaptureActivity.SACN_MODE_NAME, CaptureActivity.SCAN_BATCH_MODE);
-
-		startActivityForResult(intent, REQUEST_CODE);
-           */
+		startActivityForResult(intent, 1);
 
 
+		/*
 		Intent intent = new Intent("com.google.zxing.client.android.SCAN");
 		if (getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).size() == 0) {
 			// 未安裝
@@ -345,32 +358,123 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 			// PRODUCT_MODE, UPC and EAN 碼
 			// ONE_D_MODE, 1 維條碼
 			intent.putExtra("SCAN_MODE", "SCAN_MODE");
+			intent.putExtra(CaptureActivity.SACN_MODE_NAME, CaptureActivity.SCAN_BATCH_MODE);
+			isSingleSacn = false;
 			// 呼叫ZXing Scanner，完成動作後回傳 1 給 onActivityResult 的 requestCode 參數
 			startActivityForResult(intent, 1);
 		}
-
+		*/
 
 	}
 	//掃描後的動作
 	protected void onActivityResult (int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-        /*
-		if (isSingleSacn == true) {
-			if (data != null) {
-				CaptureActivity.Number_Order = 1;
-				CaptureActivity.Barcode_Type = data.getStringExtra(Intents.Scan.RESULT_FORMAT);
-				CaptureActivity.Barcode_Value = data.getStringExtra(Intents.Scan.RESULT);
 
-				startActivityForResult(data, REQUEST_CODE);
+		//取得掃描後的值 arraylist
+		ArrayList num = CaptureActivity.num;
+
+			for (int i = 0 ; i<num.size() ; i++) {
+				final String contents;
+				contents = String.valueOf(num.get(i));
+				if (contents.length() == 11 || contents.length() == 8) {
+					//objEdit.setText(contents);
+					//new clsHttpPostAPI().CallAPI(context,"API013",contents);
+					final String strUrl = Application.ChtUrl + "Services/API/Motor_Dispatch/Get_DispatchInfo.aspx?OrderID=" + contents + "&key=" + Application.strKey;
+					OkHttpClient client = new OkHttpClient();
+					Request request = new Request.Builder()
+							.url(strUrl)
+							.build();
+					Call call = client.newCall(request);
+					call.enqueue(new Callback() {
+						@Override public void onFailure(Call call, IOException e) {
+
+						}
+
+						@Override
+						public void onResponse(Call call, Response response) throws IOException {
+							String json = response.body().string();
+							Log.e("轉單URL", strUrl);
+							Log.e("轉單", json);
+							try {
+								JSONObject j = new JSONObject(json);
+								String status = j.getString("Result");
+								if (status.equals("1")) {
+									//cCaseID,cOrderID,cCustAddress,cDistance,cSize,cItemCount,cRequestDate,cType
+									dbLocations objDB;
+									objDB = new dbLocations(context);
+									objDB.openDB();
+									objDB.Delete("tblTask", "cOrderID='"+contents+"'");
+									//clsTask objT = objDB.LoadTask(Application.strCaseID);
+
+									String customer_name = setEncryp(j.getString("customer_name"));
+									String recipient_name = setEncryp(j.getString("recipient_name"));
+									String recipient_phoneNo = setEncryp(j.getString("recipient_phoneNo"));
+									String recipient_address = setEncryp(j.getString("recipient_address"));
+									Log.e("轉單contents2", contents);
+									objDB.InsertTaskAllData(new Object[]{j.getString("caseID"), contents, "", "", j.getString("size"), j.getString("item_count"), j.getString("status_time"), "1", customer_name, "", recipient_name, recipient_phoneNo, recipient_address, j.getString("request_time"), j.getString("pay_type_MD"), j.getString("pay_amount_MD"), j.getString("cash_on_delivery")});
+									objDB.close();
+
+									//Toast.makeText(GetTaskFrg.this,"取得"+Application.getTask+"資料！",Toast.LENGTH_SHORT).show();
+									//clsDialog.Show(context, "提示", "取得案件資料！");
+									//Log.e("Array", String.valueOf(CaptureActivity.num));
+
+
+								}
+								if (status.equals("2")) {
+									//clsDialog.Show(context, "錯誤訊息", "輸入的授權碼不合法！");
+									runOnUiThread(new Runnable() {
+										@Override
+										public void run() {
+											Toast.makeText(GetTaskFrg.this, "輸入的授權碼不合法！", Toast.LENGTH_SHORT).show();
+										}
+									});
+								}
+								if (status.equals("4")) {
+									runOnUiThread(new Runnable() {
+										@Override
+										public void run() {
+											Toast.makeText(GetTaskFrg.this, "託運單號不存在！", Toast.LENGTH_SHORT).show();
+										}
+									});
+
+								}
+								if (status.equals("200")) {
+									runOnUiThread(new Runnable() {
+										@Override
+										public void run() {
+											Toast.makeText(GetTaskFrg.this, "系統忙碌中，請重試！", Toast.LENGTH_SHORT).show();
+										}
+									});
+
+								}
+								runOnUiThread(new Runnable() {
+									@Override
+									public void run() {
+										objEdit.setText("");
+
+									}
+								});
+
+							} catch (JSONException e) {
+								e.printStackTrace();
+							}
+
+						}
+						});
+
+				} else {
+
+					Toast.makeText(this, "託運編號格式不符", Toast.LENGTH_SHORT).show();
+				}
 			}
-		}
 
-        Log.e("XXX",CaptureActivity.Barcode_Value);
 
-        */
-
+		//Log.e("Barcode_Value2", String.valueOf(num));
+		//Application.getTask = String.valueOf(num);
+		/*
 		if (requestCode == 1) {
 			if (resultCode == RESULT_OK) {
+
 				CaptureActivity.Number_Order = 1;
 				CaptureActivity.Barcode_Type = data.getStringExtra(Intents.Scan.RESULT_FORMAT);
 				CaptureActivity.Barcode_Value = data.getStringExtra(Intents.Scan.RESULT);
@@ -381,6 +485,8 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 
 				editText.setText(contents);
 				Application.getTask=contents;
+
+
 				if(contents.length()==11 || contents.length() ==8){
 
 					if(!objEdit.getText().toString().trim().equals("")) {
@@ -397,12 +503,13 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 					Toast.makeText(this,"託運編號格式不符",Toast.LENGTH_SHORT).show();
 
 				}
-				startActivityForResult(data, 1);//連續-重複掃描的動作
+
+				//startActivityForResult(data, 1);//連續-重複掃描的動作
 
 			}
 
 		}
-
+		*/
 	}
 
 	@Override

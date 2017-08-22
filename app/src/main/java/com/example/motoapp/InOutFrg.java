@@ -237,6 +237,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 						BasicUrl = "https://ga.kerrytj.com/Cht_Motor/api/GetEmployee/GetBasic?" +
 								"ID="+Application.strAccount+
 								"&CAR_NO="+Application.strCar+
+								"&Company="+Application.Company+
 								"&BOL_NO="+((EditText) findViewById(R.id.EditText_SNO1)).getText().toString();
 
 						PostBasic post = new PostBasic();
@@ -448,6 +449,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 					BasicUrl = "https://ga.kerrytj.com/Cht_Motor/api/GetEmployee/GetBasic?" +
 							"ID="+Application.strAccount+
 							"&CAR_NO="+Application.strCar+
+							"&Company="+Application.Company+
 							"&BOL_NO="+(editText.getText().toString());
 					PostBasic post = new PostBasic();
 					post.run();
@@ -526,6 +528,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 						BasicUrl = "https://ga.kerrytj.com/Cht_Motor/api/GetEmployee/GetBasic?" +
 								"ID="+Application.strAccount+
 								"&CAR_NO="+Application.strCar+
+								"&Company="+Application.Company+
 								"&BOL_NO="+((EditText) findViewById(R.id.EditText_ENO1)).getText().toString();
 						PostBasic post = new PostBasic();
 						post.run();
@@ -1052,6 +1055,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 				BasicUrl = "https://ga.kerrytj.com/Cht_Motor/api/GetEmployee/GetBasic?" +
 						"ID="+Application.strAccount+
 						"&CAR_NO="+Application.strCar+
+						"&Company="+Application.Company+
 						"&BOL_NO="+contents;
 				onClickNum = contents;
 				if (editText.length() == 11 || editText.length() == 8) {
@@ -1144,6 +1148,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 				BasicUrl = "https://ga.kerrytj.com/Cht_Motor/api/GetEmployee/GetBasic?" +
 						"ID="+Application.strAccount+
 						"&CAR_NO="+Application.strCar+
+						"&Company="+Application.Company+
 						"&BOL_NO="+contents;
 				if (editText.length() == 11 || editText.length() == 8) {
 

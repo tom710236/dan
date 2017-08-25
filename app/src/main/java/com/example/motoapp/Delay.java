@@ -37,7 +37,7 @@ import okhttp3.Response;
  */
 
 public class Delay extends Service implements LocationListener {
-    static final int MIN_TIME = 5000; //間隔時間(5秒)
+    static final int MIN_TIME = Application.GPSPeriod; //間隔時間(5秒)
     static final float MIN_DIST = 1;  //間隔距離(1公尺)
     LocationManager mgr; //取得定位管理員
     Runnable runnable;
@@ -46,8 +46,9 @@ public class Delay extends Service implements LocationListener {
     String IMEI;
     String GPSPeriod;
     Context context;
-    int CheckGPS,CheckGPS2;
+    int CheckGPS;
     PowerManager.WakeLock mWakeLock;
+    int upTime = 10;
     public static String Employee, regID, lon, lat, UserID, GCMID;
 
     @Nullable
@@ -60,6 +61,7 @@ public class Delay extends Service implements LocationListener {
     public int onStartCommand(final Intent intent, int flags, int startId) {
         // 讓CPU一直運行
         acquireWakeLock();
+
 
         // activity向service传值
         Employee = intent.getStringExtra("Employee");
@@ -134,13 +136,13 @@ public class Delay extends Service implements LocationListener {
                     Log.e("定位中", "定位中");
                 }
 
-                handler.postAtTime(this, android.os.SystemClock.uptimeMillis() + 10 * 1000);
+                handler.postAtTime(this, android.os.SystemClock.uptimeMillis() + upTime * 1000);
 
             }
 
         };
         //每分鐘執行一次
-        handler.postAtTime(runnable, android.os.SystemClock.uptimeMillis() + 10 * 1000);
+        handler.postAtTime(runnable, android.os.SystemClock.uptimeMillis() + upTime * 1000);
         //return super.onStartCommand(intent, flags, startId);
         return START_NOT_STICKY;
 
@@ -155,14 +157,15 @@ public class Delay extends Service implements LocationListener {
                 location.getAltitude()
         );
 
-        //Log.e("today", today);
+        Log.e("today", today);
         lon = String.valueOf(location.getLongitude());
         lat = String.valueOf(location.getLatitude());
 
-        //Log.e("定位",str);
+        Log.e("定位",str);
         //Toast.makeText(Delay.this, "已成功定位", Toast.LENGTH_SHORT).show();
         Application.GPS = str;
-
+        //在定位前每十秒執行一次 定位後 依GPSPeriod的時間執行
+        upTime = Application.GPSPeriod;
 
     }
 
@@ -205,6 +208,7 @@ public class Delay extends Service implements LocationListener {
         */
     }
 
+    //上傳GPS到平台
     class Get extends Thread {
         @Override
         public void run() {
@@ -240,8 +244,9 @@ public class Delay extends Service implements LocationListener {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     String json = response.body().string();
+
                     //Log.e("URL",url1);
-                    //Log.e("回傳",json);
+                    Log.e("回傳",json);
 
                 }
             });
@@ -250,6 +255,7 @@ public class Delay extends Service implements LocationListener {
 
     }
 
+    //停止service
     @Override
     public void onDestroy() {
 
@@ -263,6 +269,7 @@ public class Delay extends Service implements LocationListener {
         Application.GPS = null;
 
     }
+    //震動
     private void vibrator (){
         Vibrator vb = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
         vb.vibrate(1500);

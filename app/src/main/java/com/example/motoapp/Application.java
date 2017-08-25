@@ -36,8 +36,9 @@ public class Application extends android.app.Application {
 	//測試
 	//public static String ChtUrl = "http://efms.hinet.net/FMS_WSMotor/";
 	//測試(0628中華內部測試)
-	public static String ChtUrl = "http://efms.hinet.net/FMS_WSMotor_temp/";
-
+	//public static String ChtUrl = "http://efms.hinet.net/FMS_WSMotor_temp/";
+	//正式版
+	public static String ChtUrl = "http://efms.hinet.net/FMS_WSMotor/";
 	/**
 	 * 新達的網址
 	 */
@@ -60,4 +61,5 @@ public class Application extends android.app.Application {
 	public static String Version="";
 	public static String NETTime="";
 	public static String timeClear="";
+	public static int GPSPeriod= 0;
 }

@@ -72,6 +72,7 @@ dependencies {
     compile 'com.google.firebase:firebase-crash:10.0.1'
     testCompile 'junit:junit:4.12'
     compile project(':zxinglib2_android')
+
 }
 
 apply plugin: 'com.google.gms.google-services'

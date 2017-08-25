@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -48,6 +47,9 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.zxing.client.android.CaptureActivity;
+import com.google.zxing.client.android.Intents;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -2868,20 +2870,17 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 
 	//取件完成前 掃描
 	public void onScan (View v){
-		Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-		if (getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).size() == 0) {
-			// 未安裝
-			Toast.makeText(this, "請至 Play 商店安裝 ZXing 條碼掃描器", Toast.LENGTH_LONG).show();
-		} else {
-			// SCAN_MODE, 可判別所有支援的條碼
-			// QR_CODE_MODE, 只判別 QRCode
-			// PRODUCT_MODE, UPC and EAN 碼
-			// ONE_D_MODE, 1 維條碼
-			intent.putExtra("SCAN_MODE", "SCAN_MODE");
+		Intent intent = new Intent(DataListFrg.this, CaptureActivity.class);
+		intent.setAction(Intents.Scan.ACTION); //啟動掃描動作，一定要設定
+		intent.putExtra(Intents.Scan.WIDTH, 1200); //調整掃描視窗寬度(Optional)
+		intent.putExtra(Intents.Scan.HEIGHT, 675); //調整掃描視窗高度(Optional)
+		intent.putExtra(Intents.Scan.RESULT_DISPLAY_DURATION_MS, 100L); //設定掃描成功地顯示時間(Optional)
+		intent.putExtra(Intents.Scan.PROMPT_MESSAGE, "請將條碼置於鏡頭範圍進行掃描"); //客製化掃描視窗的提示文字(Optional)
+		//intent.putExtra(Scan.MODE, Scan.ONE_D_MODE);  //限制只能掃一維條碼(預設為全部條碼都支援)
+		//intent.putExtra(CaptureActivity.SACN_MODE_NAME, CaptureActivity.SCAN_SIGLE_MODE);
+		intent.putExtra(CaptureActivity.SACN_MODE_NAME, CaptureActivity.SCAN_SIGLE_MODE);
 
-			// 呼叫ZXing Scanner，完成動作後回傳 1 給 onActivityResult 的 requestCode 參數
-			startActivityForResult(intent, 1);
-		}
+		startActivityForResult(intent, 1);
 
 	}
 	private void time() {

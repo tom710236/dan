@@ -16,12 +16,12 @@
         "source": "C:\\work\\dan\\MotoAPP2\\zxinglib2_android\\build\\intermediates\\bundles\\default\\res\\layout\\capture.xml"
     },
     {
-        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_action_mode_close_item_material.xml",
-        "source": "C:\\Users\\TOM\\.android\\build-cache\\b5b6c98d096b176f0a130d5c86f0c3ae759ce525\\output\\res\\layout\\abc_action_mode_close_item_material.xml"
-    },
-    {
         "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_action_mode_bar.xml",
         "source": "C:\\Users\\TOM\\.android\\build-cache\\b5b6c98d096b176f0a130d5c86f0c3ae759ce525\\output\\res\\layout\\abc_action_mode_bar.xml"
+    },
+    {
+        "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_action_mode_close_item_material.xml",
+        "source": "C:\\Users\\TOM\\.android\\build-cache\\b5b6c98d096b176f0a130d5c86f0c3ae759ce525\\output\\res\\layout\\abc_action_mode_close_item_material.xml"
     },
     {
         "merged": "C:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\merged\\debug\\layout\\frg_inout.xml",

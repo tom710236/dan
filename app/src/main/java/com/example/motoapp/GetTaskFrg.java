@@ -95,7 +95,7 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 
 				if(!objEdit.getText().toString().equals("") && objEdit.getText().toString()!=null){
 					final TextView textView = (TextView)findViewById(R.id.textView14);
-					textView.setText(String.valueOf(CaptureActivity.num));
+					textView.setText(objEdit.getText().toString());
 
 				}else {
 					final TextView textView = (TextView)findViewById(R.id.textView14);
@@ -106,7 +106,7 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 
 				if (event.getAction() == event.ACTION_DOWN) {
 					if(!objEdit.getText().toString().trim().equals("")) {
-						CaptureActivity.num = null;
+
 					/*
 					 * 呼叫API 接單*/
 						new clsHttpPostAPI().CallAPI(context,"API013",objEdit.getText().toString());
@@ -114,6 +114,7 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 						clsDialog.Show(context, "提示", "請輸入託運編號！");
 
 					}
+					CaptureActivity.num = null;
 					return false;
 				}
 				return true;
@@ -344,6 +345,7 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 		//intent.putExtra(Scan.MODE, Scan.ONE_D_MODE);  //限制只能掃一維條碼(預設為全部條碼都支援)
         //intent.putExtra(CaptureActivity.SACN_MODE_NAME, CaptureActivity.SCAN_SIGLE_MODE);
 		intent.putExtra(CaptureActivity.SACN_MODE_NAME, CaptureActivity.SCAN_BATCH_MODE);
+
 		startActivityForResult(intent, 1);
 
 
@@ -400,12 +402,14 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 								String status = j.getString("Result");
 								if (status.equals("1")) {
 									//cCaseID,cOrderID,cCustAddress,cDistance,cSize,cItemCount,cRequestDate,cType
+									// 刪除掉原本有的案件
 									dbLocations objDB;
 									objDB = new dbLocations(context);
 									objDB.openDB();
 									objDB.Delete("tblTask", "cOrderID='"+contents+"'");
 									//clsTask objT = objDB.LoadTask(Application.strCaseID);
 
+									//加入轉單後的案件
 									String customer_name = setEncryp(j.getString("customer_name"));
 									String recipient_name = setEncryp(j.getString("recipient_name"));
 									String recipient_phoneNo = setEncryp(j.getString("recipient_phoneNo"));

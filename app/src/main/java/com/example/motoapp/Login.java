@@ -14,7 +14,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -32,6 +34,8 @@ import com.google.android.gcm.GCMRegistrar;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -72,6 +76,7 @@ public class Login extends Activity {
 	Context context;
 	Button button;
 	ProgressDialog myDialog;
+	ProgressDialog myDialog2;
 	int textInt = 0 ;
 	String Updata ="1.0";
 	int timeOut = 20171030 ;
@@ -79,17 +84,22 @@ public class Login extends Activity {
 	dbLocations objDB;
 	String datetime2;
 	String datetime3;
+
+
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_login);
 
+		/*
 		objDB = new dbLocations(this);
 		objDB.openDB();
 		objDB.DeleteAll();
 		objDB.close();
-
+		*/
 		//取得網路時間 (新達API)
 		GetDT post = new GetDT();
 		post.run();
@@ -124,8 +134,8 @@ public class Login extends Activity {
 
 		}
 		TextView textView = (TextView)findViewById(R.id.textView9);
-		textView.setText(Updata);
-
+		//textView.setText(Updata);
+		textView.setText("cht11");
 		/*
 		 
 		 */
@@ -202,7 +212,7 @@ public class Login extends Activity {
 			//EditText_Area.setText("");
 			EditText_Account.requestFocus();
 			EditText_No.setText("");
-			//記住帳號
+			//清除所記住的帳號
 			SharedPreferences setting2 =
 					getSharedPreferences("Login", MODE_PRIVATE);
 			setting2.edit()
@@ -716,6 +726,7 @@ public class Login extends Activity {
 							final String VersionResult = new JSONObject(json).getString("VersionResult");
 							Application.Company = Company;
 							Application.VersionResult = VersionResult;
+							Application.GPSPeriod = Integer.parseInt(GPSPeriod);
 							//new clsHttpPostAPI().CallAPI(objContext, "API021");
 							if(VersionResult.equals(",版本正確") || VersionResult.equals(Updata)){
 								//記住帳號
@@ -742,13 +753,18 @@ public class Login extends Activity {
 								runOnUiThread(new Runnable() {
 									@Override
 									public void run() {
+
 										int V = VersionResult.indexOf(",");
 										String VURI = (String) VersionResult.subSequence(0, V);
 										Log.e("VURI",VURI);
-										myDialog.dismiss();
 										Uri uri = Uri.parse(VURI);
-										Intent i=new Intent(Intent.ACTION_VIEW,uri);
-										startActivity(i);
+										setDialog2();
+										StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+										StrictMode.setVmPolicy(builder.build());
+										getAPk post = new getAPk();
+										post.GetDTInfo(uri);
+										post.run();
+
 									}
 								});
 							}
@@ -873,6 +889,20 @@ public class Login extends Activity {
 		myDialog.setCancelable(false);
 		myDialog.show();
 	}
+	private void setDialog2(){
+		myDialog2 = new ProgressDialog(Login.this);
+		myDialog2.setTitle("更新中");
+		myDialog2.setMessage("最新版本下載中，請稍後！");
+		myDialog2.setButton("關閉", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				myDialog2.dismiss();
+			}
+
+		});
+		myDialog2.setCancelable(false);
+		myDialog2.show();
+	}
 
 	//判斷網路有無訊號
 	private boolean isConnected(){
@@ -884,5 +914,64 @@ public class Login extends Activity {
 		return false;
 	}
 
+	class getAPk extends Thread{
+		Uri uri ;
+		public void run() {
+			GetDTInfo(uri);
+		}
+
+		private void GetDTInfo(final Uri uri) {
+			final String strUrl ="http://ga.kerrytj.com/Cht_Motor/CHT_APK/kerry_Motor.apk";
+			OkHttpClient client = new OkHttpClient();
+			Request request = new Request.Builder()
+					.url(strUrl)
+					.build();
+			Call call = client.newCall(request);
+			call.enqueue(new Callback() {
+				@Override
+				public void onFailure(Call call, IOException e) {
+
+				}
+
+				@Override
+				public void onResponse(Call call, Response response) throws IOException {
+					// 判斷手機版本
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+
+						StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+						StrictMode.setVmPolicy(builder.build());
+						if (!response.isSuccessful()) {
+							throw new IOException("Failed to download file: " + response);
+						}
+						// 下載後 放進路徑
+						FileOutputStream fos = new FileOutputStream(Environment.getExternalStorageDirectory() + "/download/" + "kerry_Motor.apk");
+						fos.write(response.body().bytes());
+						fos.close();
+						myDialog2.dismiss();
+						// 安裝APK
+						Intent i = new Intent(Intent.ACTION_VIEW, uri);
+						i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+						File apkFile = new File(Environment.getExternalStorageDirectory() + "/download/" + "kerry_Motor.apk");
+						i.setDataAndType(Uri.fromFile(apkFile), "application/vnd.android.package-archive");
+						startActivity(i);
+					}else {
+						if (!response.isSuccessful()) {
+							throw new IOException("Failed to download file: " + response);
+						}
+						FileOutputStream fos = new FileOutputStream(Environment.getExternalStorageDirectory() + "/download/" + "kerry_Motor.apk");
+						fos.write(response.body().bytes());
+						fos.close();
+						myDialog2.dismiss();
+						Intent i = new Intent(Intent.ACTION_VIEW, uri);
+						i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+						File apkFile = new File(Environment.getExternalStorageDirectory() + "/download/" + "kerry_Motor.apk");
+						i.setDataAndType(Uri.fromFile(apkFile), "application/vnd.android.package-archive");
+						startActivity(i);
+					}
+
+				}
+			});
+		}
+	}
 
 }

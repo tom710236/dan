@@ -172,6 +172,7 @@
                     android:layout_height="40dp">
 
                     <TextView
+                        android:id="@+id/Text_CASH"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="貨品尺寸 ："
@@ -191,6 +192,7 @@
                     android:layout_height="40dp">
 
                     <TextView
+                        android:id="@+id/Text_COD_AMT"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="取件距離 ："
@@ -205,6 +207,7 @@
                         android:textSize="16sp" />
 
                     <TextView
+                        android:id="@+id/Text_Zero3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="公尺"
@@ -216,6 +219,7 @@
                     android:layout_height="40dp">
 
                     <TextView
+                        android:id="@+id/Text_Zero"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="貨品件數："
@@ -230,6 +234,7 @@
                         android:textSize="16sp" />
 
                     <TextView
+                        android:id="@+id/Text_Zero2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="件"
@@ -288,6 +293,14 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:text="拒絕" />
+
+                    <Button
+                        android:id="@+id/button_RE"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="返回"
+                        android:visibility="gone" />
                 </LinearLayout>
 
                 <LinearLayout

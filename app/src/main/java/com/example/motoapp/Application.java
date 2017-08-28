@@ -62,4 +62,5 @@ public class Application extends android.app.Application {
 	public static String NETTime="";
 	public static String timeClear="";
 	public static int GPSPeriod= 0;
+	public static String ADDRESS = "";
 }

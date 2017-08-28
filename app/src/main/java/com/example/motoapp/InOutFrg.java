@@ -6,11 +6,11 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Base64;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
@@ -30,11 +30,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.zxing.client.android.CaptureActivity;
+import com.google.zxing.client.android.Intents;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.text.SimpleDateFormat;
@@ -81,8 +85,8 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 	String BasicUrl;
 	String type7="73",type8="02",typeNUM;
 	String onClickNum;
-	String BrushDate,BrushTime,UP_DATE,UP_TIME;
-	String ADDRESS;
+	String BrushDate,BrushTime,UP_DATE,UP_TIME,today,today2;
+	String ADDRESS,CASH,COD_AMT;
 	private dbLocations objDB;
 	ProgressDialog myDialog;
 	Handler handler;
@@ -223,8 +227,8 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 				if (event.getAction() == event.ACTION_DOWN) {
 					if (keyCode == 23 || keyCode == 66) {
 						EditText EditText_SNO1 = (EditText) v;
-						if (EditText_SNO1.getText().toString().length() < 10) {
-							clsDialog.Show(context, "提示", "請輸入10碼以上的託運單號！");
+						if (EditText_SNO1.getText().toString().length() ==10 || EditText_SNO1.getText().toString().length() ==7) {
+							clsDialog.Show(context, "提示", "請輸入正確託運單號！");
 							return true;
 						}
 						onClickNum =((EditText) findViewById(R.id.EditText_SNO1)).getText().toString();
@@ -233,13 +237,13 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 						/**
 						 * 呼叫API
 						 * */
-						//取得資訊API
+
 						BasicUrl = "https://ga.kerrytj.com/Cht_Motor/api/GetEmployee/GetBasic?" +
 								"ID="+Application.strAccount+
 								"&CAR_NO="+Application.strCar+
 								"&Company="+Application.Company+
 								"&BOL_NO="+((EditText) findViewById(R.id.EditText_SNO1)).getText().toString();
-
+						//取得資訊API
 						PostBasic post = new PostBasic();
 						post.run();
 						setDialog();
@@ -249,63 +253,6 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 						PostCondition_UP post2 = new PostCondition_UP();
 						post2.run();
 
-						/*上傳AS400API
-						JSONObject json = new JSONObject();
-						Log.e("配送前", String.valueOf(json));
-						try {
-							java.util.Date now = new java.util.Date();
-							String strDate = new java.text.SimpleDateFormat("yyyyMMdd").format(now);
-							String strMDate = String.valueOf(Integer.parseInt(strDate) - 19110000);
-							String strTime = new java.text.SimpleDateFormat("HHmmss").format(now);
-
-							json.put("HT3101", type7);
-							//json.put("HT3101", ("查詢"));
-							json.put("HT3102", ((EditText) findViewById(R.id.EditText_SNO1)).getText().toString());
-							json.put("HT3103", objLoginInfo.FormNo);
-							json.put("HT3113", strMDate);
-							json.put("HT3114", strTime);
-							json.put("HT3181", Application.TestCode);
-							json.put("HT3182", objLoginInfo.AreaID);
-							json.put("HT3183", objLoginInfo.UserID);
-							json.put("HT3184", "ABCD");
-							json.put("HT3185", "B");
-							json.put("HT3186", "1");
-							json.put("HT3191", strDate);
-							json.put("HT3192", strTime);
-							Log.e("配送", String.valueOf(json));
-						} catch (Exception e) {
-							// TODO: handle exception
-						}
-
-
-						String strPOSTData = json.toString();
-						new clsHttpPostAPI().CallAPI(context, "API016", strPOSTData);
-						Log.e("strPOSTData", strPOSTData);
-						//TODO 記單號
-						TextView TextView_SNo = (TextView) findViewById(R.id.TextView_SNO1);
-
-						TextView_SNo.setText(EditText_SNO1.getText().toString());
-						String sssss = TextView_SNo.getText().toString();
-						//TODO 清掉欄位
-						EditText_SNO1.setText("");
-
-						//TODO 更新數量
-						objLoginInfo.UpdateInOut("In");
-
-						//TODO 顯示數量
-						TextView TextView_SCount = (TextView) findViewById(R.id.TextView_SCount);
-						TextView_SCount.setText(String.format("%04d", Integer.valueOf(objLoginInfo.In)));
-
-						//TODO
-						Button EditText_SStatus1 = (Button) findViewById(R.id.EditText_SStatus1);
-						EditText_SStatus1.setText("73");
-
-						TextView TextView_EStatusName1 = (TextView) findViewById(R.id.TextView_EStatusName1);
-						TextView_EStatusName1.setText("配送");
-
-						EditText_SNO1.requestFocus();
-						return true;
-						*/
 					}
 					return false;
 				}
@@ -460,42 +407,6 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 					clsDialog.Show(context, "提示", "請輸入正確格式的託運單號！");
 				}
 
-
-				/*
-				try {
-					java.util.Date now = new java.util.Date();
-					String strDate = new java.text.SimpleDateFormat("yyyyMMdd").format(now);
-					String strMDate = String.valueOf(Integer.parseInt(strDate) - 19110000);
-					String strTime = new java.text.SimpleDateFormat("HHmmss").format(now);
-
-					//json.put("HT3101", ((Button)findViewById(R.id.EditText_SStatus1)).getText().toString());
-					//json.put("HT3101", ("查詢"));
-					json.put("HT3102", (editText.getText().toString()));
-					json.put("HT3184", "ABCD");
-					/*
-					json.put("HT3103", objLoginInfo.FormNo);
-					json.put("HT3113", strMDate);
-					json.put("HT3114", strTime);
-					json.put("HT3181", Application.TestCode);
-					json.put("HT3182", objLoginInfo.AreaID);
-					json.put("HT3183", objLoginInfo.UserID);
-
-					json.put("HT3185", "B");
-					json.put("HT3186", "1");
-					json.put("HT3191", strDate);
-					json.put("HT3192", strTime);
-
-					Log.e("查詢", String.valueOf(json));
-				} catch (Exception e) {
-					// TODO: handle exception
-				}
-
-
-				String strPOSTData = json.toString();
-				new clsHttpPostAPI().CallAPI(context, "API024", strPOSTData);
-				Log.e("strPOSTData", strPOSTData);
-				*/
-
 			}
 		});
 
@@ -536,61 +447,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 						final TextView textview = (TextView) findViewById(R.id.TextView_ENO1);
 						textview.setText(onClickNum);
 						setDialog();
-						//上傳AS400API
-						/*
-						JSONObject json = new JSONObject();
-						try {
-							java.util.Date now = new java.util.Date();
-							String strDate = new java.text.SimpleDateFormat("yyyyMMdd").format(now);
-							String strMDate = String.valueOf(Integer.parseInt(strDate) - 19110000);
-							String strTime = new java.text.SimpleDateFormat("HHmmss").format(now);
 
-							json.put("HT3101", type8);
-							json.put("HT3102", ((EditText) findViewById(R.id.EditText_ENO1)).getText().toString());
-							json.put("HT3103", objLoginInfo.FormNo);
-							json.put("HT3113", strMDate);
-							json.put("HT3114", strTime);
-							json.put("HT3181", Application.TestCode);
-							json.put("HT3182", objLoginInfo.AreaID);
-							json.put("HT3183", objLoginInfo.UserID);
-							json.put("HT3184", "ABCD");
-							json.put("HT3185", "B");
-							json.put("HT3186", "1");
-							json.put("HT3191", strDate);
-							json.put("HT3192", strTime);
-						} catch (Exception e) {
-							// TODO: handle exception
-						}
-
-
-						String strPOSTData = json.toString();
-						new clsHttpPostAPI().CallAPI(context, "API023", strPOSTData);
-
-						//TODO 記單號
-						TextView TextView_ENo = (TextView) findViewById(R.id.TextView_ENO1);
-
-						TextView_ENo.setText(EditText_ENO1.getText().toString());
-						String sssss = TextView_ENo.getText().toString();
-						//TODO 清掉欄位
-						EditText_ENO1.setText("");
-
-						//TODO 更新數量
-						objLoginInfo.UpdateInOut("Out");
-
-						//TODO 顯示數量
-						TextView TextView_ECount = (TextView) findViewById(R.id.TextView_ECount);
-						TextView_ECount.setText(String.format("%04d", Integer.valueOf(objLoginInfo.Out)) + " / " + String.format("%04d", Integer.valueOf(objLoginInfo.In)));
-
-						//TODO
-						Button EditText_SStatus1 = (Button) findViewById(R.id.EditText_SStatus1);
-						EditText_SStatus1.setText("02");
-
-						TextView TextView_EStatusName1 = (TextView) findViewById(R.id.TextView_EStatusName1);
-						TextView_EStatusName1.setText("配達");
-
-						EditText_ENO1.requestFocus();
-						return true;
-						*/
 					}
 					return false;
 
@@ -803,7 +660,55 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 
 
 	}
+	/**
+	 * Https 憑證不安全
+	 * 略過憑證方法
+	 */
+	public static class SSLSocketClient {
 
+		//获取这个SSLSocketFactory
+		public static SSLSocketFactory getSSLSocketFactory() {
+			try {
+				SSLContext sslContext = SSLContext.getInstance("SSL");
+				sslContext.init(null, getTrustManager(), new SecureRandom());
+				return sslContext.getSocketFactory();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
+
+		//获取TrustManager
+		private static TrustManager[] getTrustManager() {
+			TrustManager[] trustAllCerts = new TrustManager[]{
+					new X509TrustManager() {
+						@Override
+						public void checkClientTrusted(X509Certificate[] chain, String authType) {
+						}
+
+						@Override
+						public void checkServerTrusted(X509Certificate[] chain, String authType) {
+						}
+
+						@Override
+						public X509Certificate[] getAcceptedIssuers() {
+							return new X509Certificate[]{};
+						}
+					}
+			};
+			return trustAllCerts;
+		}
+
+		//获取HostnameVerifier
+		public static HostnameVerifier getHostnameVerifier() {
+			HostnameVerifier hostnameVerifier = new HostnameVerifier() {
+				@Override
+				public boolean verify(String s, SSLSession sslSession) {
+					return true;
+				}
+			};
+			return hostnameVerifier;
+		}
+	}
 	public void onStart() {
 		super.onStart();
 		GCMIntentService.handlerGCM = handlerGCM;
@@ -992,149 +897,300 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 
 	//配送 - 按掃描
 	public void onScran(View v) {
-		Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-		if (getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).size() == 0) {
-			// 未安裝
-			Toast.makeText(this, "請至 Play 商店安裝 ZXing 條碼掃描器", Toast.LENGTH_LONG).show();
-		} else {
-			// SCAN_MODE, 可判別所有支援的條碼
-			// QR_CODE_MODE, 只判別 QRCode
-			// PRODUCT_MODE, UPC and EAN 碼
-			// ONE_D_MODE, 1 維條碼
-			intent.putExtra("SCAN_MODE", "SCAN_MODE");
-
-			// 呼叫ZXing Scanner，完成動作後回傳 1 給 onActivityResult 的 requestCode 參數
-			startActivityForResult(intent, 1);
-		}
+		Intent intent = new Intent(InOutFrg.this, CaptureActivity.class);
+		intent.setAction(Intents.Scan.ACTION); //啟動掃描動作，一定要設定
+		intent.putExtra(Intents.Scan.WIDTH, 1200); //調整掃描視窗寬度(Optional)
+		intent.putExtra(Intents.Scan.HEIGHT, 675); //調整掃描視窗高度(Optional)
+		intent.putExtra(Intents.Scan.RESULT_DISPLAY_DURATION_MS, 100L); //設定掃描成功地顯示時間(Optional)
+		intent.putExtra(Intents.Scan.PROMPT_MESSAGE, "請將條碼置於鏡頭範圍進行掃描"); //客製化掃描視窗的提示文字(Optional)
+		//intent.putExtra(Scan.MODE, Scan.ONE_D_MODE);  //限制只能掃一維條碼(預設為全部條碼都支援)
+		//intent.putExtra(CaptureActivity.SACN_MODE_NAME, CaptureActivity.SCAN_SIGLE_MODE);
+		intent.putExtra(CaptureActivity.SACN_MODE_NAME, CaptureActivity.SCAN_BATCH_MODE);
+		startActivityForResult(intent, 1);
 	}
 	//配達 按掃描
 	public void onScran2(View v) {
-		Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-		if (getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).size() == 0) {
-			// 未安裝
-			Toast.makeText(this, "請至 Play 商店安裝 ZXing 條碼掃描器", Toast.LENGTH_LONG).show();
-		} else {
-			// SCAN_MODE, 可判別所有支援的條碼
-			// QR_CODE_MODE, 只判別 QRCode
-			// PRODUCT_MODE, UPC and EAN 碼
-			// ONE_D_MODE, 1 維條碼
-			intent.putExtra("SCAN_MODE", "SCAN_MODE");
+		Intent intent = new Intent(InOutFrg.this, CaptureActivity.class);
+		intent.setAction(Intents.Scan.ACTION); //啟動掃描動作，一定要設定
+		intent.putExtra(Intents.Scan.WIDTH, 1200); //調整掃描視窗寬度(Optional)
+		intent.putExtra(Intents.Scan.HEIGHT, 675); //調整掃描視窗高度(Optional)
+		intent.putExtra(Intents.Scan.RESULT_DISPLAY_DURATION_MS, 100L); //設定掃描成功地顯示時間(Optional)
+		intent.putExtra(Intents.Scan.PROMPT_MESSAGE, "請將條碼置於鏡頭範圍進行掃描"); //客製化掃描視窗的提示文字(Optional)
+		//intent.putExtra(Scan.MODE, Scan.ONE_D_MODE);  //限制只能掃一維條碼(預設為全部條碼都支援)
+		//intent.putExtra(CaptureActivity.SACN_MODE_NAME, CaptureActivity.SCAN_SIGLE_MODE);
+		intent.putExtra(CaptureActivity.SACN_MODE_NAME, CaptureActivity.SCAN_SIGLE_MODE);
+		startActivityForResult(intent, 2);
 
-			// 呼叫ZXing Scanner，完成動作後回傳 1 給 onActivityResult 的 requestCode 參數
-			startActivityForResult(intent, 2);
-		}
 	}
 	//查詢 - 按掃描
 	public void onScran3(View v) {
-		Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-		if (getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).size() == 0) {
-			// 未安裝
-			Toast.makeText(this, "請至 Play 商店安裝 ZXing 條碼掃描器", Toast.LENGTH_LONG).show();
-		} else {
-			// SCAN_MODE, 可判別所有支援的條碼
-			// QR_CODE_MODE, 只判別 QRCode
-			// PRODUCT_MODE, UPC and EAN 碼
-			// ONE_D_MODE, 1 維條碼
-			intent.putExtra("SCAN_MODE", "SCAN_MODE");
-			// 呼叫ZXing Scanner，完成動作後回傳 1 給 onActivityResult 的 requestCode 參數
-			startActivityForResult(intent, 3);
-		}
+		Intent intent = new Intent(InOutFrg.this, CaptureActivity.class);
+		intent.setAction(Intents.Scan.ACTION); //啟動掃描動作，一定要設定
+		intent.putExtra(Intents.Scan.WIDTH, 1200); //調整掃描視窗寬度(Optional)
+		intent.putExtra(Intents.Scan.HEIGHT, 675); //調整掃描視窗高度(Optional)
+		intent.putExtra(Intents.Scan.RESULT_DISPLAY_DURATION_MS, 100L); //設定掃描成功地顯示時間(Optional)
+		intent.putExtra(Intents.Scan.PROMPT_MESSAGE, "請將條碼置於鏡頭範圍進行掃描"); //客製化掃描視窗的提示文字(Optional)
+		//intent.putExtra(Scan.MODE, Scan.ONE_D_MODE);  //限制只能掃一維條碼(預設為全部條碼都支援)
+		//intent.putExtra(CaptureActivity.SACN_MODE_NAME, CaptureActivity.SCAN_SIGLE_MODE);
+		intent.putExtra(CaptureActivity.SACN_MODE_NAME, CaptureActivity.SCAN_SIGLE_MODE);
+		startActivityForResult(intent, 3);
+
 	}
 
 	// 接收 ZXing 掃描後回傳來的結果
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		//配送
 		if (requestCode == 1) {
-			if (resultCode == RESULT_OK) {
 				// ZXing回傳的內容
-				String contents = intent.getStringExtra("SCAN_RESULT");
-				final EditText editText = (EditText) findViewById(EditText_SNO1);
-				editText.setText(contents);
-				TextView textView = (TextView) findViewById(R.id.TextView_SNO1);
-				textView.setText(contents);
-				BasicUrl = "https://ga.kerrytj.com/Cht_Motor/api/GetEmployee/GetBasic?" +
-						"ID="+Application.strAccount+
-						"&CAR_NO="+Application.strCar+
-						"&Company="+Application.Company+
-						"&BOL_NO="+contents;
-				onClickNum = contents;
-				if (editText.length() == 11 || editText.length() == 8) {
+				//取得掃描後的值 arraylist
+				ArrayList num = CaptureActivity.num;
+				Log.e("配送", String.valueOf(num));
+				setDialog();
+				for (int i = 0 ; i<num.size() ; i++) {
+					final String contents;
+					contents = String.valueOf(num.get(i));
+					final EditText editText = (EditText) findViewById(EditText_SNO1);
+					editText.setText(contents);
+					TextView textView = (TextView) findViewById(R.id.TextView_SNO1);
+					textView.setText(contents);
+					BasicUrl = "https://ga.kerrytj.com/Cht_Motor/api/GetEmployee/GetBasic?" +
+							"ID="+Application.strAccount+
+							"&CAR_NO="+Application.strCar+
+							"&Company="+Application.Company+
+							"&BOL_NO="+contents;
+					//onClickNum = contents;
+					if (contents.length() == 11 || contents.length() == 8) {
 
-					/**
-					 * 呼叫API
-					 * */
-					//託運單資訊
-					PostBasic post = new PostBasic();
-					post.run();
-					//託運單上傳
-					//資訊更新API
-					getBrushDate();
-					getUPDate();
-					PostCondition_UP post2 = new PostCondition_UP();
-					post2.run();
-					setDialog();
-					/*
-					JSONObject json = new JSONObject();
-					try {
-						java.util.Date now = new java.util.Date();
-						String strDate = new java.text.SimpleDateFormat("yyyyMMdd").format(now);
-						String strMDate = String.valueOf(Integer.parseInt(strDate) - 19110000);
-						String strTime = new java.text.SimpleDateFormat("HHmmss").format(now);
 
-						json.put("HT3101", type7);
-						//json.put("HT3102", ((EditText) findViewById(EditText_ENO1)).getText().toString());
-						json.put("HT3102", contents);
-						json.put("HT3103", objLoginInfo.FormNo);
-						json.put("HT3113", strMDate);
-						json.put("HT3114", strTime);
-						json.put("HT3181", Application.TestCode);
-						json.put("HT3182", objLoginInfo.AreaID);
-						json.put("HT3183", objLoginInfo.UserID);
-						json.put("HT3184", "ABCD");
-						json.put("HT3185", "B");
-						json.put("HT3186", "1");
-						json.put("HT3191", strDate);
-						json.put("HT3192", strTime);
+						/**
+						 * 呼叫API託運單資訊
+						 * */
+						//
+						//PostBasic post = new PostBasic();
+						//post.run();
+						/**
+						 *
+						 */
+						final OkHttpClient client = new OkHttpClient()
+								.newBuilder()
+								.connectTimeout(30, TimeUnit.SECONDS)
+								.readTimeout(30, TimeUnit.SECONDS)
+								.writeTimeout(30, TimeUnit.SECONDS)
+								//.addInterceptor(new LogInterceptor())
+								//.addInterceptor(new TokenInterceptor())
+								.sslSocketFactory(SSLSocketClient.getSSLSocketFactory())
+								.hostnameVerifier(SSLSocketClient.getHostnameVerifier())
+								.build();
+						final Request request = new Request.Builder()
+								.url(BasicUrl)
+								.build();
+						Call call = client.newCall(request);
+						call.enqueue(new Callback() {
 
-					} catch (Exception e) {
-						// TODO: handle exception
+							@Override
+							public void onFailure(Call call, IOException e) {
+								Log.e("basic e", String.valueOf(e));
+								new Thread(new Runnable(){
+									@Override
+									public void run() {
+										myDialog.dismiss();
+									}
+								}).start();
+							}
+
+							@Override
+							public void onResponse(Call call, Response response) throws IOException {
+								myDialog.dismiss();
+								String json = response.body().string();
+								Log.e("託運單資訊回傳", json);
+								parseJson(json);
+
+							}
+
+							private void parseJson(String json) {
+								try {
+									JSONArray array = new JSONArray(json);
+									for(int i = 0 ; i<array.length() ; i++) {
+										final JSONObject obj = array.getJSONObject(i);
+										ADDRESS = String.valueOf(obj.get("ADDRESS"));
+										CASH = String.valueOf(obj.get("CASH"));
+										COD_AMT = String.valueOf(obj.get("COD_AMT"));
+
+
+
+										if(ADDRESS.equals("null")){
+											runOnUiThread(new Runnable() {
+												@Override
+												public void run() {
+													myDialog.dismiss();
+													Log.e("無此單號","無此單號");
+													Toast.makeText(InOutFrg.this, "無此單號",Toast.LENGTH_SHORT).show();
+												}
+											});
+
+										}else{
+											runOnUiThread(new Runnable() {
+												@Override
+												public void run() {
+													//配送資訊存進資料庫
+													String Add = setEncryp(ADDRESS);
+													final dbLocations objDB = new dbLocations(InOutFrg.this);
+													objDB.openDB();
+													objDB.InsertTask(new Object[] {
+															contents,
+															contents,
+															Add,
+															CASH,
+															COD_AMT,
+															null,
+															today,
+															"0" });
+													objDB.UpdateTaskStatus("BB", contents);
+													objDB.DBClose();
+													objDB.DBClose();
+
+
+													//配送
+													myDialog.dismiss();
+													TextView TextView_SAddress1 = (TextView) findViewById(R.id.TextView_SAddress1);
+													TextView_SAddress1.setText(ADDRESS);
+													TextView TextView_SMoney = (TextView)findViewById(R.id.TextView_SMoney);
+													TextView_SMoney.setText(CASH);
+													TextView TextView_SMoney2 = (TextView)findViewById(R.id.TextView_SMoney2);
+													TextView_SMoney2.setText(COD_AMT);
+
+													//配達
+													myDialog.dismiss();
+													TextView TextView_EAddress1 = (TextView)findViewById(R.id.TextView_EAddress1);
+													TextView_EAddress1.setText(ADDRESS);
+													TextView TextView_EMoney = (TextView)findViewById(R.id.TextView_EMoney);
+													TextView_EMoney.setText(CASH);
+													TextView TextView_EMoney2 = (TextView)findViewById(R.id.TextView_EMoney2);
+													TextView_EMoney2.setText(COD_AMT);
+
+
+
+													//查詢
+													myDialog.dismiss();
+													TextView TextView_AD = (TextView)findViewById(R.id.TextView_AD);
+													TextView_AD.setText(ADDRESS);
+													TextView TextView_ADMoney = (TextView)findViewById(R.id.TextView_ADMoney);
+													TextView_ADMoney.setText(CASH);
+													TextView TextView_ADMoney2 = (TextView)findViewById(R.id.TextView_ADMoney2);
+													TextView_ADMoney2.setText(COD_AMT);
+
+												}
+											});
+										}
+
+
+									}
+
+								} catch (JSONException e) {
+									e.printStackTrace();
+								}
+
+							}
+
+						});
+
+						getBrushDate();
+						getUPDate();
+						//託運單上傳
+						//資訊更新API
+						//PostCondition_UP post2 = new PostCondition_UP();
+						//post2.run();
+						/**
+						 *
+						 */
+						final String url = "https://ga.kerrytj.com/Cht_Motor/api/Condition_UP/GET?" +
+								"NUM=" + typeNUM +
+								"&BOL_NO=" + contents +
+								"&CAR_NO=" + Application.strCar +
+								"&BrushDate=" +BrushDate+
+								"&BrushTime=" +BrushTime+
+								"&BrushDept=" +"0078"+
+								"&Area=" +"777"+
+								"&ID=" +objLoginInfo.UserID+
+								"&HTnumber=" +"ABCD"+
+								"&DataResource=" +"B"+
+								"&BusinessID=" +"1"+
+								"&UP_DATE=" + UP_DATE +
+								"&Company=" + Application.Company +
+								"&UP_TIME="+ UP_TIME ;
+						final OkHttpClient client2 = new OkHttpClient()
+								.newBuilder()
+								.connectTimeout(15, TimeUnit.SECONDS)
+								.readTimeout(15, TimeUnit.SECONDS)
+								.writeTimeout(15, TimeUnit.SECONDS)
+								//.addInterceptor(new LogInterceptor())
+								//.addInterceptor(new TokenInterceptor())
+								.sslSocketFactory(SSLSocketClient.getSSLSocketFactory())
+								.hostnameVerifier(SSLSocketClient.getHostnameVerifier())
+								.build();
+						final MediaType JSON
+								= MediaType.parse("application/json; charset=utf-8");
+						RequestBody body = RequestBody.create(JSON,url);
+						final Request request2 = new Request.Builder()
+								.url(url)
+								.post(body)
+								.build();
+						Call call2 = client2.newCall(request2);
+						call2.enqueue(new Callback() {
+							@Override
+							public void onFailure(Call call, IOException e) {
+								Log.e("GetCondition_UP e", String.valueOf(e));
+
+							}
+
+							@Override
+							public void onResponse(Call call, Response response) throws IOException {
+								final String json = response.body().string();
+								Log.e("託運單資訊更新",url);
+								Log.e("託運單資訊更新回傳", json);
+								Log.e("CARTYPE", String.valueOf(CARTYPE));
+
+								if(json.equals("[{\"MESSAGE\":\"TRUE\"}]")){
+										//TODO 更新數量
+										objLoginInfo.UpdateInOut("In");
+										runOnUiThread(new Runnable() {
+											@Override
+											public void run() {
+												//TODO 顯示數量
+												Toast.makeText(InOutFrg.this,json,Toast.LENGTH_SHORT).show();
+												TextView TextView_SCount = (TextView) findViewById(R.id.TextView_SCount);
+												TextView_SCount.setText(String.format("%04d", Integer.valueOf(objLoginInfo.In)));
+
+											}
+										});
+
+								}else{
+									runOnUiThread(new Runnable() {
+										@Override
+										public void run() {
+											Toast.makeText(InOutFrg.this,json,Toast.LENGTH_SHORT).show();
+										}
+									});
+								}
+
+								runOnUiThread(new Runnable() {
+									@Override
+									public void run() {
+										TextView EditText_ENO1 = (TextView)findViewById(R.id.EditText_ENO1);
+										EditText_ENO1.setText("");
+										TextView EditText_SNO1 = (TextView)findViewById(R.id.EditText_SNO1);
+										EditText_SNO1.setText("");
+									}
+								});
+							}
+						});
+
+					}else{
+						Toast.makeText(InOutFrg.this,"條碼格式不符",Toast.LENGTH_SHORT).show();
 					}
 
-
-					String strPOSTData = json.toString();
-					new clsHttpPostAPI().CallAPI(context, "API016", strPOSTData);
-					Log.e("strPOSTData", strPOSTData);
-					//TODO 記單號
-					TextView TextView_SNo = (TextView) findViewById(R.id.TextView_SNO1);
-
-					//TextView_SNo.setText(EditText_SNO1.getText().toString());
-					String sssss = TextView_SNo.getText().toString();
-					//TODO 清掉欄位
-					//EditText_SNO1.setText("");
-
-					//TODO 更新數量
-					objLoginInfo.UpdateInOut("In");
-
-					//TODO 顯示數量
-					TextView TextView_SCount = (TextView) findViewById(R.id.TextView_SCount);
-					TextView_SCount.setText(String.format("%04d", Integer.valueOf(objLoginInfo.In)));
-					//TODO
-					Button EditText_SStatus1 = (Button) findViewById(R.id.EditText_SStatus1);
-					EditText_SStatus1.setText("73");
-
-					TextView TextView_EStatusName1 = (TextView) findViewById(R.id.TextView_EStatusName1);
-					TextView_EStatusName1.setText("配送");
-
-					editText.setText("");
-					*/
-					startActivityForResult(intent, 1);//連續掃描
-					//Toast.makeText(this, contents, Toast.LENGTH_SHORT).show();
-				}else{
-					startActivityForResult(intent, 1);
-                    Toast.makeText(InOutFrg.this,"條碼格式不符",Toast.LENGTH_SHORT).show();
 				}
 
-			}
 		//配達
 		} else if (requestCode == 2) {
 			if (resultCode == RESULT_OK) {
@@ -1158,61 +1214,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 					PostBasic post = new PostBasic();
 					post.run();
 					setDialog();
-					/*
-					JSONObject json = new JSONObject();
-					try {
-						java.util.Date now = new java.util.Date();
-						String strDate = new java.text.SimpleDateFormat("yyyyMMdd").format(now);
-						String strMDate = String.valueOf(Integer.parseInt(strDate) - 19110000);
-						String strTime = new java.text.SimpleDateFormat("HHmmss").format(now);
 
-						json.put("HT3101", ((Button) findViewById(R.id.EditText_EStatus1)).getText().toString());
-						//json.put("HT3102", ((EditText) findViewById(R.id.EditText_ENO1)).getText().toString());
-						json.put("HT3102", (contents));
-						json.put("HT3103", objLoginInfo.FormNo);
-						json.put("HT3113", strMDate);
-						json.put("HT3114", strTime);
-						json.put("HT3181", Application.TestCode);
-						json.put("HT3182", objLoginInfo.AreaID);
-						json.put("HT3183", objLoginInfo.UserID);
-						json.put("HT3184", "ABCD");
-						json.put("HT3185", "B");
-						json.put("HT3186", "1");
-						json.put("HT3191", strDate);
-						json.put("HT3192", strTime);
-					} catch (Exception e) {
-						// TODO: handle exception
-					}
-
-
-					String strPOSTData = json.toString();
-					new clsHttpPostAPI().CallAPI(context, "API023", strPOSTData);
-
-					//TODO 記單號
-					TextView TextView_ENo = (TextView) findViewById(R.id.TextView_ENO1);
-
-					//TextView_ENo.setText(EditText_ENO1.getText().toString());
-					String sssss = TextView_ENo.getText().toString();
-					//TODO 清掉欄位
-					//EditText_ENO1.setText("");
-
-					//TODO 更新數量
-					objLoginInfo.UpdateInOut("Out");
-
-					//TODO 顯示數量
-					TextView TextView_ECount = (TextView) findViewById(R.id.TextView_ECount);
-					TextView_ECount.setText(String.format("%04d", Integer.valueOf(objLoginInfo.Out)) + " / " + String.format("%04d", Integer.valueOf(objLoginInfo.In)));
-
-					//TODO
-					Button EditText_SStatus1 = (Button) findViewById(R.id.EditText_SStatus1);
-					EditText_SStatus1.setText("02");
-
-					TextView TextView_EStatusName1 = (TextView) findViewById(R.id.TextView_EStatusName1);
-					TextView_EStatusName1.setText("配達");
-
-					//EditText_ENO1.requestFocus();
-					editText.setText("");
-					*/
 				}else {
 					startActivityForResult(intent, 2);
 					Toast.makeText(InOutFrg.this,"條碼格式不符",Toast.LENGTH_SHORT).show();
@@ -1236,47 +1238,6 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 					 * 呼叫API
 					 * */
 
-					//PostBasic post = new PostBasic();
-					//post.run();
-					//EditText editText = (EditText) findViewById(R.id.EditText_SearchVal);
-					/*
-					JSONObject json = new JSONObject();
-					Log.e("查詢前", String.valueOf(json));
-					try {
-						java.util.Date now = new java.util.Date();
-						String strDate = new java.text.SimpleDateFormat("yyyyMMdd").format(now);
-						String strMDate = String.valueOf(Integer.parseInt(strDate) - 19110000);
-						String strTime = new java.text.SimpleDateFormat("HHmmss").format(now);
-
-						//json.put("HT3101", ((Button)findViewById(R.id.EditText_SStatus1)).getText().toString());
-						//json.put("HT3101", ("查詢"));
-						//json.put("HT3102", (editText.getText().toString()));
-						json.put("HT3102", (contents));
-						json.put("HT3184", "ABCD");
-					/*
-					json.put("HT3103", objLoginInfo.FormNo);
-					json.put("HT3113", strMDate);
-					json.put("HT3114", strTime);
-					json.put("HT3181", Application.TestCode);
-					json.put("HT3182", objLoginInfo.AreaID);
-					json.put("HT3183", objLoginInfo.UserID);
-
-					json.put("HT3185", "B");
-					json.put("HT3186", "1");
-					json.put("HT3191", strDate);
-					json.put("HT3192", strTime);
-
-						Log.e("查詢", String.valueOf(json));
-					} catch (Exception e) {
-						// TODO: handle exception
-					}
-
-
-					String strPOSTData = json.toString();
-					new clsHttpPostAPI().CallAPI(context, "API024", strPOSTData);
-					Log.e("strPOSTData", strPOSTData);
-					editText.setText("");
-				*/
 				}
 				else {
 					startActivityForResult(intent, 3);
@@ -1398,6 +1359,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 			try {
 				JSONArray array = new JSONArray(json);
 				final ArrayList NUMArray = new ArrayList<>();
+				//預設貨況
 				for (int i = 0; i < array.length(); i++) {
 					JSONObject obj = array.getJSONObject(i);
 					String NUM = String.valueOf(obj.get("NUM"));
@@ -1502,55 +1464,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 		}
 	}
 
-	/**
-	 * Https 憑證不安全
-	 * 略過憑證方法
-	 */
-	public static class SSLSocketClient {
 
-		//获取这个SSLSocketFactory
-		public static SSLSocketFactory getSSLSocketFactory() {
-			try {
-				SSLContext sslContext = SSLContext.getInstance("SSL");
-				sslContext.init(null, getTrustManager(), new SecureRandom());
-				return sslContext.getSocketFactory();
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
-		}
-
-		//获取TrustManager
-		private static TrustManager[] getTrustManager() {
-			TrustManager[] trustAllCerts = new TrustManager[]{
-					new X509TrustManager() {
-						@Override
-						public void checkClientTrusted(X509Certificate[] chain, String authType) {
-						}
-
-						@Override
-						public void checkServerTrusted(X509Certificate[] chain, String authType) {
-						}
-
-						@Override
-						public X509Certificate[] getAcceptedIssuers() {
-							return new X509Certificate[]{};
-						}
-					}
-			};
-			return trustAllCerts;
-		}
-
-		//获取HostnameVerifier
-		public static HostnameVerifier getHostnameVerifier() {
-			HostnameVerifier hostnameVerifier = new HostnameVerifier() {
-				@Override
-				public boolean verify(String s, SSLSession sslSession) {
-					return true;
-				}
-			};
-			return hostnameVerifier;
-		}
-	}
 
 	//貨況 7-配送 8-配達
 	class PostBasic extends Thread {
@@ -1619,6 +1533,24 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 								runOnUiThread(new Runnable() {
 									@Override
 									public void run() {
+										//配送資訊存進資料庫
+										final dbLocations objDB = new dbLocations(InOutFrg.this);
+										String Add = setEncryp(ADDRESS);
+										objDB.openDB();
+										objDB.InsertTask(new Object[] {
+												onClickNum,
+												onClickNum,
+												Add,
+												CASH,
+												COD_AMT,
+												null,
+												today,
+												"0" });
+										objDB.UpdateTaskStatus("BB", onClickNum);
+										objDB.DBClose();
+										objDB.DBClose();
+
+
 										//配送
 										myDialog.dismiss();
 										TextView TextView_SAddress1 = (TextView) findViewById(R.id.TextView_SAddress1);
@@ -1775,6 +1707,12 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 									Toast.makeText(InOutFrg.this,json,Toast.LENGTH_SHORT).show();
 									TextView TextView_ECount = (TextView) findViewById(R.id.TextView_ECount);
 									TextView_ECount.setText(String.format("%04d", Integer.valueOf(objLoginInfo.Out)) + " / " + String.format("%04d", Integer.valueOf(objLoginInfo.In)));
+									final dbLocations objDB = new dbLocations(InOutFrg.this);
+									objDB.openDB();
+									objDB.UpdateDate(today2,onClickNum);
+									objDB.UpdateTaskStatus("CC",onClickNum);
+									objDB.DBClose();
+
 								}
 							});
 						}
@@ -1789,21 +1727,8 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 									Toast.makeText(InOutFrg.this,json,Toast.LENGTH_SHORT).show();
 									TextView TextView_SCount = (TextView) findViewById(R.id.TextView_SCount);
 									TextView_SCount.setText(String.format("%04d", Integer.valueOf(objLoginInfo.In)));
-									//存入資料庫
-									/*
-									final dbLocations objDB = new dbLocations(InOutFrg.this);
-									objDB.openDB();
-									objDB.InsertTask(new Object[] {
-											onClickNum,
-											onClickNum,
-											json,
-											"null",
-											"null",
-											"null",
-											BrushTime,
-											"0" });
-									objDB.DBClose();
-									*/
+
+
 								}
 							});
 						}
@@ -1871,6 +1796,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 	}
 	private void getUPDate() {
 		Calendar mCal = Calendar.getInstance();
+
 		String dateformat = "yyyyMMdd";
 		SimpleDateFormat df = new SimpleDateFormat(dateformat);
 		UP_DATE = df.format(mCal.getTime());
@@ -1878,6 +1804,15 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 		df = new SimpleDateFormat(dateformat2);
 		UP_TIME = df.format(mCal.getTime());
 		Log.e("DATE",BrushDate + BrushTime);
+		String dateformat3 = "yyyy/MM/dd HH:mm:ss";
+		df = new SimpleDateFormat(dateformat3);
+		today = df.format(mCal.getTime());
+
+		String dateformat4 = "HH:mm";
+		df = new SimpleDateFormat(dateformat4);
+		today2 = df.format(mCal.getTime());
+
+
 	}
 	private void setDialog(){
 		myDialog = new ProgressDialog(InOutFrg.this);
@@ -1893,6 +1828,19 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 		myDialog.setCancelable(false);
 		myDialog.show();
 	}
+	//加密
+	private String setEncryp (String EncrypString){
+		SetAES AES = new SetAES();
+		EncrypMD5 encrypMD5 = new EncrypMD5();
+		EncrypSHA encrypSHA = new EncrypSHA();
+		try {
+			byte[] TextByte = AES.EncryptAES(encrypMD5.eccrypt(),encrypSHA.eccrypt(),EncrypString.getBytes());
+			EncrypString = Base64.encodeToString(TextByte,Base64.DEFAULT);
 
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return EncrypString;
+	}
 
 }

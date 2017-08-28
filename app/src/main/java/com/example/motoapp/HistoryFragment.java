@@ -67,7 +67,8 @@ public class HistoryFragment extends Activity implements GestureDetector.OnGestu
 		dbLocations objDB = new dbLocations(HistoryFragment.this);
 		objDB.openDB();
 		SysApplication.getInstance().addActivity(this);
-		Cursor cursor= objDB.Load1("tblTask", "cStatus='71' or cStatus='81' or cStatus='2' or cStatus='3' or cStatus='09' or cStatus='00'", "cRequestDate desc", "");
+		//清單位置
+		Cursor cursor= objDB.Load1("tblTask", "cStatus='71' or cStatus='81' or cStatus='2' or cStatus='3' or cStatus='09' or cStatus='00'or cStatus='CC'", "cRequestDate desc", "");
 		List rowitem = new ArrayList();
 		//設定手勢滑動
 		listView = (ListView) findViewById(R.id.listView);
@@ -101,19 +102,19 @@ public class HistoryFragment extends Activity implements GestureDetector.OnGestu
 				String strCaseID = cursor.getString(cursor.getColumnIndex("cCaseID"));
 				String strStatus = cursor.getString(cursor.getColumnIndex("cStatus"));
 				String strDate = cursor.getString(cursor.getColumnIndex("cLastDate"));
-				String oldStrDate = cursor.getString(cursor.getColumnIndex("cRequestDate"));
-				String oldStrDate2 = oldStrDate.substring(11,oldStrDate.length()-3);
 
+				//Log.e("oldStrDate",strDate);
+				String oldStrDate = cursor.getString(cursor.getColumnIndex("cRequestDate"));
+
+				String oldStrDate2 = oldStrDate.substring(11,oldStrDate.length()-3);
+				Log.e("oldStrDate2",oldStrDate2);
 
 				if(strDate != null && !strDate.equals("")){
-					rowitem.add(new HistoryItem(strOrderID,clsTask.GetStatus(strStatus),cursor.getString(cursor.getColumnIndex("cLastDate")))); //時間
+						rowitem.add(new HistoryItem(strOrderID,clsTask.GetStatus(strStatus),cursor.getString(cursor.getColumnIndex("cLastDate")))); //時間
 				}else{
 					rowitem.add(new HistoryItem(strOrderID,clsTask.GetStatus(strStatus),oldStrDate2)); //時間
 					Log.e("oldStrDate2",oldStrDate2);
 				}
-
-
-
 
 				if(cursor.isLast())
 					break;

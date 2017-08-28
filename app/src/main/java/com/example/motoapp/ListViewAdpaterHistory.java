@@ -143,7 +143,8 @@ public class ListViewAdpaterHistory extends BaseAdapter implements AdapterView.O
 
 
 			objDB.openDB();
-			Cursor cursor= objDB.Load1("tblTask", "cStatus='71' or cStatus='81' or cStatus='2' or cStatus='3' or cStatus='09'or cStatus='00'", "cRequestDate desc", "");
+			//清單位置
+			Cursor cursor= objDB.Load1("tblTask", "cStatus='71' or cStatus='81' or cStatus='2' or cStatus='3' or cStatus='09'or cStatus='00' or cStatus='CC'", "cRequestDate desc", "");
 
 			List rowitem = new ArrayList();
 			myList = new ArrayList<>();
@@ -181,8 +182,25 @@ public class ListViewAdpaterHistory extends BaseAdapter implements AdapterView.O
 			String RecAddress = null;
 			String RecPhone = null;
 			String RecName= null;
+			String cCASH = null;
+			String cCASH2 = null;
 
-			RecAddress = setDecrypt(objT.RecAddress);
+			if(objT.RecAddress != null && !objT.RecAddress.equals("")){
+				RecAddress = setDecrypt(objT.RecAddress);
+			}else {
+				RecAddress = setDecrypt(objT.CustAddress);//配達
+			}
+			if(objT.PayAmount != null && !objT.PayAmount.equals("")){
+				cCASH = objT.PayAmount;
+			}else {
+				cCASH = objT.Size;//配達
+			}
+			if(objT.Cash != null && !objT.Cash.equals("")){
+				cCASH2 = objT.Cash;
+			}else {
+				cCASH2 = objT.Distance;//配達
+			}
+
 			RecPhone = setDecrypt(objT.RecPhone);
 			RecName = setDecrypt(objT.RecName);
 
@@ -216,9 +234,9 @@ public class ListViewAdpaterHistory extends BaseAdapter implements AdapterView.O
 			((TextView) objLayout.findViewById(R.id.TextView_TEL))
 					.setText(RecPhone);
 			((TextView) objLayout.findViewById(R.id.EditText_Money))
-					.setText(objT.PayAmount);
+					.setText(cCASH);
 			((TextView) objLayout.findViewById(R.id.EditText_Cash))
-					.setText(objT.Cash);
+					.setText(cCASH2);
 			if(objT.PayType!=null&&!objT.PayType.equals("")){
 				if(objT.PayType.equals("1")){
 					((TextView) objLayout.findViewById(R.id.TextMoney))
@@ -233,7 +251,7 @@ public class ListViewAdpaterHistory extends BaseAdapter implements AdapterView.O
 
 			}else {
 				((TextView) objLayout.findViewById(R.id.TextMoney))
-						.setText("無       		：");
+						.setText("到付金額 ：");
 			}
 
 		}

@@ -94,12 +94,12 @@ public class Login extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_login);
 
-		/*
+
 		objDB = new dbLocations(this);
 		objDB.openDB();
 		objDB.DeleteAll();
 		objDB.close();
-		*/
+
 		//取得網路時間 (新達API)
 		GetDT post = new GetDT();
 		post.run();

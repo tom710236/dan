@@ -20,6 +20,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -68,6 +69,7 @@ public class Delay extends Service implements LocationListener {
         regID = intent.getStringExtra("regID");
         GPSPeriod = intent.getStringExtra("GPSPeriod");
         Log.e("GPSPeriod", GPSPeriod);
+
         handler = new Handler();
         runnable = new Runnable() {
             @TargetApi(Build.VERSION_CODES.M)
@@ -90,9 +92,20 @@ public class Delay extends Service implements LocationListener {
                         // for ActivityCompat#requestPermissions for more details.
 
                         return;
-                    }*/
+                    }
 
                     if (ActivityCompat.checkSelfPermission(Delay.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Delay.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        return;
+                    }
+                    */
+                    if (ActivityCompat.checkSelfPermission(Delay.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                         // TODO: Consider calling
                         //    ActivityCompat#requestPermissions
                         // here to request the missing permissions, and then overriding
@@ -161,8 +174,8 @@ public class Delay extends Service implements LocationListener {
         lon = String.valueOf(location.getLongitude());
         lat = String.valueOf(location.getLatitude());
 
-        Log.e("定位",str);
-        //Toast.makeText(Delay.this, "已成功定位", Toast.LENGTH_SHORT).show();
+        //Log.e("定位",str);
+        Toast.makeText(Delay.this, str, Toast.LENGTH_SHORT).show();
         Application.GPS = str;
         //在定位前每十秒執行一次 定位後 依GPSPeriod的時間執行
         upTime = Application.GPSPeriod;

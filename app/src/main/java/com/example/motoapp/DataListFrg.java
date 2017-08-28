@@ -307,6 +307,16 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 
 			}
 		});
+		/* 配送 返回 */
+		Button button_RE = (Button) findViewById(R.id.button_RE);
+		button_RE.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				type="71";
+				display();
+
+			}
+		});
 
 		/* 前往取件 */
 		Button button_Go = (Button) findViewById(R.id.button_Go);
@@ -1339,7 +1349,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 
 
 	/**
-	 * Bind ListView Data
+	 * Bind ListView Data 清單位置
 	 * */
 	private void setListView() {
 
@@ -1357,7 +1367,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 									*/
 					Cursor cursor = objDB
 							.Load1("tblTask",
-									"cStatus<>'71' and cStatus<>'81' and cStatus<>'2' and cStatus<>'3' and cStatus<>'09' and cStatus<>'00'",
+									"cStatus<>'71' and cStatus<>'81' and cStatus<>'2' and cStatus<>'3' and cStatus<>'09' and cStatus<>'00'and cStatus<>'CC'",
 									"cRequestDate desc", "");
 					List rowitem = new ArrayList();
 					listView = (ListView) findViewById(R.id.listView);
@@ -1672,7 +1682,71 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 			Log.e("type",type);
 
 		}
+		if (type.equals("BB"))// 配送畫面
+		{
+			LinearLayout LinearLayout_List = (LinearLayout) findViewById(R.id.LinearLayout_list);
+			LinearLayout_List.setVisibility(View.GONE);
 
+			ScrollView ScrollView_Delivery = (ScrollView) findViewById(R.id.ScrollView_Delivery);
+			ScrollView_Delivery.setVisibility(View.GONE);
+
+			ScrollView ScrollView_Step1 = (ScrollView) findViewById(R.id.ScrollView_Step1);
+			ScrollView_Step1.setVisibility(View.VISIBLE);
+
+			ScrollView ScrollView_Step2 = (ScrollView) findViewById(R.id.ScrollView_Step2);
+			ScrollView_Step2.setVisibility(View.GONE);
+
+			LinearLayout LinearLayout_TextViewReceive = (LinearLayout) findViewById(R.id.LinearLayout_TextViewReceive);
+			LinearLayout LinearLayout_ButtonGo = (LinearLayout) findViewById(R.id.LinearLayout_ButtonGo);
+			LinearLayout LinearLayout_ButtonGet = (LinearLayout) findViewById(R.id.LinearLayout_ButtonGet);
+
+			LinearLayout_ButtonGo.setVisibility(View.GONE);
+			LinearLayout_TextViewReceive.setVisibility(View.GONE);
+			LinearLayout_ButtonGet.setVisibility(View.VISIBLE);
+
+			/* 取出資料 */
+			objDB.openDB();
+			clsTask objT = objDB.LoadTask(Application.strCaseID);
+			String CustAddress = setDecrypt(objT.CustAddress);
+			((TextView) findViewById(R.id.TextView_CarNo))
+					.setText(Application.strCar);
+			((TextView) findViewById(R.id.TextView_DateTime))
+					.setText(objT.RequestDate);
+			((TextView) findViewById(R.id.TextView_OrderID))
+					.setText(objT.OrderID);
+			((TextView) findViewById(R.id.editText_Address))
+					.setText(CustAddress);
+			((TextView) findViewById(R.id.EditText_Count))
+					.setText(objT.ItemCount);
+			((TextView) findViewById(R.id.editText_Distant))
+					.setText(objT.Distance);
+			((TextView) findViewById(R.id.EditText_Size))
+					.setText(objT.Size);
+
+			((TextView) findViewById(R.id.Text_CASH))
+					.setText("到付金額 ：");
+			((TextView) findViewById(R.id.Text_COD_AMT))
+					.setText("代收貨款 ：");
+			((TextView) findViewById(R.id.Text_Zero))
+					.setVisibility(View.GONE);
+			((TextView) findViewById(R.id.EditText_Count))
+					.setVisibility(View.GONE);
+			((TextView) findViewById(R.id.Text_Zero2))
+					.setVisibility(View.GONE);
+			((TextView) findViewById(R.id.Text_Zero3))
+					.setVisibility(View.GONE);
+			((Button) findViewById(R.id.button_Get))
+					.setVisibility(View.GONE);
+			((Button) findViewById(R.id.button_Reject))
+					.setVisibility(View.GONE);
+			((Button) findViewById(R.id.button_RE))
+					.setVisibility(View.VISIBLE);
+
+			objDB.DBClose();
+			objDB.close();
+			Log.e("type",type);
+
+		}
 		if (type.equals("21"))// 點選接單後，設定預計到達時間畫面
 		{
 			/* Panel的顯示隱藏 */
@@ -2411,9 +2485,9 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 			ScrollView_Step2.setVisibility(View.GONE);
 
 			objDB.openDB();
-
+			//清單位置
 			Cursor cursor = objDB.Load1("tblTask",
-					"cStatus<>'71' and cStatus<>'81' and cStatus<>'2' and cStatus<>'3' and cStatus<>'09'and cStatus<>'00'", "cRequestDate desc", "");
+					"cStatus<>'71' and cStatus<>'81' and cStatus<>'2' and cStatus<>'3' and cStatus<>'09'and cStatus<>'00'and cStatus<>'CC'", "cRequestDate desc", "");
 			List rowitem = new ArrayList();
 			listView = (ListView) findViewById(R.id.listView);
 

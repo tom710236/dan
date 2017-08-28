@@ -389,6 +389,17 @@ public class dbLocations extends SQLiteOpenHelper {
 		objDBLocations.update("tblTask", args, "cCaseID='"+pStrPK+"'", null);
 	}
 	/** EX：
+	 * 更新收件地點(攜出)
+	 * */
+	public void UpdatecRecAddress (String pStrRecAddress ,String pStrPK) {
+		ContentValues args = new ContentValues();
+
+		if(pStrRecAddress .length()>0)
+			args.put("cRecAddress", pStrRecAddress );
+
+		objDBLocations.update("tblTask", args, "cCaseID='"+pStrPK+"'", null);
+	}
+	/** EX：
 	 * 轉運站名稱(NAME)
 	 * */
 	public void UpdateTaskStationName (String pStrStationName ,String pStrPK) {

@@ -721,6 +721,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 			public void onClick(View v) {
 				if(isConnected()){
 					new clsHttpPostAPI().CallAPI(context, "API015");
+					setDialog();
 					type = "08";
 					display();
 				}else {

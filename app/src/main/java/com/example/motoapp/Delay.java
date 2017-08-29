@@ -61,8 +61,6 @@ public class Delay extends Service implements LocationListener {
     public int onStartCommand(final Intent intent, int flags, int startId) {
         // 讓CPU一直運行
         acquireWakeLock();
-
-
         // activity向service传值
         Employee = intent.getStringExtra("Employee");
         regID = intent.getStringExtra("regID");
@@ -74,9 +72,8 @@ public class Delay extends Service implements LocationListener {
             @TargetApi(Build.VERSION_CODES.M)
             @Override
             public void run() {
-
+                //定位設定
                 mgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
                 if (ActivityCompat.checkSelfPermission(Delay.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Delay.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     // TODO: Consider calling
                     //    ActivityCompat#requestPermissions
@@ -87,17 +84,19 @@ public class Delay extends Service implements LocationListener {
                     // for ActivityCompat#requestPermissions for more details.
                     return;
                 }
+                //network定位
                 mgr.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
                         MIN_TIME, MIN_DIST, Delay.this);
                 time();
+                //IMEI 設定
                 TelephonyManager mTelManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
                 IMEI = mTelManager.getDeviceId();
+                //上傳GPS到平台
                 Get get = new Get();
                 get.start();
 
-                //時間到跳到Login
+                //時間到跳到Login 清楚帳號用
                 Application.datatime=datatime;
-
                 if(datatime.equals(Application.timeClear)){
                     //new clsHttpPostAPI().CallAPI(context, "API014");
                     Intent intent1 = new Intent(Delay.this,Login.class);
@@ -128,7 +127,7 @@ public class Delay extends Service implements LocationListener {
         return START_NOT_STICKY;
 
     }
-
+    // 定位成功後 執行
     @Override
     public void onLocationChanged(Location location) {
         String str = "定位提供者:" + location.getProvider();
@@ -164,7 +163,7 @@ public class Delay extends Service implements LocationListener {
     public void onProviderDisabled(String provider) {
 
     }
-
+    //得到現在時間
     private void time() {
         Calendar mCal = Calendar.getInstance();
         String dateformat = "yyyy/MM/dd HH:mm:ss";
@@ -260,12 +259,13 @@ public class Delay extends Service implements LocationListener {
 
     //申請設備電源鎖
     private void acquireWakeLock() {
-        Log.e("MyGPS","正在申請電源鎖"); if (null == mWakeLock) {
+        Log.e("MyGPS","正在申請電源鎖");
+        if (null == mWakeLock) {
         PowerManager pm = (PowerManager) this.getSystemService(Context.POWER_SERVICE);
         mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK |PowerManager.ON_AFTER_RELEASE, "");
         if (null != mWakeLock) {
             mWakeLock.acquire();
-            Log.e("MyGPS","電源鎖申請成功");
+            Log.e("MyGPS申請", String.valueOf(mWakeLock));
             }
         }
     }
@@ -275,7 +275,7 @@ public class Delay extends Service implements LocationListener {
         if (null != mWakeLock) {
             mWakeLock.release();
             mWakeLock = null;
-            Log.e("MyGPS","電源鎖釋放成功");
+            Log.e("MyGPS釋放", String.valueOf(mWakeLock));
         }
     }
 

@@ -945,7 +945,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 				//取得掃描後的值 arraylist
 				ArrayList num = CaptureActivity.num;
 				Log.e("配送", String.valueOf(num));
-				setDialog();
+
 				for (int i = 0 ; i<num.size() ; i++) {
 					final String contents;
 					contents = String.valueOf(num.get(i));
@@ -960,8 +960,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 							"&BOL_NO="+contents;
 					//onClickNum = contents;
 					if (contents.length() == 11 || contents.length() == 8) {
-
-
+						setDialog();
 						/**
 						 * 呼叫API託運單資訊
 						 * */
@@ -1033,6 +1032,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 												@Override
 												public void run() {
 													//配送資訊存進資料庫
+													/*
 													String Add = setEncryp(ADDRESS);
 													final dbLocations objDB = new dbLocations(InOutFrg.this);
 													objDB.openDB();
@@ -1047,7 +1047,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 															"0" });
 													objDB.UpdateTaskStatus("BB", contents);
 													objDB.DBClose();
-													objDB.DBClose();
+													*/
 
 
 													//配送
@@ -1534,6 +1534,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 									@Override
 									public void run() {
 										//配送資訊存進資料庫
+										/*
 										final dbLocations objDB = new dbLocations(InOutFrg.this);
 										String Add = setEncryp(ADDRESS);
 										objDB.openDB();
@@ -1548,7 +1549,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 												"0" });
 										objDB.UpdateTaskStatus("BB", onClickNum);
 										objDB.DBClose();
-										objDB.DBClose();
+										*/
 
 
 										//配送
@@ -1707,11 +1708,13 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 									Toast.makeText(InOutFrg.this,json,Toast.LENGTH_SHORT).show();
 									TextView TextView_ECount = (TextView) findViewById(R.id.TextView_ECount);
 									TextView_ECount.setText(String.format("%04d", Integer.valueOf(objLoginInfo.Out)) + " / " + String.format("%04d", Integer.valueOf(objLoginInfo.In)));
+									/*
 									final dbLocations objDB = new dbLocations(InOutFrg.this);
 									objDB.openDB();
 									objDB.UpdateDate(today2,onClickNum);
 									objDB.UpdateTaskStatus("CC",onClickNum);
 									objDB.DBClose();
+									*/
 
 								}
 							});

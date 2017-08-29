@@ -514,6 +514,8 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 
 		}
 		*/
+		TextView textView = (TextView)findViewById(R.id.textView14);
+		textView.setText(String.valueOf(CaptureActivity.num));
 	}
 
 	@Override

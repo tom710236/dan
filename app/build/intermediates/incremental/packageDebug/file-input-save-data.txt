@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Tue Aug 29 10:11:09 CST 2017
+#Tue Aug 29 11:42:56 CST 2017
 210.set=ANDROID_RESOURCE
 282.file=C\:\\work\\dan\\MotoAPP2\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\layout-v17\\notification_template_media_custom.xml
 14.set=ANDROID_RESOURCE

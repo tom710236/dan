@@ -6,7 +6,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -39,7 +38,7 @@ import okhttp3.Response;
 
 public class Delay extends Service implements LocationListener {
     static final int MIN_TIME = Application.GPSPeriod; //間隔時間(5秒)
-    static final float MIN_DIST = 1;  //間隔距離(1公尺)
+    static final float MIN_DIST = 10;  //間隔距離(1公尺)
     LocationManager mgr; //取得定位管理員
     Runnable runnable;
     Handler handler;
@@ -77,78 +76,47 @@ public class Delay extends Service implements LocationListener {
             public void run() {
 
                 mgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                String best = mgr.getBestProvider(new Criteria(), true);
-                if (best != null) {
-                    /*
-                    if (ActivityCompat.checkSelfPermission(Delay.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                            ActivityCompat.checkSelfPermission(Delay.this, Manifest.permission.ACCESS_WIFI_STATE) != PackageManager.PERMISSION_GRANTED&&
-                            ActivityCompat.checkSelfPermission(Delay.this, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
 
-                        return;
-                    }
+                if (ActivityCompat.checkSelfPermission(Delay.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Delay.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                mgr.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+                        MIN_TIME, MIN_DIST, Delay.this);
+                time();
+                TelephonyManager mTelManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+                IMEI = mTelManager.getDeviceId();
+                Get get = new Get();
+                get.start();
 
-                    if (ActivityCompat.checkSelfPermission(Delay.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Delay.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                        return;
-                    }
-                    */
-                    if (ActivityCompat.checkSelfPermission(Delay.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                        return;
-                    }
-                    mgr.requestLocationUpdates(best,
-                            MIN_TIME, MIN_DIST, Delay.this);
-                    time();
-                    TelephonyManager mTelManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-                    IMEI = mTelManager.getDeviceId();
-                    Get get = new Get();
-                    get.start();
+                //時間到跳到Login
+                Application.datatime=datatime;
 
-                    //時間到跳到Login
-                    Application.datatime=datatime;
-
-                    if(datatime.equals(Application.timeClear)){
-                        //new clsHttpPostAPI().CallAPI(context, "API014");
-                        Intent intent1 = new Intent(Delay.this,Login.class);
-                        // 錯誤代碼 Calling startActivity() from outside of an Activity context requires the , FLAG_ACTIVITY_NEW_TASK , Is this really what you want
-                        //使用 intent1.addFlags(intent1.FLAG_ACTIVITY_NEW_TASK);
-                        intent1.addFlags(intent1.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent1);
-                    }
-
-                    //GPS第一次啟動後 跳到DataListFrg
-                    if(Application.GPS!=null && !Application.GPS.equals("") && CheckGPS == 0){
-                        Intent intent1 = new Intent(Delay.this,DataListFrg.class);
-                        // 錯誤代碼 Calling startActivity() from outside of an Activity context requires the , FLAG_ACTIVITY_NEW_TASK , Is this really what you want
-                        //使用 intent1.addFlags(intent1.FLAG_ACTIVITY_NEW_TASK);
-                        intent1.addFlags(intent1.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent1);
-                        vibrator();
-                        CheckGPS = 1;
-                    }
-                } else {
-                    Log.e("定位中", "定位中");
+                if(datatime.equals(Application.timeClear)){
+                    //new clsHttpPostAPI().CallAPI(context, "API014");
+                    Intent intent1 = new Intent(Delay.this,Login.class);
+                    // 錯誤代碼 Calling startActivity() from outside of an Activity context requires the , FLAG_ACTIVITY_NEW_TASK , Is this really what you want
+                    //使用 intent1.addFlags(intent1.FLAG_ACTIVITY_NEW_TASK);
+                    intent1.addFlags(intent1.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent1);
                 }
 
+                //GPS第一次啟動後 跳到DataListFrg
+                if(Application.GPS!=null && !Application.GPS.equals("") && CheckGPS == 0){
+                    Intent intent1 = new Intent(Delay.this,DataListFrg.class);
+                    // 錯誤代碼 Calling startActivity() from outside of an Activity context requires the , FLAG_ACTIVITY_NEW_TASK , Is this really what you want
+                    //使用 intent1.addFlags(intent1.FLAG_ACTIVITY_NEW_TASK);
+                    intent1.addFlags(intent1.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent1);
+                    vibrator();
+                    CheckGPS = 1;
+                }
                 handler.postAtTime(this, android.os.SystemClock.uptimeMillis() + upTime * 1000);
 
             }

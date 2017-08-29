@@ -94,12 +94,12 @@ public class Login extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_login);
 
-
+		/*
 		objDB = new dbLocations(this);
 		objDB.openDB();
 		objDB.DeleteAll();
 		objDB.close();
-
+			*/
 		//取得網路時間 (新達API)
 		GetDT post = new GetDT();
 		post.run();
@@ -202,6 +202,18 @@ public class Login extends Activity {
 			//EditText_Area.setText("");
 			EditText_Account.requestFocus();
 			EditText_No.setText("");
+			//清除所記住的帳號
+			SharedPreferences setting2 =
+					getSharedPreferences("Login", MODE_PRIVATE);
+			setting2.edit()
+					.putString("Account", "")
+					.putString("Car","")
+					.putString("NO","")
+					.commit();
+			objDB = new dbLocations(this);
+			objDB.openDB();
+			objDB.DeleteAll();
+			objDB.close();
 
 		}
 		// 時間到0100清除帳密

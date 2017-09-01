@@ -48,138 +48,137 @@ public class GCMActivity extends Activity {
 		Bundle bundle = intent.getExtras();
 		strStatus = bundle.getString("status");
 		Log.e("strStatus GCM2",strStatus);
-		if (strStatus.equals("0")) {
-			dbLocations objDB = new dbLocations(GCMActivity.this);
-			objDB.openDB();
-			objDB.InsertTask(new Object[] { bundle.getString("caseID"),
-					bundle.getString("orderID"),
-					bundle.getString("customer_address"),
-					bundle.getString("distance"), bundle.getString("size"),
-					bundle.getString("item_count"),
-					bundle.getString("request_time"), "0" });
-			objDB.DBClose();
 
-			strCaseID = bundle.getString("caseID");
-			strOrderID =  bundle.getString("orderID");
-			TextView_Msg.setText("收到一筆派遣任務("+strOrderID+")，請問要立刻開啟嗎?");
-			LinearLayout_St0.setVisibility(View.VISIBLE);
-			Log.e("strStatus",strStatus);
-		}
+		if(!Application.Company.equals("")&&Application.Company!= null){
+			if (strStatus.equals("0")) {
+				dbLocations objDB = new dbLocations(GCMActivity.this);
+				objDB.openDB();
+				objDB.InsertTask(new Object[] { bundle.getString("caseID"),
+						bundle.getString("orderID"),
+						bundle.getString("customer_address"),
+						bundle.getString("distance"), bundle.getString("size"),
+						bundle.getString("item_count"),
+						bundle.getString("request_time"), "0" });
+				objDB.DBClose();
 
-		if (strStatus.equals("1")) {
-
-			final dbLocations objDB = new dbLocations(GCMActivity.this);
-			String customer_address2 = setEncryp(bundle.getString("customer_address"));
-			String customer_name2 = setEncryp(bundle.getString("customer_name"));
-			String customer_phoneNo2 = setEncryp(bundle.getString("customer_phoneNo"));
-			String recipient_name2 = setEncryp(bundle.getString("recipient_name"));
-			String recipient_address2 = setEncryp(bundle.getString("recipient_address"));
-			String recipient_phoneNo2 = setEncryp(bundle.getString("recipient_phoneNo"));
-
-			Log.e("GCM2","GCM2");
-			Application.strCaseID = bundle.getString("caseID");
-			Application.strObuID = bundle.getString("obuid");
-			Application.objFormInfo = bundle;
-
-			objDB.openDB();
-
-			objDB.InsertTask(new Object[] {
-					bundle.getString("caseID"),
-					bundle.getString("orderID"),
-					customer_address2,
-					bundle.getString("distance"),
-					bundle.getString("size"),
-					bundle.getString("item_count"),
-					bundle.getString("request_time"),
-					"0" });
-			objDB.DBClose();
-
-			objDB.openDB();
-
-
-
-			objDB.UpdateTask(
-					customer_address2,
-					customer_name2,
-					customer_phoneNo2,
-					recipient_name2,
-					recipient_address2,
-					recipient_phoneNo2,
-					bundle.getString("pay_type"),
-					bundle.getString("pay_amount"), "21",
-					bundle.getString("caseID"),
-					bundle.getString("orderID"),
-					bundle.getString("cash_on_delivery"));
-
-
-			objDB.DBClose();
-
-
-
-			Intent intent1 = new Intent();
-			intent1.setClass(GCMActivity.this, DataListFrg.class);
-			Bundle obj = new Bundle();
-			obj.putString("type", "21");
-			obj.putString("GCM","1");
-			//Application.objForm = bundle;
-
-			intent1.putExtras(obj);
-
-			//Application.strCaseID=strCaseID;
-			startActivity(intent1);
-			finish();
-
-
-		}
-
-		if (strStatus.equals("2")) {
-
-			dbLocations objDB = new dbLocations(GCMActivity.this);
-			objDB.openDB();
-			objDB.UpdateTaskStatus("2", bundle.getString("caseID"));
-			objDB.DBClose();
-			LinearLayout_St1.setVisibility(View.VISIBLE);
-			TextView_Msg.setText("很可惜，派遣任務("+bundle.getString("caseID")+")接單失敗！");
-			checkInt = 1;
-
-		}
-
-		if (strStatus.equals("3")) {
-			dbLocations objDB = new dbLocations(GCMActivity.this);
-			objDB.openDB();
-			objDB.UpdateTaskStatus("3", bundle.getString("caseID"));
-			objDB.DBClose();
-			LinearLayout_St1.setVisibility(View.VISIBLE);
-			TextView_Msg.setText("派遣任務("+bundle.getString("caseID")+")逾時超過"+bundle.getString("timeout")+"分鐘未回應！");
-		}
-		// 刷新listview
-		btnClose.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(GCMActivity.this, DataListFrg.class);
-				startActivity(intent);
-				finish();
-				Log.e("btnClose","btnClose");
+				strCaseID = bundle.getString("caseID");
+				strOrderID =  bundle.getString("orderID");
+				TextView_Msg.setText("收到一筆派遣任務("+strOrderID+")，請問要立刻開啟嗎?");
+				LinearLayout_St0.setVisibility(View.VISIBLE);
+				Log.e("strStatus",strStatus);
 			}
-		});
 
-		btnClose1.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
+			if (strStatus.equals("1")) {
+
+				final dbLocations objDB = new dbLocations(GCMActivity.this);
+				String customer_address2 = setEncryp(bundle.getString("customer_address"));
+				String customer_name2 = setEncryp(bundle.getString("customer_name"));
+				String customer_phoneNo2 = setEncryp(bundle.getString("customer_phoneNo"));
+				String recipient_name2 = setEncryp(bundle.getString("recipient_name"));
+				String recipient_address2 = setEncryp(bundle.getString("recipient_address"));
+				String recipient_phoneNo2 = setEncryp(bundle.getString("recipient_phoneNo"));
+
+				Log.e("GCM2","GCM2");
+				Application.strCaseID = bundle.getString("caseID");
+				Application.strObuID = bundle.getString("obuid");
+				Application.objFormInfo = bundle;
+
+				objDB.openDB();
+
+				objDB.InsertTask(new Object[] {
+						bundle.getString("caseID"),
+						bundle.getString("orderID"),
+						customer_address2,
+						bundle.getString("distance"),
+						bundle.getString("size"),
+						bundle.getString("item_count"),
+						bundle.getString("request_time"),
+						"0" });
+				objDB.DBClose();
+
+				objDB.openDB();
+
+
+
+				objDB.UpdateTask(
+						customer_address2,
+						customer_name2,
+						customer_phoneNo2,
+						recipient_name2,
+						recipient_address2,
+						recipient_phoneNo2,
+						bundle.getString("pay_type"),
+						bundle.getString("pay_amount"), "21",
+						bundle.getString("caseID"),
+						bundle.getString("orderID"),
+						bundle.getString("cash_on_delivery"));
+
+
+				objDB.DBClose();
+
+
+
+				Intent intent1 = new Intent();
+				intent1.setClass(GCMActivity.this, DataListFrg.class);
+				Bundle obj = new Bundle();
+				obj.putString("type", "21");
+				obj.putString("GCM","1");
+				//Application.objForm = bundle;
+
+				intent1.putExtras(obj);
+
+				//Application.strCaseID=strCaseID;
+				startActivity(intent1);
+				finish();
+			}
+
+			if (strStatus.equals("2")) {
+
+				dbLocations objDB = new dbLocations(GCMActivity.this);
+				objDB.openDB();
+				objDB.UpdateTaskStatus("2", bundle.getString("caseID"));
+				objDB.DBClose();
+				LinearLayout_St1.setVisibility(View.VISIBLE);
+				TextView_Msg.setText("很可惜，派遣任務("+bundle.getString("caseID")+")接單失敗！");
 				checkInt = 1;
-				Log.e("btnClose1","btnClose1");
-				Intent intent = new Intent(GCMActivity.this, DataListFrg.class);
-				startActivity(intent);
-				finish();
 
-				finish();
 			}
-		});
 
-		btnOpen.setOnClickListener(new OnClickListener() {
+			if (strStatus.equals("3")) {
+				dbLocations objDB = new dbLocations(GCMActivity.this);
+				objDB.openDB();
+				objDB.UpdateTaskStatus("3", bundle.getString("caseID"));
+				objDB.DBClose();
+				LinearLayout_St1.setVisibility(View.VISIBLE);
+				TextView_Msg.setText("派遣任務("+bundle.getString("caseID")+")逾時超過"+bundle.getString("timeout")+"分鐘未回應！");
+			}
+			// 刷新listview
+			btnClose.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(GCMActivity.this, DataListFrg.class);
+					startActivity(intent);
+					finish();
+					Log.e("btnClose","btnClose");
+				}
+			});
 
-			@Override
-			public void onClick(View v) {
+			btnClose1.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					checkInt = 1;
+					Log.e("btnClose1","btnClose1");
+					Intent intent = new Intent(GCMActivity.this, DataListFrg.class);
+					startActivity(intent);
+					finish();
+
+				}
+			});
+
+			btnOpen.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
 					Intent intent = new Intent();
 					intent.setClass(GCMActivity.this, DataListFrg.class);
 					Bundle obj = new Bundle();
@@ -191,8 +190,23 @@ public class GCMActivity extends Activity {
 					finish();
 
 
-			}
-		});
+				}
+			});
+		}else {
+			//未登入時的處理
+			LinearLayout_St1.setVisibility(View.VISIBLE);
+			TextView_Msg.setText("收到一筆派遣任務，請先登入");
+			// 刷新listview
+
+			btnClose1.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+
+				}
+			});
+
+		}
+
 	}
 	//加密
 	private String setEncryp (String EncrypString){

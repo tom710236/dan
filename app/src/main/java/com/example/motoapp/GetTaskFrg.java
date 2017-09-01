@@ -77,7 +77,11 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 		ScrollViewT.setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				return detector.onTouchEvent(event);
+				try{
+					return detector.onTouchEvent(event);
+				}catch (Exception e){
+					return false;
+				}
 			}
 		});
 
@@ -92,6 +96,34 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 		objEdit.setOnKeyListener(new View.OnKeyListener() {
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
 
+				/*
+				if (event.getAction() == event.ACTION_DOWN) {
+
+					if(objEdit.getText().toString().length() == 8 || objEdit.getText().toString().length() ==11){
+						new clsHttpPostAPI().CallAPI(context,"API013",objEdit.getText().toString());
+					}else {
+						clsDialog.Show(context, "提示", "請輸入正確託運編號格式！");
+					}
+					return false;
+
+				}*/
+				if (event.getAction() == event.ACTION_DOWN) {
+					EditText objEdit = (EditText) v;
+					if (keyCode == 23 || keyCode == 66) {
+						if (objEdit.getText().toString().length()==10 || objEdit.getText().toString().length()==7) {
+							clsDialog.Show(context, "提示", "請輸入正確託運單號格式！");
+							return true;
+						}
+
+						/**
+						 * 呼叫API
+						 * */
+						new clsHttpPostAPI().CallAPI(context,"API013",objEdit.getText().toString());
+
+					}
+					return false;
+
+				}
 
 				if(!objEdit.getText().toString().equals("") && objEdit.getText().toString()!=null){
 					final TextView textView = (TextView)findViewById(R.id.textView14);
@@ -103,20 +135,7 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 
 				}
 
-
-				if (event.getAction() == event.ACTION_DOWN) {
-					if(!objEdit.getText().toString().trim().equals("")) {
-
-					/*
-					 * 呼叫API 接單*/
-						new clsHttpPostAPI().CallAPI(context,"API013",objEdit.getText().toString());
-					}else {
-						clsDialog.Show(context, "提示", "請輸入託運編號！");
-
-					}
-					CaptureActivity.num = null;
-					return false;
-				}
+				CaptureActivity.num = null;
 				return true;
 			}
 		});
@@ -127,10 +146,13 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 		button_DoList.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent2 = new Intent(GetTaskFrg.this, HistoryFragment.class);
-				startActivity(intent2);
+				//Intent intent2 = new Intent(GetTaskFrg.this, HistoryFragment.class);
+				//startActivity(intent2);
+                //GetTaskFrg.this.finish();
 				Intent intent = new Intent(GetTaskFrg.this, DataListFrg.class);
 			    startActivity(intent);
+				GetTaskFrg.this.finish();
+
 			}
 		});
 		
@@ -138,10 +160,12 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 		button_IO.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent2 = new Intent(GetTaskFrg.this, HistoryFragment.class);
-				startActivity(intent2);
+				//Intent intent2 = new Intent(GetTaskFrg.this, HistoryFragment.class);
+				//startActivity(intent2);
 				Intent intent = new Intent(GetTaskFrg.this, InOutFrg.class);
 			    startActivity(intent);
+				GetTaskFrg.this.finish();
+
 			    
 			}
 		});
@@ -150,10 +174,12 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 		button_GT.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent2 = new Intent(GetTaskFrg.this, HistoryFragment.class);
-				startActivity(intent2);
+				//Intent intent2 = new Intent(GetTaskFrg.this, HistoryFragment.class);
+				//startActivity(intent2);
 				Intent intent = new Intent(GetTaskFrg.this, GetTaskFrg.class);
 				startActivity(intent);
+				GetTaskFrg.this.finish();
+
 			}
 		});
 		
@@ -164,6 +190,8 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 
 				Intent intent = new Intent(GetTaskFrg.this, HistoryFragment.class);
 			    startActivity(intent);
+				//GetTaskFrg.this.finish();
+				finish();
 			}
 		});
 		
@@ -195,6 +223,7 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 				Intent it = new Intent(GetTaskFrg.this,Delay.class);
 				stopService(it);
 				new clsHttpPostAPI().CallAPI(context, "API014");
+				GetTaskFrg.this.finish();
 			}
 		});
 		
@@ -316,6 +345,7 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
                                         int which) {
                                 	new clsHttpPostAPI().CallAPI(context, "API014");
                                 	SysApplication.getInstance().exit();
+									finish();
                                 }
                             })
                     .setNegativeButton("取消",
@@ -535,19 +565,23 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 
 	@Override
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+		/*
 		if(e2!=null && !e2.equals("")&& e2.getX()!=0 ){
 			float distance = e2.getX()-e1.getX();
 			if(distance>50){
 				Log.e("方向","右邊");
 				Intent intent = new Intent(GetTaskFrg.this, HistoryFragment.class);
 				startActivity(intent);
+				GetTaskFrg.this.finish();
 			}else if(distance<-50){
 				Intent intent = new Intent(GetTaskFrg.this, InOutFrg.class);
 				startActivity(intent);
 				Log.e("方向","左邊");
+				GetTaskFrg.this.finish();
 			}
 			return false;
 		}
+		*/
 		return false;
 	}
 
@@ -564,10 +598,14 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 			Log.e("方向","右邊");
 			Intent intent = new Intent(GetTaskFrg.this, HistoryFragment.class);
 			startActivity(intent);
+			GetTaskFrg.this.finish();
 		}else if(distance<-50){
 			Intent intent = new Intent(GetTaskFrg.this, InOutFrg.class);
 			startActivity(intent);
+			GetTaskFrg.this.finish();
 			Log.e("方向","左邊");
+		}else {
+			return false;
 		}
 		return false;
 	}

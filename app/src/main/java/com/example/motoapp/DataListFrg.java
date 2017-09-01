@@ -1,6 +1,7 @@
 package com.example.motoapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -212,6 +213,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 		}else if (intStatus==0){
 			Intent intent1 = new Intent(DataListFrg.this,Login.class);
 			startActivity(intent1);
+            DataListFrg.this.finish();
 		}
 
 
@@ -1228,7 +1230,11 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 		listView.setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				return detector.onTouchEvent(event);
+				try{
+					return detector.onTouchEvent(event);
+				}catch (Exception e){
+					return false;
+				}
 			}
 		});
 
@@ -1264,7 +1270,8 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 				//display();
 				Intent intent = new Intent(DataListFrg.this, DataListFrg.class);
 				startActivity(intent);
-				DataListFrg.this.finish();
+				//DataListFrg.this.finish();
+				finish();
 
 			}
 		});
@@ -1276,7 +1283,8 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 
 				Intent intent = new Intent(DataListFrg.this, InOutFrg.class);
 				startActivity(intent);
-				DataListFrg.this.finish();
+				//DataListFrg.this.finish();
+				finish();
 			}
 		});
 
@@ -1287,7 +1295,8 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 
 				Intent intent = new Intent(DataListFrg.this, GetTaskFrg.class);
 				startActivity(intent);
-				DataListFrg.this.finish();
+				//DataListFrg.this.finish();
+				finish();
 			}
 		});
 
@@ -1297,7 +1306,8 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 			public void onClick(View v) {
 				Intent intent = new Intent(DataListFrg.this, HistoryFragment.class);
 				startActivity(intent);
-				DataListFrg.this.finish();
+				//DataListFrg.this.finish();
+				finish();
 			}
 		});
 		//登出 關閉service
@@ -1311,6 +1321,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 				Intent it = new Intent(DataListFrg.this,Delay.class);
 				stopService(it);
 				new clsHttpPostAPI().CallAPI(context, "API014");
+                DataListFrg.this.finish();
 			}
 		});
 		// 休息中 接單中
@@ -1329,6 +1340,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 					((Button)v).setText(objLoginInfo.GetStatus());
 					//呼叫API
 					new clsHttpPostAPI().CallAPI(context, "API020");
+
 				}
 				else
 				if(objLoginInfo.Status.equals("01"))//接單中
@@ -1368,7 +1380,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 									*/
 					Cursor cursor = objDB
 							.Load1("tblTask",
-									"cStatus<>'71' and cStatus<>'81' and cStatus<>'2' and cStatus<>'3' and cStatus<>'09' and cStatus<>'00'and cStatus<>'CC'",
+									"cStatus<>'71' and cStatus<>'81' and cStatus<>'2' and cStatus<>'3' and cStatus<>'09' and cStatus<>'00'and cStatus<>'CC'and cStatus<>'AA'",
 									"cRequestDate desc", "");
 					List rowitem = new ArrayList();
 					listView = (ListView) findViewById(R.id.listView);
@@ -1584,6 +1596,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 
 	@Override
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+		/*
 		Log.e("E2", String.valueOf(e2));
 		try {
 			if(e2!=null && !e2.equals("")&& e2.getX()!=0 ){
@@ -1592,6 +1605,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 					Log.e("方向2","右邊");
 					Intent intent = new Intent(DataListFrg.this, HistoryFragment.class);
 					startActivity(intent);
+                    this.finish();
 				}else if(distance<-100){
 					Log.e("方向2","左邊");
 				}
@@ -1600,7 +1614,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 		}catch (Exception e){
 			return false;
 		}
-
+		*/
 		return false;
 	}
 
@@ -1618,11 +1632,15 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 			Log.e("方向","右邊");
 			Intent intent = new Intent(DataListFrg.this, InOutFrg.class);
 			startActivity(intent);
+            this.finish();
 		}else if(distance<-100){
 			Log.e("方向","左邊");
 
 			Intent intent = new Intent(DataListFrg.this, HistoryFragment.class);
 			startActivity(intent);
+            this.finish();
+		}else {
+			return false;
 		}
 		return false;
 	}
@@ -2488,7 +2506,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 			objDB.openDB();
 			//清單位置
 			Cursor cursor = objDB.Load1("tblTask",
-					"cStatus<>'71' and cStatus<>'81' and cStatus<>'2' and cStatus<>'3' and cStatus<>'09'and cStatus<>'00'and cStatus<>'CC'", "cRequestDate desc", "");
+					"cStatus<>'71' and cStatus<>'81' and cStatus<>'2' and cStatus<>'3' and cStatus<>'09'and cStatus<>'00'and cStatus<>'CC'and cStatus<>'AA'", "cRequestDate desc", "");
 			List rowitem = new ArrayList();
 			listView = (ListView) findViewById(R.id.listView);
 
@@ -3149,6 +3167,37 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 			});
 		}
 
+	}
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+		if (keyCode == KeyEvent.KEYCODE_BACK) { // 攔截返回鍵
+			new AlertDialog.Builder(DataListFrg.this)
+					.setTitle("確認視窗")
+					.setMessage("確定要結束應用程式嗎?")
+					.setIcon(R.drawable.ic_launcher).setPositiveButton("確定",
+					new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog,
+											int which) {
+							new clsHttpPostAPI().CallAPI(context, "API014");
+							SysApplication.getInstance().exit();
+							finish();
+						}
+					})
+					.setNegativeButton("取消",
+							new DialogInterface.OnClickListener() {
+
+								@Override
+								public void onClick(DialogInterface dialog,
+													int which) {
+									// TODO Auto-generated method stub
+
+								}
+							}).show();
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 }

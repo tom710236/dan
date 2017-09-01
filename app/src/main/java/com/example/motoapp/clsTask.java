@@ -132,6 +132,29 @@ public class clsTask {
 	 * */
 	public String GetID;
 
+	/**
+	 * 運輸單號
+
+	 * */
+	public String ObuID;
+
+	/**
+	 * 公司
+
+	 * */
+	public String Company;
+
+	/**
+	 * GPS上傳頻率
+
+	 * */
+	public String GPSPeriod;
+
+	/**
+	 * 版本
+
+	 * */
+	public String VersionResult;
 
 	public static String GetStatus(String pStrStatus)
 	{

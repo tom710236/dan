@@ -144,7 +144,7 @@ public class ListViewAdpaterHistory extends BaseAdapter implements AdapterView.O
 
 			objDB.openDB();
 			//清單位置
-			Cursor cursor= objDB.Load1("tblTask", "cStatus='71' or cStatus='81' or cStatus='2' or cStatus='3' or cStatus='09'or cStatus='00' or cStatus='CC'", "cRequestDate desc", "");
+			Cursor cursor= objDB.Load1("tblTask", "cStatus='71' or cStatus='81' or cStatus='2' or cStatus='3' or cStatus='09'or cStatus='00' or cStatus='CC'or cStatus='AA'", "cRequestDate desc", "");
 
 			List rowitem = new ArrayList();
 			myList = new ArrayList<>();
@@ -188,12 +188,21 @@ public class ListViewAdpaterHistory extends BaseAdapter implements AdapterView.O
 			if(objT.RecAddress != null && !objT.RecAddress.equals("")){
 				RecAddress = setDecrypt(objT.RecAddress);
 			}else {
-				RecAddress = setDecrypt(objT.CustAddress);//配達
+				if(objT.CustAddress != null && !objT.CustAddress.equals("")){
+					Log.e("CustAddress",objT.CustAddress);
+					RecAddress = setDecrypt(objT.CustAddress);//配達
+				}else {
+					RecAddress = null; //拒絕
+
+				}
+
 			}
 			if(objT.PayAmount != null && !objT.PayAmount.equals("")){
 				cCASH = objT.PayAmount;
-			}else {
+			}else if (RecAddress != null && !RecAddress.equals("")){
 				cCASH = objT.Size;//配達
+			}else {
+				cCASH = null; //拒絕
 			}
 			if(objT.Cash != null && !objT.Cash.equals("")){
 				cCASH2 = objT.Cash;

@@ -79,7 +79,7 @@ public class Login extends Activity {
 	ProgressDialog myDialog2;
 	int textInt = 0 ;
 	String Updata ="1.0";
-	int timeOut = 20171030 ;
+	int timeOut = 20171031 ;
 	String timeClear = "0100";
 	dbLocations objDB;
 	String datetime2;
@@ -94,12 +94,17 @@ public class Login extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_login);
 
-		/*
+		/* 刪除資料
+		String strData = "90311555";
+		//清除資料庫內容
 		objDB = new dbLocations(this);
 		objDB.openDB();
-		objDB.DeleteAll();
+		objDB.Delete("tblTask", "cOrderID='"+strData+"'");
 		objDB.close();
 			*/
+
+
+
 		//取得網路時間 (新達API)
 		GetDT post = new GetDT();
 		post.run();
@@ -108,7 +113,7 @@ public class Login extends Activity {
 		Logout post2 = new Logout();
 		post2.run();
 
-		//過了20171030(手機時間)後 按鍵隱藏
+		//過了20171031(手機時間)後 按鍵隱藏
 		time();
 		Log.e("datetime2",datetime2 );
 		Application.timeClear = timeClear;
@@ -121,11 +126,13 @@ public class Login extends Activity {
 		new GCMTask().execute();
 		//
 		Application.Version = Updata;
+		//一个类 用来结束所有后台activity
 		SysApplication.getInstance().addActivity(this);
 		dbLocations objLocation = new dbLocations(Login.this);
 		objLocation.CheckDB();
+		////取得 權限
         openGps();
-		// GCM
+		//關掉service
 		Intent it = new Intent(Login.this,Delay.class);
 		stopService(it);
 
@@ -135,7 +142,7 @@ public class Login extends Activity {
 		}
 		TextView textView = (TextView)findViewById(R.id.textView9);
 		//textView.setText(Updata);
-		textView.setText("cht11");
+		textView.setText("cht15");
 		/*
 		 
 		 */
@@ -244,7 +251,7 @@ public class Login extends Activity {
 			@Override
 			public void onClick(View v) {
 				if(isConnected()){
-					new GCMTask().execute();
+					//new GCMTask().execute();
 					Post post = new Post();
 					post.run();
 					//myDialog = ProgressDialog.show(Login.this, "登入中", "登入資訊檢查中，請稍後！", false);
@@ -498,6 +505,8 @@ public class Login extends Activity {
 	 * GCM註冊
 	 * 
 	 **************************/
+
+
 	private class GCMTask extends AsyncTask<Void, Void, Void> {
 		protected Void doInBackground(Void... params) {
 			Log.d(TAG, "檢查裝置是否支援 GCM");
@@ -614,6 +623,8 @@ public class Login extends Activity {
 						});
 
 
+					}else {
+						Log.e("時間",datetime3);
 					}
 				}
 			});
@@ -717,28 +728,32 @@ public class Login extends Activity {
 							Application.strUserName = new JSONObject(json)
 									.getString("EmployeeName");
 
+								String GPSPeriod = new JSONObject(json).getString("GPSPeriod");
+								String Company = new JSONObject(json).getString("Company");
+								final String VersionResult = new JSONObject(json).getString("VersionResult");
+								Application.Company = Company;
+								Application.VersionResult = VersionResult;
+								Application.GPSPeriod = Integer.parseInt(GPSPeriod);
+
 							clsLoginInfo objLogin = new clsLoginInfo(objContext);
-							objLogin.Car = EditText_Car.getText().toString();
+							objLogin.Car = EditText_Car.getText().toString();//運輸單號
 							//objLogin.CarID = json.getString("ObuID");
+								// objLogin.CarID = new JSONObject(json).getString("ObuID");
 							objLogin.DeviceID = Application.strDeviceID;
 							//objLogin.GCMID = Application.strRegistId;
 							objLogin.GCMID=regId;
-							objLogin.StationID="7048";
-							objLogin.StationName="松山站所";
+							//objLogin.StationID="7048";
+							//objLogin.StationName="松山站所";
+							objLogin.StationName = Company; //ke or ktj
 							objLogin.UserID=EditText_Account.getText().toString();
 							objLogin.UserName = new JSONObject(json).getString("EmployeeName");
-							objLogin.AreaID = EditText_Area.getText().toString();
+							objLogin.AreaID = String.valueOf(Application.GPSPeriod);//上傳GPS頻率
 							objLogin.FormNo = EditText_No.getText().toString();
 							objLogin.Insert();
 							//Log.e("GCMID",regId);
 							//Log.e("UserID",EditText_Account.getText().toString());
 							//記Log
-							String GPSPeriod = new JSONObject(json).getString("GPSPeriod");
-							String Company = new JSONObject(json).getString("Company");
-							final String VersionResult = new JSONObject(json).getString("VersionResult");
-							Application.Company = Company;
-							Application.VersionResult = VersionResult;
-							Application.GPSPeriod = Integer.parseInt(GPSPeriod);
+
 							//new clsHttpPostAPI().CallAPI(objContext, "API021");
 							if(VersionResult.equals(",版本正確") || VersionResult.equals(Updata)){
 								//記住帳號

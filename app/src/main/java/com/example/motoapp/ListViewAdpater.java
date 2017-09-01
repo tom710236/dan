@@ -90,6 +90,8 @@ public class ListViewAdpater extends BaseAdapter {
 			convertView.setBackgroundColor(Color.parseColor("#F2F2F2"));
 
 		return convertView;
+
+
 	}
 
 	class ItemButton_Click implements OnClickListener {

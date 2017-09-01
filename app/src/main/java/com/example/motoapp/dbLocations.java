@@ -12,7 +12,7 @@ public class dbLocations extends SQLiteOpenHelper {
 
 
 	private static final String DATABASE_NAME = "dbKerry.db";	//資料庫名稱
-	private static final int DATABASE_VERSION = 26;	//資料庫版本
+	private static final int DATABASE_VERSION = 29;	//資料庫版本
 	private SQLiteDatabase objDBLocations;
 
 	public dbLocations(Context context) {
@@ -89,6 +89,10 @@ public class dbLocations extends SQLiteOpenHelper {
 					+ "[cFailReasonName] [varchar](200) NULL,"
 					+ "[cStationName] [varchar](200) NULL,"
 					+ "[cGetID] [varchar](200) NULL,"
+					+ "[cObuID] [varchar](200) NULL,"
+					+ "[cCompany] [varchar](200) NULL,"
+					+ "[cGPSPeriod] [varchar](200) NULL,"
+					+ "[cVersionResult] [varchar](200) NULL,"
 					+ "[cLoginTime] [varchar](200) NULL"+
 					")";
 
@@ -295,6 +299,12 @@ public class dbLocations extends SQLiteOpenHelper {
 			objTask.LastDate = cursor.getString(cursor.getColumnIndex("cLastDate"));
 			objTask.RecPicture = cursor.getString(cursor.getColumnIndex("cRecPicture"));
 			objTask.ReqPicture = cursor.getString(cursor.getColumnIndex("cReqPicture"));
+
+			objTask.ObuID = cursor.getString(cursor.getColumnIndex("cObuID"));
+			objTask.Company = cursor.getString(cursor.getColumnIndex("cCompany"));
+			objTask.GPSPeriod = cursor.getString(cursor.getColumnIndex("cGPSPeriod"));
+			objTask.VersionResult = cursor.getString(cursor.getColumnIndex("cVersionResult"));
+
 			objTask.LoginTime = cursor.getString(cursor.getColumnIndex("cLoginTime"));
 			objTask.FailReasonName = cursor.getString(cursor.getColumnIndex("cFailReasonName"));
 			objTask.StationName = cursor.getString(cursor.getColumnIndex("cStationName"));
@@ -396,6 +406,52 @@ public class dbLocations extends SQLiteOpenHelper {
 
 		if(pStrRecAddress .length()>0)
 			args.put("cRecAddress", pStrRecAddress );
+
+		objDBLocations.update("tblTask", args, "cCaseID='"+pStrPK+"'", null);
+	}
+	/** EX：
+	 * 更新託運單號
+	 * */
+	public void UpdatecObuID (String pStrObuID ,String pStrPK) {
+		ContentValues args = new ContentValues();
+
+		if(pStrObuID .length()>0)
+			args.put("cObuID", pStrObuID );
+
+		objDBLocations.update("tblTask", args, "cCaseID='"+pStrPK+"'", null);
+	}
+	/** EX：
+	 * 更新公上傳頻率
+	 * */
+	public void UpdatecGPSPeriod (String pStrGPSPeriod ,String pStrPK) {
+		ContentValues args = new ContentValues();
+
+		if(pStrGPSPeriod .length()>0)
+			args.put("cGPSPeriod", pStrGPSPeriod );
+
+		objDBLocations.update("tblTask", args, "cCaseID='"+pStrPK+"'", null);
+	}
+
+	/** EX：
+	 * 更新公上傳頻率
+	 * */
+	public void UpdatecVersionResult (String pStrVersionResult ,String pStrPK) {
+		ContentValues args = new ContentValues();
+
+		if(pStrVersionResult .length()>0)
+			args.put("cVersionResult", pStrVersionResult );
+
+		objDBLocations.update("tblTask", args, "cCaseID='"+pStrPK+"'", null);
+	}
+
+	/** EX：
+	 * 更新公司
+	 * */
+	public void UpdatecCompany (String pStrCompany ,String pStrPK) {
+		ContentValues args = new ContentValues();
+
+		if(pStrCompany .length()>0)
+			args.put("cCompany", pStrCompany );
 
 		objDBLocations.update("tblTask", args, "cCaseID='"+pStrPK+"'", null);
 	}
@@ -571,6 +627,7 @@ public class dbLocations extends SQLiteOpenHelper {
 
 	public void Delete(String pStrTableName, String pStrWhere) {
 		objDBLocations.delete(pStrTableName, pStrWhere, null);
+
 	}
 
 	public void DeleteAll() {
@@ -579,7 +636,7 @@ public class dbLocations extends SQLiteOpenHelper {
 			objDBLocations.delete("tblLoginInfo", null, null);
 			objDBLocations.delete("tblAS400", null, null);
 		} catch (Exception e) {
-		}
+			}
 	}
 
 	public void DeleteAll(String pStrTableName) {

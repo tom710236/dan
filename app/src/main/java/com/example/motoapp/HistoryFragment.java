@@ -68,14 +68,19 @@ public class HistoryFragment extends Activity implements GestureDetector.OnGestu
 		objDB.openDB();
 		SysApplication.getInstance().addActivity(this);
 		//清單位置
-		Cursor cursor= objDB.Load1("tblTask", "cStatus='71' or cStatus='81' or cStatus='2' or cStatus='3' or cStatus='09' or cStatus='00'or cStatus='CC'", "cRequestDate desc", "");
+		Cursor cursor= objDB.Load1("tblTask", "cStatus='71' or cStatus='81' or cStatus='2' or cStatus='3' or cStatus='09' or cStatus='00'or cStatus='CC'or cStatus='AA'", "cRequestDate desc", "");
 		List rowitem = new ArrayList();
 		//設定手勢滑動
 		listView = (ListView) findViewById(R.id.listView);
 		listView.setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				return detector.onTouchEvent(event);
+				try{
+					return detector.onTouchEvent(event);
+				}catch (Exception e){
+					return false;
+				}
+
 			}
 		});
 
@@ -207,6 +212,7 @@ public class HistoryFragment extends Activity implements GestureDetector.OnGestu
 			public void onClick(View v) {
 				Intent intent = new Intent(HistoryFragment.this, DataListFrg.class);
 				startActivity(intent);
+				HistoryFragment.this.finish();
 			}
 		});
 
@@ -214,10 +220,12 @@ public class HistoryFragment extends Activity implements GestureDetector.OnGestu
 		button_IO.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent2 = new Intent(HistoryFragment.this, InOutFrg.class);
-				startActivity(intent2);
+				//Intent intent2 = new Intent(HistoryFragment.this, InOutFrg.class);
+				//startActivity(intent2);
 				Intent intent = new Intent(HistoryFragment.this, InOutFrg.class);
 				startActivity(intent);
+				HistoryFragment.this.finish();
+
 
 			}
 		});
@@ -226,11 +234,11 @@ public class HistoryFragment extends Activity implements GestureDetector.OnGestu
 		button_GT.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent2 = new Intent(HistoryFragment.this, InOutFrg.class);
-				startActivity(intent2);
+				//Intent intent2 = new Intent(HistoryFragment.this, InOutFrg.class);
+				//startActivity(intent2);
 				Intent intent = new Intent(HistoryFragment.this, GetTaskFrg.class);
 				startActivity(intent);
-
+				HistoryFragment.this.finish();
 			}
 		});
 
@@ -238,10 +246,11 @@ public class HistoryFragment extends Activity implements GestureDetector.OnGestu
 		button_DoneList.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent2 = new Intent(HistoryFragment.this, InOutFrg.class);
-				startActivity(intent2);
+				//Intent intent2 = new Intent(HistoryFragment.this, InOutFrg.class);
+				//startActivity(intent2);
 				Intent intent = new Intent(HistoryFragment.this, HistoryFragment.class);
 				startActivity(intent);
+				HistoryFragment.this.finish();
 			}
 		});
 
@@ -252,6 +261,7 @@ public class HistoryFragment extends Activity implements GestureDetector.OnGestu
 				Intent it = new Intent(HistoryFragment.this,Delay.class);
 				stopService(it);
 				new clsHttpPostAPI().CallAPI(context, "API014");
+				HistoryFragment.this.finish();
 			}
 		});
 
@@ -299,6 +309,7 @@ public class HistoryFragment extends Activity implements GestureDetector.OnGestu
 											int which) {
 							new clsHttpPostAPI().CallAPI(context, "API014");
 							SysApplication.getInstance().exit();
+							finish();
 						}
 					})
 					.setNegativeButton("取消",
@@ -344,20 +355,24 @@ public class HistoryFragment extends Activity implements GestureDetector.OnGestu
 
 	@Override
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        /*
 		if(e2!=null && !e2.equals("") && e2.getX()!=0 ){
-			Log.e("e2.getX()", String.valueOf(e2.getX()));
 			float distance = e2.getX()-e1.getX();
 			if(distance>100){
 				Log.e("方向1","右邊");
 				Intent intent = new Intent(HistoryFragment.this, HistoryFragment.class);
 				startActivity(intent);
+				HistoryFragment.this.finish();
 			}else if(distance<-100){
 				Intent intent = new Intent(HistoryFragment.this, GetTaskFrg.class);
 				startActivity(intent);
+				HistoryFragment.this.finish();
 				Log.e("方向1","左邊");
+			}else {
+				return false;
 			}
 			return false;
-		}
+		}*/
 		return false;
 	}
 
@@ -373,9 +388,11 @@ public class HistoryFragment extends Activity implements GestureDetector.OnGestu
 			Log.e("方向2","右邊");
 			Intent intent = new Intent(HistoryFragment.this, DataListFrg.class);
 			startActivity(intent);
+			HistoryFragment.this.finish();
 		}else if(distance<-100){
 			Intent intent = new Intent(HistoryFragment.this, GetTaskFrg.class);
 			startActivity(intent);
+			HistoryFragment.this.finish();
 			Log.e("方向2","左邊");
 		}
 		return false;

@@ -88,6 +88,16 @@ public class clsLoginInfo {
 	public String Out="0";
 
 	/**
+	 * 公司名
+	 * */
+	public String Company="0";
+
+	/**
+	 * 運輸單號
+	 * */
+	public String ObuID="0";
+
+	/**
 	 * 寫入
 	 * */
 	public void Insert() {

@@ -19,7 +19,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -142,7 +141,7 @@ public class Delay extends Service implements LocationListener {
         lat = String.valueOf(location.getLatitude());
 
         //Log.e("定位",str);
-        Toast.makeText(Delay.this, str, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(Delay.this, str, Toast.LENGTH_SHORT).show();
         Application.GPS = str;
         //在定位前每十秒執行一次 定位後 依GPSPeriod的時間執行
         upTime = Application.GPSPeriod;

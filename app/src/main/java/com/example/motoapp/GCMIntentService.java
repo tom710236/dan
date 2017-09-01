@@ -68,6 +68,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 		displayMessage(context, getString(R.string.gcm_registered));
 		ServerUtilities.register(context, registrationId);
 
+
+
 	}
 
 	@Override

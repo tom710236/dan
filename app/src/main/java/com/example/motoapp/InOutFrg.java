@@ -91,6 +91,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 	ProgressDialog myDialog;
 	Handler handler;
 	GestureDetector detector;
+	int numType = 0 ;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -177,7 +178,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 				TextView_SMoney.setText("");
 				TextView TextView_SMoney2 = (TextView)findViewById(R.id.TextView_SMoney2);
 				TextView_SMoney2.setText("");
-
+				//
 				PostCondition post = new PostCondition();
 				post.run();
 				//Application.strCardNo = EditNo.getText().toString();
@@ -227,7 +228,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 				if (event.getAction() == event.ACTION_DOWN) {
 					if (keyCode == 23 || keyCode == 66) {
 						EditText EditText_SNO1 = (EditText) v;
-						if (EditText_SNO1.getText().toString().length() ==10 || EditText_SNO1.getText().toString().length() ==7) {
+						if (EditText_SNO1.getText().toString().length() ==10 || EditText_SNO1.getText().toString().length() ==7 ) {
 							clsDialog.Show(context, "提示", "請輸入正確託運單號！");
 							return true;
 						}
@@ -237,21 +238,28 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 						/**
 						 * 呼叫API
 						 * */
+						if(!onClickNum.equals("") && onClickNum !=null && onClickNum.length()==8 || onClickNum.length()==11){
 
-						BasicUrl = "https://ga.kerrytj.com/Cht_Motor/api/GetEmployee/GetBasic?" +
-								"ID="+Application.strAccount+
-								"&CAR_NO="+Application.strCar+
-								"&Company="+Application.Company+
-								"&BOL_NO="+((EditText) findViewById(R.id.EditText_SNO1)).getText().toString();
-						//取得資訊API
-						PostBasic post = new PostBasic();
-						post.run();
-						setDialog();
-						//資訊更新API
-						getBrushDate();
-						getUPDate();
-						PostCondition_UP post2 = new PostCondition_UP();
-						post2.run();
+							BasicUrl = "https://ga.kerrytj.com/Cht_Motor/api/GetBasic/Get?" +
+									"ID="+Application.strAccount+
+									"&CAR_NO="+Application.strCar+
+									"&Company="+Application.Company+
+									"&BOL_NO="+((EditText) findViewById(R.id.EditText_SNO1)).getText().toString();
+							//取得資訊API
+							PostBasic post = new PostBasic();
+							post.run();
+							setDialog();
+							//資訊更新API
+							getBrushDate();
+							//getUPDate();
+							PostCondition_UP post2 = new PostCondition_UP();
+							post2.run();
+						}else {
+							EditText_SNO1.setText("");
+							clsDialog.Show(context, "提示", "請輸入正確託運單號！");
+
+						}
+
 
 					}
 					return false;
@@ -393,7 +401,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 					textView.setText(editText.getText().toString());
 					Log.e("查詢前", String.valueOf(json));
 					onClickNum = editText.getText().toString();
-					BasicUrl = "https://ga.kerrytj.com/Cht_Motor/api/GetEmployee/GetBasic?" +
+					BasicUrl = "https://ga.kerrytj.com/Cht_Motor/api/GetBasic/Get?" +
 							"ID="+Application.strAccount+
 							"&CAR_NO="+Application.strCar+
 							"&Company="+Application.Company+
@@ -426,7 +434,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 				if (event.getAction() == event.ACTION_DOWN) {
 					EditText EditText_ENO1 = (EditText) v;
 					if (keyCode == 23 || keyCode == 66) {
-						if (EditText_ENO1.getText().toString().length() < 10) {
+						if (EditText_ENO1.getText().toString().length()==10 || EditText_ENO1.getText().toString().length()==7) {
 							clsDialog.Show(context, "提示", "請輸入10碼以上的託運單號！");
 							return true;
 						}
@@ -435,18 +443,23 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 						 * 呼叫API
 						 * */
 						//取得資訊API
-
-						BasicUrl = "https://ga.kerrytj.com/Cht_Motor/api/GetEmployee/GetBasic?" +
-								"ID="+Application.strAccount+
-								"&CAR_NO="+Application.strCar+
-								"&Company="+Application.Company+
-								"&BOL_NO="+((EditText) findViewById(R.id.EditText_ENO1)).getText().toString();
-						PostBasic post = new PostBasic();
-						post.run();
 						onClickNum =((EditText) findViewById(R.id.EditText_ENO1)).getText().toString();
 						final TextView textview = (TextView) findViewById(R.id.TextView_ENO1);
 						textview.setText(onClickNum);
-						setDialog();
+						if(!onClickNum.equals("") && onClickNum !=null && onClickNum.length()==8 || onClickNum.length()==11){
+							BasicUrl = "https://ga.kerrytj.com/Cht_Motor/api/GetBasic/Get?" +
+									"ID="+Application.strAccount+
+									"&CAR_NO="+Application.strCar+
+									"&Company="+Application.Company+
+									"&BOL_NO="+((EditText) findViewById(R.id.EditText_ENO1)).getText().toString();
+							PostBasic post = new PostBasic();
+							post.run();
+							setDialog();
+						}else {
+							EditText_ENO1.setText("");
+							clsDialog.Show(context, "提示", "請輸入正確託運單號！");
+						}
+
 
 					}
 					return false;
@@ -614,7 +627,11 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 		ScrollViewT2.setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				return detector.onTouchEvent(event);
+				try{
+					return detector.onTouchEvent(event);
+				}catch (Exception e){
+					return false;
+				}
 			}
 		});
 
@@ -627,6 +644,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 				Intent it = new Intent(InOutFrg.this, Delay.class);
 				stopService(it);
 				new clsHttpPostAPI().CallAPI(context, "API014");
+				InOutFrg.this.finish();
 			}
 		});
 
@@ -879,6 +897,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 											int which) {
 							new clsHttpPostAPI().CallAPI(context, "API014");
 							SysApplication.getInstance().exit();
+							finish();
 						}
 					})
 					.setNegativeButton("取消",
@@ -897,16 +916,23 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 
 	//配送 - 按掃描
 	public void onScran(View v) {
-		Intent intent = new Intent(InOutFrg.this, CaptureActivity.class);
-		intent.setAction(Intents.Scan.ACTION); //啟動掃描動作，一定要設定
-		intent.putExtra(Intents.Scan.WIDTH, 1200); //調整掃描視窗寬度(Optional)
-		intent.putExtra(Intents.Scan.HEIGHT, 675); //調整掃描視窗高度(Optional)
-		intent.putExtra(Intents.Scan.RESULT_DISPLAY_DURATION_MS, 100L); //設定掃描成功地顯示時間(Optional)
-		intent.putExtra(Intents.Scan.PROMPT_MESSAGE, "請將條碼置於鏡頭範圍進行掃描"); //客製化掃描視窗的提示文字(Optional)
-		//intent.putExtra(Scan.MODE, Scan.ONE_D_MODE);  //限制只能掃一維條碼(預設為全部條碼都支援)
-		//intent.putExtra(CaptureActivity.SACN_MODE_NAME, CaptureActivity.SCAN_SIGLE_MODE);
-		intent.putExtra(CaptureActivity.SACN_MODE_NAME, CaptureActivity.SCAN_BATCH_MODE);
-		startActivityForResult(intent, 1);
+
+		if(!typeNUM.equals("") && typeNUM != null){
+			Intent intent = new Intent(InOutFrg.this, CaptureActivity.class);
+			intent.setAction(Intents.Scan.ACTION); //啟動掃描動作，一定要設定
+			intent.putExtra(Intents.Scan.WIDTH, 1200); //調整掃描視窗寬度(Optional)
+			intent.putExtra(Intents.Scan.HEIGHT, 675); //調整掃描視窗高度(Optional)
+			intent.putExtra(Intents.Scan.RESULT_DISPLAY_DURATION_MS, 100L); //設定掃描成功地顯示時間(Optional)
+			intent.putExtra(Intents.Scan.PROMPT_MESSAGE, "請將條碼置於鏡頭範圍進行掃描"); //客製化掃描視窗的提示文字(Optional)
+			//intent.putExtra(Scan.MODE, Scan.ONE_D_MODE);  //限制只能掃一維條碼(預設為全部條碼都支援)
+			//intent.putExtra(CaptureActivity.SACN_MODE_NAME, CaptureActivity.SCAN_SIGLE_MODE);
+			intent.putExtra(CaptureActivity.SACN_MODE_NAME, CaptureActivity.SCAN_BATCH_MODE);
+			startActivityForResult(intent, 1);
+		}else {
+			Toast.makeText(InOutFrg.this, "無貨況",Toast.LENGTH_SHORT).show();
+
+		}
+
 	}
 	//配達 按掃描
 	public void onScran2(View v) {
@@ -945,7 +971,8 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 				//取得掃描後的值 arraylist
 				ArrayList num = CaptureActivity.num;
 				Log.e("配送", String.valueOf(num));
-
+				setDialog();
+			if(num.size()!=0){
 				for (int i = 0 ; i<num.size() ; i++) {
 					final String contents;
 					contents = String.valueOf(num.get(i));
@@ -953,14 +980,14 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 					editText.setText(contents);
 					TextView textView = (TextView) findViewById(R.id.TextView_SNO1);
 					textView.setText(contents);
-					BasicUrl = "https://ga.kerrytj.com/Cht_Motor/api/GetEmployee/GetBasic?" +
+					BasicUrl = "https://ga.kerrytj.com/Cht_Motor/api/GetBasic/Get?" +
 							"ID="+Application.strAccount+
 							"&CAR_NO="+Application.strCar+
 							"&Company="+Application.Company+
 							"&BOL_NO="+contents;
 					//onClickNum = contents;
-					if (contents.length() == 11 || contents.length() == 8) {
-						setDialog();
+					if (contents.length() == 11 || contents.length() == 8 ) {
+
 						/**
 						 * 呼叫API託運單資訊
 						 * */
@@ -1008,30 +1035,33 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 
 							private void parseJson(String json) {
 								try {
+
 									JSONArray array = new JSONArray(json);
 									for(int i = 0 ; i<array.length() ; i++) {
 										final JSONObject obj = array.getJSONObject(i);
-										ADDRESS = String.valueOf(obj.get("ADDRESS"));
+										ADDRESS = String.valueOf(obj.get("ADDRES"));
 										CASH = String.valueOf(obj.get("CASH"));
 										COD_AMT = String.valueOf(obj.get("COD_AMT"));
 
+										Log.e("託運單地址",ADDRESS);
 
+									}
 
-										if(ADDRESS.equals("null")){
-											runOnUiThread(new Runnable() {
-												@Override
-												public void run() {
-													myDialog.dismiss();
-													Log.e("無此單號","無此單號");
-													Toast.makeText(InOutFrg.this, "無此單號",Toast.LENGTH_SHORT).show();
-												}
-											});
+									if(ADDRESS.equals("null")){
+										runOnUiThread(new Runnable() {
+											@Override
+											public void run() {
+												myDialog.dismiss();
+												Log.e("無此單號","無此單號");
+												Toast.makeText(InOutFrg.this, "無此單號",Toast.LENGTH_SHORT).show();
+											}
+										});
 
-										}else{
-											runOnUiThread(new Runnable() {
-												@Override
-												public void run() {
-													//配送資訊存進資料庫
+									}else{
+										runOnUiThread(new Runnable() {
+											@Override
+											public void run() {
+												//配送資訊存進資料庫
 													/*
 													String Add = setEncryp(ADDRESS);
 													final dbLocations objDB = new dbLocations(InOutFrg.this);
@@ -1050,44 +1080,42 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 													*/
 
 
-													//配送
-													myDialog.dismiss();
-													TextView TextView_SAddress1 = (TextView) findViewById(R.id.TextView_SAddress1);
-													TextView_SAddress1.setText(ADDRESS);
-													TextView TextView_SMoney = (TextView)findViewById(R.id.TextView_SMoney);
-													TextView_SMoney.setText(CASH);
-													TextView TextView_SMoney2 = (TextView)findViewById(R.id.TextView_SMoney2);
-													TextView_SMoney2.setText(COD_AMT);
+												//配送
+												myDialog.dismiss();
+												TextView TextView_SAddress1 = (TextView) findViewById(R.id.TextView_SAddress1);
+												TextView_SAddress1.setText(ADDRESS);
+												TextView TextView_SMoney = (TextView)findViewById(R.id.TextView_SMoney);
+												TextView_SMoney.setText(CASH);
+												TextView TextView_SMoney2 = (TextView)findViewById(R.id.TextView_SMoney2);
+												TextView_SMoney2.setText(COD_AMT);
 
-													//配達
-													myDialog.dismiss();
-													TextView TextView_EAddress1 = (TextView)findViewById(R.id.TextView_EAddress1);
-													TextView_EAddress1.setText(ADDRESS);
-													TextView TextView_EMoney = (TextView)findViewById(R.id.TextView_EMoney);
-													TextView_EMoney.setText(CASH);
-													TextView TextView_EMoney2 = (TextView)findViewById(R.id.TextView_EMoney2);
-													TextView_EMoney2.setText(COD_AMT);
-
-
-
-													//查詢
-													myDialog.dismiss();
-													TextView TextView_AD = (TextView)findViewById(R.id.TextView_AD);
-													TextView_AD.setText(ADDRESS);
-													TextView TextView_ADMoney = (TextView)findViewById(R.id.TextView_ADMoney);
-													TextView_ADMoney.setText(CASH);
-													TextView TextView_ADMoney2 = (TextView)findViewById(R.id.TextView_ADMoney2);
-													TextView_ADMoney2.setText(COD_AMT);
-
-												}
-											});
-										}
+												//配達
+												myDialog.dismiss();
+												TextView TextView_EAddress1 = (TextView)findViewById(R.id.TextView_EAddress1);
+												TextView_EAddress1.setText(ADDRESS);
+												TextView TextView_EMoney = (TextView)findViewById(R.id.TextView_EMoney);
+												TextView_EMoney.setText(CASH);
+												TextView TextView_EMoney2 = (TextView)findViewById(R.id.TextView_EMoney2);
+												TextView_EMoney2.setText(COD_AMT);
 
 
+
+												//查詢
+												myDialog.dismiss();
+												TextView TextView_AD = (TextView)findViewById(R.id.TextView_AD);
+												TextView_AD.setText(ADDRESS);
+												TextView TextView_ADMoney = (TextView)findViewById(R.id.TextView_ADMoney);
+												TextView_ADMoney.setText(CASH);
+												TextView TextView_ADMoney2 = (TextView)findViewById(R.id.TextView_ADMoney2);
+												TextView_ADMoney2.setText(COD_AMT);
+
+											}
+										});
 									}
 
 								} catch (JSONException e) {
 									e.printStackTrace();
+									myDialog.dismiss();
 								}
 
 							}
@@ -1095,7 +1123,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 						});
 
 						getBrushDate();
-						getUPDate();
+						//getUPDate();
 						//託運單上傳
 						//資訊更新API
 						//PostCondition_UP post2 = new PostCondition_UP();
@@ -1103,54 +1131,63 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 						/**
 						 *
 						 */
-						final String url = "https://ga.kerrytj.com/Cht_Motor/api/Condition_UP/GET?" +
-								"NUM=" + typeNUM +
-								"&BOL_NO=" + contents +
-								"&CAR_NO=" + Application.strCar +
-								"&BrushDate=" +BrushDate+
-								"&BrushTime=" +BrushTime+
-								"&BrushDept=" +"0078"+
-								"&Area=" +"777"+
-								"&ID=" +objLoginInfo.UserID+
-								"&HTnumber=" +"ABCD"+
-								"&DataResource=" +"B"+
-								"&BusinessID=" +"1"+
-								"&UP_DATE=" + UP_DATE +
-								"&Company=" + Application.Company +
-								"&UP_TIME="+ UP_TIME ;
-						final OkHttpClient client2 = new OkHttpClient()
-								.newBuilder()
-								.connectTimeout(15, TimeUnit.SECONDS)
-								.readTimeout(15, TimeUnit.SECONDS)
-								.writeTimeout(15, TimeUnit.SECONDS)
-								//.addInterceptor(new LogInterceptor())
-								//.addInterceptor(new TokenInterceptor())
-								.sslSocketFactory(SSLSocketClient.getSSLSocketFactory())
-								.hostnameVerifier(SSLSocketClient.getHostnameVerifier())
-								.build();
-						final MediaType JSON
-								= MediaType.parse("application/json; charset=utf-8");
-						RequestBody body = RequestBody.create(JSON,url);
-						final Request request2 = new Request.Builder()
-								.url(url)
-								.post(body)
-								.build();
-						Call call2 = client2.newCall(request2);
-						call2.enqueue(new Callback() {
-							@Override
-							public void onFailure(Call call, IOException e) {
-								Log.e("GetCondition_UP e", String.valueOf(e));
+						//延遲上傳時間
 
-							}
+						try {
+							Thread.sleep(200); //1000為1秒
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 
-							@Override
-							public void onResponse(Call call, Response response) throws IOException {
-								final String json = response.body().string();
-								Log.e("託運單資訊更新",url);
-								Log.e("託運單資訊更新回傳", json);
-								Log.e("CARTYPE", String.valueOf(CARTYPE));
+							final String url = "https://ga.kerrytj.com/Cht_Motor/api/Condition_UP/GET?" +
+									"NUM=" + typeNUM +
+									"&BOL_NO=" + contents +
+									"&CAR_NO=" + Application.strCar +
+									"&BrushDate=" +BrushDate+
+									"&BrushTime=" +BrushTime+
+									"&BrushDept=" +"0078"+
+									"&Area=" +"777"+
+									"&ID=" +objLoginInfo.UserID+
+									"&HTnumber=" +"ABCD"+
+									"&DataResource=" +"B"+
+									"&BusinessID=" +"1"+
+									"&UP_DATE=" + null +
+									"&Company=" + Application.Company +
+									"&UP_TIME="+ null ;
+							final OkHttpClient client2 = new OkHttpClient()
+									.newBuilder()
+									.connectTimeout(15, TimeUnit.SECONDS)
+									.readTimeout(15, TimeUnit.SECONDS)
+									.writeTimeout(15, TimeUnit.SECONDS)
+									//.addInterceptor(new LogInterceptor())
+									//.addInterceptor(new TokenInterceptor())
+									.sslSocketFactory(SSLSocketClient.getSSLSocketFactory())
+									.hostnameVerifier(SSLSocketClient.getHostnameVerifier())
+									.build();
+							final MediaType JSON
+									= MediaType.parse("application/json; charset=utf-8");
+							RequestBody body = RequestBody.create(JSON,url);
+							final Request request2 = new Request.Builder()
+									.url(url)
+									.post(body)
+									.build();
+							Call call2 = client2.newCall(request2);
+							call2.enqueue(new Callback() {
+								@Override
+								public void onFailure(Call call, IOException e) {
+									Log.e("GetCondition_UP e", String.valueOf(e));
 
-								if(json.equals("[{\"MESSAGE\":\"TRUE\"}]")){
+								}
+
+								@Override
+								public void onResponse(Call call, Response response) throws IOException {
+									final String json = response.body().string();
+									Log.e("託運單資訊更新",url);
+									Log.e("託運單資訊更新回傳", json);
+									Log.e("CARTYPE", String.valueOf(CARTYPE));
+
+									if(json.equals("[{\"MESSAGE\":\"TRUE\"}]")){
 										//TODO 更新數量
 										objLoginInfo.UpdateInOut("In");
 										runOnUiThread(new Runnable() {
@@ -1164,32 +1201,39 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 											}
 										});
 
-								}else{
+									}else{
+										runOnUiThread(new Runnable() {
+											@Override
+											public void run() {
+												Toast.makeText(InOutFrg.this,json,Toast.LENGTH_SHORT).show();
+											}
+										});
+									}
+
 									runOnUiThread(new Runnable() {
 										@Override
 										public void run() {
-											Toast.makeText(InOutFrg.this,json,Toast.LENGTH_SHORT).show();
+											TextView EditText_ENO1 = (TextView)findViewById(R.id.EditText_ENO1);
+											EditText_ENO1.setText("");
+											TextView EditText_SNO1 = (TextView)findViewById(R.id.EditText_SNO1);
+											EditText_SNO1.setText("");
 										}
 									});
 								}
+							});
 
-								runOnUiThread(new Runnable() {
-									@Override
-									public void run() {
-										TextView EditText_ENO1 = (TextView)findViewById(R.id.EditText_ENO1);
-										EditText_ENO1.setText("");
-										TextView EditText_SNO1 = (TextView)findViewById(R.id.EditText_SNO1);
-										EditText_SNO1.setText("");
-									}
-								});
-							}
-						});
+
 
 					}else{
 						Toast.makeText(InOutFrg.this,"條碼格式不符",Toast.LENGTH_SHORT).show();
+						myDialog.dismiss();
 					}
 
 				}
+			}else {
+				myDialog.dismiss();
+			}
+
 
 		//配達
 		} else if (requestCode == 2) {
@@ -1201,7 +1245,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 				TextView textView = (TextView) findViewById(R.id.TextView_ENO1);
 				textView.setText(contents);
 				onClickNum = contents;
-				BasicUrl = "https://ga.kerrytj.com/Cht_Motor/api/GetEmployee/GetBasic?" +
+				BasicUrl = "https://ga.kerrytj.com/Cht_Motor/api/GetBasic/Get?" +
 						"ID="+Application.strAccount+
 						"&CAR_NO="+Application.strCar+
 						"&Company="+Application.Company+
@@ -1229,9 +1273,10 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 				editText.setText(contents);
 				TextView textView = (TextView) findViewById(R.id.TextView_ENO2);
 				textView.setText(contents);
-				BasicUrl = "https://ga.kerrytj.com/Cht_Motor/api/GetEmployee/GetBasic?" +
+				BasicUrl = "https://ga.kerrytj.com/Cht_Motor/api/GetBasic/Get?" +
 						"ID="+Application.strAccount+
 						"&CAR_NO="+Application.strCar+
+						"&Company="+Application.Company+
 						"&BOL_NO="+contents;
 				if (editText.length() == 11 || editText.length() == 8) {
 					/**
@@ -1265,6 +1310,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 
 	@Override
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+		/*
 		if(e2!=null && !e2.equals("")&& e2.getX()!=0 ){
 			float distance = e2.getX()-e1.getX();
 			if(distance>50){
@@ -1272,14 +1318,18 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 				Log.e("方向1","右邊");
 				Intent intent = new Intent(InOutFrg.this, GetTaskFrg.class);
 				startActivity(intent);
+				this.finish();
 			}else if(distance<-50){
 				Intent intent = new Intent(InOutFrg.this,GetTaskFrg.class);
 				startActivity(intent);
+				this.finish();
 				Log.e("方向1","左邊");
 			}
 			return false;
 		}
+		*/
 		return false;
+
 	}
 
 	@Override
@@ -1294,10 +1344,14 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 			Log.e("方向2","右邊");
 			Intent intent = new Intent(InOutFrg.this, GetTaskFrg.class);
 			startActivity(intent);
+			this.finish();
 		}else if(distance<-50){
 			Intent intent = new Intent(InOutFrg.this, DataListFrg.class);
 			startActivity(intent);
+			this.finish();
 			Log.e("方向2","左邊");
+		}else {
+			return false;
 		}
 		return false;
 	}
@@ -1315,6 +1369,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 		@Override
 		public void run() {
 			GetConditionInfo();
+			setDialog();
 		}
 
 		private void GetConditionInfo() {
@@ -1348,6 +1403,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 					String json = response.body().string();
 					Log.e("貨況回傳", json);
 					parseJson(json);
+
 				}
 			});
 
@@ -1390,6 +1446,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 						spinner.setAdapter(list);
 						spinner.setSelection(finalWhere7);
 						list.notifyDataSetChanged();
+						myDialog.dismiss();
 					}
 				});
 				//spinner 點擊事件
@@ -1431,6 +1488,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 						spinner2.setAdapter(list2);
 						spinner2.setSelection(finalWhere01);
 						list.notifyDataSetChanged();
+						myDialog.dismiss();
 					}
 				});
 				//spinner 點擊事件
@@ -1507,6 +1565,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 
 					String json = response.body().string();
 					Log.e("託運單資訊回傳", json);
+					Log.e("託運單資訊回傳",BasicUrl);
 					parseJson(json);
 
 				}
@@ -1516,9 +1575,10 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 						JSONArray array = new JSONArray(json);
 						for(int i = 0 ; i<array.length() ; i++) {
 							JSONObject obj = array.getJSONObject(i);
-							ADDRESS = String.valueOf(obj.get("ADDRESS"));
+							ADDRESS = String.valueOf(obj.get("ADDRES"));
 							final String CASH = String.valueOf(obj.get("CASH"));
 							final String COD_AMT = String.valueOf(obj.get("COD_AMT"));
+
 							if(ADDRESS.equals("null")){
 								runOnUiThread(new Runnable() {
 									@Override
@@ -1604,7 +1664,8 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 	public void onClick (View v){
 		EditText EditText_ENO1 = (EditText)findViewById(R.id.EditText_ENO1);
 		if(EditText_ENO1.getText().toString().length()==11 || EditText_ENO1.getText().toString().length()==8){
-			getUPDate();
+			getBrushDate();
+			//getUPDate();
 			PostCondition_UP post = new PostCondition_UP();
 			post.run();
 
@@ -1662,9 +1723,9 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 					"&HTnumber=" +"ABCD"+
 					"&DataResource=" +"B"+
 					"&BusinessID=" +"1"+
-					"&UP_DATE=" + UP_DATE +
+					"&UP_DATE=" + null +
 					"&Company=" + Application.Company +
-					"&UP_TIME="+ UP_TIME ;
+					"&UP_TIME="+ null ;
 			final OkHttpClient client = new OkHttpClient()
 					.newBuilder()
 					.connectTimeout(15, TimeUnit.SECONDS)

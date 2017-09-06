@@ -730,9 +730,9 @@ public class clsHttpPostAPI extends Activity {
 			String strUrl;
 			try {
 				if(strData!=null){
-					strUrl =Application.ChtUrl+"Services/API/Motor_Dispatch/Get_DispatchInfo.aspx?OrderID=" + strData+"&key="+Application.strKey;
+					strUrl =Application.ChtUrl+"Services/API/Motor_Dispatch/Get_DispatchInfo.aspx?OrderID=" + strData+"&key="+Application.strKey+ "&EmployeeID="+Application.strAccount+ "&TransportID="+Application.strCar+"&Company="+Application.Company;
 				}else{
-					strUrl =Application.ChtUrl+"Services/API/Motor_Dispatch/Get_DispatchInfo.aspx?OrderID=" +objT.OrderID+"&key="+Application.strKey;
+					strUrl =Application.ChtUrl+"Services/API/Motor_Dispatch/Get_DispatchInfo.aspx?OrderID=" +objT.OrderID+"&key="+Application.strKey+ "&EmployeeID="+Application.strAccount+ "&TransportID="+Application.strCar+"&Company="+Application.Company;
 				}
 
 				clsLogger.i("form_GetTaskData", strUrl);

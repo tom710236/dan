@@ -917,7 +917,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 	//配送 - 按掃描
 	public void onScran(View v) {
 
-		if(!typeNUM.equals("") && typeNUM != null){
+
 			Intent intent = new Intent(InOutFrg.this, CaptureActivity.class);
 			intent.setAction(Intents.Scan.ACTION); //啟動掃描動作，一定要設定
 			intent.putExtra(Intents.Scan.WIDTH, 1200); //調整掃描視窗寬度(Optional)
@@ -928,10 +928,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 			//intent.putExtra(CaptureActivity.SACN_MODE_NAME, CaptureActivity.SCAN_SIGLE_MODE);
 			intent.putExtra(CaptureActivity.SACN_MODE_NAME, CaptureActivity.SCAN_BATCH_MODE);
 			startActivityForResult(intent, 1);
-		}else {
-			Toast.makeText(InOutFrg.this, "無貨況",Toast.LENGTH_SHORT).show();
 
-		}
 
 	}
 	//配達 按掃描
@@ -1016,12 +1013,13 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 							@Override
 							public void onFailure(Call call, IOException e) {
 								Log.e("basic e", String.valueOf(e));
-								new Thread(new Runnable(){
+								runOnUiThread(new Runnable() {
 									@Override
 									public void run() {
+										Toast.makeText(InOutFrg.this, "請確認網路是否連線",Toast.LENGTH_SHORT).show();
 										myDialog.dismiss();
 									}
-								}).start();
+								});
 							}
 
 							@Override
@@ -1177,7 +1175,14 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 								@Override
 								public void onFailure(Call call, IOException e) {
 									Log.e("GetCondition_UP e", String.valueOf(e));
-
+									runOnUiThread(new Runnable() {
+										@Override
+										public void run() {
+											//TODO 顯示數量
+											Toast.makeText(InOutFrg.this,"請確認網路是否連線",Toast.LENGTH_SHORT).show();
+											myDialog.dismiss();
+										}
+									});
 								}
 
 								@Override
@@ -1394,8 +1399,17 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 
 			call.enqueue(new Callback() {
 				@Override
-				public void onFailure(Call call, IOException e) {
+				public void onFailure(Call call, final IOException e) {
 					Log.e("e", String.valueOf(e));
+					myDialog.dismiss();
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							Toast.makeText(InOutFrg.this, "請確認網路是否連線",Toast.LENGTH_SHORT).show();
+							myDialog.dismiss();
+						}
+					});
+
 				}
 
 				@Override
@@ -1552,12 +1566,13 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 				@Override
 				public void onFailure(Call call, IOException e) {
 					Log.e("basic e", String.valueOf(e));
-					new Thread(new Runnable(){
+					runOnUiThread(new Runnable() {
 						@Override
 						public void run() {
+							Toast.makeText(InOutFrg.this, "請確認網路是否連線", Toast.LENGTH_SHORT).show();
 							myDialog.dismiss();
 						}
-					}).start();
+					});
 				}
 
 				@Override
@@ -1747,8 +1762,14 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 			call.enqueue(new Callback() {
 				@Override
 				public void onFailure(Call call, IOException e) {
-					Log.e("GetCondition_UP e", String.valueOf(e));
 
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							Toast.makeText(InOutFrg.this, "請確認網路是否連線",Toast.LENGTH_SHORT).show();
+							myDialog.dismiss();
+						}
+					});
 				}
 
 				@Override

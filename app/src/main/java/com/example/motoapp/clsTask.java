@@ -200,6 +200,8 @@ public class clsTask {
 			return "配送";
 		if(pStrStatus.equals("CC"))
 			return "配達";
+		if(pStrStatus.equals("DD"))
+			return "取件改派";
 		return "";
 	}
 

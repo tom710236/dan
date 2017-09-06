@@ -275,14 +275,14 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 
 						objDB = new dbLocations(context);
 						objDB.openDB();
-
+						String ObuID = objEdit.getText().toString();
 						String customer_name  = setEncryp (json.getString("customer_name"));
 						String recipient_name = setEncryp(json.getString("recipient_name")) ;
 						String recipient_phoneNo = setEncryp(json.getString("recipient_phoneNo"));
 						String recipient_address = setEncryp(json.getString("recipient_address")) ;
-						objDB.InsertTaskAllData(new Object[]{json.getString("caseID"),objEdit.getText().toString() ,"","",json.getString("size"),json.getString("item_count"),json.getString("status_time"),"1",customer_name,"",recipient_name,recipient_phoneNo,recipient_address,json.getString("request_time"),json.getString("pay_type_MD"),json.getString("pay_amount_MD"),json.getString("cash_on_delivery")});
+						objDB.InsertTaskAllData(new Object[]{json.getString("caseID"),ObuID,"","",json.getString("size"),json.getString("item_count"),json.getString("status_time"),"1",customer_name,"",recipient_name,recipient_phoneNo,recipient_address,json.getString("request_time"),json.getString("pay_type_MD"),json.getString("pay_amount_MD"),json.getString("cash_on_delivery")});
 						//objDB.InsertTaskAllData(new Object[]{json.getString("caseID"),contents,"","",json.getString("size"),json.getString("item_count"),json.getString("status_time"),"1",customer_name,"",recipient_name,recipient_phoneNo,recipient_address,json.getString("request_time"),json.getString("pay_type_MD"),json.getString("pay_amount_MD"),json.getString("cash_on_delivery")});
-
+						Log.e("轉單單號2",ObuID);
 						objDB.DBClose();
 
 
@@ -411,7 +411,7 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 				if (contents.length() == 11 || contents.length() == 8) {
 					//objEdit.setText(contents);
 					//new clsHttpPostAPI().CallAPI(context,"API013",contents);
-					final String strUrl = Application.ChtUrl + "Services/API/Motor_Dispatch/Get_DispatchInfo.aspx?OrderID=" + contents + "&key=" + Application.strKey;
+					final String strUrl = Application.ChtUrl + "Services/API/Motor_Dispatch/Get_DispatchInfo.aspx?OrderID=" + contents + "&key=" + Application.strKey + "&EmployeeID="+Application.strAccount+ "&TransportID="+Application.strCar+"&Company="+Application.Company;
 					OkHttpClient client = new OkHttpClient();
 					Request request = new Request.Builder()
 							.url(strUrl)
@@ -419,7 +419,14 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 					Call call = client.newCall(request);
 					call.enqueue(new Callback() {
 						@Override public void onFailure(Call call, IOException e) {
+							runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									//TODO 顯示數量
+									Toast.makeText(GetTaskFrg.this,"請確認網路是否連線",Toast.LENGTH_SHORT).show();
 
+								}
+							});
 						}
 
 						@Override

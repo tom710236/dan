@@ -45,10 +45,11 @@ public class GCMActivity extends Activity {
 		LinearLayout_St1.setVisibility(View.GONE);
 
 		Intent intent = getIntent();
-		Bundle bundle = intent.getExtras();
+		final Bundle bundle = intent.getExtras();
 		strStatus = bundle.getString("status");
 		Log.e("strStatus GCM2",strStatus);
 
+		// 假如Application.Company為空值 表示沒有登入
 		if(!Application.Company.equals("")&&Application.Company!= null){
 			if (strStatus.equals("0")) {
 				dbLocations objDB = new dbLocations(GCMActivity.this);
@@ -152,6 +153,50 @@ public class GCMActivity extends Activity {
 				LinearLayout_St1.setVisibility(View.VISIBLE);
 				TextView_Msg.setText("派遣任務("+bundle.getString("caseID")+")逾時超過"+bundle.getString("timeout")+"分鐘未回應！");
 			}
+			if (strStatus.equals("4")) {
+				//刪除已被其他司機轉單/指定派遣的既有派遣單
+				//刪除掉原本有的案件
+				LinearLayout_St1.setVisibility(View.VISIBLE);
+				TextView_Msg.setText("取件改派，"+bundle.getString("orderID")+"派遣單");
+				final String newUserID;
+				final String strData = bundle.getString("orderID");
+
+				if(bundle.getString("EmployeeID").length()<5){
+					final int userID = Integer.parseInt(bundle.getString("EmployeeID"));
+					newUserID= String.format("%05d", userID);
+				}else {
+					newUserID =bundle.getString("EmployeeID");
+				}
+
+					/*
+					Log.e("newUserID",newUserID);
+					Log.e("刪除",strData);
+					dbLocations objDB;
+					objDB = new dbLocations(GCMActivity.this);
+					objDB.openDB();
+					objDB.Delete("tblTask", "cOrderID='"+strData+"'");
+					objDB.close();
+					// 刷新listview
+					*/
+
+
+					Log.e("newUserID",newUserID);
+					Log.e("刪除",strData);
+					Application.strCaseID = bundle.getString("caseID");
+					dbLocations objDB;
+					objDB = new dbLocations(GCMActivity.this);
+					objDB.openDB();
+					objDB.UpdateTaskStatus("DD", bundle.getString("caseID"));
+					objDB.DBClose();
+					btnClose1.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							Intent intent = new Intent(GCMActivity.this, DataListFrg.class);
+							startActivity(intent);
+						}
+					});
+
+			}
 			// 刷新listview
 			btnClose.setOnClickListener(new OnClickListener() {
 				@Override
@@ -201,7 +246,7 @@ public class GCMActivity extends Activity {
 			btnClose1.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-
+					finish();
 				}
 			});
 
@@ -238,4 +283,5 @@ public class GCMActivity extends Activity {
 		}
 		return DecryptString;
 	}
+
 }

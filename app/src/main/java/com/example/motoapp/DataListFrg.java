@@ -264,7 +264,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 								@Override
 								public void run() {
 									try{
-										Thread.sleep(40000);
+										Thread.sleep(30000);
 									}
 									catch(Exception e){
 										e.printStackTrace();
@@ -1380,7 +1380,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 									*/
 					Cursor cursor = objDB
 							.Load1("tblTask",
-									"cStatus<>'71' and cStatus<>'81' and cStatus<>'2' and cStatus<>'3' and cStatus<>'09' and cStatus<>'00'and cStatus<>'CC'and cStatus<>'AA'",
+									"cStatus<>'71' and cStatus<>'81' and cStatus<>'2' and cStatus<>'3' and cStatus<>'09' and cStatus<>'00'and cStatus<>'CC'and cStatus<>'AA'and cStatus<>'DD'",
 									"cRequestDate desc", "");
 					List rowitem = new ArrayList();
 					listView = (ListView) findViewById(R.id.listView);
@@ -2506,7 +2506,7 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 			objDB.openDB();
 			//清單位置
 			Cursor cursor = objDB.Load1("tblTask",
-					"cStatus<>'71' and cStatus<>'81' and cStatus<>'2' and cStatus<>'3' and cStatus<>'09'and cStatus<>'00'and cStatus<>'CC'and cStatus<>'AA'", "cRequestDate desc", "");
+					"cStatus<>'71' and cStatus<>'81' and cStatus<>'2' and cStatus<>'3' and cStatus<>'09'and cStatus<>'00'and cStatus<>'CC'and cStatus<>'AA'and cStatus<>'DD'", "cRequestDate desc", "");
 			List rowitem = new ArrayList();
 			listView = (ListView) findViewById(R.id.listView);
 

@@ -68,7 +68,7 @@ public class HistoryFragment extends Activity implements GestureDetector.OnGestu
 		objDB.openDB();
 		SysApplication.getInstance().addActivity(this);
 		//清單位置
-		Cursor cursor= objDB.Load1("tblTask", "cStatus='71' or cStatus='81' or cStatus='2' or cStatus='3' or cStatus='09' or cStatus='00'or cStatus='CC'or cStatus='AA'", "cRequestDate desc", "");
+		Cursor cursor= objDB.Load1("tblTask", "cStatus='71' or cStatus='81' or cStatus='2' or cStatus='3' or cStatus='09' or cStatus='00'or cStatus='CC'or cStatus='AA'or cStatus='DD'", "cRequestDate desc", "");
 		List rowitem = new ArrayList();
 		//設定手勢滑動
 		listView = (ListView) findViewById(R.id.listView);

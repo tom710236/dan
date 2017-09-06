@@ -102,8 +102,12 @@ public class Login extends Activity {
 		objDB.Delete("tblTask", "cOrderID='"+strData+"'");
 		objDB.close();
 			*/
-
-
+		/*
+		objDB = new dbLocations(this);
+		objDB.openDB();
+		objDB.DeleteAll();
+		objDB.close();
+			*/
 
 		//取得網路時間 (新達API)
 		GetDT post = new GetDT();
@@ -142,7 +146,7 @@ public class Login extends Activity {
 		}
 		TextView textView = (TextView)findViewById(R.id.textView9);
 		//textView.setText(Updata);
-		textView.setText("cht15");
+		textView.setText("cht17");
 		/*
 		 
 		 */
@@ -251,7 +255,7 @@ public class Login extends Activity {
 			@Override
 			public void onClick(View v) {
 				if(isConnected()){
-					//new GCMTask().execute();
+					new GCMTask().execute();
 					Post post = new Post();
 					post.run();
 					//myDialog = ProgressDialog.show(Login.this, "登入中", "登入資訊檢查中，請稍後！", false);
@@ -509,13 +513,16 @@ public class Login extends Activity {
 
 	private class GCMTask extends AsyncTask<Void, Void, Void> {
 		protected Void doInBackground(Void... params) {
+
+
+			/*
 			Log.d(TAG, "檢查裝置是否支援 GCM");
 			// 檢查裝置是否支援 GCM
 			GCMRegistrar.checkDevice(Login.this);
 			GCMRegistrar.checkManifest(Login.this);
 			regId = GCMRegistrar.getRegistrationId(Login.this);
 			Log.e("REGID",regId);
-			if (regId.equals("")) {
+			if (regId.equals("")&& regId == null) {
 				Log.d(TAG, "尚未註冊 Google GCM, 進行註冊");
 
 				GCMRegistrar.register(Login.this,
@@ -523,7 +530,7 @@ public class Login extends Activity {
 				
 				GCMRegistrar.checkDevice(Login.this);
 				GCMRegistrar.checkManifest(Login.this);
-				
+				Log.e("REGID",regId);
 			int iq=1;	
 				//while (regId.equals("")) {
 				//	regId = GCMRegistrar.getRegistrationId(Login.this);
@@ -532,11 +539,22 @@ public class Login extends Activity {
 
 			// POST Data
 			Application.strRegistId = regId;
-			
+			*/
+
+			GCMRegistrar.register(Login.this,
+					CommonUtilities.SENDER_ID);
+
+			GCMRegistrar.checkDevice(Login.this);
+			GCMRegistrar.checkManifest(Login.this);
+			regId = GCMRegistrar.getRegistrationId(Login.this );
+			Application.strRegistId = regId;
+			Log.e("REGID",regId);
 			return null;
 		}
+
+
 	}
-	
+
 	@Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         
@@ -637,7 +655,7 @@ public class Login extends Activity {
 
 		private void GetDTInfo() {
 			final String strUrl =Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DeviceInfo.aspx?" +
-					"DeviceID="+ regId +
+					"DeviceID="+ Application.strRegistId +
 					"&Status=2" +
 					"&EmployeeID="+Application.strAccount+
 					"&Odometer="+Application.strPass+
@@ -670,7 +688,7 @@ public class Login extends Activity {
 
 		private void PostUserInfo() {
 			final String strUrl = Application.ChtUrl+"Services/API/Motor_Dispatch/Send_DeviceInfo.aspx?" +
-					"DeviceID="+ regId +
+					"DeviceID="+ Application.strRegistId +
 					"&Status=1" +
 					"&EmployeeID="+EditText_Account.getText().toString()+
 					"&Odometer="+EditText_No.getText().toString()+

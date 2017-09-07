@@ -71,6 +71,8 @@ public class GCMActivity extends Activity {
 
 			if (strStatus.equals("1")) {
 
+
+
 				final dbLocations objDB = new dbLocations(GCMActivity.this);
 				String customer_address2 = setEncryp(bundle.getString("customer_address"));
 				String customer_name2 = setEncryp(bundle.getString("customer_name"));
@@ -95,10 +97,9 @@ public class GCMActivity extends Activity {
 						bundle.getString("item_count"),
 						bundle.getString("request_time"),
 						"0" });
-				objDB.DBClose();
+				//objDB.DBClose();
 
-				objDB.openDB();
-
+				//objDB.openDB();
 
 
 				objDB.UpdateTask(
@@ -117,20 +118,18 @@ public class GCMActivity extends Activity {
 
 				objDB.DBClose();
 
-
-
 				Intent intent1 = new Intent();
 				intent1.setClass(GCMActivity.this, DataListFrg.class);
+
 				Bundle obj = new Bundle();
 				obj.putString("type", "21");
 				obj.putString("GCM","1");
 				//Application.objForm = bundle;
-
 				intent1.putExtras(obj);
-
 				//Application.strCaseID=strCaseID;
 				startActivity(intent1);
 				finish();
+
 			}
 
 			if (strStatus.equals("2")) {

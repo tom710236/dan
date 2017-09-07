@@ -89,6 +89,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 	@Override
 	protected void onMessage(Context context, Intent intent)
 	{
+
+
 		Log.i("onMessage", "Received message");
 		Log.e("onMessage GCM", "Received message");
 		// 接收 GCM server 傳來的訊息
@@ -192,6 +194,12 @@ public class GCMIntentService extends GCMBaseIntentService {
 					Message objMessage = new Message();
 					objMessage.obj = bundle;
 					handlerGCM.sendMessage(objMessage);
+
+					//開啟APP開啟APP
+					Intent intent = new Intent("com.example.motoapp.MAIN");
+					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					intent.putExtras(bundle);
+					context.startActivity(intent);
 
 				}else{
 					Log.e("GCM bundle", String.valueOf(bundle));

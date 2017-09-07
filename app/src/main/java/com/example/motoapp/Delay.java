@@ -2,6 +2,7 @@ package com.example.motoapp;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.Notification;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -49,6 +50,7 @@ public class Delay extends Service implements LocationListener {
     PowerManager.WakeLock mWakeLock;
     int upTime = 10;
     public static String Employee, regID, lon, lat, UserID, GCMID;
+    private final static int GOHNSON_ID = 1000;
 
     @Nullable
     @Override
@@ -58,13 +60,25 @@ public class Delay extends Service implements LocationListener {
 
     @Override
     public int onStartCommand(final Intent intent, int flags, int startId) {
-        // 讓CPU一直運行
+        // 讓CPU一直運行 7.0以上好像沒效果
         acquireWakeLock();
         // activity向service传值
         Employee = intent.getStringExtra("Employee");
         regID = intent.getStringExtra("regID");
         GPSPeriod = intent.getStringExtra("GPSPeriod");
         Log.e("GPSPeriod", GPSPeriod);
+
+        //灰色喚醒
+        if (Build.VERSION.SDK_INT < 18) {
+            startForeground(GOHNSON_ID, new Notification());
+        } else {
+            Intent innerIntent = new Intent(this, GohnsonInnerService.class);
+            startService(innerIntent);
+            startForeground(GOHNSON_ID, new Notification());
+        }
+
+
+
 
         handler = new Handler();
         runnable = new Runnable() {
@@ -122,8 +136,8 @@ public class Delay extends Service implements LocationListener {
         };
         //每分鐘執行一次
         handler.postAtTime(runnable, android.os.SystemClock.uptimeMillis() + upTime * 1000);
-        //return super.onStartCommand(intent, flags, startId);
-        return START_NOT_STICKY;
+        return super.onStartCommand(intent, flags, startId);
+        //return START_NOT_STICKY;
 
     }
     // 定位成功後 執行
@@ -277,5 +291,20 @@ public class Delay extends Service implements LocationListener {
             Log.e("MyGPS釋放", String.valueOf(mWakeLock));
         }
     }
+    public static class GohnsonInnerService extends Service {
 
+        @Override
+        public int onStartCommand(Intent intent, int flags, int startId) {
+            startForeground(GOHNSON_ID, new Notification());
+            stopForeground(true);
+            stopSelf();
+            return super.onStartCommand(intent, flags, startId);
+        }
+
+        @Nullable
+        @Override
+        public IBinder onBind(Intent intent) {
+            return null;
+        }
+    }
 }

@@ -19,7 +19,6 @@ ADDED from C:\work\dan\MotoAPP2\app\src\main\AndroidManifest.xml:3:1-162:12
 		ADDED from C:\work\dan\MotoAPP2\app\src\main\AndroidManifest.xml:3:11-69
 uses-sdk
 ADDED from C:\work\dan\MotoAPP2\app\src\main\AndroidManifest.xml:10:5-13:67
-MERGED from [com.android.support:multidex:1.0.1] C:\Users\TOM\.android\build-cache\c30dc90c811a661f56ef75a1f9fa0562e5510dce\output\AndroidManifest.xml:18:5-42
 MERGED from [com.android.support.constraint:constraint-layout:1.0.2] C:\Users\TOM\.android\build-cache\b5da4a5731daf70e574399395403eba0e3d9d6df\output\AndroidManifest.xml:5:5-7:41
 MERGED from [me.jessyan:progressmanager:1.3.3] C:\Users\TOM\.android\build-cache\de6f6482188fd191d9136e8b65ce72a16b7773ef\output\AndroidManifest.xml:7:5-9:41
 MERGED from [com.kaopiz:kprogresshud:1.0.2] C:\Users\TOM\.android\build-cache\12b81d42e7ac1c4071430cf082d9ab5e5ab04215\output\AndroidManifest.xml:7:5-9:41

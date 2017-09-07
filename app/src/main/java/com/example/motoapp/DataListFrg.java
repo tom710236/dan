@@ -2899,9 +2899,6 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 				typeInt = 1;
 			}
 
-
-
-
 			objDB = new dbLocations(context);
 			objDB.openDB();
 			final clsTask objT = objDB.LoadTask(Application.strCaseID);

@@ -514,7 +514,6 @@ public class Login extends Activity {
 	private class GCMTask extends AsyncTask<Void, Void, Void> {
 		protected Void doInBackground(Void... params) {
 
-
 			/*
 			Log.d(TAG, "檢查裝置是否支援 GCM");
 			// 檢查裝置是否支援 GCM

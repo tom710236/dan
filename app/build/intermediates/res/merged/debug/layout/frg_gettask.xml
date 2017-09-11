@@ -53,8 +53,8 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:layout_weight="3"
+                        android:layout_gravity="top|right"
+                        android:layout_weight="3.5"
                         android:text="託運單號："
                         android:textSize="16sp" />
 
@@ -62,7 +62,7 @@
                         android:id="@+id/TextView_OrderNo3"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="5"
+                        android:layout_weight="5.5"
                         android:inputType="numberSigned"
                         android:singleLine="true"
                         android:text=""

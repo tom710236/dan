@@ -959,6 +959,7 @@ public class Login extends Activity {
 	}
 
 	class getAPk extends Thread{
+
 		Uri uri ;
 		public void run() {
 			GetDTInfo(uri);

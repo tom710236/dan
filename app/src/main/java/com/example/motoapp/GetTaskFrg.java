@@ -272,21 +272,36 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 
 					if (status.equals("1")) {
 						//cCaseID,cOrderID,cCustAddress,cDistance,cSize,cItemCount,cRequestDate,cType
+						/*
+						String ObuID = objEdit.getText().toString();
+						// 刪除掉原本有的案件
+						dbLocations objDB;
+						objDB = new dbLocations(context);
+						objDB.openDB();
+						objDB.Delete("tblTask", "cOrderID='"+ObuID+"'");
+						*/
+						// 刪除掉原本有的案件
+						objDB = new dbLocations(context);
+						objDB.openDB();
+						clsTask objT = objDB.LoadTask(json.getString("caseID"));
+						Log.e("cOrderID",objT.OrderID);
+						//objDB.Delete("tblTask", "cOrderID='"+strData+"'");
+						objDB.Delete("tblTask", "cOrderID='"+objT.OrderID+"'");
+						objDB.DBClose();
 
 						objDB = new dbLocations(context);
 						objDB.openDB();
-						String ObuID = objEdit.getText().toString();
+
 						String customer_name  = setEncryp (json.getString("customer_name"));
 						String recipient_name = setEncryp(json.getString("recipient_name")) ;
 						String recipient_phoneNo = setEncryp(json.getString("recipient_phoneNo"));
 						String recipient_address = setEncryp(json.getString("recipient_address")) ;
-						objDB.InsertTaskAllData(new Object[]{json.getString("caseID"),ObuID,"","",json.getString("size"),json.getString("item_count"),json.getString("status_time"),"1",customer_name,"",recipient_name,recipient_phoneNo,recipient_address,json.getString("request_time"),json.getString("pay_type_MD"),json.getString("pay_amount_MD"),json.getString("cash_on_delivery")});
+						objDB.InsertTaskAllData(new Object[]{json.getString("caseID"),objEdit.getText().toString(),"","",json.getString("size"),json.getString("item_count"),json.getString("status_time"),"1",customer_name,"",recipient_name,recipient_phoneNo,recipient_address,json.getString("request_time"),json.getString("pay_type_MD"),json.getString("pay_amount_MD"),json.getString("cash_on_delivery")});
 						//objDB.InsertTaskAllData(new Object[]{json.getString("caseID"),contents,"","",json.getString("size"),json.getString("item_count"),json.getString("status_time"),"1",customer_name,"",recipient_name,recipient_phoneNo,recipient_address,json.getString("request_time"),json.getString("pay_type_MD"),json.getString("pay_amount_MD"),json.getString("cash_on_delivery")});
-						Log.e("轉單單號2",ObuID);
 						objDB.DBClose();
 
 
-						Toast.makeText(GetTaskFrg.this,"取得"+Application.getTask+"資料！",Toast.LENGTH_SHORT).show();
+						Toast.makeText(GetTaskFrg.this,"取得"+objEdit.getText().toString()+"資料！",Toast.LENGTH_SHORT).show();
 						//clsDialog.Show(context, "提示", "取得案件資料！");
 						Log.e("Array", String.valueOf(CaptureActivity.num));
 
@@ -440,11 +455,20 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 								if (status.equals("1")) {
 									//cCaseID,cOrderID,cCustAddress,cDistance,cSize,cItemCount,cRequestDate,cType
 									// 刪除掉原本有的案件
+									/*
 									dbLocations objDB;
 									objDB = new dbLocations(context);
 									objDB.openDB();
 									objDB.Delete("tblTask", "cOrderID='"+contents+"'");
 									//clsTask objT = objDB.LoadTask(Application.strCaseID);
+									*/
+									// 刪除掉原本有的案件
+									objDB = new dbLocations(context);
+									objDB.openDB();
+									clsTask objT = objDB.LoadTask(j.getString("caseID"));
+									Log.e("掃描caseID",j.getString("caseID"));
+									Log.e("cOrderID",objT.OrderID);
+									objDB.Delete("tblTask", "cOrderID='"+objT.OrderID+"'");
 
 									//加入轉單後的案件
 									String customer_name = setEncryp(j.getString("customer_name"));

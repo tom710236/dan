@@ -1627,13 +1627,13 @@ public class DataListFrg extends Activity implements GestureDetector.OnGestureLi
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 		float distance = e2.getX()-e1.getX();
 
-		if(distance>100){
+		if(distance>150){
 
 			Log.e("方向","右邊");
 			Intent intent = new Intent(DataListFrg.this, InOutFrg.class);
 			startActivity(intent);
             this.finish();
-		}else if(distance<-100){
+		}else if(distance<-150){
 			Log.e("方向","左邊");
 
 			Intent intent = new Intent(DataListFrg.this, HistoryFragment.class);

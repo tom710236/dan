@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
+import android.os.Vibrator;
 import android.util.Log;
 
 import com.google.android.gcm.GCMBaseIntentService;
@@ -114,6 +115,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 		kl.disableKeyguard();
 		//解鎖
 
+		//收到推播會震動
+		vibrator();
 		try {
 
 			clsLogger.i(TAG, "Received message");
@@ -195,7 +198,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 					objMessage.obj = bundle;
 					handlerGCM.sendMessage(objMessage);
 
-					//開啟APP開啟APP
+					//開啟APP
 					Intent intent = new Intent("com.example.motoapp.MAIN");
 					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					intent.putExtras(bundle);
@@ -231,5 +234,10 @@ public class GCMIntentService extends GCMBaseIntentService {
 	/*	*/
 
 	}
+	//震動
+	private void vibrator (){
+		Vibrator vb = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
+		vb.vibrate(1500);
 
+	}
 }

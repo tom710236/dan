@@ -6,6 +6,7 @@ public class Application extends android.app.Application {
 	public static String strKey="7092a3c1-8ad6-48b5-b354-577378c282a5";
 	/** API */ public static final String strAPIUrl = "http://efms.hinet.net/FMS_WS/Services/API/Motor_Dispatch/";
 	public static String strCaseID="";
+	public static String strCaseID2="";
 	public static String strObuID="";
 	public static String strGoMin="";
 	public static Bundle objForm;
@@ -49,6 +50,7 @@ public class Application extends android.app.Application {
 	public static int strPayType;
 	public static String strPayAmounts="";
 	public static String newstrObuID="";
+	public static String ObuID="";
 	public static String newPay="";
 	public static String newPayType="";
 	public static String datatime="";

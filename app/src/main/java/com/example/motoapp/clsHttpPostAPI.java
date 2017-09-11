@@ -718,11 +718,19 @@ public class clsHttpPostAPI extends Activity {
 			//
 			// TODO: http request.
 			//
+			/*  把刪除原案件的邏輯 改到POST後 (GetTaskFrg)
 			objDB = new dbLocations(context);
 			objDB.openDB();
 			objDB.Delete("tblTask", "cOrderID='"+strData+"'");
+			//objDB.Delete("tblTask", "cOrderID='"+Application.ObuID+"'");
 			clsTask objT = objDB.LoadTask(Application.strCaseID);
 			Log.e("cOrderID",strData);
+			Log.e("cOrderID2",Application.strCaseID2);
+			objDB.DBClose();
+				*/
+			objDB = new dbLocations(context);
+			objDB.openDB();
+			clsTask objT = objDB.LoadTask(Application.strCaseID);
 			objDB.DBClose();
 
 			clsHttpPost objHttppost = new clsHttpPost();

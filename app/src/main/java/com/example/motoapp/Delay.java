@@ -63,10 +63,10 @@ public class Delay extends Service implements LocationListener {
         // 讓CPU一直運行 7.0以上好像沒效果
         acquireWakeLock();
         // activity向service传值
-        Employee = intent.getStringExtra("Employee");
-        regID = intent.getStringExtra("regID");
-        GPSPeriod = intent.getStringExtra("GPSPeriod");
-        Log.e("GPSPeriod", GPSPeriod);
+        //Employee = intent.getStringExtra("Employee");
+        //regID = intent.getStringExtra("regID");
+        //GPSPeriod = intent.getStringExtra("GPSPeriod");
+        //Log.e("GPSPeriod", GPSPeriod);
 
         //灰色喚醒
         if (Build.VERSION.SDK_INT < 18) {

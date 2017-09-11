@@ -50,7 +50,7 @@ public class Application extends android.app.Application {
 	public static int strPayType;
 	public static String strPayAmounts="";
 	public static String newstrObuID="";
-	public static String ObuID="";
+	//public static String ObuID="";
 	public static String newPay="";
 	public static String newPayType="";
 	public static String datatime="";

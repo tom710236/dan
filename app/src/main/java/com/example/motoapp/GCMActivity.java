@@ -64,7 +64,7 @@ public class GCMActivity extends Activity {
 
 				strCaseID = bundle.getString("caseID");
 				strOrderID =  bundle.getString("orderID");
-				Application.ObuID = strOrderID;
+				//Application.ObuID = strOrderID;
 				TextView_Msg.setText("收到一筆派遣任務("+strOrderID+")，請問要立刻開啟嗎?");
 				LinearLayout_St0.setVisibility(View.VISIBLE);
 				Log.e("strStatus",strStatus);

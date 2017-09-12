@@ -53,6 +53,7 @@ import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.READ_PHONE_STATE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static com.example.motoapp.Application.datatime;
 
 public class Login extends Activity {
 
@@ -80,11 +81,11 @@ public class Login extends Activity {
 	int textInt = 0 ;
 	String Updata ="1.0";
 	int timeOut = 20171031 ;
-	String timeClear = "0100";
+	String timeClear = "0110";
 	dbLocations objDB;
 	String datetime2;
 	String datetime3;
-
+	int IntTimeClear , IntDataTime ;
 
 
 
@@ -228,7 +229,9 @@ public class Login extends Activity {
 
 		}
 		// 時間到0100清除帳密
-		if(Application.datatime.equals(Application.timeClear) && textInt ==0){
+		IntTimeClear = Integer.parseInt(Application.timeClear);
+		IntDataTime = Integer.parseInt(datatime);
+		if(IntTimeClear>=IntDataTime-3 && IntTimeClear<=IntDataTime+3){
 			EditText_Account.setText("");
 			//EditText_Password.setText("");
 			EditText_Car.setText("");
@@ -627,6 +630,7 @@ public class Login extends Activity {
 				@Override
 				public void onResponse(Call call, Response response) throws IOException {
 					String json = response.body().string();
+					Log.e("新達時間",json);
 					String json2 = String.valueOf(json.subSequence(0,10));
 					datetime3 = json2.replaceAll("-","");
 					Application.NETTime = datetime3;

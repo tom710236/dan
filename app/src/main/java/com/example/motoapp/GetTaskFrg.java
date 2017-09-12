@@ -287,6 +287,7 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 						//clsDialog.Show(context, "提示", "取得案件資料！");
 						Log.e("Array", String.valueOf(CaptureActivity.num));
 
+						//若託運單號有更改而且資料庫裡是舊的託運單號時
 						objDB = new dbLocations(context);
 						objDB.openDB();
 						clsTask objT = objDB.LoadTask(json.getString("caseID"));
@@ -454,15 +455,6 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 								JSONObject j = new JSONObject(json);
 								String status = j.getString("Result");
 								if (status.equals("1")) {
-									//cCaseID,cOrderID,cCustAddress,cDistance,cSize,cItemCount,cRequestDate,cType
-									// 刪除掉原本有的案件
-									/*
-									dbLocations objDB;
-									objDB = new dbLocations(context);
-									objDB.openDB();
-									objDB.Delete("tblTask", "cOrderID='"+contents+"'");
-									//clsTask objT = objDB.LoadTask(Application.strCaseID);
-									*/
 									// 刪除掉原本有的案件
 									dbLocations objDB;
 									objDB = new dbLocations(context);
@@ -487,6 +479,7 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 									//clsDialog.Show(context, "提示", "取得案件資料！");
 									//Log.e("Array", String.valueOf(CaptureActivity.num));
 
+									//若託運單號有更改而且資料庫裡是舊的託運單號時
 									objDB = new dbLocations(context);
 									objDB.openDB();
 									clsTask objT = objDB.LoadTask(j.getString("caseID"));

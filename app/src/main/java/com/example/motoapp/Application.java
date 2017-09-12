@@ -53,7 +53,7 @@ public class Application extends android.app.Application {
 	//public static String ObuID="";
 	public static String newPay="";
 	public static String newPayType="";
-	public static String datatime="";
+	public static String datatime="0";
     public static String cash_on_delivery="";
 	public static String getTask="";
 	public static String Updata ="";

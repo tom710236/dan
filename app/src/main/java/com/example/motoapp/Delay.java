@@ -51,7 +51,7 @@ public class Delay extends Service implements LocationListener {
     int upTime = 10;
     public static String Employee, regID, lon, lat, UserID, GCMID;
     private final static int GOHNSON_ID = 1000;
-
+    int IntTimeClear , IntDataTime ;
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -108,15 +108,18 @@ public class Delay extends Service implements LocationListener {
                 Get get = new Get();
                 get.start();
 
-                //時間到跳到Login 清楚帳號用
+                //時間到跳到Login 清除帳號用
                 Application.datatime=datatime;
-                if(datatime.equals(Application.timeClear)){
+                IntTimeClear = Integer.parseInt(Application.timeClear);
+                IntDataTime = Integer.parseInt(datatime);
+                if(IntTimeClear>=IntDataTime-3 && IntTimeClear<=IntDataTime+3){
                     //new clsHttpPostAPI().CallAPI(context, "API014");
                     Intent intent1 = new Intent(Delay.this,Login.class);
                     // 錯誤代碼 Calling startActivity() from outside of an Activity context requires the , FLAG_ACTIVITY_NEW_TASK , Is this really what you want
                     //使用 intent1.addFlags(intent1.FLAG_ACTIVITY_NEW_TASK);
                     intent1.addFlags(intent1.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent1);
+                    Log.e("現在時間", String.valueOf(Integer.parseInt(datatime)));
                 }
 
                 //GPS第一次啟動後 跳到DataListFrg
@@ -306,5 +309,10 @@ public class Delay extends Service implements LocationListener {
         public IBinder onBind(Intent intent) {
             return null;
         }
+    }
+
+    public static boolean rangeInDefined(int current, int min, int max)
+    {
+        return Math.max(min, current) == Math.min(current, max);
     }
 }

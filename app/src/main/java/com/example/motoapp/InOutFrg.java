@@ -91,6 +91,8 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 	ProgressDialog myDialog;
 	Handler handler;
 	GestureDetector detector;
+	boolean check = false;
+
 	int numType = 0 ;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -431,11 +433,12 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 		EditText EditText_ENO1 = (EditText) findViewById(R.id.EditText_ENO1);
 		EditText_ENO1.setOnKeyListener(new OnKeyListener() {
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
+
 				if (event.getAction() == event.ACTION_DOWN) {
 					EditText EditText_ENO1 = (EditText) v;
 					if (keyCode == 23 || keyCode == 66) {
 						if (EditText_ENO1.getText().toString().length()==10 || EditText_ENO1.getText().toString().length()==7) {
-							clsDialog.Show(context, "提示", "請輸入10碼以上的託運單號！");
+							clsDialog.Show(context, "提示", "請輸入正確託運單號！");
 							return true;
 						}
 
@@ -933,6 +936,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 	}
 	//配達 按掃描
 	public void onScran2(View v) {
+		check = true;
 		Intent intent = new Intent(InOutFrg.this, CaptureActivity.class);
 		intent.setAction(Intents.Scan.ACTION); //啟動掃描動作，一定要設定
 		intent.putExtra(Intents.Scan.WIDTH, 1200); //調整掃描視窗寬度(Optional)
@@ -941,7 +945,7 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 		intent.putExtra(Intents.Scan.PROMPT_MESSAGE, "請將條碼置於鏡頭範圍進行掃描"); //客製化掃描視窗的提示文字(Optional)
 		//intent.putExtra(Scan.MODE, Scan.ONE_D_MODE);  //限制只能掃一維條碼(預設為全部條碼都支援)
 		//intent.putExtra(CaptureActivity.SACN_MODE_NAME, CaptureActivity.SCAN_SIGLE_MODE);
-		intent.putExtra(CaptureActivity.SACN_MODE_NAME, CaptureActivity.SCAN_SIGLE_MODE);
+		intent.putExtra(CaptureActivity.SACN_MODE_NAME, CaptureActivity.SCAN_BATCH_MODE);
 		startActivityForResult(intent, 2);
 
 	}
@@ -1236,13 +1240,291 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 
 				}
 			}else {
+				Toast.makeText(InOutFrg.this,"條碼格式不符",Toast.LENGTH_SHORT).show();
 				myDialog.dismiss();
 			}
 
 
-		//配達
+		//配達 ZXing回傳的內容
 		} else if (requestCode == 2) {
-			if (resultCode == RESULT_OK) {
+
+				// ZXing回傳的內容
+				//取得掃描後的值 arraylist
+				ArrayList num = CaptureActivity.num;
+				Log.e("配達", String.valueOf(num));
+				setDialog();
+				if(num.size()!=0){
+					for (int i = 0 ; i<num.size() ; i++) {
+						final String contents;
+						contents = String.valueOf(num.get(i));
+						final EditText editText = (EditText) findViewById(EditText_SNO1);
+						editText.setText(contents);
+						TextView textView = (TextView) findViewById(R.id.TextView_SNO1);
+						textView.setText(contents);
+						BasicUrl = "https://ga.kerrytj.com/Cht_Motor/api/GetBasic/Get?" +
+								"ID="+Application.strAccount+
+								"&CAR_NO="+Application.strCar+
+								"&Company="+Application.Company+
+								"&BOL_NO="+contents;
+						//onClickNum = contents;
+						if (contents.length() == 11 || contents.length() == 8 ) {
+
+							/**
+							 * 呼叫API託運單資訊
+							 * */
+							//
+							//PostBasic post = new PostBasic();
+							//post.run();
+							/**
+							 *
+							 */
+							final OkHttpClient client = new OkHttpClient()
+									.newBuilder()
+									.connectTimeout(30, TimeUnit.SECONDS)
+									.readTimeout(30, TimeUnit.SECONDS)
+									.writeTimeout(30, TimeUnit.SECONDS)
+									//.addInterceptor(new LogInterceptor())
+									//.addInterceptor(new TokenInterceptor())
+									.sslSocketFactory(SSLSocketClient.getSSLSocketFactory())
+									.hostnameVerifier(SSLSocketClient.getHostnameVerifier())
+									.build();
+							final Request request = new Request.Builder()
+									.url(BasicUrl)
+									.build();
+							Call call = client.newCall(request);
+							call.enqueue(new Callback() {
+
+								@Override
+								public void onFailure(Call call, IOException e) {
+									Log.e("basic e", String.valueOf(e));
+									runOnUiThread(new Runnable() {
+										@Override
+										public void run() {
+											Toast.makeText(InOutFrg.this, "請確認網路是否連線",Toast.LENGTH_SHORT).show();
+											myDialog.dismiss();
+										}
+									});
+								}
+
+								@Override
+								public void onResponse(Call call, Response response) throws IOException {
+									myDialog.dismiss();
+									String json = response.body().string();
+									Log.e("託運單資訊回傳", json);
+									parseJson(json);
+
+								}
+
+								private void parseJson(String json) {
+									try {
+
+										JSONArray array = new JSONArray(json);
+										for(int i = 0 ; i<array.length() ; i++) {
+											final JSONObject obj = array.getJSONObject(i);
+											ADDRESS = String.valueOf(obj.get("ADDRES"));
+											CASH = String.valueOf(obj.get("CASH"));
+											COD_AMT = String.valueOf(obj.get("COD_AMT"));
+
+											Log.e("託運單地址",ADDRESS);
+
+										}
+
+										if(ADDRESS.equals("null")){
+											runOnUiThread(new Runnable() {
+												@Override
+												public void run() {
+													myDialog.dismiss();
+													Log.e("無此單號","無此單號");
+													Toast.makeText(InOutFrg.this, "無此單號",Toast.LENGTH_SHORT).show();
+												}
+											});
+
+										}else{
+											runOnUiThread(new Runnable() {
+												@Override
+												public void run() {
+													//配送資訊存進資料庫
+													/*
+													String Add = setEncryp(ADDRESS);
+													final dbLocations objDB = new dbLocations(InOutFrg.this);
+													objDB.openDB();
+													objDB.InsertTask(new Object[] {
+															contents,
+															contents,
+															Add,
+															CASH,
+															COD_AMT,
+															null,
+															today,
+															"0" });
+													objDB.UpdateTaskStatus("BB", contents);
+													objDB.DBClose();
+													*/
+
+
+													//配送
+													myDialog.dismiss();
+													TextView TextView_SAddress1 = (TextView) findViewById(R.id.TextView_SAddress1);
+													TextView_SAddress1.setText(ADDRESS);
+													TextView TextView_SMoney = (TextView)findViewById(R.id.TextView_SMoney);
+													TextView_SMoney.setText(CASH);
+													TextView TextView_SMoney2 = (TextView)findViewById(R.id.TextView_SMoney2);
+													TextView_SMoney2.setText(COD_AMT);
+
+													//配達
+													myDialog.dismiss();
+													TextView TextView_EAddress1 = (TextView)findViewById(R.id.TextView_EAddress1);
+													TextView_EAddress1.setText(ADDRESS);
+													TextView TextView_EMoney = (TextView)findViewById(R.id.TextView_EMoney);
+													TextView_EMoney.setText(CASH);
+													TextView TextView_EMoney2 = (TextView)findViewById(R.id.TextView_EMoney2);
+													TextView_EMoney2.setText(COD_AMT);
+
+
+
+													//查詢
+													myDialog.dismiss();
+													TextView TextView_AD = (TextView)findViewById(R.id.TextView_AD);
+													TextView_AD.setText(ADDRESS);
+													TextView TextView_ADMoney = (TextView)findViewById(R.id.TextView_ADMoney);
+													TextView_ADMoney.setText(CASH);
+													TextView TextView_ADMoney2 = (TextView)findViewById(R.id.TextView_ADMoney2);
+													TextView_ADMoney2.setText(COD_AMT);
+
+												}
+											});
+										}
+
+									} catch (JSONException e) {
+										e.printStackTrace();
+										myDialog.dismiss();
+									}
+
+								}
+
+							});
+
+							getBrushDate();
+							//getUPDate();
+							//託運單上傳
+							//資訊更新API
+							//PostCondition_UP post2 = new PostCondition_UP();
+							//post2.run();
+							/**
+							 *
+							 */
+							//延遲上傳時間
+							/*
+							try {
+								Thread.sleep(200); //1000為1秒
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+
+							final String url = "https://ga.kerrytj.com/Cht_Motor/api/Condition_UP/GET?" +
+									"NUM=" + typeNUM +
+									"&BOL_NO=" + contents +
+									"&CAR_NO=" + Application.strCar +
+									"&BrushDate=" +BrushDate+
+									"&BrushTime=" +BrushTime+
+									"&BrushDept=" +"0078"+
+									"&Area=" +"777"+
+									"&ID=" +objLoginInfo.UserID+
+									"&HTnumber=" +"ABCD"+
+									"&DataResource=" +"B"+
+									"&BusinessID=" +"1"+
+									"&UP_DATE=" + null +
+									"&Company=" + Application.Company +
+									"&UP_TIME="+ null ;
+							final OkHttpClient client2 = new OkHttpClient()
+									.newBuilder()
+									.connectTimeout(15, TimeUnit.SECONDS)
+									.readTimeout(15, TimeUnit.SECONDS)
+									.writeTimeout(15, TimeUnit.SECONDS)
+									//.addInterceptor(new LogInterceptor())
+									//.addInterceptor(new TokenInterceptor())
+									.sslSocketFactory(SSLSocketClient.getSSLSocketFactory())
+									.hostnameVerifier(SSLSocketClient.getHostnameVerifier())
+									.build();
+							final MediaType JSON
+									= MediaType.parse("application/json; charset=utf-8");
+							RequestBody body = RequestBody.create(JSON,url);
+							final Request request2 = new Request.Builder()
+									.url(url)
+									.post(body)
+									.build();
+							Call call2 = client2.newCall(request2);
+							call2.enqueue(new Callback() {
+								@Override
+								public void onFailure(Call call, IOException e) {
+									Log.e("GetCondition_UP e", String.valueOf(e));
+									runOnUiThread(new Runnable() {
+										@Override
+										public void run() {
+											//TODO 顯示數量
+											Toast.makeText(InOutFrg.this,"請確認網路是否連線",Toast.LENGTH_SHORT).show();
+											myDialog.dismiss();
+										}
+									});
+								}
+
+								@Override
+								public void onResponse(Call call, Response response) throws IOException {
+									final String json = response.body().string();
+									Log.e("託運單資訊更新",url);
+									Log.e("託運單資訊更新回傳", json);
+									Log.e("CARTYPE", String.valueOf(CARTYPE));
+
+									if(json.equals("[{\"MESSAGE\":\"TRUE\"}]")){
+										//TODO 更新數量
+										objLoginInfo.UpdateInOut("In");
+										runOnUiThread(new Runnable() {
+											@Override
+											public void run() {
+												//TODO 顯示數量
+												Toast.makeText(InOutFrg.this,json,Toast.LENGTH_SHORT).show();
+												TextView TextView_SCount = (TextView) findViewById(R.id.TextView_SCount);
+												TextView_SCount.setText(String.format("%04d", Integer.valueOf(objLoginInfo.In)));
+
+											}
+										});
+
+									}else{
+										runOnUiThread(new Runnable() {
+											@Override
+											public void run() {
+												Toast.makeText(InOutFrg.this,json,Toast.LENGTH_SHORT).show();
+											}
+										});
+									}
+
+									runOnUiThread(new Runnable() {
+										@Override
+										public void run() {
+											TextView EditText_ENO1 = (TextView)findViewById(R.id.EditText_ENO1);
+											EditText_ENO1.setText("");
+											TextView EditText_SNO1 = (TextView)findViewById(R.id.EditText_SNO1);
+											EditText_SNO1.setText("");
+										}
+									});
+								}
+							});
+							*/
+
+
+						}else{
+							Toast.makeText(InOutFrg.this,"條碼格式不符",Toast.LENGTH_SHORT).show();
+							myDialog.dismiss();
+						}
+
+					}
+				}else {
+					myDialog.dismiss();
+				}
+
+
+				/*單筆刷
 				// ZXing回傳的內容
 				String contents = intent.getStringExtra("SCAN_RESULT");
 				final EditText editText = (EditText) findViewById(R.id.EditText_ENO1);
@@ -1257,9 +1539,6 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 						"&BOL_NO="+contents;
 				if (editText.length() == 11 || editText.length() == 8) {
 
-					/**
-					 * 呼叫API
-					 * */
 					PostBasic post = new PostBasic();
 					post.run();
 					setDialog();
@@ -1268,7 +1547,8 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 					startActivityForResult(intent, 2);
 					Toast.makeText(InOutFrg.this,"條碼格式不符",Toast.LENGTH_SHORT).show();
 				}
-			}
+				*/
+
 		//查詢
 		} else if (requestCode == 3) {
 			if (resultCode == RESULT_OK) {
@@ -1677,22 +1957,169 @@ public class InOutFrg extends Activity implements GestureDetector.OnGestureListe
 	}
 	//配達 確認鍵
 	public void onClick (View v){
-		EditText EditText_ENO1 = (EditText)findViewById(R.id.EditText_ENO1);
-		if(EditText_ENO1.getText().toString().length()==11 || EditText_ENO1.getText().toString().length()==8){
-			getBrushDate();
-			//getUPDate();
-			PostCondition_UP post = new PostCondition_UP();
-			post.run();
 
-			TextView TextView_EAddress1 = (TextView)findViewById(R.id.TextView_EAddress1);
-			TextView_EAddress1.setText("");
-			TextView TextView_EMoney = (TextView)findViewById(R.id.TextView_EMoney);
-			TextView_EMoney.setText("");
-			TextView TextView_EMoney2 = (TextView)findViewById(R.id.TextView_EMoney2);
-			TextView_EMoney2.setText("");
-		}else {
-			clsDialog.Show(context, "提示", "請輸入正確格式託運單號！");
+		if(check == true){
+			ArrayList num ;
+			num = CaptureActivity.num;
+			if(num.size()!=0) {
+				for (int i = 0; i < num.size(); i++) {
+					final String contents;
+					contents = String.valueOf(num.get(i));
+					getBrushDate();
+
+					/**
+					 *
+					 */
+					//延遲上傳時間
+
+					try {
+						Thread.sleep(200); //1000為1秒
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					final String url = "https://ga.kerrytj.com/Cht_Motor/api/Condition_UP/GET?" +
+							"NUM=" + typeNUM +
+							"&BOL_NO=" + contents +
+							"&CAR_NO=" + Application.strCar +
+							"&BrushDate=" + BrushDate +
+							"&BrushTime=" + BrushTime +
+							"&BrushDept=" + "0078" +
+							"&Area=" + "777" +
+							"&ID=" + objLoginInfo.UserID +
+							"&HTnumber=" + "ABCD" +
+							"&DataResource=" + "B" +
+							"&BusinessID=" + "1" +
+							"&UP_DATE=" + null +
+							"&Company=" + Application.Company +
+							"&UP_TIME=" + null;
+					final OkHttpClient client2 = new OkHttpClient()
+							.newBuilder()
+							.connectTimeout(15, TimeUnit.SECONDS)
+							.readTimeout(15, TimeUnit.SECONDS)
+							.writeTimeout(15, TimeUnit.SECONDS)
+							//.addInterceptor(new LogInterceptor())
+							//.addInterceptor(new TokenInterceptor())
+							.sslSocketFactory(SSLSocketClient.getSSLSocketFactory())
+							.hostnameVerifier(SSLSocketClient.getHostnameVerifier())
+							.build();
+					final MediaType JSON
+							= MediaType.parse("application/json; charset=utf-8");
+					RequestBody body = RequestBody.create(JSON, url);
+					final Request request2 = new Request.Builder()
+							.url(url)
+							.post(body)
+							.build();
+					Call call2 = client2.newCall(request2);
+					call2.enqueue(new Callback() {
+						@Override
+						public void onFailure(Call call, IOException e) {
+							Log.e("GetCondition_UP e", String.valueOf(e));
+							runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									//TODO 顯示數量
+									Toast.makeText(InOutFrg.this, "請確認網路是否連線", Toast.LENGTH_SHORT).show();
+									myDialog.dismiss();
+								}
+							});
+						}
+
+						@Override
+						public void onResponse(Call call, Response response) throws IOException {
+							final String json = response.body().string();
+							Log.e("託運單資訊更新", url);
+							Log.e("託運單資訊更新回傳", json);
+							Log.e("CARTYPE", String.valueOf(CARTYPE));
+
+							if (json.equals("[{\"MESSAGE\":\"TRUE\"}]")) {
+								//TODO 更新數量
+								//TODO 更新數量
+								objLoginInfo.UpdateInOut("Out");
+								runOnUiThread(new Runnable() {
+									@Override
+									public void run() {
+										//TODO 顯示數量
+										Toast.makeText(InOutFrg.this, json, Toast.LENGTH_SHORT).show();
+										TextView TextView_ECount = (TextView) findViewById(R.id.TextView_ECount);
+										TextView_ECount.setText(String.format("%04d", Integer.valueOf(objLoginInfo.Out)) + " / " + String.format("%04d", Integer.valueOf(objLoginInfo.In)));
+
+									}
+								});
+
+							} else {
+								runOnUiThread(new Runnable() {
+									@Override
+									public void run() {
+										Toast.makeText(InOutFrg.this, json, Toast.LENGTH_SHORT).show();
+									}
+								});
+							}
+
+							runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									TextView EditText_ENO1 = (TextView) findViewById(R.id.EditText_ENO1);
+									EditText_ENO1.setText("");
+									TextView EditText_SNO1 = (TextView) findViewById(R.id.EditText_SNO1);
+									EditText_SNO1.setText("");
+								}
+							});
+						}
+					});
+
+				}
+				num.clear();
+
+			}else{
+
+				EditText EditText_ENO1 = (EditText)findViewById(R.id.EditText_ENO1);
+				Log.e("EditText_ENO1",EditText_ENO1.getText().toString());
+				if(EditText_ENO1.getText().toString().length()==11 || EditText_ENO1.getText().toString().length()==8) {
+
+					getBrushDate();
+					//getUPDate();
+					PostCondition_UP post = new PostCondition_UP();
+					post.run();
+					/*
+					TextView TextView_EAddress1 = (TextView) findViewById(R.id.TextView_EAddress1);
+					TextView_EAddress1.setText("");
+					TextView TextView_EMoney = (TextView) findViewById(R.id.TextView_EMoney);
+					TextView_EMoney.setText("");
+					TextView TextView_EMoney2 = (TextView) findViewById(R.id.TextView_EMoney2);
+					TextView_EMoney2.setText("");
+					*/
+				}else{
+					Toast.makeText(InOutFrg.this,"條碼格式不符",Toast.LENGTH_SHORT).show();
+
+				}
+			}
+		}else{
+
+			EditText EditText_ENO1 = (EditText)findViewById(R.id.EditText_ENO1);
+			Log.e("EditText_ENO1",EditText_ENO1.getText().toString());
+			if(EditText_ENO1.getText().toString().length()==11 || EditText_ENO1.getText().toString().length()==8) {
+
+				getBrushDate();
+				//getUPDate();
+				PostCondition_UP post = new PostCondition_UP();
+				post.run();
+				/*
+				TextView TextView_EAddress1 = (TextView) findViewById(R.id.TextView_EAddress1);
+				TextView_EAddress1.setText("");
+				TextView TextView_EMoney = (TextView) findViewById(R.id.TextView_EMoney);
+				TextView_EMoney.setText("");
+				TextView TextView_EMoney2 = (TextView) findViewById(R.id.TextView_EMoney2);
+				TextView_EMoney2.setText("");
+				*/
+			}else{
+				Toast.makeText(InOutFrg.this,"條碼格式不符",Toast.LENGTH_SHORT).show();
+
+			}
+
 		}
+
 
 
 	}

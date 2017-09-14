@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -56,6 +58,8 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 	GestureDetector detector;
 	ArrayList Value;
 	String ObuID;
+    SQLiteDatabase db ;
+
 	private final int REQUEST_CODE = 0xa1;
 	private boolean isSingleSacn = false;
 	@Override
@@ -118,7 +122,11 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 						/**
 						 * 呼叫API
 						 * */
-						new clsHttpPostAPI().CallAPI(context,"API013",objEdit.getText().toString());
+						if(checkOdb(objEdit.getText().toString())==true || checkOdb2(objEdit.getText().toString())==true){
+							new clsHttpPostAPI().CallAPI(context,"API013",objEdit.getText().toString());
+						}else {
+							Toast.makeText(GetTaskFrg.this, "託運單號"+objEdit.getText().toString()+"已在清單中", Toast.LENGTH_SHORT).show();
+						}
 
 					}
 					return false;
@@ -205,8 +213,15 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 				
 				if(!objEdit.getText().toString().trim().equals("")) {
 					/*
-					 * 呼叫API 接單*/
-					new clsHttpPostAPI().CallAPI(context,"API013",objEdit.getText().toString());
+					 * 呼叫API 接單
+					 * */
+
+					if(checkOdb(objEdit.getText().toString())==true || checkOdb2(objEdit.getText().toString())==true){
+						new clsHttpPostAPI().CallAPI(context,"API013",objEdit.getText().toString());
+					}else {
+						Toast.makeText(GetTaskFrg.this, "託運單號"+objEdit.getText().toString()+"已在清單中", Toast.LENGTH_SHORT).show();
+					}
+
 				}else {
 					clsDialog.Show(context, "提示", "請輸入託運編號！");
 
@@ -428,126 +443,131 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 				if (contents.length() == 11 || contents.length() == 8) {
 					//objEdit.setText(contents);
 					//new clsHttpPostAPI().CallAPI(context,"API013",contents);
-					final String strUrl = Application.ChtUrl + "Services/API/Motor_Dispatch/Get_DispatchInfo.aspx?OrderID=" + contents + "&key=" + Application.strKey + "&EmployeeID="+Application.strAccount+ "&TransportID="+Application.strCar+"&Company="+Application.Company;
-					OkHttpClient client = new OkHttpClient();
-					Request request = new Request.Builder()
-							.url(strUrl)
-							.build();
-					Call call = client.newCall(request);
-					call.enqueue(new Callback() {
-						@Override public void onFailure(Call call, IOException e) {
-							runOnUiThread(new Runnable() {
-								@Override
-								public void run() {
-									//TODO 顯示數量
-									Toast.makeText(GetTaskFrg.this,"請確認網路是否連線",Toast.LENGTH_SHORT).show();
+					// 先判斷轉單有無在清單中
+					if(checkOdb(contents) == true || checkOdb2(contents) == true){
+						final String strUrl = Application.ChtUrl + "Services/API/Motor_Dispatch/Get_DispatchInfo.aspx?OrderID=" + contents + "&key=" + Application.strKey + "&EmployeeID="+Application.strAccount+ "&TransportID="+Application.strCar+"&Company="+Application.Company;
+						OkHttpClient client = new OkHttpClient();
+						Request request = new Request.Builder()
+								.url(strUrl)
+								.build();
+						Call call = client.newCall(request);
+						call.enqueue(new Callback() {
+							@Override public void onFailure(Call call, IOException e) {
+								runOnUiThread(new Runnable() {
+									@Override
+									public void run() {
+										//TODO 顯示數量
+										Toast.makeText(GetTaskFrg.this,"請確認網路是否連線",Toast.LENGTH_SHORT).show();
 
-								}
-							});
-						}
+									}
+								});
+							}
 
-						@Override
-						public void onResponse(Call call, Response response) throws IOException {
-							String json = response.body().string();
-							Log.e("轉單URL", strUrl);
-							Log.e("轉單", json);
-							try {
-								JSONObject j = new JSONObject(json);
-								String status = j.getString("Result");
-								if (status.equals("1")) {
-									// 刪除掉原本有的案件
-									dbLocations objDB;
-									objDB = new dbLocations(context);
-									objDB.openDB();
-									objDB.Delete("tblTask", "cOrderID='"+contents+"'");
-									//objDB.Delete("tblTask", "cOrderID='"+objT.OrderID+"'");
-									//加入轉單後的案件
-									String customer_name = setEncryp(j.getString("customer_name"));
-									String recipient_name = setEncryp(j.getString("recipient_name"));
-									String recipient_phoneNo = setEncryp(j.getString("recipient_phoneNo"));
-									String recipient_address = setEncryp(j.getString("recipient_address"));
-									Log.e("轉單contents2", contents);
-									objDB.InsertTaskAllData(new Object[]{j.getString("caseID"), contents, "", "", j.getString("size"), j.getString("item_count"), j.getString("status_time"), "1", customer_name, "", recipient_name, recipient_phoneNo, recipient_address, j.getString("request_time"), j.getString("pay_type_MD"), j.getString("pay_amount_MD"), j.getString("cash_on_delivery")});
-									objDB.close();
-
-									runOnUiThread(new Runnable() {
-										@Override
-										public void run() {
-											Toast.makeText(GetTaskFrg.this,"取得"+contents+"資料！",Toast.LENGTH_SHORT).show();
-										}
-									});
-									//clsDialog.Show(context, "提示", "取得案件資料！");
-									//Log.e("Array", String.valueOf(CaptureActivity.num));
-
-									//若託運單號有更改而且資料庫裡是舊的託運單號時
-									objDB = new dbLocations(context);
-									objDB.openDB();
-									clsTask objT = objDB.LoadTask(j.getString("caseID"));
-									if(!objT.equals("") && objT != null){
-										//objDB = new dbLocations(context);
+							@Override
+							public void onResponse(Call call, Response response) throws IOException {
+								String json = response.body().string();
+								Log.e("轉單URL", strUrl);
+								Log.e("轉單", json);
+								try {
+									JSONObject j = new JSONObject(json);
+									String status = j.getString("Result");
+									if (status.equals("1")) {
+										// 刪除掉原本有的案件
+										dbLocations objDB;
+										objDB = new dbLocations(context);
 										objDB.openDB();
-										objDB.Delete("tblTask", "cOrderID='"+objT.OrderID+"'");
+										objDB.Delete("tblTask", "cOrderID='"+contents+"'");
+										//objDB.Delete("tblTask", "cOrderID='"+objT.OrderID+"'");
+										//加入轉單後的案件
+										String customer_name = setEncryp(j.getString("customer_name"));
+										String recipient_name = setEncryp(j.getString("recipient_name"));
+										String recipient_phoneNo = setEncryp(j.getString("recipient_phoneNo"));
+										String recipient_address = setEncryp(j.getString("recipient_address"));
+										Log.e("轉單contents2", contents);
+										objDB.InsertTaskAllData(new Object[]{j.getString("caseID"), contents, "", "", j.getString("size"), j.getString("item_count"), j.getString("status_time"), "1", customer_name, "", recipient_name, recipient_phoneNo, recipient_address, j.getString("request_time"), j.getString("pay_type_MD"), j.getString("pay_amount_MD"), j.getString("cash_on_delivery")});
+										objDB.close();
 
-										customer_name  = setEncryp (j.getString("customer_name"));
-										recipient_name = setEncryp(j.getString("recipient_name")) ;
-										recipient_phoneNo = setEncryp(j.getString("recipient_phoneNo"));
-										recipient_address = setEncryp(j.getString("recipient_address")) ;
-										objDB.InsertTaskAllData(new Object[]{j.getString("caseID"), contents ,"","",j.getString("size"),j.getString("item_count"),j.getString("status_time"),"1",customer_name,"",recipient_name,recipient_phoneNo,recipient_address,j.getString("request_time"),j.getString("pay_type_MD"),j.getString("pay_amount_MD"),j.getString("cash_on_delivery")});
-										//objDB.InsertTaskAllData(new Object[]{json.getString("caseID"),contents,"","",json.getString("size"),json.getString("item_count"),json.getString("status_time"),"1",customer_name,"",recipient_name,recipient_phoneNo,recipient_address,json.getString("request_time"),json.getString("pay_type_MD"),json.getString("pay_amount_MD"),json.getString("cash_on_delivery")});
-										objDB.DBClose();
 										runOnUiThread(new Runnable() {
 											@Override
 											public void run() {
 												Toast.makeText(GetTaskFrg.this,"取得"+contents+"資料！",Toast.LENGTH_SHORT).show();
 											}
 										});
-
 										//clsDialog.Show(context, "提示", "取得案件資料！");
-										Log.e("Array", String.valueOf(CaptureActivity.num));
-									}
+										//Log.e("Array", String.valueOf(CaptureActivity.num));
 
-								}
-								if (status.equals("2")) {
-									//clsDialog.Show(context, "錯誤訊息", "輸入的授權碼不合法！");
-									runOnUiThread(new Runnable() {
-										@Override
-										public void run() {
-											Toast.makeText(GetTaskFrg.this, "輸入的授權碼不合法！", Toast.LENGTH_SHORT).show();
-										}
-									});
-								}
-								if (status.equals("4")) {
-									runOnUiThread(new Runnable() {
-										@Override
-										public void run() {
-											Toast.makeText(GetTaskFrg.this, "託運單號不存在！", Toast.LENGTH_SHORT).show();
-										}
-									});
+										//若託運單號有更改而且資料庫裡是舊的託運單號時
+										objDB = new dbLocations(context);
+										objDB.openDB();
+										clsTask objT = objDB.LoadTask(j.getString("caseID"));
+										if(!objT.equals("") && objT != null){
+											//objDB = new dbLocations(context);
+											objDB.openDB();
+											objDB.Delete("tblTask", "cOrderID='"+objT.OrderID+"'");
 
-								}
-								if (status.equals("200")) {
-									runOnUiThread(new Runnable() {
-										@Override
-										public void run() {
-											Toast.makeText(GetTaskFrg.this, "系統忙碌中，請重試！", Toast.LENGTH_SHORT).show();
-										}
-									});
+											customer_name  = setEncryp (j.getString("customer_name"));
+											recipient_name = setEncryp(j.getString("recipient_name")) ;
+											recipient_phoneNo = setEncryp(j.getString("recipient_phoneNo"));
+											recipient_address = setEncryp(j.getString("recipient_address")) ;
+											objDB.InsertTaskAllData(new Object[]{j.getString("caseID"), contents ,"","",j.getString("size"),j.getString("item_count"),j.getString("status_time"),"1",customer_name,"",recipient_name,recipient_phoneNo,recipient_address,j.getString("request_time"),j.getString("pay_type_MD"),j.getString("pay_amount_MD"),j.getString("cash_on_delivery")});
+											//objDB.InsertTaskAllData(new Object[]{json.getString("caseID"),contents,"","",json.getString("size"),json.getString("item_count"),json.getString("status_time"),"1",customer_name,"",recipient_name,recipient_phoneNo,recipient_address,json.getString("request_time"),json.getString("pay_type_MD"),json.getString("pay_amount_MD"),json.getString("cash_on_delivery")});
+											objDB.DBClose();
+											runOnUiThread(new Runnable() {
+												@Override
+												public void run() {
+													Toast.makeText(GetTaskFrg.this,"取得"+contents+"資料！",Toast.LENGTH_SHORT).show();
+												}
+											});
 
-								}
-								runOnUiThread(new Runnable() {
-									@Override
-									public void run() {
-										objEdit.setText("");
+											//clsDialog.Show(context, "提示", "取得案件資料！");
+											Log.e("Array", String.valueOf(CaptureActivity.num));
+										}
 
 									}
-								});
+									if (status.equals("2")) {
+										//clsDialog.Show(context, "錯誤訊息", "輸入的授權碼不合法！");
+										runOnUiThread(new Runnable() {
+											@Override
+											public void run() {
+												Toast.makeText(GetTaskFrg.this, "輸入的授權碼不合法！", Toast.LENGTH_SHORT).show();
+											}
+										});
+									}
+									if (status.equals("4")) {
+										runOnUiThread(new Runnable() {
+											@Override
+											public void run() {
+												Toast.makeText(GetTaskFrg.this, "託運單號不存在！", Toast.LENGTH_SHORT).show();
+											}
+										});
 
-							} catch (JSONException e) {
-								e.printStackTrace();
+									}
+									if (status.equals("200")) {
+										runOnUiThread(new Runnable() {
+											@Override
+											public void run() {
+												Toast.makeText(GetTaskFrg.this, "系統忙碌中，請重試！", Toast.LENGTH_SHORT).show();
+											}
+										});
+
+									}
+									runOnUiThread(new Runnable() {
+										@Override
+										public void run() {
+											objEdit.setText("");
+
+										}
+									});
+
+								} catch (JSONException e) {
+									e.printStackTrace();
+								}
+
 							}
-
-						}
 						});
+					}else {
+						Toast.makeText(this, "託運單號"+contents+"已在清單中", Toast.LENGTH_SHORT).show();
+					}
 
 				} else {
 
@@ -686,5 +706,54 @@ public class GetTaskFrg extends Activity implements GestureDetector.OnGestureLis
 		}
 		return EncrypString;
 	}
+	private boolean checkOdb (String contents){
+		//要比對資料庫裡面是否已有要轉的單子
+		dbLocations objDB;
+		objDB = new dbLocations(context);
+		objDB.openDB();
+		db = objDB.getWritableDatabase();
+		Cursor c = db.query("tblTask",
+				null,
+				"cOrderID = ? ",
+				new String[]{contents},
+				null,
+				null,
+				null);
+		while (c.moveToNext()){
+			Log.e("轉單資料庫",c.getString(c.getColumnIndex("cOrderID")));
+		}
+		Log.e("轉單資料庫數字", String.valueOf(c.getCount()));
 
+		if (c.getCount() == 0){
+			return  true;
+		}
+
+		objDB.close();
+		return false;
+	}
+	private boolean checkOdb2 (String contents){
+		//要比對資料庫裡面是否已有要轉的單子
+		dbLocations objDB;
+		objDB = new dbLocations(context);
+		objDB.openDB();
+		db = objDB.getWritableDatabase();
+		Cursor c = db.query("tblTask",
+				null,
+				"cOrderID = ? and cStatus = ?",
+				new String[]{contents,"2"},
+				null,
+				null,
+				null);
+		while (c.moveToNext()){
+			Log.e("轉單資料2",c.getString(c.getColumnIndex("cOrderID")));
+		}
+		Log.e("轉單資料庫數字2", String.valueOf(c.getCount()));
+
+		if (c.getCount() == 1){
+			return  true;
+		}
+
+		objDB.close();
+		return false;
+	}
 }

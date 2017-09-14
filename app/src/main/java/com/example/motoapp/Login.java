@@ -250,6 +250,10 @@ public class Login extends Activity {
             objDB.openDB();
             objDB.DeleteAll();
             objDB.close();
+
+            //跳到登入頁後 要登出 才不會收到推播
+            Logout post3 = new Logout();
+            post3.run();
 		}
 
 
@@ -678,7 +682,8 @@ public class Login extends Activity {
 
 				@Override
 				public void onResponse(Call call, Response response) throws IOException {
-
+                    String json = response.body().string();
+                    Log.e("登出",json);
 				}
 			});
 		}
